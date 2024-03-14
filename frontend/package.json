@@ -1,0 +1,24 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build --base=/assets/tyre/frontend/ && yarn copy-html-entry",
+    "preview": "vite preview",
+    "copy-html-entry": "cp ../tyre/public/frontend/index.html ../tyre/www/frontend.html"
+  },
+  "dependencies": {
+    "socket.io-client": "^4.5.1",
+    "vue": "^3.4.21",
+    "vue-router": "^4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "autoprefixer": "^10.4.18",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "vite": "^5.1.6"
+  }
+}
