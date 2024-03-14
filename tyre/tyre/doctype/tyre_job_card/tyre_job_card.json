@@ -1,0 +1,1361 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2024-03-08 13:10:20.892048",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "service_advisor",
+  "naming_series",
+  "cb_1",
+  "time_in",
+  "cb_2",
+  "time_out",
+  "cb_3",
+  "company",
+  "abbr",
+  "sb_1",
+  "vehicle_no",
+  "tyre_change_km",
+  "cb_4",
+  "vehicle_brand",
+  "odo_reading_kms",
+  "cb_5",
+  "vehicle_model_name",
+  "free_alignment_kms",
+  "cb_6",
+  "monthly_avg_kms",
+  "paid_alignment_kms",
+  "sb_2",
+  "customer",
+  "mobile_no",
+  "refer_by",
+  "website",
+  "workshop_name",
+  "garage_name",
+  "friend_name",
+  "customer_refer",
+  "cb_7",
+  "driver_name",
+  "driver_mobile",
+  "cb_8",
+  "contact_person",
+  "contact_mobile_no",
+  "department",
+  "email",
+  "contact_check",
+  "cb_9",
+  "whatsapp",
+  "call",
+  "mail",
+  "send_notification_to_owner",
+  "send_notification_to_driver",
+  "send_notification_to_contact_person",
+  "amended_from",
+  "5_points_checkup_tab",
+  "front_left_section",
+  "fl_remaining_tread_depth",
+  "fl_irregular_wear",
+  "fl_cut_damage",
+  "column_break_ueyu",
+  "fl_tyre_pressure",
+  "fl_run_flat_mark",
+  "fl_damage",
+  "column_break_upac",
+  "fl_comment",
+  "fl_bulge",
+  "fl_inflation",
+  "front_right_section",
+  "fr_remaining_tread_depth",
+  "fr_irregular_wear",
+  "fr_cut_damage",
+  "column_break_pbme",
+  "fr_tyre_pressure",
+  "fr_run_flat_mark",
+  "fr_damage",
+  "column_break_igtn",
+  "fr_comment",
+  "fr_bulge",
+  "fr_inflation",
+  "rear_left_section",
+  "rl_remaining_tread_depth",
+  "rl_irregular_wear",
+  "rl_cut_damage",
+  "column_break_lwcd",
+  "rl_tyre_pressure",
+  "rl_run_flat_mark",
+  "rl_damage",
+  "column_break_wphh",
+  "rl_comment",
+  "rl_bulge",
+  "rl_inflation",
+  "rear_right_section",
+  "rr_remaining_tread_depth",
+  "rr_irregular_wear",
+  "rr_cut_damage",
+  "column_break_losp",
+  "rr_tyre_pressure",
+  "rr_run_flat_mark",
+  "rr_damage",
+  "column_break_sziy",
+  "rr_comment",
+  "rr_bulge",
+  "rr_inflation",
+  "spare_tyre_section",
+  "sp1_remaining_tread_depth",
+  "sp1_irregular_wear",
+  "sp1_cut_damage",
+  "column_break_mdxw",
+  "sp1_tyre_pressure",
+  "sp1_run_flat_mark",
+  "sp1_damage",
+  "column_break_yumg",
+  "sp1_comment",
+  "sp1_bulge",
+  "sp1_inflation",
+  "required_services_details_tab",
+  "required_services_section",
+  "alignment",
+  "rotation",
+  "oil_change",
+  "balancing",
+  "inflation",
+  "column_break_saah",
+  "ac_service",
+  "battery",
+  "wiper",
+  "car_wash",
+  "column_break_fxsa",
+  "puncture",
+  "tyre_edge",
+  "tyre_batch",
+  "mushroom_batch",
+  "alignment_details_section",
+  "last_alignment_kms",
+  "column_break_ygkr",
+  "next_alignment_kms",
+  "tyre_rotation_details_section",
+  "rim",
+  "column_break_fkby",
+  "wheel",
+  "oil_service_section",
+  "oil_quality",
+  "column_break_nnxa",
+  "oil_quantity",
+  "balancing_details_section",
+  "front_left_gm",
+  "column_break_oihj",
+  "front_right_gms",
+  "column_break_tozo",
+  "rear_left_gms",
+  "column_break_hpwb",
+  "rear_right_gms",
+  "column_break_gpnk",
+  "spare_tyre_gms",
+  "inflation_details_section",
+  "air",
+  "nitrogen",
+  "column_break_eusa",
+  "front_tyres_psi",
+  "rear_tyres_psi",
+  "column_break_tibf",
+  "column_break_gxps",
+  "replacement_tyre_details_tab",
+  "front_left_tyre_section",
+  "fl_tyre_brand",
+  "fl_load_index",
+  "column_break_kjli",
+  "fl_pattern",
+  "fl_speed_rating",
+  "column_break_ikdm",
+  "fl_tt_tl",
+  "fl_size",
+  "column_break_qvil",
+  "fl_item",
+  "copy_for_all",
+  "front_right_tyre_section",
+  "fr_brand",
+  "fr_load_index",
+  "column_break_ehwo",
+  "fr_pattern",
+  "fr_speed_rating",
+  "column_break_dnxf",
+  "fr_tt_tl",
+  "fr_size",
+  "column_break_kvmi",
+  "fr_item",
+  "rear_left_tyre_section",
+  "rl_brand",
+  "rl_load_index",
+  "column_break_yxql",
+  "rl_pattern",
+  "rl_speed_rating",
+  "column_break_tirg",
+  "rl_tt_tl",
+  "rl_size",
+  "column_break_xqav",
+  "rl_item",
+  "rear_right_tyre_section",
+  "rr_brand",
+  "rr_load_index",
+  "column_break_idth",
+  "rr_pattern",
+  "rr_speed_rating",
+  "column_break_hatf",
+  "rr_tt_tl",
+  "rr_size",
+  "column_break_yend",
+  "rr_item",
+  "spare_tyre_sb",
+  "sp_brand",
+  "sp_load_index",
+  "column_break_gagi",
+  "sp_pattern",
+  "sp_speed_rating",
+  "column_break_lsps",
+  "sp_tt_tl",
+  "sp_size",
+  "column_break_bwhf",
+  "sp_item"
+ ],
+ "fields": [
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Tyre Job Card",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "service_advisor",
+   "fieldtype": "Link",
+   "label": "Service Advisor",
+   "options": "User"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Series",
+   "options": "JCD-.YY.-.MM.-.####."
+  },
+  {
+   "fieldname": "cb_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "now",
+   "fieldname": "time_in",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Time In"
+  },
+  {
+   "fieldname": "cb_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "time_out",
+   "fieldtype": "Datetime",
+   "label": "Time Out",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cb_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
+  },
+  {
+   "fetch_from": "company.abbr",
+   "fieldname": "abbr",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Abbr"
+  },
+  {
+   "fieldname": "sb_1",
+   "fieldtype": "Section Break",
+   "label": "Vehicle Details"
+  },
+  {
+   "fieldname": "vehicle_no",
+   "fieldtype": "Link",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "label": "Vehicle No",
+   "options": "Vehicle"
+  },
+  {
+   "fieldname": "tyre_change_km",
+   "fieldtype": "Int",
+   "label": "Tyre Change (kms)"
+  },
+  {
+   "fieldname": "cb_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "vehicle_brand",
+   "fieldtype": "Link",
+   "label": "Vehicle Brand",
+   "options": "Brand"
+  },
+  {
+   "fieldname": "odo_reading_kms",
+   "fieldtype": "Data",
+   "label": "Odo Reading (kms)"
+  },
+  {
+   "fieldname": "cb_5",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "vehicle_model_name",
+   "fieldtype": "Link",
+   "label": "Vehicle Model",
+   "options": "Vehicle Model"
+  },
+  {
+   "fieldname": "free_alignment_kms",
+   "fieldtype": "Int",
+   "label": "Free Alignment (kms)"
+  },
+  {
+   "fieldname": "cb_6",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "monthly_avg_kms",
+   "fieldtype": "Data",
+   "label": "Monthly Avg Km"
+  },
+  {
+   "fieldname": "paid_alignment_kms",
+   "fieldtype": "Int",
+   "label": "Paid Alignment (kms)"
+  },
+  {
+   "fieldname": "sb_2",
+   "fieldtype": "Section Break",
+   "label": "Customer Details"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "label": "Owner",
+   "options": "Customer"
+  },
+  {
+   "fetch_from": "customer.mobile_no",
+   "fieldname": "mobile_no",
+   "fieldtype": "Data",
+   "label": "Mobile No"
+  },
+  {
+   "fieldname": "refer_by",
+   "fieldtype": "Select",
+   "label": "Refer By",
+   "options": "Leaflet\nWhatsapp\nRepeat\nWeb\nOW Workshop\nGarages\nFriend\nExisting Customer\nNew"
+  },
+  {
+   "depends_on": "eval:doc.refer_from==\"Web\" ",
+   "fieldname": "website",
+   "fieldtype": "Link",
+   "label": "Website",
+   "options": "Shop Websites"
+  },
+  {
+   "depends_on": "eval:doc.refer_from==\"OW Workshop\"",
+   "fieldname": "workshop_name",
+   "fieldtype": "Link",
+   "label": "Workshop Name",
+   "options": "OW Workshop"
+  },
+  {
+   "depends_on": "eval:doc.refer_from==\"Garages\"",
+   "fieldname": "garage_name",
+   "fieldtype": "Link",
+   "label": "Garage Name",
+   "options": "Garages"
+  },
+  {
+   "depends_on": "eval:doc.refer_from==\"Friend\"",
+   "fieldname": "friend_name",
+   "fieldtype": "Data",
+   "label": "Friend Name"
+  },
+  {
+   "depends_on": "eval:doc.refer_from==\"Existing Customer\"",
+   "fieldname": "customer_refer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "cb_7",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "driver_name",
+   "fieldtype": "Link",
+   "in_filter": 1,
+   "label": "Driver",
+   "options": "Driver"
+  },
+  {
+   "fetch_from": "driver_name.cell_number",
+   "fetch_if_empty": 1,
+   "fieldname": "driver_mobile",
+   "fieldtype": "Data",
+   "label": "Mobile No"
+  },
+  {
+   "fieldname": "cb_8",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "contact_person",
+   "fieldtype": "Link",
+   "label": "Contact Person",
+   "options": "Contact"
+  },
+  {
+   "fieldname": "contact_mobile_no",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "label": "Contact Mobile No"
+  },
+  {
+   "fieldname": "department",
+   "fieldtype": "Data",
+   "label": "Department"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email"
+  },
+  {
+   "default": "0",
+   "fieldname": "contact_check",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Contact Check"
+  },
+  {
+   "fieldname": "cb_9",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "whatsapp",
+   "fieldtype": "Check",
+   "label": "Whatsapp"
+  },
+  {
+   "default": "0",
+   "fieldname": "call",
+   "fieldtype": "Check",
+   "label": "Call"
+  },
+  {
+   "default": "0",
+   "fieldname": "mail",
+   "fieldtype": "Check",
+   "label": "Mail"
+  },
+  {
+   "default": "0",
+   "fieldname": "send_notification_to_owner",
+   "fieldtype": "Check",
+   "label": "Send Notification to Owner"
+  },
+  {
+   "default": "0",
+   "fieldname": "send_notification_to_driver",
+   "fieldtype": "Check",
+   "label": "Send Notification to Driver"
+  },
+  {
+   "default": "0",
+   "fieldname": "send_notification_to_contact_person",
+   "fieldtype": "Check",
+   "label": "Send Notification to Contact Person"
+  },
+  {
+   "fieldname": "5_points_checkup_tab",
+   "fieldtype": "Tab Break",
+   "label": "5 Points Checkup"
+  },
+  {
+   "fieldname": "front_left_section",
+   "fieldtype": "Section Break",
+   "label": "Front Left"
+  },
+  {
+   "fieldname": "fl_remaining_tread_depth",
+   "fieldtype": "Data",
+   "label": "Remaining Tread Depth"
+  },
+  {
+   "default": "0",
+   "fieldname": "fl_irregular_wear",
+   "fieldtype": "Check",
+   "label": " Irregular Wear"
+  },
+  {
+   "default": "0",
+   "fieldname": "fl_cut_damage",
+   "fieldtype": "Check",
+   "label": "Cut/Damage"
+  },
+  {
+   "fieldname": "column_break_ueyu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fl_tyre_pressure",
+   "fieldtype": "Data",
+   "label": "Tyre Pressure(psi)"
+  },
+  {
+   "default": "0",
+   "fieldname": "fl_run_flat_mark",
+   "fieldtype": "Check",
+   "label": "Run Flat Mark"
+  },
+  {
+   "default": "0",
+   "fieldname": "fl_damage",
+   "fieldtype": "Check",
+   "label": "Damage"
+  },
+  {
+   "fieldname": "column_break_upac",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fl_comment",
+   "fieldtype": "Data",
+   "label": "Comment"
+  },
+  {
+   "default": "0",
+   "fieldname": "fl_bulge",
+   "fieldtype": "Check",
+   "label": "Bulge"
+  },
+  {
+   "default": "0",
+   "fieldname": "fl_inflation",
+   "fieldtype": "Check",
+   "label": "Inflation"
+  },
+  {
+   "fieldname": "front_right_section",
+   "fieldtype": "Section Break",
+   "label": "Front Right"
+  },
+  {
+   "fieldname": "fr_remaining_tread_depth",
+   "fieldtype": "Data",
+   "label": "Remaining Tread Depth"
+  },
+  {
+   "default": "0",
+   "fieldname": "fr_irregular_wear",
+   "fieldtype": "Check",
+   "label": " Irregular Wear"
+  },
+  {
+   "default": "0",
+   "fieldname": "fr_cut_damage",
+   "fieldtype": "Check",
+   "label": "Cut/Damage"
+  },
+  {
+   "fieldname": "column_break_pbme",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fr_tyre_pressure",
+   "fieldtype": "Data",
+   "label": "Tyre Pressure(psi)"
+  },
+  {
+   "default": "0",
+   "fieldname": "fr_run_flat_mark",
+   "fieldtype": "Check",
+   "label": "Run Flat Mark"
+  },
+  {
+   "default": "0",
+   "fieldname": "fr_damage",
+   "fieldtype": "Check",
+   "label": "Damage"
+  },
+  {
+   "fieldname": "column_break_igtn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fr_comment",
+   "fieldtype": "Data",
+   "label": "Comment"
+  },
+  {
+   "default": "0",
+   "fieldname": "fr_bulge",
+   "fieldtype": "Check",
+   "label": "Bulge"
+  },
+  {
+   "default": "0",
+   "fieldname": "fr_inflation",
+   "fieldtype": "Check",
+   "label": "Inflation"
+  },
+  {
+   "fieldname": "rear_left_section",
+   "fieldtype": "Section Break",
+   "label": "Rear Left"
+  },
+  {
+   "fieldname": "rl_remaining_tread_depth",
+   "fieldtype": "Data",
+   "label": "Remaining Tread Depth"
+  },
+  {
+   "default": "0",
+   "fieldname": "rl_irregular_wear",
+   "fieldtype": "Check",
+   "label": " Irregular Wear"
+  },
+  {
+   "default": "0",
+   "fieldname": "rl_cut_damage",
+   "fieldtype": "Check",
+   "label": "Cut/Damage"
+  },
+  {
+   "fieldname": "column_break_lwcd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rl_tyre_pressure",
+   "fieldtype": "Data",
+   "label": "Tyre Pressure(psi)"
+  },
+  {
+   "default": "0",
+   "fieldname": "rl_run_flat_mark",
+   "fieldtype": "Check",
+   "label": "Run Flat Mark"
+  },
+  {
+   "default": "0",
+   "fieldname": "rl_damage",
+   "fieldtype": "Check",
+   "label": "Damage"
+  },
+  {
+   "fieldname": "column_break_wphh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rl_comment",
+   "fieldtype": "Data",
+   "label": "Comment"
+  },
+  {
+   "default": "0",
+   "fieldname": "rl_bulge",
+   "fieldtype": "Check",
+   "label": "Bulge"
+  },
+  {
+   "default": "0",
+   "fieldname": "rl_inflation",
+   "fieldtype": "Check",
+   "label": "Inflation"
+  },
+  {
+   "fieldname": "rear_right_section",
+   "fieldtype": "Section Break",
+   "label": "Rear Right"
+  },
+  {
+   "fieldname": "rr_remaining_tread_depth",
+   "fieldtype": "Data",
+   "label": "Remaining Tread Depth"
+  },
+  {
+   "default": "0",
+   "fieldname": "rr_irregular_wear",
+   "fieldtype": "Check",
+   "label": " Irregular Wear"
+  },
+  {
+   "default": "0",
+   "fieldname": "rr_cut_damage",
+   "fieldtype": "Check",
+   "label": "Cut/Damage"
+  },
+  {
+   "fieldname": "column_break_losp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rr_tyre_pressure",
+   "fieldtype": "Data",
+   "label": "Tyre Pressure(psi)"
+  },
+  {
+   "default": "0",
+   "fieldname": "rr_run_flat_mark",
+   "fieldtype": "Check",
+   "label": "Run Flat Mark"
+  },
+  {
+   "default": "0",
+   "fieldname": "rr_damage",
+   "fieldtype": "Check",
+   "label": "Damage"
+  },
+  {
+   "fieldname": "column_break_sziy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rr_comment",
+   "fieldtype": "Data",
+   "label": "Comment"
+  },
+  {
+   "default": "0",
+   "fieldname": "rr_bulge",
+   "fieldtype": "Check",
+   "label": "Bulge"
+  },
+  {
+   "default": "0",
+   "fieldname": "rr_inflation",
+   "fieldtype": "Check",
+   "label": "Inflation"
+  },
+  {
+   "fieldname": "spare_tyre_section",
+   "fieldtype": "Section Break",
+   "label": "Spare Tyre"
+  },
+  {
+   "fieldname": "sp1_remaining_tread_depth",
+   "fieldtype": "Data",
+   "label": "Remaining Tread Depth"
+  },
+  {
+   "default": "0",
+   "fieldname": "sp1_irregular_wear",
+   "fieldtype": "Check",
+   "label": " Irregular Wear"
+  },
+  {
+   "default": "0",
+   "fieldname": "sp1_cut_damage",
+   "fieldtype": "Check",
+   "label": "Cut/Damage"
+  },
+  {
+   "fieldname": "column_break_mdxw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sp1_tyre_pressure",
+   "fieldtype": "Data",
+   "label": "Tyre Pressure(psi)"
+  },
+  {
+   "default": "0",
+   "fieldname": "sp1_run_flat_mark",
+   "fieldtype": "Check",
+   "label": "Run Flat Mark"
+  },
+  {
+   "default": "0",
+   "fieldname": "sp1_damage",
+   "fieldtype": "Check",
+   "label": "Damage"
+  },
+  {
+   "fieldname": "column_break_yumg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sp1_comment",
+   "fieldtype": "Data",
+   "label": "Comment"
+  },
+  {
+   "default": "0",
+   "fieldname": "sp1_bulge",
+   "fieldtype": "Check",
+   "label": "Bulge"
+  },
+  {
+   "default": "0",
+   "fieldname": "sp1_inflation",
+   "fieldtype": "Check",
+   "label": "Inflation"
+  },
+  {
+   "fieldname": "required_services_details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Required Services Details"
+  },
+  {
+   "fieldname": "required_services_section",
+   "fieldtype": "Section Break",
+   "label": "Required Services"
+  },
+  {
+   "default": "0",
+   "fieldname": "alignment",
+   "fieldtype": "Check",
+   "label": "Alignment"
+  },
+  {
+   "default": "0",
+   "fieldname": "rotation",
+   "fieldtype": "Check",
+   "label": "Rotation"
+  },
+  {
+   "default": "0",
+   "fieldname": "oil_change",
+   "fieldtype": "Check",
+   "label": "Oil Change"
+  },
+  {
+   "default": "0",
+   "fieldname": "balancing",
+   "fieldtype": "Check",
+   "label": "Balancing"
+  },
+  {
+   "default": "0",
+   "fieldname": "inflation",
+   "fieldtype": "Check",
+   "label": "Inflation"
+  },
+  {
+   "fieldname": "column_break_saah",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "ac_service",
+   "fieldtype": "Check",
+   "label": "AC Service"
+  },
+  {
+   "default": "0",
+   "fieldname": "battery",
+   "fieldtype": "Check",
+   "label": "Battery"
+  },
+  {
+   "default": "0",
+   "fieldname": "wiper",
+   "fieldtype": "Check",
+   "label": "Wiper"
+  },
+  {
+   "default": "0",
+   "fieldname": "car_wash",
+   "fieldtype": "Check",
+   "label": "Car Wash"
+  },
+  {
+   "fieldname": "column_break_fxsa",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "puncture",
+   "fieldtype": "Check",
+   "label": "Puncture"
+  },
+  {
+   "default": "0",
+   "fieldname": "tyre_edge",
+   "fieldtype": "Check",
+   "label": "Tyre Edge"
+  },
+  {
+   "default": "0",
+   "fieldname": "tyre_batch",
+   "fieldtype": "Check",
+   "label": "Tyre Batch"
+  },
+  {
+   "default": "0",
+   "fieldname": "mushroom_batch",
+   "fieldtype": "Check",
+   "label": "Mushroom Batch"
+  },
+  {
+   "fieldname": "alignment_details_section",
+   "fieldtype": "Section Break",
+   "label": "Alignment Details"
+  },
+  {
+   "fieldname": "last_alignment_kms",
+   "fieldtype": "Data",
+   "label": "Last Alignment (kms)"
+  },
+  {
+   "fieldname": "column_break_ygkr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "next_alignment_kms",
+   "fieldtype": "Data",
+   "label": "Next Alignment (kms)"
+  },
+  {
+   "fieldname": "tyre_rotation_details_section",
+   "fieldtype": "Section Break",
+   "label": "Tyre Rotation Details"
+  },
+  {
+   "fieldname": "rim",
+   "fieldtype": "Data",
+   "label": "Rim"
+  },
+  {
+   "fieldname": "column_break_fkby",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "wheel",
+   "fieldtype": "Data",
+   "label": "Wheel"
+  },
+  {
+   "fieldname": "oil_service_section",
+   "fieldtype": "Section Break",
+   "label": "Oil Service"
+  },
+  {
+   "fieldname": "oil_quality",
+   "fieldtype": "Select",
+   "label": "Oil Quality",
+   "options": "Good\nOk\nChange"
+  },
+  {
+   "fieldname": "column_break_nnxa",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "oil_quantity",
+   "fieldtype": "Select",
+   "label": "Oil Quantity",
+   "options": "Max\nNormal\nMin"
+  },
+  {
+   "fieldname": "balancing_details_section",
+   "fieldtype": "Section Break",
+   "label": "Balancing Details"
+  },
+  {
+   "fieldname": "front_left_gm",
+   "fieldtype": "Data",
+   "label": "Front Left (gm)"
+  },
+  {
+   "fieldname": "column_break_oihj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "front_right_gms",
+   "fieldtype": "Data",
+   "label": "Front Right (gm)"
+  },
+  {
+   "fieldname": "column_break_tozo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rear_left_gms",
+   "fieldtype": "Data",
+   "label": "Rear Left (gm)"
+  },
+  {
+   "fieldname": "column_break_hpwb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rear_right_gms",
+   "fieldtype": "Data",
+   "label": "Rear Right (gm)"
+  },
+  {
+   "fieldname": "column_break_gpnk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "spare_tyre_gms",
+   "fieldtype": "Data",
+   "label": "Spare Tyre (gm)"
+  },
+  {
+   "fieldname": "inflation_details_section",
+   "fieldtype": "Section Break",
+   "label": "Inflation Details"
+  },
+  {
+   "default": "0",
+   "fieldname": "air",
+   "fieldtype": "Check",
+   "label": "Air"
+  },
+  {
+   "default": "0",
+   "fieldname": "nitrogen",
+   "fieldtype": "Check",
+   "label": "Nitrogen"
+  },
+  {
+   "fieldname": "column_break_eusa",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "front_tyres_psi",
+   "fieldtype": "Data",
+   "label": "Front Tyres (psi)"
+  },
+  {
+   "fieldname": "rear_tyres_psi",
+   "fieldtype": "Data",
+   "label": "Rear Tyres (psi)"
+  },
+  {
+   "fieldname": "column_break_tibf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_gxps",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "replacement_tyre_details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Replacement Tyre Details"
+  },
+  {
+   "fieldname": "front_left_tyre_section",
+   "fieldtype": "Section Break",
+   "label": "Front Left Tyre"
+  },
+  {
+   "fieldname": "fl_tyre_brand",
+   "fieldtype": "Data",
+   "label": "Brand"
+  },
+  {
+   "fieldname": "fl_load_index",
+   "fieldtype": "Data",
+   "label": "Load Index"
+  },
+  {
+   "fieldname": "column_break_kjli",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fl_pattern",
+   "fieldtype": "Data",
+   "label": "Pattern"
+  },
+  {
+   "fieldname": "fl_speed_rating",
+   "fieldtype": "Data",
+   "label": "Speed Rating"
+  },
+  {
+   "fieldname": "column_break_ikdm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fl_tt_tl",
+   "fieldtype": "Data",
+   "label": "TT/TL"
+  },
+  {
+   "fieldname": "fl_size",
+   "fieldtype": "Data",
+   "label": "Size"
+  },
+  {
+   "fieldname": "column_break_qvil",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fl_item",
+   "fieldtype": "Data",
+   "label": "Item"
+  },
+  {
+   "default": "0",
+   "fieldname": "copy_for_all",
+   "fieldtype": "Check",
+   "label": "Copy for all"
+  },
+  {
+   "fieldname": "front_right_tyre_section",
+   "fieldtype": "Section Break",
+   "label": "Front Right Tyre"
+  },
+  {
+   "fieldname": "fr_brand",
+   "fieldtype": "Data",
+   "label": "Brand"
+  },
+  {
+   "fieldname": "fr_load_index",
+   "fieldtype": "Data",
+   "label": "Load Index"
+  },
+  {
+   "fieldname": "column_break_ehwo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fr_pattern",
+   "fieldtype": "Data",
+   "label": "Pattern"
+  },
+  {
+   "fieldname": "fr_speed_rating",
+   "fieldtype": "Data",
+   "label": "Speed Rating"
+  },
+  {
+   "fieldname": "column_break_dnxf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fr_tt_tl",
+   "fieldtype": "Data",
+   "label": "TT/TL"
+  },
+  {
+   "fieldname": "fr_size",
+   "fieldtype": "Data",
+   "label": "Size"
+  },
+  {
+   "fieldname": "column_break_kvmi",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fr_item",
+   "fieldtype": "Data",
+   "label": "Item"
+  },
+  {
+   "fieldname": "rear_left_tyre_section",
+   "fieldtype": "Section Break",
+   "label": "Rear Left Tyre"
+  },
+  {
+   "fieldname": "rl_brand",
+   "fieldtype": "Data",
+   "label": "Brand"
+  },
+  {
+   "fieldname": "rl_load_index",
+   "fieldtype": "Data",
+   "label": "Load Index"
+  },
+  {
+   "fieldname": "column_break_yxql",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rl_pattern",
+   "fieldtype": "Data",
+   "label": "Pattern"
+  },
+  {
+   "fieldname": "rl_speed_rating",
+   "fieldtype": "Data",
+   "label": "Speed Rating"
+  },
+  {
+   "fieldname": "column_break_tirg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rl_tt_tl",
+   "fieldtype": "Data",
+   "label": "TT/TL"
+  },
+  {
+   "fieldname": "rl_size",
+   "fieldtype": "Data",
+   "label": "Size"
+  },
+  {
+   "fieldname": "column_break_xqav",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rl_item",
+   "fieldtype": "Data",
+   "label": "Item"
+  },
+  {
+   "fieldname": "rear_right_tyre_section",
+   "fieldtype": "Section Break",
+   "label": "Rear Right Tyre"
+  },
+  {
+   "fieldname": "rr_brand",
+   "fieldtype": "Data",
+   "label": "Brand"
+  },
+  {
+   "fieldname": "rr_load_index",
+   "fieldtype": "Data",
+   "label": "Load Index"
+  },
+  {
+   "fieldname": "column_break_idth",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rr_pattern",
+   "fieldtype": "Data",
+   "label": "Pattern"
+  },
+  {
+   "fieldname": "rr_speed_rating",
+   "fieldtype": "Data",
+   "label": "Speed Rating"
+  },
+  {
+   "fieldname": "column_break_hatf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rr_tt_tl",
+   "fieldtype": "Data",
+   "label": "TT/TL"
+  },
+  {
+   "fieldname": "rr_size",
+   "fieldtype": "Data",
+   "label": "Size"
+  },
+  {
+   "fieldname": "column_break_yend",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rr_item",
+   "fieldtype": "Data",
+   "label": "Item"
+  },
+  {
+   "fieldname": "spare_tyre_sb",
+   "fieldtype": "Section Break",
+   "label": "Spare Tyre"
+  },
+  {
+   "fieldname": "sp_brand",
+   "fieldtype": "Data",
+   "label": "Brand"
+  },
+  {
+   "fieldname": "sp_load_index",
+   "fieldtype": "Data",
+   "label": "Load Index"
+  },
+  {
+   "fieldname": "column_break_gagi",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sp_pattern",
+   "fieldtype": "Data",
+   "label": "Pattern"
+  },
+  {
+   "fieldname": "sp_speed_rating",
+   "fieldtype": "Data",
+   "label": "Speed Rating"
+  },
+  {
+   "fieldname": "column_break_lsps",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sp_tt_tl",
+   "fieldtype": "Data",
+   "label": "TT/TL"
+  },
+  {
+   "fieldname": "sp_size",
+   "fieldtype": "Data",
+   "label": "Size"
+  },
+  {
+   "fieldname": "column_break_bwhf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sp_item",
+   "fieldtype": "Data",
+   "label": "Item"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2024-03-12 21:21:51.597000",
+ "modified_by": "Administrator",
+ "module": "Tyre",
+ "name": "Tyre Job Card",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,118 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:license_plate",
+ "creation": "2024-03-13 15:19:39.059003",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "license_plate",
+  "vehicle_brand",
+  "vehicle_model",
+  "column_break_kwzk",
+  "vehicle_usage",
+  "fuel_type",
+  "wheel",
+  "last_odometer_reading",
+  "owner_details_section",
+  "current_owner",
+  "column_break_ispq",
+  "owner_mobile_no"
+ ],
+ "fields": [
+  {
+   "fieldname": "vehicle_brand",
+   "fieldtype": "Data",
+   "label": "Vehicle Brand"
+  },
+  {
+   "fieldname": "fuel_type",
+   "fieldtype": "Select",
+   "label": "Fuel Type",
+   "options": "\nPetrol\nDiesel\nEV"
+  },
+  {
+   "fieldname": "column_break_kwzk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "vehicle_model",
+   "fieldtype": "Data",
+   "label": "Vehicle Model"
+  },
+  {
+   "fieldname": "vehicle_usage",
+   "fieldtype": "Select",
+   "label": "Use",
+   "options": "Private\nPublic"
+  },
+  {
+   "fieldname": "license_plate",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "License Plate",
+   "no_copy": 1,
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "wheel",
+   "fieldtype": "Select",
+   "label": "Wheel",
+   "options": "\nAlloy\nOrdinary"
+  },
+  {
+   "fieldname": "last_odometer_reading",
+   "fieldtype": "Data",
+   "label": "Last Odometer Reading"
+  },
+  {
+   "fieldname": "owner_details_section",
+   "fieldtype": "Section Break",
+   "label": "Owner Details"
+  },
+  {
+   "fieldname": "current_owner",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Current Owner",
+   "options": "Current Owner",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_ispq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "current_owner.mobile_no",
+   "fieldname": "owner_mobile_no",
+   "fieldtype": "Data",
+   "label": "Owner Mobile No"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-03-13 18:09:31.758370",
+ "modified_by": "Administrator",
+ "module": "Tyre",
+ "name": "Vehicle Details",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
