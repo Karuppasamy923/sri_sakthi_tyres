@@ -1,0 +1,107 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:license_plate",
+ "creation": "2024-03-15 08:12:26.362987",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "license_plate",
+  "current_owner",
+  "owner_data",
+  "column_break_rmcq",
+  "owner_mobile_no",
+  "owner_email_id",
+  "section_break_tufh",
+  "current_driver",
+  "section_break_cpqa",
+  "contact_person"
+ ],
+ "fields": [
+  {
+   "fieldname": "license_plate",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "License Plate",
+   "no_copy": 1,
+   "options": "Vehicle Details",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fetch_from": "owner_data.customer_name",
+   "fieldname": "current_owner",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Current Owner"
+  },
+  {
+   "fieldname": "column_break_rmcq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "owner_data.mobile_no",
+   "fieldname": "owner_mobile_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Owner Mobile No"
+  },
+  {
+   "fetch_from": "owner_data.email_id",
+   "fieldname": "owner_email_id",
+   "fieldtype": "Data",
+   "label": "Owner Email ID"
+  },
+  {
+   "fieldname": "section_break_tufh",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "current_driver",
+   "fieldtype": "Table",
+   "label": "Current Driver ",
+   "options": "Current Driver"
+  },
+  {
+   "fieldname": "section_break_cpqa",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "contact_person",
+   "fieldtype": "Table",
+   "label": "Contact Person",
+   "options": "Contact Person"
+  },
+  {
+   "fieldname": "owner_data",
+   "fieldtype": "Link",
+   "label": "Owner Data",
+   "options": "Customer"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-03-28 12:17:13.078874",
+ "modified_by": "Administrator",
+ "module": "Tyre",
+ "name": "Customer Details",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

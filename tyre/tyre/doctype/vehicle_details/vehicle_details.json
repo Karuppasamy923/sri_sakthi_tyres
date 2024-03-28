@@ -9,15 +9,15 @@
   "license_plate",
   "vehicle_brand",
   "vehicle_model",
+  "vehicle_type",
+  "chassis_no",
   "column_break_kwzk",
   "vehicle_usage",
   "fuel_type",
   "wheel",
   "last_odometer_reading",
-  "owner_details_section",
-  "current_owner",
-  "column_break_ispq",
-  "owner_mobile_no"
+  "alignment",
+  "tyre_change"
  ],
  "fields": [
   {
@@ -67,32 +67,31 @@
    "label": "Last Odometer Reading"
   },
   {
-   "fieldname": "owner_details_section",
-   "fieldtype": "Section Break",
-   "label": "Owner Details"
+   "fieldname": "vehicle_type",
+   "fieldtype": "Select",
+   "label": "Vehicle Type",
+   "options": "\nBus\nCar\nTruck"
   },
   {
-   "fieldname": "current_owner",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Current Owner",
-   "options": "Current Owner",
-   "reqd": 1
-  },
-  {
-   "fieldname": "column_break_ispq",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fetch_from": "current_owner.mobile_no",
-   "fieldname": "owner_mobile_no",
+   "fieldname": "chassis_no",
    "fieldtype": "Data",
-   "label": "Owner Mobile No"
+   "label": "Chassis No",
+   "options": "\nBus\nCar\nTruck"
+  },
+  {
+   "fieldname": "alignment",
+   "fieldtype": "Data",
+   "label": "Alignment"
+  },
+  {
+   "fieldname": "tyre_change",
+   "fieldtype": "Data",
+   "label": "Tyre Change"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-03-13 18:09:31.758370",
+ "modified": "2024-03-21 15:45:25.664648",
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "Vehicle Details",

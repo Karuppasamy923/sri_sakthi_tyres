@@ -227,3 +227,21 @@ app_license = "mit"
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+
+website_route_rules = [{'from_route': '/frontend/<path:app_path>', 'to_route': 'frontend'}, {'from_route': '/frontend/<path:app_path>', 'to_route': 'frontend'},]
+
+whitelist = ["GET", "POST"]
+
+app_list = ['get_details', 'custom_test_api','store_vehicle_details']
+
+from tyre.api import get_details, custom_test_api, store_vehicle_details
+
+api_routes = {
+    "GET": {
+        "/api/method/tyre/api/get_details": get_details,
+        "/api/method/tyre.api.custom_test_api": custom_test_api,
+        "/api/method/tyre.api.store_vehicle_details": store_vehicle_details
+    },
+    # "POST": {
+    # }
+}

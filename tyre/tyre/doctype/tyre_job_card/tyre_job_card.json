@@ -30,29 +30,32 @@
   "sb_2",
   "customer",
   "mobile_no",
-  "refer_by",
-  "website",
-  "workshop_name",
-  "garage_name",
-  "friend_name",
-  "customer_refer",
+  "whatsapp",
+  "call",
+  "mail",
   "cb_7",
   "driver_name",
   "driver_mobile",
+  "driver_whatsapp",
+  "driver_call",
+  "driver_mail",
   "cb_8",
   "contact_person",
   "contact_mobile_no",
   "department",
   "email",
+  "contact_whatsapp",
+  "contact_call",
+  "contact_mail",
   "contact_check",
   "cb_9",
-  "whatsapp",
-  "call",
-  "mail",
-  "send_notification_to_owner",
-  "send_notification_to_driver",
-  "send_notification_to_contact_person",
   "amended_from",
+  "refer_by",
+  "website",
+  "workshop_name",
+  "friend_name",
+  "garage_name",
+  "customer_refer",
   "5_points_checkup_tab",
   "front_left_section",
   "fl_remaining_tread_depth",
@@ -289,11 +292,10 @@
   },
   {
    "fieldname": "vehicle_no",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "in_filter": 1,
    "in_list_view": 1,
-   "label": "Vehicle No",
-   "options": "Vehicle"
+   "label": "Vehicle No"
   },
   {
    "fieldname": "tyre_change_km",
@@ -306,9 +308,8 @@
   },
   {
    "fieldname": "vehicle_brand",
-   "fieldtype": "Link",
-   "label": "Vehicle Brand",
-   "options": "Brand"
+   "fieldtype": "Data",
+   "label": "Vehicle Brand"
   },
   {
    "fieldname": "odo_reading_kms",
@@ -321,9 +322,8 @@
   },
   {
    "fieldname": "vehicle_model_name",
-   "fieldtype": "Link",
-   "label": "Vehicle Model",
-   "options": "Vehicle Model"
+   "fieldtype": "Data",
+   "label": "Vehicle Model"
   },
   {
    "fieldname": "free_alignment_kms",
@@ -475,24 +475,6 @@
    "fieldname": "mail",
    "fieldtype": "Check",
    "label": "Mail"
-  },
-  {
-   "default": "0",
-   "fieldname": "send_notification_to_owner",
-   "fieldtype": "Check",
-   "label": "Send Notification to Owner"
-  },
-  {
-   "default": "0",
-   "fieldname": "send_notification_to_driver",
-   "fieldtype": "Check",
-   "label": "Send Notification to Driver"
-  },
-  {
-   "default": "0",
-   "fieldname": "send_notification_to_contact_person",
-   "fieldtype": "Check",
-   "label": "Send Notification to Contact Person"
   },
   {
    "fieldname": "5_points_checkup_tab",
@@ -1329,12 +1311,48 @@
    "fieldname": "sp_item",
    "fieldtype": "Data",
    "label": "Item"
+  },
+  {
+   "default": "0",
+   "fieldname": "driver_whatsapp",
+   "fieldtype": "Check",
+   "label": "Whatsapp"
+  },
+  {
+   "default": "0",
+   "fieldname": "driver_call",
+   "fieldtype": "Check",
+   "label": "Call"
+  },
+  {
+   "default": "0",
+   "fieldname": "driver_mail",
+   "fieldtype": "Check",
+   "label": "Mail"
+  },
+  {
+   "default": "0",
+   "fieldname": "contact_whatsapp",
+   "fieldtype": "Check",
+   "label": "Whatsapp"
+  },
+  {
+   "default": "0",
+   "fieldname": "contact_call",
+   "fieldtype": "Check",
+   "label": "Call"
+  },
+  {
+   "default": "0",
+   "fieldname": "contact_mail",
+   "fieldtype": "Check",
+   "label": "Mail"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-03-12 21:21:51.597000",
+ "modified": "2024-03-17 22:36:57.381122",
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "Tyre Job Card",
@@ -1357,5 +1375,6 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "track_changes": 1
 }
