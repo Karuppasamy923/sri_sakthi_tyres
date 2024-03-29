@@ -95,7 +95,7 @@
           </div>
           <!-- main page -->
           <div v-if="currentstep == 0 && Auth">
-              <div class="pt-24">
+              <div class="pt-24 p-12">
                   <div v-if="currentstep == 0">
                       <div class="flex justify-center m-5">
                           <input type="text" class="w-[338px] h-[52px] rounded-sm border-solid border border-black"
@@ -161,7 +161,7 @@
                                           </div>
                                       </div>
                                   </div>
-                                  <div class="mt-[70px] flex flex-row space-x-9">
+                                  <div class="mt-[67px] flex flex-row space-x-9">
                                       <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
                                           @click="addVehicle">
                                           Add Vehicle
@@ -244,7 +244,7 @@
                                           </div>
                                       </div>
                                   </div>
-                                  <div class="float-right mt-[20px] flex flex-row space-x-9">
+                                  <div class="float-right mt-[30px] flex flex-row space-x-9 pr-3">
                                       <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
                                           @click="addCustomer" id="customerId">
                                           Add Customer
@@ -580,10 +580,10 @@
           </div>
           <!-- 5 point check up  -->
           <div v-if="currentstep == 1" class="mr-9">
-              <div class="p-12 pt-24 w-screen bg-blue-300">
+              <div class="p-12 pt-24 w-screen ">
                   <div class="flex flex-row justify-between p-1">
                       <h1 class="text-[1.2rem] font-bold mt-5">5 Points Checkup</h1>
-                      <button class="text-[1.2rem]  text-white w-[10rem] h-[3rem] bg-blue-500 rounded-lg"
+                      <button class="text-[1.2rem]  text-white w-[12rem] h-[3rem] bg-blue-500 rounded-lg"
                           @click="addTyre">Add</button>
                   </div>
                   <hr class="mt-2 " :style="{ borderWidth: '2px', borderColor: 'gray' }">
@@ -666,292 +666,294 @@
           <!-- Required Services -->
           <div v-if="currentstep == 2">
               <div class="pt-24">
-                  <h1 class="text-[20px] font-bold mb-1">Required Services</h1>
-                  <hr class="mt-2" :style="{ borderWidth: '2px', borderColor: 'gray' }">
-                  <div
-                      class="mt-6 flex flex-row space-x-[10rem] p-7 bg-gray-200 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg">
-                      <!-- col-1 -->
-                      <div class="flex flex-col space-y-4 mt-4">
-                          <div class="flex flex-row items-center space-x-3">
-                              <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox"
-                                  id="alignment" @change="handleShow('alignment')">
-                              <label class="text-[18px]" for="alignment">Alignment</label>
-                          </div>
-                          <div class="flex flex-row items-center space-x-3">
-                              <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox"
-                                  id="rotation" @change="handleShow('rotation')">
-                              <label class="text-[18px]" for="rotation">Rotation</label>
-                          </div>
-                          <div class="flex flex-row items-center space-x-3">
-                              <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox"
-                                  id="oil_change" @change="handleShow('oil_change')">
-                              <label class="text-[18px]" for="oil_change">Oil Change</label>
-                          </div>
-                          <div class="flex flex-row items-center space-x-3">
-                              <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox"
-                                  id="balancing" @change="handleShow('balancing')">
-                              <label class="text-[18px]" for="balancing">Balancing</label>
-                          </div>
-                          <div class="flex flex-row items-center space-x-3">
-                              <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox"
-                                  id="inflation" @change="handleShow('inflation')">
-                              <label class="text-[18px]" for="inflation">Inflation</label>
-                          </div>
-                      </div>
-                      <!-- col-2 -->
-                      <div class="flex flex-col space-y-4 mt-4">
-                          <div class="flex flex-row items-center space-x-3">
-                              <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox"
-                                  id="puncture">
-                              <label class="text-[18px]" for="puncture">Puncture</label>
-                          </div>
-                          <div class="flex flex-row items-center space-x-3">
-                              <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox"
-                                  id="tyre_edge">
-                              <label class="text-[18px]" for="tyre_edge">Tyre Edge</label>
-                          </div>
-                          <div class="flex flex-row items-center space-x-3">
-                              <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox"
-                                  id="tyre_batch">
-                              <label class="text-[18px]" for="tyre_batch">Tyre Batch</label>
-                          </div>
-                          <div class="flex flex-row items-center space-x-3">
-                              <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox"
-                                  id="mushroom_batch">
-                              <label class="text-[18px]" for="mashroom_batch">Mushroom Batch</label>
-                          </div>
-                      </div>
-                      <!-- col-3 -->
-                      <div class="flex flex-col space-y-4 mt-4">
-                          <div class="flex flex-row items-center space-x-3">
-                              <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox"
-                                  id="ac_service" @change="handleShow('ac_service')">
-                              <label class="text-[18px]" for="ac_service">AC Service</label>&emsp;
-                              <select v-if="show.Ac" class="w-[16rem]] h-[3rem] rounded-sm"
-                                  style="border: 1px solid black;">
-                                  <option value="" selected disabled hidden>Please select...</option>
-                                  <option value="good">Good</option>
-                                  <option value="better">Better</option>
-                                  <option value="not_good">Not Good</option>
-                              </select>
-                          </div>
-                          <div class="flex flex-row items-center space-x-3">
-                              <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox"
-                                  id="battery" @change="handleShow('battery')">
-                              <label class="text-[18px]" for="battery">Battery</label>&emsp;&emsp;&emsp;
-                              <select v-if="show.battery" class="w-[16rem]] h-[3rem] rounded-sm"
-                                  style="border: 1px solid black;">
-                                  <option value="" selected disabled hidden>Please select...</option>
-                                  <option value="good">Good</option>
-                                  <option value="better">Better</option>
-                                  <option value="not_good">Not Good</option>
-                              </select>
-                          </div>
-                          <div class="flex flex-row items-center space-x-3">
-                              <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox"
-                                  id="wiper" @change="handleShow('wiper')">
-                              <label class="text-[18px]" for="wiper">Wiper</label>&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;
-                              <select v-if="show.wiper" class="w-[16rem]] h-[3rem] rounded-sm"
-                                  style="border: 1px solid black;">
-                                  <option value="" selected disabled hidden>Please select...</option>
-                                  <option value="good">Good</option>
-                                  <option value="better">Better</option>
-                                  <option value="not_good">Not Good</option>
-                              </select>
-                          </div>
-                          <div class="flex flex-row items-center space-x-3">
-                              <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox"
-                                  id="car_wash" @change="handleShow('car_wash')">
-                              <label class="text-[18px]" for="car_wash">Car Wash</label>&emsp;&emsp;
-                              <select v-if="show.car_wash" class="w-[16rem]] h-[3rem] rounded-sm"
-                                  style="border: 1px solid black;">
-                                  <option value="" selected disabled hidden>Please select...</option>
-                                  <option value="good">Good</option>
-                                  <option value="better">Better</option>
-                                  <option value="not_good">Not Good</option>
-                              </select>
-                          </div>
-                      </div>
-                  </div>
-                  <!-- hiden fields -->
-                  <div class="flex flex-col space-y-6 mt-6 ">
-                      <div v-if="show.alignment"
-                          class="p-6 bg-gray-200 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg">
-                          <h1 class="text-[20px] font-bold ml-1 mb-6">Alignment Details</h1>
-                          <div class="flex flex-row space-x-[8rem] ml-[55px]">
-                              <div class="flex flex-col space-y-1">
-                                  <label class="text-[16px]" for="LA">Last Alignment (kms)</label>
-                                  <input class="w-[16rem]] h-[3rem] rounded-sm border-solid border border-black"
-                                      type="text" id="LA">
+                <div class=" p-12">
+                    <h1 class="text-[20px] font-bold mb-1">Required Services</h1>
+                    <hr class="mt-2" :style="{ borderWidth: '2px', borderColor: 'gray' }">
+                      <div
+                          class="mt-6 flex flex-row space-x-[12rem] p-7 bg-gray-200 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg">
+                          <!-- col-1 -->
+                          <div class="flex flex-col space-y-4 mt-4">
+                              <div class="flex flex-row items-center space-x-3">
+                                  <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox" v-model="show.alignment_service_checkbox"
+                                      id="alignment" @change="handleShow('alignment')">
+                                  <label class="text-[18px]" for="alignment">Alignment</label>
                               </div>
-                              <div class="flex flex-col space-y-1">
-                                  <label class="text-[16px]" for="NA">Next Alignment (kms)</label>
-                                  <input class="w-[16rem]] h-[3rem] rounded-sm border-solid border border-black"
-                                      type="text" id="NA">
+                              <div class="flex flex-row items-center space-x-3">
+                                  <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox" v-model="show.rotation_service_checkbox"
+                                      id="rotation" @change="handleShow('rotation')">
+                                  <label class="text-[18px]" for="rotation">Rotation</label>
+                              </div>
+                              <div class="flex flex-row items-center space-x-3">
+                                  <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox" v-model="show.oil_change_service_checkbox"
+                                      id="oil_change" @change="handleShow('oil_change')">
+                                  <label class="text-[18px]" for="oil_change">Oil Change</label>
+                              </div>
+                              <div class="flex flex-row items-center space-x-3">
+                                  <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox" v-model="show.balancing_service_checkbox"
+                                      id="balancing" @change="handleShow('balancing')">
+                                  <label class="text-[18px]" for="balancing">Balancing</label>
+                              </div>
+                              <div class="flex flex-row items-center space-x-3">
+                                  <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox" v-model="show.inflation_service_checkbox"
+                                      id="inflation" @change="handleShow('inflation')">
+                                  <label class="text-[18px]" for="inflation">Inflation</label>
+                              </div>
+                          </div>
+                          <!-- col-2 -->
+                          <div class="flex flex-col space-y-4 mt-4">
+                              <div class="flex flex-row items-center space-x-3">
+                                  <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox" v-model="show.puncture_checkbox"
+                                      id="puncture" @change="handelCheck('puncture')">
+                                  <label class="text-[18px]" for="puncture">Puncture</label>
+                              </div>
+                              <div class="flex flex-row items-center space-x-3">
+                                  <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox" v-model="show.tyre_edge_checkbox"
+                                      id="tyre_edge" @change="handelCheck('tyre_edge')">
+                                  <label class="text-[18px]" for="tyre_edge">Tyre Edge</label>
+                              </div>
+                              <div class="flex flex-row items-center space-x-3">
+                                  <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox" v-model="show.tyre_path_checkbox"
+                                      id="tyre_batch" @change="handelCheck('tyre_patch')">
+                                  <label class="text-[18px]" for="tyre_batch">Tyre Patch</label>
+                              </div>
+                              <div class="flex flex-row items-center space-x-3">
+                                  <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox" v-model="show.mushroom_path_checkbox"
+                                      id="mushroom_batch" @change="handelCheck('mushrrom_patch')">
+                                  <label class="text-[18px]" for="mashroom_batch">Mushroom Patch</label>
+                              </div>
+                          </div>
+                          <!-- col-3 -->
+                          <div class="flex flex-col space-y-4 mt-4">
+                              <div class="flex flex-row items-center space-x-3">
+                                  <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox" v-model="show.ac_service_checkbox"
+                                      id="ac_service" @change="handleShow('ac_service')">
+                                  <label class="text-[18px] pr-[7px]" for="ac_service">AC Service</label>&emsp;
+                                  <select v-if="show.Ac" class="w-[16rem] h-[3rem] rounded-sm"
+                                      style="border: 1px solid black;">
+                                      <option value="" selected disabled hidden>Please select...</option>
+                                      <option value="good">Good</option>
+                                      <option value="better">Better</option>
+                                      <option value="not_good">Not Good</option>
+                                  </select>
+                              </div>
+                              <div class="flex flex-row items-center space-x-3">
+                                  <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox" v-model="show.battery_service_checkbox"
+                                      id="battery" @change="handleShow('battery')">
+                                  <label class="text-[18px] pr-1" for="battery">Battery</label>&emsp;&emsp;&emsp;
+                                  <select v-if="show.battery" class="w-[16rem] h-[3rem] rounded-sm"
+                                      style="border: 1px solid black;">
+                                      <option value="" selected disabled hidden>Please select...</option>
+                                      <option value="good">Good</option>
+                                      <option value="better">Better</option>
+                                      <option value="not_good">Not Good</option>
+                                  </select>
+                              </div>
+                              <div class="flex flex-row items-center space-x-3">
+                                  <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox" v-model="show.wiper_service_checkbox"
+                                      id="wiper" @change="handleShow('wiper')">
+                                  <label class="text-[18px] pr-[1px]" for="wiper">Wiper</label>&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;
+                                  <select v-if="show.wiper" class="w-[16rem] h-[3rem] rounded-sm"
+                                      style="border: 1px solid black;">
+                                      <option value="" selected disabled hidden>Please select...</option>
+                                      <option value="good">Good</option>
+                                      <option value="better">Better</option>
+                                      <option value="not_good">Not Good</option>
+                                  </select>
+                              </div>
+                              <div class="flex flex-row items-center space-x-3">
+                                  <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox" v-model="show.car_wash_service_checkbox"
+                                      id="car_wash" @change="handleShow('car_wash')">
+                                  <label class="text-[18px] pr-[2px]" for="car_wash">Car Wash</label>&emsp;&emsp;
+                                  <select v-if="show.car_wash" class="w-[16rem] h-[3rem] rounded-sm"
+                                      style="border: 1px solid black;">
+                                      <option value="" selected disabled hidden>Please select...</option>
+                                      <option value="good">Good</option>
+                                      <option value="better">Better</option>
+                                      <option value="not_good">Not Good</option>
+                                  </select>
                               </div>
                           </div>
                       </div>
-                      <div v-if="show.rotation"
-                          class="p-6 bg-gray-200 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg">
-                          <h1 class="text-[20px] font-bold ml-1 mb-6">Tyre Rotation Details</h1>
-                          <div class="flex flex-row space-x-[8rem] ml-[55px]">
-                              <div class="flex flex-col space-y-1">
-                                  <label class="text-[16px]" for="rim">Rim</label>
-                                  <input class="w-[16rem]] h-[3rem] rounded-sm border-solid border border-black"
-                                      type="text" id="rim">
-                              </div>
-                              <div class="flex flex-col space-y-1">
-                                  <label class="text-[16px]" for="wheel">Wheel</label>
-                                  <input class="w-[16rem]] h-[3rem] rounded-sm border-solid border border-black"
-                                      type="text" id="wheel">
-                              </div>
-                          </div>
-                      </div>
-                      <div v-if="show.oil_change"
-                          class="p-6 bg-gray-200 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg">
-                          <h1 class="text-[20px] font-bold ml-1 mb-6">Oil Service</h1>
-                          <div class="flex flex-row space-x-[8rem] ml-[55px]">
-                              <div class="flex flex-col space-y-1">
-                                  <label class="text-[16px]" for="oil_quality">Oil Quality</label>
-                                  <div>
-                                      <select class="w-[16rem] h-[3rem] rounded-sm" style="border: 1px solid black;"
-                                          id="oil_quality">
-                                          <option value="" selected disabled hidden>Please select...</option>
-                                          <option value="good">Good</option>
-                                          <option value="ok">Ok</option>
-                                          <option value="change">Change</option>
-                                      </select>
-                                  </div>
-                              </div>
-                              <div class="flex flex-col space-y-1">
-                                  <label class="text-[16px]" for="oil_quantity">Oil Quantity</label>
-                                  <div>
-                                      <select class="w-[16rem] h-[3rem] rounded-sm" style="border: 1px solid black;"
-                                          id="oil_quantity">
-                                          <option value="" selected disabled hidden>Please select...</option>
-                                          <option value="max">Max</option>
-                                          <option value="normal">Normal</option>
-                                          <option value="min">Min</option>
-                                      </select>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                      <div v-if="show.balancing"
-                          class="p-6 bg-gray-200 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg">
-                          <h1 class="text-[20px] font-bold ml-1 mb-6">Balancing Details</h1>
-                          <div class="flex flex-row justify-around">
-                              <div class="flex flex-col space-y-1">
-                                  <label class="text-[1rem]" for="FL">Front-Left (gm)</label>
-                                  <input class="w-[10rem] h-[3rem] rounded-sm border-solid border border-black"
-                                      type="text" id="FL">
-                              </div>
-                              <div class="flex flex-col space-y-1">
-                                  <label class="text-[1rem]" for="FR">Front-Right (gm)</label>
-                                  <input class="w-[10rem] h-[3rem] rounded-sm border-solid border border-black"
-                                      type="text" id="FR">
-                              </div>
-                              <div class="flex flex-col space-y-1">
-                                  <label class="text-[1rem]" for="BL">Back-Left (gm)</label>
-                                  <input class="w-[10rem] h-[3rem] rounded-sm border-solid border border-black"
-                                      type="text" id="BL">
-                              </div>
-                              <div class="flex flex-col space-y-1">
-                                  <label class="text-[1rem]" for="BR">Back-Right (gm)</label>
-                                  <input class="w-[10rem] h-[3rem] rounded-sm border-solid border border-black"
-                                      type="text" id="BR">
-                              </div>
-                              <div class="flex flex-col space-y-1">
-                                  <label class="text-[1rem]" for="ST">Spare Tyre (gm)</label>
-                                  <input class="w-[10rem] h-[3rem] rounded-sm border-solid border border-black"
-                                      type="text" id="ST">
-                              </div>
-                          </div>
-                      </div>
-                      <div v-if="show.inflation"
-                          class="p-6 bg-gray-200 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg">
-                          <h1 class="text-[20px] font-bold ml-1 mb-6">Inflation Details</h1>
-                          <div class="flex flex-row space-x-[100px] ml-[55px]">
-                              <div class="flex flex-col space-y-5">
-                                  <div class="flex flex-row space-x-3 mt-3">
-                                      <input class="w-5 h-5 rounded-sm border border-black bg-gray-200"
-                                          type="checkbox" id="air" :checked="selectedCheckbox === 'air'"
-                                          @change="handleCheckboxChange('air')">
-                                      <label class="text-[18px]" for="air">Air</label>
-                                  </div>
-                                  <div class="flex flex-row space-x-3">
-                                      <input class="w-5 h-5 rounded-sm border border-black bg-gray-200"
-                                          type="checkbox" id="nitrogen" :checked="selectedCheckbox === 'nitrogen'"
-                                          @change="handleCheckboxChange('nitrogen')">
-                                      <label class="text-[18px]" for="nitrogen">Nitrogen</label>
-                                  </div>
-                              </div>
-                              <div class="flex flex-row space-x-[100px]">
+                      <!-- hiden fields -->
+                      <div class="flex flex-col space-y-6 mt-6 ">
+                          <div v-if="show.alignment"
+                              class="p-6 bg-gray-200 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg">
+                              <h1 class="text-[20px] font-bold ml-1 mb-6">Alignment Details</h1>
+                              <div class="flex flex-row space-x-[12rem] ml-[55px]">
                                   <div class="flex flex-col space-y-1">
-                                      <label class="text-[16px]" for="FTS">Front Tyres (psi)</label>
-                                      <input class="w-[10rem]] h-[3rem] rounded-sm border-solid border border-black"
-                                          type="text" id="FTS">
+                                      <label class="text-[16px]" for="LA">Last Alignment (kms)</label>
+                                      <input class="w-[16rem]] h-[3rem] rounded-sm border-solid border border-black"
+                                          type="text" id="LA">
                                   </div>
                                   <div class="flex flex-col space-y-1">
-                                      <label class="text-[16px]" for="RTS">Rear Tyres (psi)</label>
-                                      <input class="w-[10rem]] h-[3rem] rounded-sm border-solid border border-black"
-                                          type="text" id="RTS">
+                                      <label class="text-[16px]" for="NA">Next Alignment (kms)</label>
+                                      <input class="w-[16rem]] h-[3rem] rounded-sm border-solid border border-black"
+                                          type="text" id="NA">
+                                  </div>
+                              </div>
+                          </div>
+                          <div v-if="show.rotation"
+                              class="p-6 bg-gray-200 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg">
+                              <h1 class="text-[20px] font-bold ml-1 mb-6">Tyre Rotation Details</h1>
+                              <div class="flex flex-row space-x-[12rem] ml-[55px]">
+                                  <div class="flex flex-col space-y-1">
+                                      <label class="text-[16px]" for="rim">Rim</label>
+                                      <input class="w-[16rem]] h-[3rem] rounded-sm border-solid border border-black"
+                                          type="text" id="rim">
+                                  </div>
+                                  <div class="flex flex-col space-y-1">
+                                      <label class="text-[16px]" for="wheel">Wheel</label>
+                                      <input class="w-[16rem]] h-[3rem] rounded-sm border-solid border border-black"
+                                          type="text" id="wheel">
+                                  </div>
+                              </div>
+                          </div>
+                          <div v-if="show.oil_change"
+                              class="p-6 bg-gray-200 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg">
+                              <h1 class="text-[20px] font-bold ml-1 mb-6">Oil Service</h1>
+                              <div class="flex flex-row space-x-[12rem] ml-[55px]">
+                                  <div class="flex flex-col space-y-1">
+                                      <label class="text-[16px]" for="oil_quality">Oil Quality</label>
+                                      <div>
+                                          <select class="w-[15rem] h-[3rem] rounded-sm" style="border: 1px solid black;"
+                                              id="oil_quality">
+                                              <option value="" selected disabled hidden>Please select...</option>
+                                              <option value="good">Good</option>
+                                              <option value="ok">Ok</option>
+                                              <option value="change">Change</option>
+                                          </select>
+                                      </div>
+                                  </div>
+                                  <div class="flex flex-col space-y-1">
+                                      <label class="text-[16px]" for="oil_quantity">Oil Quantity</label>
+                                      <div>
+                                          <select class="w-[15rem] h-[3rem] rounded-sm" style="border: 1px solid black;"
+                                              id="oil_quantity">
+                                              <option value="" selected disabled hidden>Please select...</option>
+                                              <option value="max">Max</option>
+                                              <option value="normal">Normal</option>
+                                              <option value="min">Min</option>
+                                          </select>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div v-if="show.balancing"
+                              class="p-6 bg-gray-200 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg">
+                              <h1 class="text-[20px] font-bold ml-1 mb-6">Balancing Details</h1>
+                              <div class="flex flex-row justify-around">
+                                  <div class="flex flex-col space-y-1">
+                                      <label class="text-[1rem]" for="FL">Front-Left (gm)</label>
+                                      <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
+                                          type="text" id="FL">
+                                  </div>
+                                  <div class="flex flex-col space-y-1">
+                                      <label class="text-[1rem]" for="FR">Front-Right (gm)</label>
+                                      <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
+                                          type="text" id="FR">
+                                  </div>
+                                  <div class="flex flex-col space-y-1">
+                                      <label class="text-[1rem]" for="BL">Back-Left (gm)</label>
+                                      <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
+                                          type="text" id="BL">
+                                  </div>
+                                  <div class="flex flex-col space-y-1">
+                                      <label class="text-[1rem]" for="BR">Back-Right (gm)</label>
+                                      <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
+                                          type="text" id="BR">
+                                  </div>
+                                  <div class="flex flex-col space-y-1">
+                                      <label class="text-[1rem]" for="ST">Spare Tyre (gm)</label>
+                                      <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
+                                          type="text" id="ST">
+                                  </div>
+                              </div>
+                          </div>
+                          <div v-if="show.inflation"
+                              class="p-6 bg-gray-200 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg">
+                              <h1 class="text-[20px] font-bold ml-1 mb-6">Inflation Details</h1>
+                              <div class="flex flex-row space-x-[100px] ml-[55px]">
+                                  <div class="flex flex-col space-y-5">
+                                      <div class="flex flex-row space-x-3 mt-3">
+                                          <input class="w-5 h-5 rounded-sm border border-black bg-gray-200"
+                                              type="checkbox" id="air" :checked="selectedCheckbox === 'air'"
+                                              @change="handleCheckboxChange('air')">
+                                          <label class="text-[18px]" for="air">Air</label>
+                                      </div>
+                                      <div class="flex flex-row space-x-3">
+                                          <input class="w-5 h-5 rounded-sm border border-black bg-gray-200"
+                                              type="checkbox" id="nitrogen" :checked="selectedCheckbox === 'nitrogen'"
+                                              @change="handleCheckboxChange('nitrogen')">
+                                          <label class="text-[18px]" for="nitrogen">Nitrogen</label>
+                                      </div>
+                                  </div>
+                                  <div class="flex flex-row space-x-[100px]">
+                                      <div class="flex flex-col space-y-1">
+                                          <label class="text-[16px]" for="FTS">Front Tyres (psi)</label>
+                                          <input class="w-[12rem]] h-[3rem] rounded-sm border-solid border border-black"
+                                              type="text" id="FTS">
+                                      </div>
+                                      <div class="flex flex-col space-y-1">
+                                          <label class="text-[16px]" for="RTS">Rear Tyres (psi)</label>
+                                          <input class="w-[12rem]] h-[3rem] rounded-sm border-solid border border-black"
+                                              type="text" id="RTS">
+                                      </div>
                                   </div>
                               </div>
                           </div>
                       </div>
-                  </div>
+                </div>
               </div>
           </div>
           <!-- Replacement Tyre Details -->
           <div v-if="currentstep == 3">
-              <div class="pt-24">
+              <div class="pt-24 p-12">
                   <h1 class="text-[20px] font-bold mb-1">Tyre Replacement Details</h1>
                   <hr class="mt-2 " :style="{ borderWidth: '2px', borderColor: 'gray' }">
                   <div class="pb-5 ">
                       <div v-for="(position, index) in tyrePositions" :key="index"
-                          class="grid grid-cols-5 gap-0 mt-7 pb-5 ml-2 border-b border-gray-900 p-2 bg-gray-200 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg">
-                          <div class="ml-5">
+                          class="grid grid-cols-10 gap-[12rem] mt-7 pb-5 ml-2 border-b border-gray-900 p-2 bg-gray-200 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg">
+                          <div class="ml-5 w-[16rem]">
                               <p class="text-[20px] font-bold mt-8">{{ position }} Tyre</p>
-                              <div class="mt-[40px]">
+                              <div class="mt-[35px]">
                                   <label>Load Index</label><br>
-                                  <input class="w-[338px] h-[52px] rounded-sm border-solid border border-black"
+                                  <input class="w-[15rem] h-[52px] rounded-sm border-solid border border-black"
                                       type="text" v-model="tyres[index].loadIndex" @change="saveData(index)">
                               </div>
                           </div>
                           <div class="ml-[100px]">
                               <div>
                                   <label>Brand</label>
-                                  <input class="w-[338px] h-[52px] rounded-sm border-solid border border-black"
+                                  <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                       type="text" v-model="tyres[index].brand" @change="saveData(index)">
                               </div>
-                              <div class="mt-[20px]">
+                              <div class="mt-[20px] w-[16rem]">
                                   <label>Speed Rating</label>
-                                  <input class="w-[338px] h-[52px] rounded-sm border-solid border border-black"
+                                  <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                       type="text" v-model="tyres[index].speedRating" @change="saveData(index)">
                               </div>
                           </div>
                           <div class="ml-[200px]">
                               <div>
                                   <label>Pattern</label>
-                                  <input class="w-[338px] h-[52px] rounded-sm border-solid border border-black"
+                                  <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                       type="text" v-model="tyres[index].pattern" @change="saveData(index)">
                               </div>
                               <div class="mt-[20px]">
                                   <label>Size</label>
-                                  <input class="w-[338px] h-[52px] rounded-sm border-solid border border-black"
+                                  <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                       type="text" v-model="tyres[index].size" @change="saveData(index)">
                               </div>
                           </div>
                           <div class="ml-[300px]">
                               <div>
                                   <label>TT/TL</label>
-                                  <input class="w-[338px] h-[52px] rounded-sm border-solid border border-black"
+                                  <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                       type="text" v-model="tyres[index].ttTl" @change="saveData(index)">
                               </div>
                               <div class="mt-[20px]">
                                   <label>Item</label>
-                                  <input class="w-[338px] h-[52px] rounded-sm border-solid border border-black"
+                                  <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                       type="text" v-model="tyres[index].item" @change="saveData(index)">
                               </div>
                           </div>
@@ -961,47 +963,47 @@
           </div>
           <!-- Billing Details -->
           <div v-if="currentstep == 4">
-              <div class="pt-24">
+              <div class="pt-24 p-12">
                   <h1 class="text-[20px] font-bold mb-1">Raw Materials</h1>
                   <hr class="mt-2" :style="{ borderWidth: '2px', borderColor: 'gray' }">
                   <div class="pt-5">
                       <table
-                          class="table-auto border border-collapse border-gray-800 w-full shadow-md transition-shadow">
+                          class="table-auto border border-collapse border-gray-800 w-auto shadow-md transition-shadow">
                           <thead>
                               <tr>
-                                  <th class="border border-gray-800 px-4 py-4">SI.No</th>
-                                  <th class="border border-gray-800 px-4 py-4">Item Code</th>
-                                  <th class="border border-gray-800 px-4 py-4">Source Warehouse</th>
-                                  <th class="border border-gray-800 px-4 py-4">Required Quantity</th>
-                                  <th class="border border-gray-800 px-4 py-4">Rate</th>
-                                  <th class="border border-gray-800 px-4 py-4">Cost</th>
+                                  <th class="border border-gray-800 px-4 py-4 w-[10rem]">SI.No</th>
+                                  <th class="border border-gray-800 px-4 py-4 w-[10rem]">Item Code</th>
+                                  <th class="border border-gray-800 px-4 py-4 w-[16rem]">Source Warehouse</th>
+                                  <th class="border border-gray-800 px-4 py-4 w-[16rem]">Required Quantity</th>
+                                  <th class="border border-gray-800 px-4 py-4 w-[10rem]">Rate</th>
+                                  <th class="border border-gray-800 px-4 py-4 w-[10rem]">Cost</th>
                               </tr>
                           </thead>
                           <tbody class="border border-gray-800 text-center">
                               <tr v-for="(data, index) in tableData" :key="index">
-                                  <td class="border border-gray-800 px-4 py-2">{{ index + 1 }}</td>
+                                  <td class="border border-gray-800 px-4 py-2 w-[10rem]">{{ index + 1 }}</td>
                                   <td class="border border-gray-800 px-4 py-2">
                                       <input type="text" v-model="data.itemCode"
-                                          class="rounded-sm border-solid border border-black">
+                                          class="w-[10rem] rounded-sm border-solid border border-black">
                                   </td>
                                   <td class="border border-gray-800 px-4 py-2">
                                       <input type="text" v-model="data.sourceWarehouse"
-                                          class="rounded-sm border-solid border border-black">
+                                          class="w-[10rem] rounded-sm border-solid border border-black">
                                   </td>
                                   <td class="border border-gray-800 px-4 py-2">
                                       <input type="text" v-model="data.requiredQuantity" @input="calculateTotals"
-                                          class="rounded-sm border-solid border border-black">
+                                          class="w-[10rem] rounded-sm border-solid border border-black">
                                   </td>
                                   <td class="border border-gray-800 px-4 py-2">
                                       <input type="text" v-model="data.rate" @input="calculateTotals"
-                                          class="rounded-sm border-solid border border-black">
+                                          class="w-[10rem] rounded-sm border-solid border border-black">
                                   </td>
                                   <td class="border border-gray-800 px-4 py-2">
                                       <input type="text" v-model="data.cost" readonly
-                                          class="rounded-sm border-solid border border-black">
+                                          class=" w-[10rem] rounded-sm border-solid border border-black">
                                   </td>
                                   <td class="border border-gray-800 px-4 py-2">
-                                      <button class="bg-red-500 text-white font-bold text-base p-3 rounded-lg mt-3"
+                                      <button class="w-[5rem] bg-red-500 text-white font-bold text-base p-3 rounded-lg mt-3"
                                           @click="removeRow(index)">Delete</button>
                                   </td>
                               </tr>
@@ -1704,7 +1706,20 @@ const show = ref({
   rotation: false,
   oil_change: false,
   balancing: false,
-  inflation: false
+  inflation: false,
+  ac_service_checkbox: false,
+  battery_service_checkbox: false,
+  wiper_service_checkbox: false,
+  car_wash_service_checkbox: false,
+  alignment_service_checkbox: false,
+  rotation_service_checkbox: false,
+  oil_change_service_checkbox: false,
+  balancing_service_checkbox: false,
+  inflation_service_checkbox: false,
+  puncture_checkbox: false,
+  tyre_edge_checkbox: false,
+  tyre_path_checkbox: false,
+  mushroom_path_checkbox: false,
 })
 
 function handleCheckboxChange(checkboxId) {
@@ -1723,32 +1738,58 @@ function handleShow(item) {
   switch (item) {
       case 'ac_service':
           show.value.Ac = !show.value.Ac;
+          show.ac_service_checkbox = true;
           break;
       case 'battery':
           show.value.battery = !show.value.battery;
+          show.battery_service_checkbox = true;
           break;
       case 'wiper':
           show.value.wiper = !show.value.wiper;
+          show.wiper_service_checkbox = true;
           break;
       case 'car_wash':
           show.value.car_wash = !show.value.car_wash;
+          show.car_wash_service_checkbox = true;
           break;
       case 'alignment':
           show.value.alignment = !show.value.alignment;
+          show.alignment_service_checkbox = true;
           break;
       case 'rotation':
           show.value.rotation = !show.value.rotation;
+          show.rotation_service_checkbox = true;
           break;
       case 'oil_change':
           show.value.oil_change = !show.value.oil_change;
+          show.oil_change_service_checkbox = true;
           break;
       case 'balancing':
           show.value.balancing = !show.value.balancing;
+          show.balancing_service_checkbox = true;
           break;
       case 'inflation':
           show.value.inflation = !show.value.inflation;
+          show.inflation_service_checkbox = true;
           break;
   }
+}
+
+function handelCheck(data) {
+    switch (data) {
+        case 'puncture':
+            show.puncture_checkbox = true;
+            break
+        case 'tyre_edge':
+            show.tyre_edge_checkbox = true;
+            break;
+        case 'tyre_patch':
+            show.tyre_path_checkbox = true;
+            break;
+        case 'mushrrom_patch':
+            show.mushroom_path_checkbox = true;
+            break;
+    }
 }
 
 //===================================================>>> Replacement Tyre Details <<<========================================================================//
