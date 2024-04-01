@@ -718,7 +718,7 @@
                               </div>
                               <div class="flex flex-row items-center space-x-3">
                                   <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox" v-model="show.mushroom_path_checkbox"
-                                      id="mushroom_batch" @change="handelCheck('mushrrom_patch')">
+                                      id="mushroom_batch" @change="handelCheck('mushroom_patch')">
                                   <label class="text-[18px]" for="mashroom_batch">Mushroom Patch</label>
                               </div>
                           </div>
@@ -729,7 +729,7 @@
                                       id="ac_service" @change="handleShow('ac_service')">
                                   <label class="text-[18px] pr-[7px]" for="ac_service">AC Service</label>&emsp;
                                   <select v-if="show.Ac" class="w-[16rem] h-[3rem] rounded-sm"
-                                      style="border: 1px solid black;">
+                                      style="border: 1px solid black;" v-model="requireService.ac" @change="shooo">
                                       <option value="" selected disabled hidden>Please select...</option>
                                       <option value="good">Good</option>
                                       <option value="better">Better</option>
@@ -741,7 +741,7 @@
                                       id="battery" @change="handleShow('battery')">
                                   <label class="text-[18px] pr-1" for="battery">Battery</label>&emsp;&emsp;&emsp;
                                   <select v-if="show.battery" class="w-[16rem] h-[3rem] rounded-sm"
-                                      style="border: 1px solid black;">
+                                      style="border: 1px solid black;" v-model="requireService.battery" @change="shooo">
                                       <option value="" selected disabled hidden>Please select...</option>
                                       <option value="good">Good</option>
                                       <option value="better">Better</option>
@@ -753,7 +753,7 @@
                                       id="wiper" @change="handleShow('wiper')">
                                   <label class="text-[18px] pr-[1px]" for="wiper">Wiper</label>&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;
                                   <select v-if="show.wiper" class="w-[16rem] h-[3rem] rounded-sm"
-                                      style="border: 1px solid black;">
+                                      style="border: 1px solid black;" v-model="requireService.wiper" @change="shooo">
                                       <option value="" selected disabled hidden>Please select...</option>
                                       <option value="good">Good</option>
                                       <option value="better">Better</option>
@@ -765,7 +765,7 @@
                                       id="car_wash" @change="handleShow('car_wash')">
                                   <label class="text-[18px] pr-[2px]" for="car_wash">Car Wash</label>&emsp;&emsp;
                                   <select v-if="show.car_wash" class="w-[16rem] h-[3rem] rounded-sm"
-                                      style="border: 1px solid black;">
+                                      style="border: 1px solid black;" v-model="requireService.car_wash" @change="shooo">
                                       <option value="" selected disabled hidden>Please select...</option>
                                       <option value="good">Good</option>
                                       <option value="better">Better</option>
@@ -783,12 +783,12 @@
                                   <div class="flex flex-col space-y-1">
                                       <label class="text-[16px]" for="LA">Last Alignment (kms)</label>
                                       <input class="w-[16rem]] h-[3rem] rounded-sm border-solid border border-black"
-                                          type="text" id="LA">
+                                          type="text" id="LA" v-model="requireService.alignment.lastAlignment">
                                   </div>
                                   <div class="flex flex-col space-y-1">
                                       <label class="text-[16px]" for="NA">Next Alignment (kms)</label>
                                       <input class="w-[16rem]] h-[3rem] rounded-sm border-solid border border-black"
-                                          type="text" id="NA">
+                                          type="text" id="NA" v-model="requireService.alignment.nextAlignment" @change="shooo">
                                   </div>
                               </div>
                           </div>
@@ -799,12 +799,12 @@
                                   <div class="flex flex-col space-y-1">
                                       <label class="text-[16px]" for="rim">Rim</label>
                                       <input class="w-[16rem]] h-[3rem] rounded-sm border-solid border border-black"
-                                          type="text" id="rim">
+                                          type="text" id="rim" v-model="requireService.rotation.rim">
                                   </div>
                                   <div class="flex flex-col space-y-1">
                                       <label class="text-[16px]" for="wheel">Wheel</label>
                                       <input class="w-[16rem]] h-[3rem] rounded-sm border-solid border border-black"
-                                          type="text" id="wheel">
+                                          type="text" id="wheel" v-model='requireService.rotation.wheel' @change="shooo">
                                   </div>
                               </div>
                           </div>
@@ -816,7 +816,7 @@
                                       <label class="text-[16px]" for="oil_quality">Oil Quality</label>
                                       <div>
                                           <select class="w-[15rem] h-[3rem] rounded-sm" style="border: 1px solid black;"
-                                              id="oil_quality">
+                                              id="oil_quality" v-model="requireService.oil_change.oil_quality">
                                               <option value="" selected disabled hidden>Please select...</option>
                                               <option value="good">Good</option>
                                               <option value="ok">Ok</option>
@@ -828,7 +828,7 @@
                                       <label class="text-[16px]" for="oil_quantity">Oil Quantity</label>
                                       <div>
                                           <select class="w-[15rem] h-[3rem] rounded-sm" style="border: 1px solid black;"
-                                              id="oil_quantity">
+                                              id="oil_quantity" v-model="requireService.oil_change.oil_quantity" @change="shooo">
                                               <option value="" selected disabled hidden>Please select...</option>
                                               <option value="max">Max</option>
                                               <option value="normal">Normal</option>
@@ -845,27 +845,27 @@
                                   <div class="flex flex-col space-y-1">
                                       <label class="text-[1rem]" for="FL">Front-Left (gm)</label>
                                       <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
-                                          type="text" id="FL">
+                                          type="text" id="FL" v-model="requireService.balancing.fl">
                                   </div>
                                   <div class="flex flex-col space-y-1">
                                       <label class="text-[1rem]" for="FR">Front-Right (gm)</label>
                                       <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
-                                          type="text" id="FR">
+                                          type="text" id="FR" v-model="requireService.balancing.fr">
                                   </div>
                                   <div class="flex flex-col space-y-1">
                                       <label class="text-[1rem]" for="BL">Back-Left (gm)</label>
                                       <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
-                                          type="text" id="BL">
+                                          type="text" id="BL" v-model="requireService.balancing.bl">
                                   </div>
                                   <div class="flex flex-col space-y-1">
                                       <label class="text-[1rem]" for="BR">Back-Right (gm)</label>
                                       <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
-                                          type="text" id="BR">
+                                          type="text" id="BR" v-model="requireService.balancing.br">
                                   </div>
                                   <div class="flex flex-col space-y-1">
                                       <label class="text-[1rem]" for="ST">Spare Tyre (gm)</label>
                                       <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
-                                          type="text" id="ST">
+                                          type="text" id="ST" v-model='requireService.balancing.st' @change="shooo">
                                   </div>
                               </div>
                           </div>
@@ -891,12 +891,12 @@
                                       <div class="flex flex-col space-y-1">
                                           <label class="text-[16px]" for="FTS">Front Tyres (psi)</label>
                                           <input class="w-[12rem]] h-[3rem] rounded-sm border-solid border border-black"
-                                              type="text" id="FTS">
+                                              type="text" id="FTS" v-model="requireService.inflation.ft">
                                       </div>
                                       <div class="flex flex-col space-y-1">
                                           <label class="text-[16px]" for="RTS">Rear Tyres (psi)</label>
                                           <input class="w-[12rem]] h-[3rem] rounded-sm border-solid border border-black"
-                                              type="text" id="RTS">
+                                              type="text" id="RTS" v-model="requireService.inflation.rt" @change="shooo">
                                       </div>
                                   </div>
                               </div>
@@ -1691,6 +1691,7 @@ const updateTyreData = (index) => {
 
 const deleteTyre = (index) => {
   tyreDatas.value.splice(index, 1);
+  console.log(tyreDatas.value);
 };
 
 //========================================================>>> Required Services <<<============================================================================//
@@ -1728,49 +1729,114 @@ function handleCheckboxChange(checkboxId) {
   } else {
       selectedCheckbox = checkboxId;
       const otherCheckboxId = checkboxId === 'air' ? 'nitrogen' : 'air';
+      requireService.value.inflation.type=selectedCheckbox;
       const otherCheckbox = document.getElementById(otherCheckboxId);
       if (otherCheckbox) {
           otherCheckbox.checked = false;
       }
   }
 }
+const requireService=ref({
+    alignment:{
+        lastAlignment:'',
+        nextAlignment:''
+    },
+    rotation:{
+        rim:'',
+        wheel:''
+    },
+    oil_change:{
+        oil_quality:'',
+        oil_quantity:''
+    },
+    balancing:{
+        fl:'',
+        fr:'',
+        bl:'',
+        br:'',
+        st:''
+    },
+    inflation:{
+        type:'',
+        ft:'',
+        rt:''
+    },
+    ac:'',
+    battery:'',
+    wiper:'',
+    car_wash:'',
+    puncture:false,
+    tyre_edge:false,
+    tyre_patch:false,
+    mashroom_patch:false,
+})
+function shooo(){
+    console.log(requireService.value);
+}
 function handleShow(item) {
   switch (item) {
       case 'ac_service':
           show.value.Ac = !show.value.Ac;
-          show.ac_service_checkbox = true;
+          if(show.value.Ac == false){
+            requireService.value.ac='';
+          }
           break;
       case 'battery':
           show.value.battery = !show.value.battery;
-          show.battery_service_checkbox = true;
+          if(show.value.battery == false){
+            requireService.value.battery='';
+          }
           break;
       case 'wiper':
           show.value.wiper = !show.value.wiper;
-          show.wiper_service_checkbox = true;
+          if(show.value.wiper == false){
+            requireService.value.wiper='';
+          }
           break;
       case 'car_wash':
           show.value.car_wash = !show.value.car_wash;
-          show.car_wash_service_checkbox = true;
+          if(show.value.car_wash == false){
+            requireService.value.car_wash='';
+          }
           break;
       case 'alignment':
           show.value.alignment = !show.value.alignment;
-          show.alignment_service_checkbox = true;
+          if(show.value.alignment == false){
+            requireService.value.alignment.lastAlignment='';
+            requireService.value.alignment.nextAlignment='';
+          }
           break;
       case 'rotation':
           show.value.rotation = !show.value.rotation;
-          show.rotation_service_checkbox = true;
+          if(show.value.rotation == false){
+            requireService.value.rotation.rim='';
+            requireService.value.rotation.wheel='';
+          }
           break;
       case 'oil_change':
           show.value.oil_change = !show.value.oil_change;
-          show.oil_change_service_checkbox = true;
+          if(show.value.oil_change == false){
+            requireService.value.oil_change.oil_quality='';
+            requireService.value.oil_change.oil_quantity='';
+          }
           break;
       case 'balancing':
           show.value.balancing = !show.value.balancing;
-          show.balancing_service_checkbox = true;
+          if(show.value.balancing == false){
+            requireService.value.balancing.fl='';
+            requireService.value.balancing.fr='';
+            requireService.value.balancing.bl='';
+            requireService.value.balancing.br='';
+            requireService.value.balancing.st='';
+          }
           break;
       case 'inflation':
           show.value.inflation = !show.value.inflation;
-          show.inflation_service_checkbox = true;
+          if(show.value.inflation == false){
+            requireService.value.inflation.type='';
+            requireService.value.inflation.ft='';
+            requireService.value.inflation.rt='';
+          }
           break;
   }
 }
@@ -1778,16 +1844,36 @@ function handleShow(item) {
 function handelCheck(data) {
     switch (data) {
         case 'puncture':
-            show.puncture_checkbox = true;
+            show.puncture_checkbox = !show.puncture_checkbox;
+            if(show.puncture_checkbox == true){
+                requireService.value.puncture=true;
+            }else{
+                requireService.value.puncture=false;
+            }
             break
         case 'tyre_edge':
-            show.tyre_edge_checkbox = true;
+            show.tyre_edge_checkbox = !show.tyre_edge_checkbox;
+            if(show.tyre_edge_checkbox == true){
+                requireService.value.tyre_edge=true;
+            }else{
+                requireService.value.tyre_edge=false;
+            }
             break;
         case 'tyre_patch':
-            show.tyre_path_checkbox = true;
+            show.tyre_path_checkbox = !show.tyre_path_checkbox;
+            if(show.tyre_path_checkbox == true){
+                requireService.value.tyre_patch=true;
+            }else{
+                requireService.value.tyre_patch=false;
+            }
             break;
-        case 'mushrrom_patch':
-            show.mushroom_path_checkbox = true;
+        case 'mushroom_patch':
+            show.mushroom_path_checkbox = !show.mushroom_path_checkbox;
+            if(show.mushroom_path_checkbox == true){
+                requireService.value.mashroom_patch=true;
+            }else{
+                requireService.value.mashroom_patch=false;
+            }
             break;
     }
 }
