@@ -578,7 +578,7 @@
                   </div>
               </div>
           </div>
-          <!-- 5 point check up  -->
+          <!-- 5 point checkup  -->
           <div v-if="currentstep == 1" class="mr-9">
               <div class="p-12 pt-24 w-screen ">
                   <div class="flex flex-row justify-between p-1">
@@ -907,60 +907,91 @@
           </div>
           <!-- Replacement Tyre Details -->
           <div v-if="currentstep == 3">
-              <div class="pt-24 p-12">
+            <div class="pt-24 p-12">
+              <div class=" flex flex-row justify-between">
                   <h1 class="text-[20px] font-bold mb-1">Tyre Replacement Details</h1>
-                  <hr class="mt-2 " :style="{ borderWidth: '2px', borderColor: 'gray' }">
-                  <div class="pb-5 ">
-                      <div v-for="(position, index) in tyrePositions" :key="index"
-                          class="grid grid-cols-10 gap-[12rem] mt-7 pb-5 ml-2 border-b border-gray-900 p-2 bg-gray-200 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg">
-                          <div class="ml-5 w-[16rem]">
-                              <p class="text-[20px] font-bold mt-8">{{ position }} Tyre</p>
-                              <div class="mt-[35px]">
-                                  <label>Load Index</label><br>
-                                  <input class="w-[15rem] h-[52px] rounded-sm border-solid border border-black"
-                                      type="text" v-model="tyres[index].loadIndex" @change="saveData(index)">
-                              </div>
-                          </div>
-                          <div class="ml-[100px]">
-                              <div>
-                                  <label>Brand</label>
-                                  <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                      type="text" v-model="tyres[index].brand" @change="saveData(index)">
-                              </div>
-                              <div class="mt-[20px] w-[16rem]">
-                                  <label>Speed Rating</label>
-                                  <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                      type="text" v-model="tyres[index].speedRating" @change="saveData(index)">
-                              </div>
-                          </div>
-                          <div class="ml-[200px]">
-                              <div>
-                                  <label>Pattern</label>
-                                  <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                      type="text" v-model="tyres[index].pattern" @change="saveData(index)">
-                              </div>
-                              <div class="mt-[20px]">
-                                  <label>Size</label>
-                                  <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                      type="text" v-model="tyres[index].size" @change="saveData(index)">
-                              </div>
-                          </div>
-                          <div class="ml-[300px]">
-                              <div>
-                                  <label>TT/TL</label>
-                                  <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                      type="text" v-model="tyres[index].ttTl" @change="saveData(index)">
-                              </div>
-                              <div class="mt-[20px]">
-                                  <label>Item</label>
-                                  <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                      type="text" v-model="tyres[index].item" @change="saveData(index)">
-                              </div>
+                  <button class="text-[1.2rem]  text-white w-[12rem] h-[3rem] bg-blue-500 rounded-lg"
+                          @click="addTyreReplacement">Add</button>
+              </div>
+                <hr class="mt-2 " :style="{ borderWidth: '2px', borderColor: 'gray' }">
+                <div class="pb-5 ">
+                    <div v-for="(tyre, index) in tyres" :key="index"     
+                        class="grid grid-cols-10 gap-[11rem] mt-7 pb-5 ml-2 border-b border-gray-900 p-2 bg-gray-200 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg">
+                        <div class="ml-5 w-[16rem]">
+                          <label class="pt-2" :for="'type' + index"  >Tyer Position</label><br>
+                          <select class="w-[15rem] h-[52px] rounded-sm border-solid border border-black"
+                            v-model="tyre.type" :id="'type'+index" @change="saveData(index)">
+                                  <option value="" selected disabled hidden>Please select...</option>
+                                  <option value="Front-Left">Front-Left</option>
+                                  <option value="Front-Right">Front-Right</option>
+                                  <option value="Back-Left">Back-Left</option>
+                                  <option value="Back-Right">Back-Right</option>
+                                  <option value="Stephanie">Spare-wheel</option>
+                          </select>
+                            <!-- <p class="text-[20px] font-bold mt-8">{{ position }} Tyre</p> -->
+                            <div class="mt-[20px]">
+                                <label :for="'loadIndex' + index">Load Index</label><br>
+                                <input class="w-[15rem] h-[52px] rounded-sm border-solid border border-black"
+                                    :id="'loadIndex'+index" type="text" v-model="tyre.loadIndex" @change="saveData(index)">
+                            </div>
+                        </div>
+                        <div class="ml-[100px]">
+                            <div>
+                                <label :for="'brand' + index">Brand</label>
+                                <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
+                                    :id="'brand'+index" type="text" v-model="tyre.brand" @change="saveData(index)">
+                            </div>
+                            <div class="mt-[20px] w-[16rem]">
+                                <label :for="'speedRating' + index">Speed Rating</label>
+                                <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
+                                    :id="'speedRating'+index" type="text" v-model="tyre.speedRating" @change="saveData(index)">
+                            </div>
+                        </div>
+                        <div class="ml-[200px]">
+                            <div>
+                                <label :for="'pattern' + index" >Pattern</label>
+                                <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
+                                    :id="'pattern'+index" type="text" v-model="tyre.pattern" @change="saveData(index)">
+                            </div>
+                            <div class="mt-[20px]">
+                                <label :for="'size' + index">Size</label>
+                                <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
+                                    :id="'size'+index" type="text" v-model="tyre.size" @change="saveData(index)">
+                            </div>
+                        </div>
+                        <div class="ml-[300px]">
+                            <div>
+                                <label :for="'ttTl' + index">TT/TL</label>
+                                <input :id="'ttTl'+index" class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
+                                    type="text" v-model="tyre.ttTl" @change="saveData(index)">
+                            </div>
+                            <div class="mt-[20px]">
+                                <label :for="'item' + index" >Item</label>
+                                <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
+                                    :id="'item'+index" type="text" v-model="tyre.item" @change="saveData(index)">
+                            </div>
+                        </div>
+                        <div class="ml-[400px]">
+                          <FeatherIcon name="trash-2" class="mt-8 w-8 h-8 cursor-pointer text-red-500"
+                              @click="deleteTyreReplacement" />
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class=" pb-5 p-8">
+                  <div v-for="(position, index) in setValue.index" :key="index" class=" p-4">
+                      <div class=" rounded h-24  w-full bg-white" >
+                          <div class=" grid grid-cols-4">
+                              <p>hi</p>
+                              <p>hi</p>
+                              <p>hi</p>
+                              <p>hi</p>
+                              <p>hi</p>
                           </div>
                       </div>
                   </div>
-              </div>
-          </div>
+                </div> -->
+            </div>
+        </div>
           <!-- Billing Details -->
           <div v-if="currentstep == 4">
               <div class="pt-24 p-12">
@@ -1882,19 +1913,51 @@ function handelCheck(data) {
 
 const tyrePositions = ['Front Left', 'Front Right', 'Rear Left', 'Rear Right', 'Spare'];
 
-const tyres = ref(Array.from({ length: tyrePositions.length }, () => ({
-  loadIndex: '',
-  brand: '',
-  speedRating: '',
-  pattern: '',
-  size: '',
-  ttTl: '',
-  item: ''
-})));
+// const tyres = ref(Array.from({ length: tyrePositions.length }, () => ({
+//   loadIndex: '',
+//   brand: '',
+//   speedRating: '',
+//   pattern: '',
+//   size: '',
+//   ttTl: '',
+//   item: ''
+// })));
 
-const saveData = (index) => {
-  console.log(tyres.value);
-};
+const tyres = ref([{
+    type:'',
+    loadIndex: '',
+    brand: '',
+    speedRating: '',
+    pattern: '',
+    size: '',
+    ttTl: '',
+    item: ''
+  }]);
+  
+  const saveData = (index) => {
+    const tyreValues = tyres.value[index];
+    console.log('Updated tyre data:', tyreValues);
+    console.log(tyres.value);
+  };
+  
+  const setValue  = reactive({
+      index:ref(1)
+  });
+  
+  const addTyreReplacement = () =>{
+      tyres.value.push({
+          loadIndex: '',
+          brand: '',
+          speedRating: '',
+          pattern: '',
+          size: '',
+          ttTl: '',
+          item: ''
+      })
+  }
+  const deleteTyreReplacement = (index) =>{
+      tyres.value.splice(index, 1)
+  }
 
 //===================================================>>>Last Page <<<=========================================================================================//
 
