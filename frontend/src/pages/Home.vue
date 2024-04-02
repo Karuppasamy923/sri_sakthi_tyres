@@ -972,7 +972,7 @@
                             </div>
                         </div>
                         <div class="ml-[400px]">
-                          <FeatherIcon name="trash-2" class="mt-8 w-8 h-8 cursor-pointer text-red-500"
+                          <FeatherIcon name="x" class="mt-0 ml-2 w-6 h-6 cursor-pointer text-red-500"
                               @click="deleteTyreReplacement" />
                         </div>
                     </div>
@@ -1710,9 +1710,18 @@ const removeEmployee1 = (index) => {
 
 const tyreDatas = ref([{ tyre: '', depth: '', pressure: '', comment: '', wear: false, cut: false, mark: false, damage: false, bulge: false, puncture: false }]);
 
+const sampleValue = reactive({
+    index: ref(1),
+})
+
 const addTyre = () => {
-  tyreDatas.value.push({ tyre: '', depth: '', pressure: '', comment: '', wear: false, cut: false, mark: false, damage: false, bulge: false, puncture: false });
+    if( sampleValue.index < 5){
+        tyreDatas.value.push({ tyre: '', depth: '', pressure: '', comment: '', wear: false, cut: false, mark: false, damage: false, bulge: false, puncture: false });
+        sampleValue.index++;
+    }
+//   tyreDatas.value.push({ tyre: '', depth: '', pressure: '', comment: '', wear: false, cut: false, mark: false, damage: false, bulge: false, puncture: false });
 };
+
 
 const updateTyreData = (index) => {
   const tyre = tyreDatas.value[index];
@@ -1721,8 +1730,12 @@ const updateTyreData = (index) => {
 };
 
 const deleteTyre = (index) => {
-  tyreDatas.value.splice(index, 1);
-  console.log(tyreDatas.value);
+    if(sampleValue.index > 1){
+        tyreDatas.value.splice(index, 1);
+        sampleValue.index--;
+    }
+//   tyreDatas.value.splice(index, 1);
+//   console.log(tyreDatas.value);
 };
 
 //========================================================>>> Required Services <<<============================================================================//
@@ -1945,18 +1958,25 @@ const tyres = ref([{
   });
   
   const addTyreReplacement = () =>{
-      tyres.value.push({
-          loadIndex: '',
-          brand: '',
-          speedRating: '',
-          pattern: '',
-          size: '',
-          ttTl: '',
-          item: ''
-      })
+    if(setValue.index < 5){
+        tyres.value.push({
+            loadIndex: '',
+            brand: '',
+            speedRating: '',
+            pattern: '',
+            size: '',
+            ttTl: '',
+            item: ''
+        })
+        setValue.index++;
+    }
   }
   const deleteTyreReplacement = (index) =>{
-      tyres.value.splice(index, 1)
+    if(setValue.index > 1){
+        tyres.value.splice(index, 1)
+        setValue.index--;
+    }
+    //   tyres.value.splice(index, 1)
   }
 
 //===================================================>>>Last Page <<<=========================================================================================//
