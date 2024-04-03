@@ -8,7 +8,9 @@
  "field_order": [
   "current_driver",
   "mobile_no",
-  "email_id"
+  "whatsapp",
+  "sms",
+  "call"
  ],
  "fields": [
   {
@@ -19,14 +21,6 @@
    "label": "Mobile No"
   },
   {
-   "fetch_from": "current_driver.custom_email",
-   "fetch_if_empty": 1,
-   "fieldname": "email_id",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Email ID"
-  },
-  {
    "fetch_if_empty": 1,
    "fieldname": "current_driver",
    "fieldtype": "Link",
@@ -34,12 +28,36 @@
    "in_standard_filter": 1,
    "label": "Current Driver",
    "options": "Driver"
+  },
+  {
+   "default": "0",
+   "fetch_from": "current_driver.custom_whatsapp_check",
+   "fieldname": "whatsapp",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Whatsapp"
+  },
+  {
+   "default": "0",
+   "fetch_from": "current_driver.custom_sms_check",
+   "fieldname": "sms",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "SMS"
+  },
+  {
+   "default": "0",
+   "fetch_from": "current_driver.custom_call_check",
+   "fieldname": "call",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Call"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-03-27 16:24:50.484246",
+ "modified": "2024-04-01 18:42:18.002329",
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "Current Driver",

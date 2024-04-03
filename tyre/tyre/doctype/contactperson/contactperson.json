@@ -9,7 +9,10 @@
   "contact_person_name",
   "contact_person_mobile",
   "contact_person_email",
-  "naming_series"
+  "naming_series",
+  "whatsapp",
+  "sms",
+  "call"
  ],
  "fields": [
   {
@@ -33,11 +36,29 @@
    "fieldtype": "Select",
    "label": "Series",
    "options": "CP-DRI-.YYYY.-"
+  },
+  {
+   "default": "0",
+   "fieldname": "whatsapp",
+   "fieldtype": "Check",
+   "label": "Whatsapp"
+  },
+  {
+   "default": "0",
+   "fieldname": "sms",
+   "fieldtype": "Check",
+   "label": "SMS"
+  },
+  {
+   "default": "0",
+   "fieldname": "call",
+   "fieldtype": "Check",
+   "label": "Call"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-03-28 15:18:37.980311",
+ "modified": "2024-04-01 19:26:43.397880",
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "ContactPerson",

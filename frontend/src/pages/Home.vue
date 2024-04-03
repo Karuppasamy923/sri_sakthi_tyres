@@ -1277,6 +1277,9 @@ function nextPageAndHighlight() {
   if (currentstep.value < maxStep) {
       currentstep.value++;
       currentPage.value = getPageName(currentstep.value);
+      if(currentstep.value == 2){
+        checkup(tyreDatas)
+      }
   }
 }
 
@@ -1733,10 +1736,25 @@ const deleteTyre = (index) => {
     if(sampleValue.index > 1){
         tyreDatas.value.splice(index, 1);
         sampleValue.index--;
+        console.log(tyreDatas.value);
     }
 //   tyreDatas.value.splice(index, 1);
 //   console.log(tyreDatas.value);
 };
+
+function checkup(data){
+    console.log("*******")
+    console.log(data.value);
+    console.log("*******")
+    const json_data = { data: JSON.stringify(data.value) }
+    console.log(json_data);
+    try{
+        const response= axios.post("http://192.168.1.39:8002/api/method/tyre.api.job_card",json_data);
+        console.log(response);
+    }catch (error){
+        console.error("error");
+    }
+}
 
 //========================================================>>> Required Services <<<============================================================================//
 

@@ -29,9 +29,11 @@ def get_details(license_plate):
                 print(data.contact_person_name)
                 contact_person.name=contact_person.contact_person_name
                 contact_person.contact_person_name=data.contact_person_name
+                print(contact_person.contact_person_name)
                             
             print(customer_details.current_owner)
 
+        # print(customer_details.call)
         print("Vehicle Details:", vehicle_details)
         print("Customer Details:", customer_details)
         # print(customer_details.employee_name)
@@ -52,23 +54,14 @@ def store_vehicle_details(data):
     # checking if vehicle number already exists
     if frappe.db.exists('Vehicle Details', {'name': license_plate}):
         doc = frappe.get_doc('Vehicle Details', license_plate)
-        print(doc)
         doc.license_plate = license_plate
-        print(doc.license_plate)
         doc.vehicle_brand = " ".join([w.capitalize() for w in data.get('vehicle_brand').split()]) if data.get('vehicle_brand') else None
-        print(doc.vehicle_brand)
         doc.vehicle_model = " ".join([w.capitalize() for w in data.get('vehicle_model').split()]) if data.get('vehicle_model') else None
-        print(doc.vehicle_model)
         doc.chassis_no = data.get('chassis_no').upper() if data.get('chassis_no') else None
-        print(doc.chassis_no)
         doc.fuel_type = data.get('fuel_type')
-        print(doc.fuel_type)
         doc.last_odometer_reading = data.get('last_odometer_reading')
-        print(doc.last_odometer_reading)
         doc.alignment = data.get('alignment')
-        print(doc.alignment)
         doc.tyre_change=data.get('tyre_change')
-        print(doc.tyre_change)
         doc.save(ignore_permissions=True)
         return [doc]
         
@@ -101,8 +94,14 @@ def store_customer_details(data):
     if frappe.db.exists('Customer Details', {'name': license_plate}):
         doc=frappe.get_doc('Customer Details', {'name': license_plate})
         doc.license_plate = license_plate
-        doc.current_owner = data.get('current_owner')
-        doc.owner_mobile_no = data.get('owner_mobile_no')
+        if frappe.db.exists("Customer",{'name':data.get('owner_data')}):
+            owner = frappe.get_doc("Customer",data.get('owner_data'))
+            owner.customer_name = data.get( 'current_owner')
+            owner.mobile_no = data.get('owner_mobile_no')
+            owner.custom_whatsapp = data.get('whatsapp')
+            owner.custom_sms = data.get('sms')
+            owner.custom_call = data.get('call')
+            owner.save(ignore_permissions=True)
         # doc.owner_email_id = data.get('owner_email_id')
         print("********old*******")
         
@@ -117,6 +116,9 @@ def store_customer_details(data):
                     new_driver = frappe.new_doc("Driver")
                     new_driver.full_name=driver_data.get('current_driver')
                     new_driver.cell_number=driver_data.get('mobile_no')
+                    new_driver.custom_whatsapp_check=driver_data.get('whatsapp')
+                    new_driver.custom_sms_check=driver_data.get('sms')
+                    new_driver.custom_call_check=driver_data.get('call')
                     new_driver.save(ignore_permissions=True)
                     driver = new_driver.name
                     doc.append("current_driver", {"current_driver": driver, "mobile_no": driver_data.get('mobile_no')})
@@ -128,6 +130,9 @@ def store_customer_details(data):
                     print("2222")
                     new_driver.cell_number=driver_data.get('mobile_no')
                     print("333")
+                    new_driver.custom_whatsapp_check=driver_data.get('whatsapp')
+                    new_driver.custom_sms_check=driver_data.get('sms')
+                    new_driver.custom_call_check=driver_data.get('call')
                     new_driver.save(ignore_permissions=True)
                     # driver = new_driver.name  
             else:
@@ -140,6 +145,9 @@ def store_customer_details(data):
                     print(new_driver.contact_person_name)
                     new_driver.contact_person_mobile=driver_data.get('contact_person_mobile')
                     print(new_driver.contact_person_mobile)
+                    new_driver.whatsapp=driver_data.get("custom_whatsapp")
+                    new_driver.sms=driver_data.get("custom_sms")
+                    new_driver.call=driver_data.get("custom_call")
                     new_driver.save(ignore_permissions=True)
                     cPerson = new_driver.name
                     doc.append("contact_person", {"contact_person_name": cPerson, "contact_person_mobile": driver_data.get('contact_person_mobile')})
@@ -150,6 +158,9 @@ def store_customer_details(data):
                     print(new_driver.contact_person_name)
                     new_driver.contact_person_mobile=driver_data.get('contact_person_mobile')
                     print(new_driver.contact_person_mobile)
+                    new_driver.whatsapp=driver_data.get("custom_whatsapp")
+                    new_driver.sms=driver_data.get("custom_sms")
+                    new_driver.call=driver_data.get("custom_call")
                     new_driver.save(ignore_permissions=True)
                     # cPerson = new_driver.name 
                 # Append new Contact Person document to the parent document
@@ -170,6 +181,9 @@ def store_customer_details(data):
             new_owner=frappe.new_doc("Customer")
             new_owner.customer_name = data.get('current_owner')
             new_owner.mobile_no = data.get('owner_mobile_no')
+            new_owner.custom_whatsapp=data.get('whatsappChecked')
+            new_owner.custom_sms=data.get('smsChecked')
+            new_owner.custom_call=data.get('callChecked')
             new_owner.save(ignore_permissions=True)
             doc.owner_data=new_owner
         # doc.owner_email_id = data.get('owner_email_id')
@@ -186,6 +200,9 @@ def store_customer_details(data):
                     new_driver = frappe.new_doc("Driver")
                     new_driver.full_name=driver_data.get('driver_name')
                     new_driver.cell_number=driver_data.get('mobile_no')
+                    new_driver.custom_whatsapp_check=driver_data.get('whatsappChecked1')
+                    new_driver.custom_sms_check=driver_data.get('smsChecked1')
+                    new_driver.custom_call_check=driver_data.get('callChecked1')
                     new_driver.save(ignore_permissions=True)
                     driver = new_driver.name
                 doc.append("current_driver", {"current_driver": driver, "mobile_no": driver_data.get('mobile_no')})
@@ -195,6 +212,9 @@ def store_customer_details(data):
                     new_driver = frappe.new_doc("ContactPerson")
                     new_driver.contact_person_name=driver_data.get('driver_name')
                     new_driver.contact_person_mobile=driver_data.get('mobile_no')
+                    new_driver.whatsapp=driver_data.get('whatsappChecked1')
+                    new_driver.sms=driver_data.get('smsChecked1')
+                    new_driver.call=driver_data.get('callChecked1')
                     new_driver.save(ignore_permissions=True)
                     cPerson = new_driver.name
                 # Append new Contact Person document to the parent document
@@ -206,14 +226,9 @@ def store_customer_details(data):
         return ['',[doc]]
 
 
-# function to create five point checkup
-def create_five_point_checkup():
-    pass
-
+# function to create job card
 @frappe.whitelist(allow_guest=True)
-def custom_test_api():
-    data = {
-        "msg": "This is test api"
-    }
-
-    return data
+def job_card(data):
+    data = json.loads(data)
+    for da in data:
+        print(da.get("tyre"))

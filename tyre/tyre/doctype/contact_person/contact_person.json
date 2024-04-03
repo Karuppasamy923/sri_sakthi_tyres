@@ -53,7 +53,6 @@
   {
    "fieldname": "contact_person_email",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "Contact Person Email"
   },
   {
@@ -65,7 +64,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-03-27 18:01:09.018572",
+ "modified": "2024-04-02 10:02:32.986737",
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "Contact Person",
