@@ -10,6 +10,10 @@
   "contact_person_name",
   "contact_person_mobile",
   "designation",
+  "custom_whatsapp",
+  "custom_sms",
+  "custom_call",
+  "custom_primary",
   "column_break_ystl",
   "contact_person_email",
   "department",
@@ -59,12 +63,44 @@
    "fieldname": "employee_id",
    "fieldtype": "Data",
    "label": "Employee Id"
+  },
+  {
+   "default": "0",
+   "fetch_from": "contact_person_name.whatsapp",
+   "fieldname": "custom_whatsapp",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Whatsapp"
+  },
+  {
+   "default": "0",
+   "fetch_from": "contact_person_name.sms",
+   "fieldname": "custom_sms",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "SMS"
+  },
+  {
+   "default": "0",
+   "fetch_from": "contact_person_name.call",
+   "fieldname": "custom_call",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Call"
+  },
+  {
+   "default": "0",
+   "fetch_from": "contact_person_name.custom_primary",
+   "fieldname": "custom_primary",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Primary"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-04-02 10:02:32.986737",
+ "modified": "2024-04-03 16:43:59.110103",
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "Contact Person",
