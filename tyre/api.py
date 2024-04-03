@@ -119,6 +119,7 @@ def store_customer_details(data):
                     new_driver.custom_whatsapp_check=driver_data.get('whatsapp')
                     new_driver.custom_sms_check=driver_data.get('sms')
                     new_driver.custom_call_check=driver_data.get('call')
+                    new_driver.custom_primary=driver_data.get('primary')
                     new_driver.save(ignore_permissions=True)
                     driver = new_driver.name
                     doc.append("current_driver", {"current_driver": driver, "mobile_no": driver_data.get('mobile_no')})
@@ -133,6 +134,10 @@ def store_customer_details(data):
                     new_driver.custom_whatsapp_check=driver_data.get('whatsapp')
                     new_driver.custom_sms_check=driver_data.get('sms')
                     new_driver.custom_call_check=driver_data.get('call')
+                    if driver_data.get('primary')== True:
+                        new_driver.custom_primary=1
+                    else:
+                        new_driver.custom_primary=0    
                     new_driver.save(ignore_permissions=True)
                     # driver = new_driver.name  
             else:
@@ -148,6 +153,7 @@ def store_customer_details(data):
                     new_driver.whatsapp=driver_data.get("custom_whatsapp")
                     new_driver.sms=driver_data.get("custom_sms")
                     new_driver.call=driver_data.get("custom_call")
+                    new_driver.custom_primary=driver_data.get('custom_primary')
                     new_driver.save(ignore_permissions=True)
                     cPerson = new_driver.name
                     doc.append("contact_person", {"contact_person_name": cPerson, "contact_person_mobile": driver_data.get('contact_person_mobile')})
@@ -161,6 +167,11 @@ def store_customer_details(data):
                     new_driver.whatsapp=driver_data.get("custom_whatsapp")
                     new_driver.sms=driver_data.get("custom_sms")
                     new_driver.call=driver_data.get("custom_call")
+                    # new_driver.custom_primary=driver_data.get('primary')
+                    if driver_data.get('custom_primary')== True:
+                        new_driver.custom_primary=1
+                    else:
+                        new_driver.custom_primary=0
                     new_driver.save(ignore_permissions=True)
                     # cPerson = new_driver.name 
                 # Append new Contact Person document to the parent document
@@ -203,6 +214,7 @@ def store_customer_details(data):
                     new_driver.custom_whatsapp_check=driver_data.get('whatsappChecked1')
                     new_driver.custom_sms_check=driver_data.get('smsChecked1')
                     new_driver.custom_call_check=driver_data.get('callChecked1')
+                    new_driver.custom_primary=driver_data.get('primary')
                     new_driver.save(ignore_permissions=True)
                     driver = new_driver.name
                 doc.append("current_driver", {"current_driver": driver, "mobile_no": driver_data.get('mobile_no')})
@@ -215,6 +227,7 @@ def store_customer_details(data):
                     new_driver.whatsapp=driver_data.get('whatsappChecked1')
                     new_driver.sms=driver_data.get('smsChecked1')
                     new_driver.call=driver_data.get('callChecked1')
+                    new_driver.custom_primary=driver_data.get('custom_primary')
                     new_driver.save(ignore_permissions=True)
                     cPerson = new_driver.name
                 # Append new Contact Person document to the parent document
