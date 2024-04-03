@@ -9,6 +9,7 @@ def get_details(license_plate):
     if license_plate:
         vehicle_details = ''
         customer_details = ''
+        primary_details=[]
 
         # Check if Vehicle Details exist
         if frappe.db.exists("Vehicle Details", {"name": license_plate}):
@@ -22,16 +23,21 @@ def get_details(license_plate):
                 print(data.full_name)
                 current_driver.name=current_driver.current_driver
                 current_driver.current_driver=data.full_name
+                if data.custom_primary:
+                    primary_details.append(data)
                
                 
             for contact_person in customer_details.contact_person:
                 data= frappe.get_doc("ContactPerson",{"name":contact_person.contact_person_name})
-                print(data.contact_person_name)
+                # print(data.contact_person_name)
                 contact_person.name=contact_person.contact_person_name
                 contact_person.contact_person_name=data.contact_person_name
-                print(contact_person.contact_person_name)
+                # print(contact_person.contact_person_name)
+                if data.custom_primary:
+                    primary_details.append(data)
                             
-            print(customer_details.current_owner)
+            # print(customer_details.current_owner)
+                
 
         # print(customer_details.call)
         print("Vehicle Details:", vehicle_details)
@@ -39,7 +45,7 @@ def get_details(license_plate):
         # print(customer_details.employee_name)
 
         if vehicle_details or customer_details :
-            return [vehicle_details, customer_details]
+            return [vehicle_details, customer_details,primary_details]
         else:
             return ""
 
