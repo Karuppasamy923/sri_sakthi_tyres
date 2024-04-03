@@ -877,13 +877,13 @@
                                       <div class="flex flex-row space-x-3 mt-3">
                                           <input class="w-5 h-5 rounded-sm border border-black bg-gray-200"
                                               type="checkbox" id="air" :checked="selectedCheckbox === 'air'"
-                                              @change="handleCheckboxChange('air')">
+                                              @change="handleCheckboxChange('air')" v-model="show.inflation_air">
                                           <label class="text-[18px]" for="air">Air</label>
                                       </div>
                                       <div class="flex flex-row space-x-3">
                                           <input class="w-5 h-5 rounded-sm border border-black bg-gray-200"
                                               type="checkbox" id="nitrogen" :checked="selectedCheckbox === 'nitrogen'"
-                                              @change="handleCheckboxChange('nitrogen')">
+                                              @change="handleCheckboxChange('nitrogen')" v-model="show.inflation_nitrogen">
                                           <label class="text-[18px]" for="nitrogen">Nitrogen</label>
                                       </div>
                                   </div>
@@ -1770,6 +1770,8 @@ const show = ref({
   oil_change: false,
   balancing: false,
   inflation: false,
+  inflation_air: false,
+  inflation_nitrogen: false,
   ac_service_checkbox: false,
   battery_service_checkbox: false,
   wiper_service_checkbox: false,
@@ -1795,6 +1797,16 @@ function handleCheckboxChange(checkboxId) {
       const otherCheckbox = document.getElementById(otherCheckboxId);
       if (otherCheckbox) {
           otherCheckbox.checked = false;
+          if(otherCheckboxId == 'air'){
+            show.value.inflation_air = false;
+            show.value.inflation_nitrogen = true;
+          }
+          else{
+            show.value.inflation_air = true;
+            show.value.inflation_nitrogen = false;
+          }
+          console.log(show.value.inflation_air);
+          console.log(show.value.inflation_nitrogen);
       }
   }
 }
