@@ -601,7 +601,7 @@
                                       <option value="Front-Right">Front-Right</option>
                                       <option value="Back-Left">Back-Left</option>
                                       <option value="Back-Right">Back-Right</option>
-                                      <option value="Stephanie">Stephanie</option>
+                                      <option value="Stephanie">Spare-wheel</option>
                                   </select>
                               </div>
                               <div class="flex flex-col space-y-1">
