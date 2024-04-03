@@ -9,6 +9,9 @@
   "license_plate",
   "current_owner",
   "owner_data",
+  "whatsapp",
+  "sms",
+  "call",
   "column_break_rmcq",
   "owner_mobile_no",
   "owner_email_id",
@@ -77,11 +80,35 @@
    "fieldtype": "Link",
    "label": "Owner Data",
    "options": "Customer"
+  },
+  {
+   "default": "0",
+   "fetch_from": "owner_data.custom_whatsapp",
+   "fieldname": "whatsapp",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Whatsapp"
+  },
+  {
+   "default": "0",
+   "fetch_from": "owner_data.custom_sms",
+   "fieldname": "sms",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "SMS"
+  },
+  {
+   "default": "0",
+   "fetch_from": "owner_data.custom_call",
+   "fieldname": "call",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Call"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-03-29 15:43:57.627469",
+ "modified": "2024-04-01 19:15:54.943185",
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "Customer Details",
