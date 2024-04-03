@@ -10,7 +10,8 @@
   "mobile_no",
   "whatsapp",
   "sms",
-  "call"
+  "call",
+  "primary"
  ],
  "fields": [
   {
@@ -52,12 +53,20 @@
    "fieldtype": "Check",
    "in_list_view": 1,
    "label": "Call"
+  },
+  {
+   "default": "0",
+   "fetch_from": "current_driver.custom_primary",
+   "fieldname": "primary",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Primary"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-04-01 18:42:18.002329",
+ "modified": "2024-04-03 11:55:43.744334",
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "Current Driver",

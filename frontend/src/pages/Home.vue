@@ -818,9 +818,9 @@
                                           <select class="w-[15rem] h-[3rem] rounded-sm" style="border: 1px solid black;"
                                               id="oil_quality" v-model="requireService.oil_change.oil_quality">
                                               <option value="" selected disabled hidden>Please select...</option>
-                                              <option value="good">Good</option>
-                                              <option value="ok">Ok</option>
-                                              <option value="change">Change</option>
+                                              <option value="Good">Good</option>
+                                              <option value="Ok">Ok</option>
+                                              <option value="Change">Change</option>
                                           </select>
                                       </div>
                                   </div>
@@ -830,9 +830,9 @@
                                           <select class="w-[15rem] h-[3rem] rounded-sm" style="border: 1px solid black;"
                                               id="oil_quantity" v-model="requireService.oil_change.oil_quantity" @change="shooo">
                                               <option value="" selected disabled hidden>Please select...</option>
-                                              <option value="max">Max</option>
-                                              <option value="normal">Normal</option>
-                                              <option value="min">Min</option>
+                                              <option value="Max">Max</option>
+                                              <option value="Normal">Normal</option>
+                                              <option value="Min">Min</option>
                                           </select>
                                       </div>
                                   </div>
@@ -1277,8 +1277,8 @@ function nextPageAndHighlight() {
   if (currentstep.value < maxStep) {
       currentstep.value++;
       currentPage.value = getPageName(currentstep.value);
-      if(currentstep.value == 2){
-        checkup(tyreDatas)
+      if(currentstep.value == 3){
+        checkup(requireService)
       }
   }
 }
@@ -1742,19 +1742,19 @@ const deleteTyre = (index) => {
 //   console.log(tyreDatas.value);
 };
 
-function checkup(data){
-    console.log("*******")
-    console.log(data.value);
-    console.log("*******")
-    const json_data = { data: JSON.stringify(data.value) }
-    console.log(json_data);
-    try{
-        const response= axios.post("http://192.168.1.39:8002/api/method/tyre.api.job_card",json_data);
-        console.log(response);
-    }catch (error){
-        console.error("error");
-    }
-}
+// function checkup(data){
+//     console.log("*******")
+//     console.log(data.value);
+//     console.log("*******")
+//     const json_data = { data: JSON.stringify(data.value) }
+//     console.log(json_data);
+//     try{
+//         const response= axios.post("http://192.168.1.39:8002/api/method/tyre.api.job_card",json_data);
+//         console.log(response);
+//     }catch (error){
+//         console.error("error");
+//     }
+// }
 
 //========================================================>>> Required Services <<<============================================================================//
 
@@ -1799,6 +1799,15 @@ function handleCheckboxChange(checkboxId) {
   }
 }
 const requireService=ref({
+    Alignment:false,
+    Rotation:false,
+    Oil_change:false,
+    Balancing:false,
+    Inflation:false,
+    AcService:false,
+    Battery:false,
+    Wiper:false,
+    CarWash:false,
     alignment:{
         lastAlignment:'',
         nextAlignment:''
@@ -1832,6 +1841,18 @@ const requireService=ref({
     tyre_patch:false,
     mashroom_patch:false,
 })
+function checkup(data){
+    console.log("******")
+    console.log(data.value)
+    const json_data = { data: JSON.stringify(data.value) }
+    console.log(json_data);
+    try{
+        const response= axios.post("http://192.168.1.39:8002/api/method/tyre.api.job_card",json_data);
+        console.log(response);
+    }catch (error){
+        console.error("error");
+    }
+}
 function shooo(){
     console.log(requireService.value);
 }
@@ -1839,30 +1860,35 @@ function handleShow(item) {
   switch (item) {
       case 'ac_service':
           show.value.Ac = !show.value.Ac;
+          requireService.value.AcService=show.value.Ac;
           if(show.value.Ac == false){
             requireService.value.ac='';
           }
           break;
       case 'battery':
           show.value.battery = !show.value.battery;
+          requireService.value.Battery=show.value.battery;
           if(show.value.battery == false){
             requireService.value.battery='';
           }
           break;
       case 'wiper':
           show.value.wiper = !show.value.wiper;
+          requireService.value.Wiper=show.value.wiper;
           if(show.value.wiper == false){
             requireService.value.wiper='';
           }
           break;
       case 'car_wash':
           show.value.car_wash = !show.value.car_wash;
+          requireService.value.CarWash=show.value.car_wash;
           if(show.value.car_wash == false){
             requireService.value.car_wash='';
           }
           break;
       case 'alignment':
           show.value.alignment = !show.value.alignment;
+          requireService.value.Alignment=show.value.alignment;
           if(show.value.alignment == false){
             requireService.value.alignment.lastAlignment='';
             requireService.value.alignment.nextAlignment='';
@@ -1870,6 +1896,7 @@ function handleShow(item) {
           break;
       case 'rotation':
           show.value.rotation = !show.value.rotation;
+          requireService.value.Rotation=show.value.rotation;
           if(show.value.rotation == false){
             requireService.value.rotation.rim='';
             requireService.value.rotation.wheel='';
@@ -1877,6 +1904,7 @@ function handleShow(item) {
           break;
       case 'oil_change':
           show.value.oil_change = !show.value.oil_change;
+          requireService.value.Oil_change=show.value.oil_change;
           if(show.value.oil_change == false){
             requireService.value.oil_change.oil_quality='';
             requireService.value.oil_change.oil_quantity='';
@@ -1884,6 +1912,7 @@ function handleShow(item) {
           break;
       case 'balancing':
           show.value.balancing = !show.value.balancing;
+          requireService.value.Balancing=show.value.balancing;
           if(show.value.balancing == false){
             requireService.value.balancing.fl='';
             requireService.value.balancing.fr='';
@@ -1894,6 +1923,7 @@ function handleShow(item) {
           break;
       case 'inflation':
           show.value.inflation = !show.value.inflation;
+          requireService.value.Inflation=show.value.inflation;
           if(show.value.inflation == false){
             requireService.value.inflation.type='';
             requireService.value.inflation.ft='';
