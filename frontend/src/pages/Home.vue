@@ -1,564 +1,690 @@
 <template>
-  <div class="mr-2 mb-[3%] mt-[3%] ml-2 font-serif">
-      <div class="fixed top-0 left-0 right-0 bg-white z-10 shadow-md py-4 px-6 flex items-center justify-between">
-          <!-- <img src="https://www.digitire.com/cdn/shop/files/HORIZONTAL_ROXA_1_1200x1200.png?v=1652820934"
-              alt="Company Logo" class="ml-[40px] h-[120px] w-auto"> -->
-          <span class="font-bold">
-              <h1 class="text-[30px]">
-                  Sri Sakthi Tyres
-              </h1>
-              <h1 class="text-2xl font-semibold">
-                  Perundurai Road, Erode,<br>
-                  Tamil Nadu.
-              </h1>
-          </span>
-          <div v-if="Auth" class="flex flex-col space-y-1 items-center mr-[50px]">
-              <!-- <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/1200px-User_icon_2.svg.png"
-                  alt="user" class="h-[60px] w-auto"> -->
-              <h1 class="text-[20px] font-bold mb-6">Welcome User 1</h1>
-          </div>
-      </div>
-      <div>
-          <div v-if="!selectImg" class="flex justify-center mt-[300px]">
-              <div class="flex flex-row space-x-8">
-                  <div class="person-container">
-                      <img class="w-237 h-188"
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0-FVVaYSFbTMXiC6bUW2O_Vzx0OyauBu_RwRlfQ7iIU5aMvWJ86dpdfvGL7eYThBSkQ0&usqp=CAU"
-                          alt="person-1" @click="handleImgSelection" />
-                      <p>Vignesh</p>
-                  </div>
-                  <div class="person-container">
-                      <img class="w-237 h-188"
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0-FVVaYSFbTMXiC6bUW2O_Vzx0OyauBu_RwRlfQ7iIU5aMvWJ86dpdfvGL7eYThBSkQ0&usqp=CAU"
-                          alt="person-2" @click="handleImgSelection" />
-                      <p>Yesha</p>
-                  </div>
-                  <div class="person-container">
-                      <img class="w-237 h-188"
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0-FVVaYSFbTMXiC6bUW2O_Vzx0OyauBu_RwRlfQ7iIU5aMvWJ86dpdfvGL7eYThBSkQ0&usqp=CAU"
-                          alt="person-3" @click="handleImgSelection" />
-                      <p>Vijay</p>
-                  </div>
-                  <div class="person-container">
-                      <img class="w-237 h-188"
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0-FVVaYSFbTMXiC6bUW2O_Vzx0OyauBu_RwRlfQ7iIU5aMvWJ86dpdfvGL7eYThBSkQ0&usqp=CAU"
-                          alt="person-4" @click="handleImgSelection" />
-                      <p>Kavil</p>
-                  </div>
-              </div>
-          </div>
-          <div v-if="selectImg && !Auth" class="flex flex-col space-y-3 justify-center mt-[300px] items-center ">
-              <div v-if="incorrect"
-                  class="flex items-center p-4 mb-4 text-lg text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-white-800 dark:text-red-800 dark:border-red-900"
-                  role="alert">
-                  <svg class="flex-shrink-0 inline w-5 h-5 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                          d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                  </svg>
-                  <span class="sr-only">Info</span>&nbsp;
-                  <div>
-                      <span class="font-medium">Danger alert!</span> Change a few things up and try submitting again.
-                  </div>
-              </div>
-              <div>
-                  <FeatherIcon name="arrow-left" class="w-10 h-10 absolute top-[15%] right-[93%] cursor-pointer"
-                      @click="selectImg = false" />
-              </div>
-              <div class="flex flex-col space-y-7 justify-center items-center p-[60px] rounded-lg"
-                  style="box-shadow: 5px 5px 10px rgba(1, 1, 0.5, 0.5); background: linear-gradient(135deg, #7469B6, #AD88C6, #E1AFD1);">
-                  <div class="mb-4" style="width: 237.48px; height: 227.17px;">
-                      <img style="width: 100%; height: 100%; object-fit: contain;" :src="data.selectedImgSrc"
-                          :alt="data.selectedAlt" />
-                  </div>
-                  <div class="mb-4">
-                      <h1 class="text-center text-2xl font-semibold" style="color: #333;">User-1</h1>
-                  </div>
-                  <div class="mb-4">
-                      <h1 class="text-xl font-semibold" style="color: #333;">Enter your 4 Digit Pin</h1>
-                  </div>
-                  <div class="flex flex-row space-x-8">
-                      <input class="w-16 h-16 text-center border-2 border-black-500 bg-gray-200 rounded-lg"
-                          type="password" v-model="pin1" maxlength="1" @input="focusNext($event, 1)"
-                          style="color: #333;">
-                      <input class="w-16 h-16 text-center border-2 border-black-500 bg-gray-200 rounded-lg"
-                          type="password" v-model="pin2" maxlength="1" @input="focusNext($event, 2)"
-                          style="color: #333;">
-                      <input class="w-16 h-16 text-center border-2 border-black-500 bg-gray-200 rounded-lg"
-                          type="password" v-model="pin3" maxlength="1" @input="focusNext($event, 3)"
-                          style="color: #333;">
-                      <input class="w-16 h-16 text-center border-2 border-black-500 bg-gray-200 rounded-lg"
-                          type="password" v-model="pin4" maxlength="1" @input="focusNext($event, 4)"
-                          style="color: #333;">
-                  </div>
-              </div>
-          </div>
-          <!-- main page -->
-          <div v-if="currentstep == 0 && Auth">
-              <div class="pt-24 p-12">
-                  <div v-if="currentstep == 0">
-                      <div class="flex justify-center m-5">
-                          <input type="text" class="w-[338px] h-[52px] rounded-sm border-solid border border-black"
-                              v-model="searchQuery" @keyup.enter="search" placeholder="Enter your Vehicle Number">
-                          <button class="bg-blue-500 w-[150px] text-white font-bold text-base p-4 rounded-lg ml-3"
-                              @click="search">Search</button>
-                      </div>
-                      <div class="grid grid-cols-2 gap-3">
-                          <Card>
-                              <div>
-                                  <h4 class="text-[20px] font-bold">Vehicle Details</h4>
-                                  <hr class="dark-hr">
-                                  <div class="grid grid-cols-2">
-                                      <div>
-                                          <div class="mt-2">
-                                              <label>Vehicle Number&emsp;&nbsp;:&nbsp;</label>
-                                              <label v-if="check">
-                                                  {{ responseData.message[0]?.name || 'No data' }}
-                                              </label>
-                                              <!-- <label v-else>No data</label> -->
-                                          </div>
-                                          <div class="mt-2">
-                                              <label>Vehicle Brand&emsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;</label>
-                                              <label class="mt-3" v-if="check"> {{
-              responseData.message[0]?.vehicle_brand || 'No data' }}</label>
-                                          </div>
-                                          <div class="mt-2">
-                                              <label>Fuel
-                                                  Type&nbsp;&nbsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;:&nbsp;</label>
-                                              <label class="mt-3" v-if="check"> {{ responseData.message[0]?.fuel_type
-              || 'No data'
-                                                  }}</label>
-                                          </div>
-                                          <div class="mt-2">
-                                              <label>Tyre Change(kms)&nbsp;:&nbsp;</label>
-                                              <label class="mt-3" v-if="check">{{ responseData.message[0]?.tyre_change
-              || 'No data'
-                                                  }}</label>
-                                          </div>
-                                      </div>
-                                      <div>
-                                          <div class="mt-2">
-                                              <label>Vehicle Model&nbsp;&nbsp;: </label>
-                                              <label class="mt-3" v-if="check">{{
-              responseData.message[0]?.vehicle_model || 'No data' }}</label>
-                                          </div>
-                                          <div class="mt-2">
-                                              <label>Chassis No&nbsp;&nbsp;:&nbsp; </label>
-                                              <label class="mt-3" v-if="check">{{ responseData.message[0]?.chassis_no
-              || 'No data' }}</label>
-                                          </div>
-                                          <div class="mt-2">
-                                              <label>Odometer Value&nbsp;&nbsp;:&nbsp;</label>
-                                              <label class="mt-3" v-if="check">
-                                                  {{ responseData.message[0]?.last_odometer_reading
-              || 'No data' }}</label>
-                                          </div>
-                                          <div class="mt-2">
-                                              <label>Alignment (kms)&nbsp;&nbsp;:&nbsp;</label>
-                                              <label class="mt-3" v-if="check"> {{ responseData.message[0]?.alignment
-              || 'No data'
-                                                  }}</label>
-                                          </div>
-                                      </div>
-                                  </div>
-                                  <div class="mt-[67px] flex flex-row space-x-9">
-                                      <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
-                                          @click="addVehicle">
-                                          Add Vehicle
-                                      </button>
-                                      <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
-                                          @click="modifyVehicle">Modify</button>
-                                  </div>
-                              </div>
-                          </Card>
-                          <Card>
-                              <div>
-                                  <h4 class="text-[20px] font-bold">Customer Details</h4>
-                                  <hr class="dark-hr">
-                                  <div class="grid grid-cols-2 pl-1">
-                                      <div>
-                                          <div class="mt-2">
-                                              <label>Owner Name&nbsp;&nbsp;:&nbsp; </label>
-                                              <label class="mt-3" v-if="check">
-                                                  {{ responseData.message[1]?.current_owner || 'No data' }}
-                                              </label><br>
-                                              <input type="checkbox"
-                                                  class="bg-gray-300 rounded-sm">&nbsp;&nbsp;WhatsApp
-                                              <span class="ml-5">
-                                                  <input type="checkbox"
-                                                      class="bg-gray-300 rounded-sm">&nbsp;&nbsp;Call
-                                              </span>
-                                          </div>
-                                          <div class="mt-2">
-                                              <label>Driver Name&nbsp;&nbsp;:&nbsp;</label>
-                                              <label class="mt-3" v-if="check">
-                                                  {{ responseData.message[1]?.current_driver[0]?.current_driver
-              || 'No data' }}
-                                              </label><br>
-                                              <input type="checkbox"
-                                                  class="bg-gray-300 rounded-sm">&nbsp;&nbsp;WhatsApp
-                                              <span class="ml-5">
-                                                  <input type="checkbox"
-                                                      class="bg-gray-300 rounded-sm">&nbsp;&nbsp;Call
-                                              </span>
-                                          </div>
-                                          <div class="mt-2">
-                                              <label>Contact Person&nbsp;&nbsp;:&nbsp;</label>
-                                              <label class="mt-3" v-if="check">
-                                                  {{ responseData.message[1]?.contact_person[0]?.contact_person_name
-              || 'No data' }}
-                                              </label><br>
-                                              <input type="checkbox"
-                                                  class="bg-gray-300 rounded-sm">&nbsp;&nbsp;WhatsApp
-                                              <span class="ml-5">
-                                                  <input type="checkbox"
-                                                      class="bg-gray-300 rounded-sm">&nbsp;&nbsp;Call
-                                              </span>
-                                          </div>
-                                      </div>
-                                      <div>
-                                          <div class="mt-2">
-                                              <label>Customer Mobile&nbsp;&nbsp;:&nbsp;</label>
-                                              <label class="mt-3" v-if="check">
-                                                  {{ responseData.message[1]?.owner_mobile_no || 'No data' }}
-                                              </label><br>
-                                              <input type="checkbox" class="bg-gray-300 rounded-sm">&nbsp;&nbsp;Email
-                                          </div>
-                                          <div class="mt-2">
-                                              <label>Driver Mobile&nbsp;&nbsp;:&nbsp;</label>
-                                              <label class="mt-3" v-if="check">
-                                                  {{ responseData.message[1]?.current_driver[0]?.mobile_no
-              || 'No data' }}
-                                              </label>
-                                              <br> <input type="checkbox"
-                                                  class="bg-gray-300 rounded-sm">&nbsp;&nbsp;Email
-                                          </div>
-                                          <div class="mt-2">
-                                              <label>Contact Person&nbsp;&nbsp;:&nbsp; </label>
-                                              <label class="mt-3" v-if="check">
-                                                  {{ responseData.message[1]?.contact_person[0]?.contact_person_mobile
-              || 'No data' }}
-                                              </label>
-                                              <br>
-                                              <input type="checkbox" class="bg-gray-300 rounded-sm">&nbsp;&nbsp;Email
-                                          </div>
-                                      </div>
-                                  </div>
-                                  <div class="float-right mt-[30px] flex flex-row space-x-9 pr-3">
-                                      <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
-                                          @click="addCustomer" id="customerId">
-                                          Add Customer
-                                      </button>
-                                      <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
-                                          @click="modifyCustomer">Modify</button>
-                                  </div>
-                              </div>
-                          </Card>
-                      </div>
+    <div class="mr-2 mb-[3%] mt-[3%] ml-2 font-serif">
+        <div class="fixed top-0 left-0 right-0 bg-white z-10 shadow-md py-4 px-6 flex items-center justify-between">
+            <span class="font-bold">
+                <h1 class="text-[30px]">
+                    Sri Sakthi Tyres
+                </h1>
+                <h1 class="text-2xl font-semibold">
+                    Perundurai Road, Erode,<br>
+                    Tamil Nadu.
+                </h1>
+            </span>
+            <div v-if="Auth" class="flex flex-col space-y-1 items-center mr-[50px]">
+                <h1 class="text-[20px] font-bold mb-6">Welcome User 1</h1>
+            </div>
+        </div>
+        <div>
+            <div v-if="!selectImg" class="flex justify-center mt-[300px]">
+                <div class="flex flex-row space-x-8">
+                    <div class="person-container">
+                        <img class="w-237 h-188"
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0-FVVaYSFbTMXiC6bUW2O_Vzx0OyauBu_RwRlfQ7iIU5aMvWJ86dpdfvGL7eYThBSkQ0&usqp=CAU"
+                            alt="person-1" @click="handleImgSelection" />
+                        <p>Vignesh</p>
+                    </div>
+                    <div class="person-container">
+                        <img class="w-237 h-188"
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0-FVVaYSFbTMXiC6bUW2O_Vzx0OyauBu_RwRlfQ7iIU5aMvWJ86dpdfvGL7eYThBSkQ0&usqp=CAU"
+                            alt="person-2" @click="handleImgSelection" />
+                        <p>Yesha</p>
+                    </div>
+                    <div class="person-container">
+                        <img class="w-237 h-188"
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0-FVVaYSFbTMXiC6bUW2O_Vzx0OyauBu_RwRlfQ7iIU5aMvWJ86dpdfvGL7eYThBSkQ0&usqp=CAU"
+                            alt="person-3" @click="handleImgSelection" />
+                        <p>Vijay</p>
+                    </div>
+                    <div class="person-container">
+                        <img class="w-237 h-188"
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0-FVVaYSFbTMXiC6bUW2O_Vzx0OyauBu_RwRlfQ7iIU5aMvWJ86dpdfvGL7eYThBSkQ0&usqp=CAU"
+                            alt="person-4" @click="handleImgSelection" />
+                        <p>Kavil</p>
+                    </div>
+                </div>
+            </div>
+            <div v-if="selectImg && !Auth" class="flex flex-col space-y-3 justify-center mt-[300px] items-center ">
+                <div v-if="incorrect"
+                    class="flex items-center p-4 mb-4 text-lg text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-white-800 dark:text-red-800 dark:border-red-900"
+                    role="alert">
+                    <svg class="flex-shrink-0 inline w-5 h-5 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                    </svg>
+                    <span class="sr-only">Info</span>&nbsp;
+                    <div>
+                        <span class="font-medium">Danger alert!</span> Change a few things up and try submitting again.
+                    </div>
+                </div>
+                <div>
+                    <FeatherIcon name="arrow-left" class="w-10 h-10 absolute top-[15%] right-[93%] cursor-pointer"
+                        @click="selectImg = false" />
+                </div>
+                <div class="flex flex-col space-y-7 justify-center items-center p-[60px] rounded-lg"
+                    style="box-shadow: 5px 5px 10px rgba(1, 1, 0.5, 0.5); background: linear-gradient(135deg, #7469B6, #AD88C6, #E1AFD1);">
+                    <div class="mb-4" style="width: 237.48px; height: 227.17px;">
+                        <img style="width: 100%; height: 100%; object-fit: contain;" :src="data.selectedImgSrc"
+                            :alt="data.selectedAlt" />
+                    </div>
+                    <div class="mb-4">
+                        <h1 class="text-center text-2xl font-semibold" style="color: #333;">User-1</h1>
+                    </div>
+                    <div class="mb-4">
+                        <h1 class="text-xl font-semibold" style="color: #333;">Enter your 4 Digit Pin</h1>
+                    </div>
+                    <div class="flex flex-row space-x-8">
+                        <input class="w-16 h-16 text-center border-2 border-black-500 bg-gray-200 rounded-lg"
+                            type="password" v-model="pin1" maxlength="1" @input="focusNext($event, 1)"
+                            style="color: #333;">
+                        <input class="w-16 h-16 text-center border-2 border-black-500 bg-gray-200 rounded-lg"
+                            type="password" v-model="pin2" maxlength="1" @input="focusNext($event, 2)"
+                            style="color: #333;">
+                        <input class="w-16 h-16 text-center border-2 border-black-500 bg-gray-200 rounded-lg"
+                            type="password" v-model="pin3" maxlength="1" @input="focusNext($event, 3)"
+                            style="color: #333;">
+                        <input class="w-16 h-16 text-center border-2 border-black-500 bg-gray-200 rounded-lg"
+                            type="password" v-model="pin4" maxlength="1" @input="focusNext($event, 4)"
+                            style="color: #333;">
+                    </div>
+                </div>
+            </div>
+            <!-- main page -->
+            <div v-if="currentstep == 0 && Auth">
+                <div class="pt-24">
+                    <div v-if="currentstep == 0">
+                        <div>
+                            <input type="button"
+                                class="bg-blue-500 w-[150px] text-white font-bold text-base p-4 rounded-lg ml-3"
+                                value="Create Customer">
+                            <div class="flex justify-end">
+                                <FeatherIcon name="arrow-right" class="w-8 h-8 cursor-pointer text-blue-500"
+                                    @click="nextPageAndHighlight" />
+                            </div>
+                        </div>
+                        <div class="flex justify-center m-5">
+                            <input type="text" class="w-[338px] h-[52px] rounded-sm border-solid border border-black"
+                                v-model="searchQuery" @keyup.enter="search" placeholder="Enter your Vehicle Number">
+                            <button class="bg-blue-500 w-[150px] text-white font-bold text-base p-4 rounded-lg ml-3"
+                                @click="search">Search</button>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3" v-if="check">
+                            <Card>
+                                <div>
+                                    <h4 class="text-[20px] font-bold">Vehicle Details</h4>
+                                    <hr class="dark-hr">
+                                    <div class="grid grid-cols-2">
+                                        <div>
+                                            <div class="mt-2">
+                                                <label>Vehicle Number&emsp;&nbsp;:&nbsp;</label>
+                                                <label v-if="check">
+                                                    {{ responseData.message[0]?.name || 'No data' }}
+                                                </label>
+                                                <!-- <label v-else>No data</label> -->
+                                            </div>
+                                            <div class="mt-2">
+                                                <label>Vehicle Brand&emsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;</label>
+                                                <label class="mt-3" v-if="check"> {{
+                responseData.message[0]?.vehicle_brand || 'No data' }}</label>
+                                            </div>
+                                            <div class="mt-2">
+                                                <label>Fuel
+                                                    Type&nbsp;&nbsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;:&nbsp;</label>
+                                                <label class="mt-3" v-if="check"> {{ responseData.message[0]?.fuel_type
+                || 'No data'
+                                                    }}</label>
+                                            </div>
+                                            <div class="mt-2">
+                                                <label>Tyre Change(kms)&nbsp;:&nbsp;</label>
+                                                <label class="mt-3" v-if="check">{{ responseData.message[0]?.tyre_change
+                || 'No data'
+                                                    }}</label>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="mt-2">
+                                                <label>Vehicle Model&nbsp;&nbsp;: </label>
+                                                <label class="mt-3" v-if="check">
+                                                    {{ responseData.message[0]?.vehicle_model || 'No data' }}</label>
+                                            </div>
+                                            <div class="mt-2">
+                                                <label>Chassis No&nbsp;&nbsp;:&nbsp; </label>
+                                                <label class="mt-3" v-if="check">{{ responseData.message[0]?.chassis_no
+                || 'No data' }}</label>
+                                            </div>
+                                            <div class="mt-2">
+                                                <label>Odometer Value&nbsp;&nbsp;:&nbsp;</label>
+                                                <label class="mt-3" v-if="check">
+                                                    {{ responseData.message[0]?.last_odometer_reading
+                || 'No data' }}</label>
+                                            </div>
+                                            <div class="mt-2">
+                                                <label>Alignment (kms)&nbsp;&nbsp;:&nbsp;</label>
+                                                <label class="mt-3" v-if="check"> {{ responseData.message[0]?.alignment
+                || 'No data'
+                                                    }}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-[70px] flex flex-row space-x-9">
+                                        <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
+                                            @click="addVehicle">
+                                            Add Vehicle
+                                        </button>
+                                        <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
+                                            @click="modifyVehicle">Modify</button>
+                                    </div>
+                                </div>
+                            </Card>
+                            <Card>
+                                <div>
+                                    <h4 class="text-[20px] font-bold">Customer Details</h4>
+                                    <hr class="dark-hr">
+                                    <div class="grid grid-cols-2 pl-1">
+                                        <div>
+                                            <div class="mt-2">
+                                                <label>Owner Name&nbsp;&nbsp;:&nbsp; </label>
+                                                <label class="mt-3" v-if="check">
+                                                    {{ responseData.message[1]?.current_owner || 'No data' }}
+                                                </label><br>
+                                                <input type="checkbox" v-if="check"
+                                                    :checked="responseData.message[1]?.whatsapp === 1"
+                                                    :disabled="!isEditMode"
+                                                    @change="responseData.message[1].whatsapp = $event.target.checked ? 1 : 0"
+                                                    class="bg-gray-300 rounded-sm">&nbsp;&nbsp;WhatsApp
+                                                <span class="ml-5">
+                                                    <input type="checkbox" v-if="check"
+                                                        :checked="responseData.message[1]?.call === 1"
+                                                        :disabled="!isEditMode"
+                                                        @change="responseData.message[1].call = $event.target.checked ? 1 : 0"
+                                                        class="bg-gray-300 rounded-sm">&nbsp;&nbsp;Call
+                                                </span>
+                                            </div>
+                                            <!-- <div v-for="(employee, index) in responseData.message[1]?.current_driver"
+                                                :key="index"> -->
+                                            <div class="mt-2">
+                                                <label>Driver Name&nbsp;&nbsp;:&nbsp;</label>
+                                                <label class="mt-3" v-if="check">
+                                                    {{ responseData.message[2][0]?.full_name || 'No data' }}
+                                                </label><br>
+                                                <input type="checkbox" v-if="check"
+                                                        :checked="responseData.message[2][0]?.custom_whatsapp_check === 1" :disabled="!isEditMode"
+                                                        @change="responseData.message[2][0].custom_whatsapp_check = $event.target.checked ? 1 : 0"
+                                                        class="bg-gray-300 rounded-sm">&nbsp;&nbsp;WhatsApp
+                                                    <span class="ml-5">
+                                                        <input type="checkbox" v-if="check"
+                                                            :checked="responseData.message[2][0]?.custom_call_check === 1" :disabled="!isEditMode"
+                                                            @change="responseData.message[2][0].custom_call_check = $event.target.checked ? 1 : 0"
+                                                            class="bg-gray-300 rounded-sm">&nbsp;&nbsp;Call
+                                                    </span>
+                                            </div>
+                                            <!-- </div> -->
+                                            <!-- <div v-for="(contact, index) in responseData.message[1]?.contact_person"
+                                                :key="index"> -->
+                                                <div class="mt-2">
+                                                    <label>Contact Person&nbsp;&nbsp;:&nbsp;</label>
+                                                    <label class="mt-3" v-if="check">
+                                                        {{ responseData.message[2][1]?.contact_person_name || 'No data' }}
+                                                    </label><br>
+                                                    <input type="checkbox" v-if="check"
+                                                        :checked="responseData.message[2][1]?.whatsapp === 1" :disabled="!isEditMode"
+                                                        @change="responseData.message[2][1].whatsapp = $event.target.checked ? 1 : 0"
+                                                        class="bg-gray-300 rounded-sm">&nbsp;&nbsp;WhatsApp
+                                                    <span class="ml-5">
+                                                        <input type="checkbox" v-if="check"
+                                                            :checked="responseData.message[2][1]?.call === 1" :disabled="!isEditMode"
+                                                            @change="responseData.message[2][1].call = $event.target.checked ? 1 : 0"
+                                                            class="bg-gray-300 rounded-sm">&nbsp;&nbsp;Call
+                                                    </span>
+                                                </div>
+                                            <!-- </div> -->
+                                        </div>
+                                        <div>
+                                            <div class="mt-2">
+                                                <label>Customer Mobile&nbsp;&nbsp;:&nbsp;</label>
+                                                <label class="mt-3" v-if="check">
+                                                    {{ responseData.message[1]?.owner_mobile_no || 'No data' }}
+                                                </label><br>
+                                                <span class="ml-5">
+                                                    <input type="checkbox" v-if="check"
+                                                        :checked="responseData.message[1]?.sms === 1"
+                                                        :disabled="!isEditMode"
+                                                        @change="responseData.message[1].sms = $event.target.checked ? 1 : 0"
+                                                        class="bg-gray-300 rounded-sm">&nbsp;&nbsp;SMS
+                                                </span>
+                                            </div>
+                                            <!-- <div v-for="(employee, index) in responseData.message[1]?.current_driver"
+                                                :key="index"> -->
+                                                <div class="mt-2" >
+                                                    <label>Driver Mobile&nbsp;&nbsp;:&nbsp;</label>
+                                                    <label class="mt-3" v-if="check">
+                                                        {{ responseData.message[2][0]?.cell_number
+                || 'No data' }}
+                                                    </label><br>
+                                                    <span class="ml-5">
+                                                        <input type="checkbox" v-if="check"
+                                                            :checked="responseData.message[2][0]?.custom_sms_check === 1" :disabled="!isEditMode"
+                                                            @change="responseData.message[2][0].custom_sms_check = $event.target.checked ? 1 : 0"
+                                                            class="bg-gray-300 rounded-sm">&nbsp;&nbsp;SMS
+                                                    </span>
+                                                </div>
+                                            <!-- </div> -->
+                                            <!-- <div v-for="(contact, index) in responseData.message[1]?.contact_person"
+                                                :key="index"> -->
+                                                <div class="mt-2">
+                                                    <label>Contact Person&nbsp;&nbsp;:&nbsp; </label>
+                                                    <label class="mt-3" v-if="check">
+                                                        {{ responseData.message[2][1]?.contact_person_mobile
+                || 'No data' }}
+                                                    </label>
+                                                    <br>
+                                                    <span class="ml-5">
+                                                        <input type="checkbox" v-if="check"
+                                                            :checked="responseData.message[2][1]?.sms === 1" :disabled="!isEditMode"
+                                                            @change="responseData.message[2][1].sms = $event.target.checked ? 1 : 0"
+                                                            class="bg-gray-300 rounded-sm">&nbsp;&nbsp;SMS
+                                                    </span>
+                                                </div>
+                                            <!-- </div> -->
+                                        
+                                        </div>
+                                    </div>
+                                    <div class="float-right mt-[20px] flex flex-row space-x-9">
+                                        <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
+                                            @click="addCustomer" id="customerId">
+                                            Add Customer
+                                        </button>
+                                        <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
+                                            @click="modifyCustomer">Modify</button>
+                                    </div>
+                                </div>
+                            </Card>
+                        </div>
+                        <div class=" h-64" v-if="check == false"></div>
 
-                      <div v-if="showNewVehicle"
-                          class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-end items-center pb-10">
-                          <div class="fixed inset-0" @click="addVehicle"></div>
-                          <div class="max-w-sm w-full bg-white shadow-xl h-full overflow-y-auto relative">
-                              <button class="absolute to text-black pt-5 font-bold p-2 right-2  px-2 py-1 rounded"
-                                  @click="addVehicle">
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                                      viewBox="0 0 24 24" stroke="currentColor">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M6 18L18 6M6 6l12 12" />
-                                  </svg>
-                              </button>
-                              <div class="p-8 mt-[140px]  ">
-                                  <h2 class="text-2xl font-semibold mb-4 ">Vehicle Details</h2>
-                                  <hr class="dark-hr">
-                                  <p class="m-2">Vehicle Number <br>
-                                      <input type="text"
-                                          class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                          v-model="vehicleData.name" placeholder="Enter your Vehicle Number">
-                                  </p>
-                                  <p class="m-2">Vehicle Brand <br>
-                                      <input type="text"
-                                          class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                          v-model="vehicleData.vehicle_brand" placeholder="Enter Vehicle Brand">
-                                  </p>
-                                  <p class="m-2">Vehicle Model <br>
-                                      <input type="text"
-                                          class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                          v-model="vehicleData.vehicle_model" placeholder="Enter Vehicle Model">
-                                  </p>
-                                  <p class="m-2">Chassis No <br>
-                                      <input type="text"
-                                          class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                          v-model="vehicleData.chassis_no" placeholder="Enter Chassis No">
-                                  </p>
-                                  <p class="m-2">Fuel Type <br>
-                                      <select v-model="vehicleData.fuel_type"
-                                          class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
-                                          <option value="Petrol">Petrol</option>
-                                          <option value="Diesel">Diesel</option>
-                                          <option value="EV">Electical Vehicle</option>
-                                      </select>
-                                  </p>
-                                  <p class="m-2">Odometer Value <br>
-                                      <input type="text"
-                                          class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                          v-model="vehicleData.last_odometer_reading"
-                                          placeholder="Enter Odometer Value">
-                                  </p>
-                                  <p class="m-2">Tyre Change (kms) <br>
-                                      <input type="text"
-                                          class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                          v-model="vehicleData.tyre_change" placeholder="Enter Tyre Change">
-                                  </p>
-                                  <p class="m-2">Alignment (kms) <br>
-                                      <input type="text"
-                                          class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                          v-model="vehicleData.alignment" placeholder="Enter Alignment">
-                                  </p>
-                                  <div class="m-3 mt-4 flex flex-row space-x-[70px]">
-                                      <button class="bg-green-500 w-[100px] text-white font-bold 0 p-2 rounded"
-                                          @click="addVehicleData">Add</button>
-                                      <button class="bg-red-500 w-[100px] text-white font-bold ml-3 p-2 rounded"
-                                          @click="clearVehicleData">Clear</button>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
+                        <div v-if="showNewVehicle"
+                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-end items-center pb-10">
+                            <div class="fixed inset-0" @click="addVehicle"></div>
+                            <div class="max-w-sm w-full bg-white shadow-xl h-full overflow-y-auto relative">
+                                <button class="absolute to text-black pt-5 font-bold p-2 right-2  px-2 py-1 rounded"
+                                    @click="addVehicle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                                <div class="p-8 mt-[140px]  ">
+                                    <h2 class="text-2xl font-semibold mb-4 ">Vehicle Details</h2>
+                                    <hr class="dark-hr">
+                                    <p class="m-2">Vehicle Number <br>
+                                        <input type="text"
+                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            v-model="vehicleData.name" placeholder="Enter your Vehicle Number">
+                                    </p>
+                                    <p class="m-2">Vehicle Brand <br>
+                                        <input type="text"
+                                            class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            v-model="vehicleData.vehicle_brand" placeholder="Enter Vehicle Brand">
+                                    </p>
+                                    <p class="m-2">Vehicle Model <br>
+                                        <input type="text"
+                                            class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            v-model="vehicleData.vehicle_model" placeholder="Enter Vehicle Model">
+                                    </p>
+                                    <p class="m-2">Chassis No <br>
+                                        <input type="text"
+                                            class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            v-model="vehicleData.chassis_no" placeholder="Enter Chassis No">
+                                    </p>
+                                    <p class="m-2">Fuel Type <br>
+                                        <select v-model="vehicleData.fuel_type"
+                                            class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
+                                            <option value="Petrol">Petrol</option>
+                                            <option value="Diesel">Diesel</option>
+                                            <option value="EV">Electical Vehicle</option>
+                                        </select>
+                                    </p>
+                                    <p class="m-2">Odometer Value <br>
+                                        <input type="text"
+                                            class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            v-model="vehicleData.last_odometer_reading"
+                                            placeholder="Enter Odometer Value">
+                                    </p>
+                                    <p class="m-2">Tyre Change (kms) <br>
+                                        <input type="text"
+                                            class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            v-model="vehicleData.tyre_change" placeholder="Enter Tyre Change">
+                                    </p>
+                                    <p class="m-2">Alignment (kms) <br>
+                                        <input type="text"
+                                            class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            v-model="vehicleData.alignment" placeholder="Enter Alignment">
+                                    </p>
+                                    <div class="m-3 mt-4 flex flex-row space-x-[70px]">
+                                        <button class="bg-green-500 w-[100px] text-white font-bold 0 p-2 rounded"
+                                            @click="addVehicleData">Add</button>
+                                        <button class="bg-red-500 w-[100px] text-white font-bold ml-3 p-2 rounded"
+                                            @click="clearVehicleData">Clear</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                      <div v-if="showModifyVehicle"
-                          class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-end items-center pb-10">
-                          <div class="fixed inset-0" @click="modifyVehicle"></div>
-                          <div class="max-w-sm w-full bg-white shadow-xl h-full overflow-y-auto relative">
-                              <button class="absolute to text-black pt-5 font-bold p-2 right-2 px-2 py-1 rounded"
-                                  @click="modifyVehicle">
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                                      viewBox="0 0 24 24" stroke="currentColor">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M6 18L18 6M6 6l12 12" />
-                                  </svg>
-                              </button>
-                              <div class="p-8 mt-[140px]">
-                                  <h2 class="text-2xl font-semibold mb-4">Vehicle Details</h2>
-                                  <hr class="dark-hr">
-                                  <p class="m-2">Vehicle Number <br>
-                                      <input type="text" v-if="check"
-                                          class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                          v-model="responseData.message[0].name"
-                                          placeholder="Enter your Vehicle Number">
-                                  </p>
-                                  <p class="m-2">Vehicle Brand <br>
-                                      <input type="text" v-if="check"
-                                          class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                          v-model="responseData.message[0].vehicle_brand"
-                                          placeholder="Enter Vehicle Brand">
-                                  </p>
-                                  <p class="m-2">Vehicle Model <br>
-                                      <input type="text" v-if="check"
-                                          class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                          v-model="responseData.message[0].vehicle_model"
-                                          placeholder="Enter Vehicle Model">
-                                  </p>
-                                  <p class="m-2">Chassis No <br>
-                                      <input type="text" v-if="check"
-                                          class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                          v-model="responseData.message[0].chassis_no" placeholder="Enter Chassis No">
-                                  </p>
-                                  <p class="m-2">Fuel Type <br>
-                                      <select v-model="responseData.message[0].fuel_type"
-                                          class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
-                                          <option value="Petrol">Petrol</option>
-                                          <option value="Diesel">Diesel</option>
-                                          <option value="EV">Electical Vehicle</option>
-                                      </select>
-                                  </p>
-                                  <p class="m-2">Odometer Value <br>
-                                      <input type="text" v-if="check"
-                                          class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                          v-model="responseData.message[0].last_odometer_reading"
-                                          placeholder="Enter Odometer Value">
-                                  </p>
-                                  <p class="m-2">Tyre Change (kms) <br>
-                                      <input type="text" v-if="check"
-                                          class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                          v-model="responseData.message[0].tyre_change"
-                                          placeholder="Enter Tyre Change">
-                                  </p>
-                                  <p class="m-2">Alignment (kms) <br>
-                                      <input type="text" v-if="check"
-                                          class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                          v-model="responseData.message[0].alignment" placeholder="Enter Alignment">
-                                  </p>
-                                  <div class="m-3 mt-4 flex flex-row space-x-[70px]">
-                                      <button class="bg-green-500 w-[100px] text-white font-bold 0 p-2 rounded"
-                                          @click="addModifiedData">Add</button>
-                                      <button class="bg-red-500 w-[100px] text-white font-bold ml-3 p-2 rounded"
-                                          @click="clearModifiedVehicleData">Clear</button>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
+                        <div v-if="showModifyVehicle"
+                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-end items-center pb-10">
+                            <div class="fixed inset-0" @click="modifyVehicle"></div>
+                            <div class="max-w-sm w-full bg-white shadow-xl h-full overflow-y-auto relative">
+                                <button class="absolute to text-black pt-5 font-bold p-2 right-2 px-2 py-1 rounded"
+                                    @click="modifyVehicle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                                <div class="p-8 mt-[140px]">
+                                    <h2 class="text-2xl font-semibold mb-4">Vehicle Details</h2>
+                                    <hr class="dark-hr">
+                                    <p class="m-2">Vehicle Number <br>
+                                        <input type="text" v-if="check"
+                                            class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            v-model="responseData.message[0].name"
+                                            placeholder="Enter your Vehicle Number">
+                                    </p>
+                                    <p class="m-2">Vehicle Brand <br>
+                                        <input type="text" v-if="check"
+                                            class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            v-model="responseData.message[0].vehicle_brand"
+                                            placeholder="Enter Vehicle Brand">
+                                    </p>
+                                    <p class="m-2">Vehicle Model <br>
+                                        <input type="text" v-if="check"
+                                            class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            v-model="responseData.message[0].vehicle_model"
+                                            placeholder="Enter Vehicle Model">
+                                    </p>
+                                    <p class="m-2">Chassis No <br>
+                                        <input type="text" v-if="check"
+                                            class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            v-model="responseData.message[0].chassis_no" placeholder="Enter Chassis No">
+                                    </p>
+                                    <p class="m-2">Fuel Type <br>
+                                        <select v-model="responseData.message[0].fuel_type"
+                                            class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
+                                            <option value="Petrol">Petrol</option>
+                                            <option value="Diesel">Diesel</option>
+                                            <option value="EV">Electical Vehicle</option>
+                                        </select>
+                                    </p>
+                                    <p class="m-2">Odometer Value <br>
+                                        <input type="text" v-if="check"
+                                            class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            v-model="responseData.message[0].last_odometer_reading"
+                                            placeholder="Enter Odometer Value">
+                                    </p>
+                                    <p class="m-2">Tyre Change (kms) <br>
+                                        <input type="text" v-if="check"
+                                            class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            v-model="responseData.message[0].tyre_change"
+                                            placeholder="Enter Tyre Change">
+                                    </p>
+                                    <p class="m-2">Alignment (kms) <br>
+                                        <input type="text" v-if="check"
+                                            class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            v-model="responseData.message[0].alignment" placeholder="Enter Alignment">
+                                    </p>
+                                    <div class="m-3 mt-4 flex flex-row space-x-[70px]">
+                                        <button class="bg-green-500 w-[100px] text-white font-bold 0 p-2 rounded"
+                                            @click="addModifiedData">Save</button>
+                                        <button class="bg-red-500 w-[100px] text-white font-bold ml-3 p-2 rounded"
+                                            @click="clearModifiedVehicleData">Clear</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                      <div v-if="showNewCustomer"
-                          class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-end items-center pb-9">
-                          <div class="fixed inset-0" @click="addCustomer"></div>
-                          <div class="max-w-sm w-full bg-white shadow-xl h-full overflow-y-auto relative">
-                              <button class="absolute to text-gray pt-5 font-bold p-2 right-2 px-2 py-1 rounded"
-                                  @click="addCustomer">
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                                      viewBox="0 0 24 24" stroke="currentColor">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M6 18L18 6M6 6l12 12" />
-                                  </svg>
-                              </button>
-                              <div class="p-8 mt-[150px]">
-                                  <h2 class="text-2xl font-semibold mb-4">Customer Details</h2>
-                                  <hr class="dark-hr">
-                                  <p class="m-2">Vehicle Number <br>
-                                      <input type="text" v-model="customerData.name"
-                                          class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                          placeholder="Enter your Vehicle Number">
-                                  </p>
-                                  <p class="m-2">Owner Name <br>
-                                      <input type="text" v-model="customerData.current_owner"
-                                          class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                          placeholder="Enter your Owner Name">
-                                  </p>
-                                  <p class="m-2">Owner Mobile No <br>
-                                      <input type="text" v-model="customerData.owner_mobile_no"
-                                          class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                          placeholder="Enter Owner Mobile No.">
-                                  </p>
-                                  <div v-for="(employee, index) in employees" :key="index" class="mt-2">
-                                      <hr class="dark-hr m-4">
-                                      <p class="m-2">Employee Name
-                                          <button
-                                              class="bg-blue-500 w-[100px] text-white font-bold  text-base p-4 rounded-lg mb-1 float-right"
-                                              @click="removeEmployee1(index)">Remove</button> <br>
-                                          <br>
-                                          <input type="text" v-model="employee.driver_name"
-                                              class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                              placeholder="Enter your Name">
-                                      </p>
-                                      <p class="m-2">Employee Type<br>
-                                          <select v-model="employee.type"
-                                              class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
-                                              <option value="current_driver">Driver</option>
-                                              <option value="contact_person">Contact Person</option>
-                                          </select>
-                                      </p>
-                                      <p class="m-2">Phone <br>
-                                          <input type="text" v-model="employee.mobile_no"
-                                              class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
-                                      </p>
-                                  </div>
-                                  <div>
-                                      <button
-                                          class="bg-blue-500 w-[100px] text-white font-bold  text-base p-4 rounded-lg mb-1 float-right"
-                                          @click="moreEmployee">Add
-                                      </button><br>
-                                  </div>
-                                  <div class="m-3 mt-[40px] flex flex-row space-x-[70px]">
-                                      <button
-                                          class="bg-green-500 w-[100px]  text-white font-bold 0 text-base p-4 rounded-lg ml-3"
-                                          @click="addCustomerData">Save</button>
-                                      <button
-                                          class="bg-red-500 w-[100px]  text-white font-bold text-base p-4 rounded-lg ml-3"
-                                          @click="removeCustomerData">Clear</button>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
+                        <div v-if="showNewCustomer"
+                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-end items-center pb-9">
+                            <div class="fixed inset-0" @click="addCustomer"></div>
+                            <div class="max-w-md w-full bg-white shadow-xl h-full overflow-y-auto relative">
+                                <button class="absolute to text-gray pt-5 font-bold p-2 right-2 px-2 py-1 rounded"
+                                    @click="addCustomer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                                <div class="p-8 mt-[150px]">
+                                    <h2 class="text-2xl font-semibold mb-4">Customer Details</h2>
+                                    <hr class="dark-hr">
+                                    <p class="m-2">Vehicle Number <br>
+                                        <input type="text" v-model="customerData.name"
+                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            placeholder="Enter your Vehicle Number">
+                                    </p>
+                                    <p class="m-2">Owner Name <br>
+                                        <input type="text" v-model="customerData.current_owner"
+                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            placeholder="Enter your Owner Name">
+                                    </p>
+                                    <p class="m-2">Owner Mobile No <br>
+                                        <input type="text" v-model="customerData.owner_mobile_no"
+                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            placeholder="Enter Owner Mobile No.">
+                                    </p>
+                                    <input type="checkbox" v-model="customerData.whatsappChecked"
+                                        class="bg-gray-300 rounded-sm">&nbsp;&nbsp;WhatsApp
+                                    <span class="ml-5">
+                                        <input type="checkbox" v-model="customerData.callChecked"
+                                            class="bg-gray-300 rounded-sm">&nbsp;&nbsp;Call
+                                    </span>
+                                    <span class="ml-5">
+                                        <input type="checkbox" v-model="customerData.smsChecked"
+                                            class="bg-gray-300 rounded-sm">&nbsp;&nbsp;SMS
+                                    </span>
+                                    <div v-for="(employee, index) in employees" :key="index" class="mt-2">
+                                        <hr class="dark-hr m-4">
+                                        <p class="m-2">Employee Name
+                                            <button
+                                                class="bg-blue-500 w-[100px] text-white font-bold  text-base p-4 rounded-lg mb-1 float-right"
+                                                @click="removeEmployee1(index)">Remove</button> <br>
+                                            <br>
+                                            <input type="text" v-model="employee.driver_name"
+                                                class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                                placeholder="Enter your Name">
+                                        </p>
+                                        <p class="m-2">Employee Type<br>
+                                            <select v-model="employee.type"
+                                                class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
+                                                <option value="current_driver">Driver</option>
+                                                <option value="contact_person">Contact Person</option>
+                                            </select>
+                                        </p>
+                                        <p class="m-2">Phone <br>
+                                            <input type="text" v-model="employee.mobile_no"
+                                                class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                                placeholder="Enter Mobile No.">
+                                        </p>
+                                        <input type="checkbox" v-model="employee.whatsappChecked1"
+                                            class="bg-gray-300 rounded-sm">&nbsp;&nbsp;WhatsApp
+                                        <span class="ml-5">
+                                            <input type="checkbox" v-model="employee.callChecked1"
+                                                class="bg-gray-300 rounded-sm">&nbsp;&nbsp;Call
+                                        </span>
+                                        <span class="ml-5">
+                                            <input type="checkbox" v-model="employee.smsChecked1"
+                                                class="bg-gray-300 rounded-sm">&nbsp;&nbsp;SMS
+                                        </span>
+                                        <span class="ml-5">
+                                            <input type="checkbox" v-model="employee.primary"
+                                                @click="handlePrimaryCheckbox(employee)"
+                                                class="bg-gray-300 rounded-sm">&nbsp;&nbsp;Primary
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <button
+                                            class="bg-blue-500 w-[100px] text-white font-bold  text-base p-4 rounded-lg mb-1 float-right"
+                                            @click="moreEmployee">Add
+                                        </button><br>
+                                    </div>
+                                    <div class="m-3 mt-[40px] flex flex-row space-x-[70px]">
+                                        <button
+                                            class="bg-green-500 w-[100px]  text-white font-bold 0 text-base p-4 rounded-lg ml-3"
+                                            @click="addCustomerData">Save</button>
+                                        <button
+                                            class="bg-red-500 w-[100px]  text-white font-bold text-base p-4 rounded-lg ml-3"
+                                            @click="removeCustomerData">Clear</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                      <div v-if="showModifyCustomer"
-                          class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-end items-center pb-10">
-                          <div class="fixed inset-0" @click="modifyCustomer"></div>
-                          <div class="max-w-sm w-full bg-white shadow-xl h-full overflow-y-auto relative">
-                              <button class="absolute to text-black pt-5 font-bold right-2 px-2 py-1 rounded"
-                                  @click="modifyCustomer">
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                                      viewBox="0 0 24 24" stroke="currentColor">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M6 18L18 6M6 6l12 12" />
-                                  </svg>
-                              </button>
-                              <div class="p-8 mt-[140px]">
-                                  <h2 class="text-2xl font-semibold mb-4">Customer Details</h2>
-                                  <hr class="dark-hr">
-                                  <p class="m-2">Vehicle Number <br>
-                                      <input type="text" v-if="check" v-model="responseData.message[1].name"
-                                          class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                          placeholder="Enter your Vehicle Number">
-                                  </p>
-                                  <p class="m-2">Owner Name <br>
-                                      <input type="text" v-if="check" v-model="responseData.message[1].current_owner"
-                                          class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                          placeholder="Enter your Owner Name">
-                                  </p>
-                                  <p class="m-2">Owner Mobile No <br>
-                                      <input type="text" v-if="check"
-                                          v-model="responseData.message[1].owner_mobile_no"
-                                          class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                          placeholder="Enter Owner Mobile No.">
-                                  </p>
-                                  <div v-for="(employee, index) in responseData.message[1].current_driver"
-                                      :key="index" class="mt-2">
-                                      <hr class="dark-hr m-4">
-                                      <p class="m-3">Employee Name
-                                          <button
-                                              class="bg-blue-500 w-[100px] text-white font-bold  text-base p-4 rounded-lg mb-1 float-right"
-                                              @click="removeEmployee2(index)">Remove</button> <br>
-                                          <input type="text" v-model="employee.current_driver"
-                                              class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                              placeholder="Enter your Name">
-                                      </p>
-                                      <p class="m-2">Employee Type<br>
-                                          <select v-model="employee.parentfield"
-                                              @change="updateEmployeeType(employee)"
-                                              class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
-                                              <option :value="'current_driver'"
-                                                  :selected="employee.parentfield === 'current_driver'">Driver
-                                              </option>
-                                              <option :value="'contact_person'"
-                                                  :selected="employee.parentfield === 'contact_person'">Contact Person
-                                              </option>
-                                          </select>
-                                      </p>
-                                      <p class="m-2">Phone <br>
-                                          <input type="text" v-model="employee.mobile_no"
-                                              class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
-                                      </p>
-                                  </div>
-                                  <div v-for="(contact, index) in responseData.message[1].contact_person" :key="index"
-                                      class="mt-2">
-                                      <hr class="dark-hr m-4">
-                                      <p class="m-3">Employee Name
-                                          <button
-                                              class="bg-blue-500 w-[100px] text-white font-bold  text-base p-4 rounded-lg mb-1 float-right"
-                                              @click="removeEmployee3(index)">Remove</button> <br>
-                                          <input type="text" v-model="contact.contact_person_name"
-                                              class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                              placeholder="Enter your Name">
-                                      </p>
-                                      <p class="m-2">Employee Type<br>
-                                          <select v-model="contact.parentfield" @change="updateEmployeeType(contact)"
-                                              class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
-                                              <option :value="'current_driver'"
-                                                  :selected="contact.parentfield === 'current_driver'">Driver
-                                              </option>
-                                              <option :value="'contact_person'"
-                                                  :selected="contact.parentfield === 'contact_person'">Contact Person
-                                              </option>
-                                          </select>
-                                      </p>
-                                      <p class="m-2">Phone <br>
-                                          <input type="text" v-model="contact.contact_person_mobile"
-                                              class="w-[280px] h-[52px] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
-                                      </p>
-                                  </div>
-                                  <div>
-                                      <button
-                                          class="bg-blue-500 w-[100px]  text-white font-bold 0 text-base p-4 rounded-lg ml-3"
-                                          @click="modifiedMoreEmployee('current_driver')">Add Driver</button>
+                        <div v-if="showModifyCustomer"
+                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-end items-center pb-10">
+                            <div class="fixed inset-0" @click="modifyCustomer"></div>
+                            <div class="max-w-md w-full bg-white shadow-xl h-full overflow-y-auto relative">
+                                <button class="absolute to text-black pt-5 font-bold right-2 px-2 py-1 rounded"
+                                    @click="modifyCustomer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                                <div class="p-8 mt-[140px]">
+                                    <h2 class="text-2xl font-semibold mb-4">Customer Details</h2>
+                                    <hr class="dark-hr">
+                                    <p class="m-2">Vehicle Number <br>
+                                        <input type="text" v-if="check" v-model="responseData.message[1].name"
+                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            placeholder="Enter your Vehicle Number">
+                                    </p>
+                                    <p class="m-2">Owner Name <br>
+                                        <input type="text" v-if="check" v-model="responseData.message[1].current_owner"
+                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            placeholder="Enter your Owner Name">
+                                    </p>
+                                    <p class="m-2">Owner Mobile No <br>
+                                        <input type="text" v-if="check"
+                                            v-model="responseData.message[1].owner_mobile_no"
+                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            placeholder="Enter Owner Mobile No.">
+                                    </p>
+                                    <input type="checkbox" v-if="check"
+                                        :checked="responseData.message[1]?.whatsapp === 1"
+                                        @change="responseData.message[1].whatsapp = $event.target.checked ? 1 : 0"
+                                        class="bg-gray-300 rounded-sm">&nbsp;&nbsp;WhatsApp
+                                    <span class="ml-5">
+                                        <input type="checkbox" v-if="check"
+                                            :checked="responseData.message[1]?.call === 1"
+                                            @change="responseData.message[1].call = $event.target.checked ? 1 : 0"
+                                            class="bg-gray-300 rounded-sm">&nbsp;&nbsp;Call
+                                    </span>
+                                    <span class="ml-5">
+                                        <input type="checkbox" v-if="check"
+                                            :checked="responseData.message[1]?.sms === 1"
+                                            @change="responseData.message[1].sms = $event.target.checked ? 1 : 0"
+                                            class="bg-gray-300 rounded-sm">&nbsp;&nbsp;SMS
+                                    </span>
+                                    <div v-for="(employee, index) in responseData.message[1].current_driver"
+                                        :key="index" class="mt-2">
+                                        <hr class="dark-hr m-4">
+                                        <p class="m-3">Employee Name
+                                            <button
+                                                class="bg-blue-500 w-[100px] text-white font-bold  text-base p-4 rounded-lg mb-1 float-right"
+                                                @click="removeEmployee2(index)">Remove</button> <br>
+                                            <input type="text" v-model="employee.current_driver"
+                                                class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                                placeholder="Enter your Name">
+                                        </p>
+                                        <p class="m-2">Employee Type<br>
+                                            <select v-model="employee.parentfield"
+                                                @change="updateEmployeeType(employee)"
+                                                class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
+                                                <option :value="'current_driver'"
+                                                    :selected="employee.parentfield === 'current_driver'">Driver
+                                                </option>
+                                                <option :value="'contact_person'"
+                                                    :selected="employee.parentfield === 'contact_person'">Contact Person
+                                                </option>
+                                            </select>
+                                        </p>
+                                        <p class="m-2">Phone <br>
+                                            <input type="text" v-model="employee.mobile_no"
+                                                class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
+                                        </p>
+                                        <input type="checkbox" v-if="check" :checked="employee.whatsapp === 1"
+                                            @change="employee.whatsapp = $event.target.checked ? 1 : 0"
+                                            class="bg-gray-300 rounded-sm">&nbsp;&nbsp;WhatsApp
+                                        <span class="ml-5">
+                                            <input type="checkbox" v-if="check" :checked="employee.call === 1"
+                                                @change="employee.call = $event.target.checked ? 1 : 0"
+                                                class="bg-gray-300 rounded-sm">&nbsp;&nbsp;Call
+                                        </span>
+                                        <span class="ml-5">
+                                            <input type="checkbox" v-if="check" :checked="employee.sms === 1"
+                                                @change="employee.sms = $event.target.checked ? 1 : 0"
+                                                class="bg-gray-300 rounded-sm">&nbsp;&nbsp;SMS
+                                        </span>
+                                        <span class="ml-5">
+                                            <input type="checkbox" v-if="check" :checked="employee.primary === 1"
+                                                @change="employee.primary = $event.target.checked ? 1 : 0"
+                                                @click="handlePrimaryCheckboxModify(employee)"
+                                                class="bg-gray-300 rounded-sm">&nbsp;&nbsp;Primary
+                                        </span>
+                                    </div>
+                                    <div v-for="(contact, index) in responseData.message[1].contact_person" :key="index"
+                                        class="mt-2">
+                                        <hr class="dark-hr m-4">
+                                        <p class="m-3">Employee Name
+                                            <button
+                                                class="bg-blue-500 w-[100px] text-white font-bold  text-base p-4 rounded-lg mb-1 float-right"
+                                                @click="removeEmployee3(index)">Remove</button> <br>
+                                            <input type="text" v-model="contact.contact_person_name"
+                                                class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                                placeholder="Enter your Name">
+                                        </p>
+                                        <p class="m-2">Employee Type<br>
+                                            <select v-model="contact.parentfield" @change="updateEmployeeType(contact)"
+                                                class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
+                                                <option :value="'current_driver'"
+                                                    :selected="contact.parentfield === 'current_driver'">Driver
+                                                </option>
+                                                <option :value="'contact_person'"
+                                                    :selected="contact.parentfield === 'contact_person'">Contact Person
+                                                </option>
+                                            </select>
+                                        </p>
+                                        <p class="m-2">Phone <br>
+                                            <input type="text" v-model="contact.contact_person_mobile"
+                                                class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
+                                        </p>
+                                        <input type="checkbox" v-if="check" :checked="contact.custom_whatsapp === 1"
+                                            @change="contact.custom_whatsapp = $event.target.checked ? 1 : 0"
+                                            class="bg-gray-300 rounded-sm">&nbsp;&nbsp;WhatsApp
+                                        <span class="ml-5">
+                                            <input type="checkbox" v-if="check" :checked="contact.custom_call === 1"
+                                                @change="contact.custom_call = $event.target.checked ? 1 : 0"
+                                                class="bg-gray-300 rounded-sm">&nbsp;&nbsp;Call
+                                        </span>
+                                        <span class="ml-5">
+                                            <input type="checkbox" v-if="check" :checked="contact.custom_sms === 1"
+                                                @change="contact.custom_sms = $event.target.checked ? 1 : 0"
+                                                class="bg-gray-300 rounded-sm">&nbsp;&nbsp;SMS
+                                        </span>
+                                        <span class="ml-5">
+                                            <input type="checkbox" v-if="check" :checked="contact.custom_primary === 1"
+                                                @change="contact.custom_primary = $event.target.checked ? 1 : 0"
+                                                @click="handlePrimaryCheckboxModify(contact)"
+                                                class="bg-gray-300 rounded-sm">&nbsp;&nbsp;Primary
+                                        </span>
+                                    </div>
+                                    <div class="mt-5">
+                                        <button
+                                            class="bg-blue-500 w-[100px] text-white font-bold 0 text-base p-5 rounded-lg ml-3"
+                                            @click="modifiedMoreEmployee('current_driver')">Add Driver</button>
 
                                       <button
                                           class="bg-blue-500 w-[100px]  text-white font-bold 0 text-base p-4 rounded-lg ml-3"
@@ -1113,8 +1239,8 @@ const incorrect = ref(false);
 const currentstep = ref(0);
 
 const data = reactive({
-  selectedImgSrc: '',
-  selectedAlt: ''
+    selectedImgSrc: '',
+    selectedAlt: ''
 });
 
 const pin1 = ref('');
@@ -1123,143 +1249,211 @@ const pin3 = ref('');
 const pin4 = ref('');
 
 function handleImgSelection(event) {
-  selectImg.value = true;
-  data.selectedImgSrc = event.target.src;
-  data.selectedAlt = event.target.alt;
-  console.log(data.selectedImgSrc, data.selectedAlt);
+    selectImg.value = true;
+    data.selectedImgSrc = event.target.src;
+    data.selectedAlt = event.target.alt;
+    console.log(data.selectedImgSrc, data.selectedAlt);
 }
 
 function focusNext(event, nextInput) {
-  const target = event.target;
-  if (target.value.length === 1) {
-      const inputs = target.parentNode.querySelectorAll('input');
-      if (nextInput < inputs.length) {
-          inputs[nextInput].focus();
-      } else {
-          submitPin();
-      }
-  }
+    const target = event.target;
+    if (target.value.length === 1) {
+        const inputs = target.parentNode.querySelectorAll('input');
+        if (nextInput < inputs.length) {
+            inputs[nextInput].focus();
+        } else {
+            submitPin();
+        }
+    }
 }
 
 function submitPin() {
-  if (pin1 && pin2 && pin3 && pin4) {
-      const pin = pin1.value + pin2.value + pin3.value + pin4.value;
-      if (pin === "1234") {
-          Auth.value = true;
-      }
-      else {
-          incorrect.value = true;
-          pin1.value = pin2.value = pin3.value = pin4.value = '';
-          setTimeout(() => {
-              incorrect.value = false;
-          }, 3000);
-      }
-  }
+    if (pin1 && pin2 && pin3 && pin4) {
+        const pin = pin1.value + pin2.value + pin3.value + pin4.value;
+        if (pin === "1234") {
+            Auth.value = true;
+        }
+        else {
+            incorrect.value = true;
+            pin1.value = pin2.value = pin3.value = pin4.value = '';
+            setTimeout(() => {
+                incorrect.value = false;
+            }, 3000);
+        }
+    }
 }
 //==========================================================>>> Main Page <<<================================================================================//
 
+const isEditMode = ref(false)
 const searchQuery = ref('');
 const responseData = ref({
-  message: [{
-      name: '',
-      vehicle_brand: '',
-      vehicle_model: '',
-      chassis_no: '',
-      fuel_type: '',
-      last_odometer_reading: '',
-      tyre_change: '',
-      alignment: ''
-  },
-  {
-      current_owner: '',
-      owner_mobile_no: '',
-      current_driver: [{
-          current_driver: '',
-          name: '',
-          mobile_no: ''
-      }],
-      contact_person: [{
-          contact_person_name: '',
-          contact_person_mobile: ''
-      }]
-  }]
+//     message: [
+//         {
+//         name: '',
+//         vehicle_brand: '',
+//         vehicle_model: '',
+//         chassis_no: '',
+//         fuel_type: '',
+//         last_odometer_reading: '',
+//         tyre_change: '',
+//         alignment: ''
+//     },
+//     {
+//         current_owner: '',
+//         owner_mobile_no: '',
+//         call: '',
+//         whatsapp: '',
+//         sms: '',
+//         current_driver: [{
+//             current_driver: '',
+//             name: '',
+//             mobile_no: '',
+//             call: '',
+//             whatsapp: '',
+//             sms: ''
+//         }],
+//         contact_person: [{
+//             contact_person_name: '',
+//             contact_person_mobile: '',
+//             custom_call: '',
+//             custom_whatsapp: '',
+//             custom_sms: ''
+//         }]
+//     },
+//     {
+//         0: {
+//             custom_primary: '',
+//             full_name: '',
+//             cell_number: '',
+//             custom_call_check: '',
+//             custom_whatsapp_check: '',
+//             custom_sms_check: '',
+//         },
+//         1: {
+//             contact_person_mobile: '',
+//             contact_person_name: '',
+//             custom_primary: '',
+//             call: '',
+//             sms: '',
+//             whatsapp: ''
+//         }
+//     }
+// ]
 });
 
 const spacing = (plate) => {
-  console.log('space checking', plate);
-  const spaced_plate = plate.match(/[a-zA-Z]{1,2}|\d+/g).join(" ");
-  console.log('after spacing :', spaced_plate);
-  return spaced_plate;
+    console.log('space checking', plate);
+    const spaced_plate = plate.match(/[a-zA-Z]{1,2}|\d+/g).join(" ");
+    console.log('after spacing :', spaced_plate);
+    return spaced_plate;
 };
 const check = ref(false)
 const search = async () => {
-  const data = {
-      "license_plate": searchQuery.value
-  };
-  console.log('checking data', data);
-  try {
-      if (data.license_plate.trim() !== "") {
-          const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.get_details", data);
-          check.value = true;
-          if (response.data.message === "") {
-              // If no data found, set vehicle details to empty and customer details to "No data"
-              responseData.value = {
-                  message: [{
-                      name: 'No data',
-                      vehicle_brand: 'No data',
-                      vehicle_model: '',
-                      chassis_no: '',
-                      fuel_type: '',
-                      last_odometer_reading: '',
-                      tyre_change: '',
-                      alignment: ''
-                  },
-                  {
-                      current_owner: '',
-                      owner_mobile_no: '',
-                      current_driver: [{
-                          current_driver: '',
-                          name: '',
-                          mobile_no: ''
-                      }],
-                      contact_person: [{
-                          contact_person_name: '',
-                          contact_person_mobile: ''
-                      }]
-                  }]
-              };
-              alert("No data found");
-              console.log(response.data);
-          } else {
-              // If data found, set vehicle details to response data and customer details accordingly
-              responseData.value = {
-                  message: [
-                      response.data.message[0],
-                      response.data.message[1] ? response.data.message[1] : {
-                          current_owner: '',
-                          owner_mobile_no: '',
-                          current_driver: [{
-                              current_driver: '',
-                              name: '',
-                              mobile_no: ''
-                          }],
-                          contact_person: [{
-                              contact_person_name: '',
-                              contact_person_mobile: ''
-                          }]
-                      }
-                  ]
-              };
-              console.log("Response:", response.data);
-          }
-      } else {
-          alert("Please enter search value");
-          console.log("Please enter search value");
-          // responseData.value = null;
-      }
-  } catch (error) {
-      console.error("Error:", error);
-  }
+    const data = {
+        "license_plate": searchQuery.value
+    };
+    console.log('checking data', data);
+    try {
+        if (data.license_plate.trim() !== "") {
+            const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.get_details", data);
+            if (response.data.message === "") {
+                // If no data found, set vehicle details to empty and customer details to "No data"
+                // responseData.value = {
+                    // message: [{
+                    //     name: 'No data',
+                    //     vehicle_brand: 'No data',
+                    //     vehicle_model: '',
+                    //     chassis_no: '',
+                    //     fuel_type: '',
+                    //     last_odometer_reading: '',
+                    //     tyre_change: '',
+                    //     alignment: ''
+                    // },
+                    // {
+                    //     current_owner: '',
+                    //     owner_mobile_no: '',
+                    //     call: '',
+                    //     whatsapp: '',
+                    //     sms: '',
+                    //     current_driver: [{
+                    //         current_driver: '',
+                    //         name: '',
+                    //         mobile_no: '',
+                    //         call: '',
+                    //         whatsapp: '',
+                    //         sms: ''
+
+                    //     }],
+                    //     contact_person: [{
+                    //         contact_person_name: '',
+                    //         contact_person_mobile: '',
+                    //         custom_call: '',
+                    //         custom_whatsapp: '',
+                    //         custom_sms: ''
+                    //     }]
+                    // },
+                    // {
+                    //     0: {
+                    //         custom_primary: '',
+                    //         full_name: '',
+                    //         cell_number: '',
+                    //         custom_call_check: '',
+                    //         custom_whatsapp_check: '',
+                    //         custom_sms_check: '',
+                    //     },
+                    //     1: {
+                    //         contact_person_mobile: '',
+                    //         contact_person_name: '',
+                    //         custom_primary: '',
+                    //         call: '',
+                    //         sms: '',
+                    //         whatsapp: ''
+                    //     }
+                    // }]
+                // };
+                alert("No data found");
+                check.value = false;
+                console.log(response.data);
+            } else {
+                // If data found, set vehicle details to response data and customer details accordingly
+                check.value = true;
+                responseData.value = {
+                    message: [
+                        response.data.message[0],
+                        response.data.message[1] ? response.data.message[1] : {
+                            current_owner: '',
+                            owner_mobile_no: '',
+                            call: '',
+                            whatsapp: '',
+                            sms: '',
+                            current_driver: [{
+                                current_driver: '',
+                                name: '',
+                                mobile_no: '',
+                                call: '',
+                                whatsapp: '',
+                                sms: ''
+
+                            }],
+                            contact_person: [{
+                                contact_person_name: '',
+                                contact_person_mobile: '',
+                                custom_call: '',
+                                custom_whatsapp: '',
+                                custom_sms: ''
+                            }]
+                        }, response.data.message[2]
+                    ]
+                };
+                console.log("Response:", response.data);
+            }
+        } else {
+            alert("Please enter search value");
+            console.log("Please enter search value");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
 };
 
 const currentPage = ref('details');
@@ -1267,10 +1461,10 @@ const currentPage = ref('details');
 const maxStep = 4;
 
 function previousPage() {
-  if (currentstep.value > 0) {
-      currentstep.value--;
-      currentPage.value = getPageName(currentstep.value);
-  }
+    if (currentstep.value > 0) {
+        currentstep.value--;
+        currentPage.value = getPageName(currentstep.value);
+    }
 }
 
 function nextPageAndHighlight() {
@@ -1284,35 +1478,35 @@ function nextPageAndHighlight() {
 }
 
 function getPageName(step) {
-  switch (step) {
-      case 0:
-          return 'details';
-      case 1:
-          return '5 Points Checkup';
-      case 2:
-          return 'Required Services';
-      case 3:
-          return 'Tyre Replacement Details';
-      case 4:
-          return 'Billing Details';
-      default:
-          return 'details';
-  }
+    switch (step) {
+        case 0:
+            return 'details';
+        case 1:
+            return '5 Points Checkup';
+        case 2:
+            return 'Required Services';
+        case 3:
+            return 'Tyre Replacement Details';
+        case 4:
+            return 'Billing Details';
+        default:
+            return 'details';
+    }
 }
 
 const setCurrentPage = (page, step) => {
-  currentPage.value = page;
-  currentstep.value = step;
+    currentPage.value = page;
+    currentstep.value = step;
 }
 const vehicleDetails = ref({
-  name: '',
-  vehicle_brand: '',
-  vehicle_model: '',
-  chassis_no: '',
-  fuel_type: '',
-  last_odometer_reading: '',
-  tyre_change: '',
-  alignment: ''
+    name: '',
+    vehicle_brand: '',
+    vehicle_model: '',
+    chassis_no: '',
+    fuel_type: '',
+    last_odometer_reading: '',
+    tyre_change: '',
+    alignment: ''
 })
 
 
@@ -1322,390 +1516,495 @@ const showModifyVehicle = ref(false);
 const showModifyCustomer = ref(false);
 
 const addVehicle = () => {
-  showNewVehicle.value = !showNewVehicle.value;
+    showNewVehicle.value = !showNewVehicle.value;
 };
 const addCustomer = () => {
-  showNewCustomer.value = !showNewCustomer.value;
+    showNewCustomer.value = !showNewCustomer.value;
 }
 const modifyVehicle = () => {
-  showModifyVehicle.value = !showModifyVehicle.value;
+    showModifyVehicle.value = !showModifyVehicle.value;
 }
 const modifyCustomer = () => {
-  showModifyCustomer.value = !showModifyCustomer.value;
+    showModifyCustomer.value = !showModifyCustomer.value;
 }
-const employees = ref([{ driver_name: '', type: '', mobile_no: '' }]);
-
-function moreEmployee() {
-  employees.value.push({ driver_name: '', type: '', mobile_no: '' });
-}
-
-const modifiedMoreEmployee = async (type) => {
-  try {
-      const newEmployee = {
-          mobile_no: '',
-          current_driver: '',
-          name: '',
-          type: type
-      };
-
-      if (type === 'current_driver') {
-          responseData.value.message[1].current_driver.push(newEmployee);
-      } else if (type === 'contact_person') {
-          responseData.value.message[1].contact_person.push(newEmployee);
-      } else {
-          console.error('Invalid employee type:', type);
-          return;
-      }
-  } catch (error) {
-      console.error('Error adding more employees:', error);
-  }
-};
 
 const vehicleData = ref({
-  name: responseData?.message?.[0]?.name ?? '',
-  vehicle_brand: '',
-  vehicle_model: '',
-  chassis_no: '',
-  fuel_type: '',
-  last_odometer_reading: '',
-  tyre_change: '',
-  alignment: ''
+    name: responseData?.message?.[0]?.name ?? '',
+    vehicle_brand: '',
+    vehicle_model: '',
+    chassis_no: '',
+    fuel_type: '',
+    last_odometer_reading: '',
+    tyre_change: '',
+    alignment: ''
 });
 
-const addVehicleData = () => {
-  const fieldNames = Object.keys(vehicleData.value);
-  const data = {};
+const addVehicleData = async () => {
+    const fieldNames = Object.keys(vehicleData.value);
+    const data = {};
 
-  fieldNames.forEach(fieldName => {
-      const value = vehicleData.value[fieldName].trim();
-      if (value == '') {
-          return
-      }
-      data[fieldName] = value;
-      vehicleData.value[fieldName] = '';
-  });
-  console.log(data);
-  const json_data = { data: JSON.stringify(data) }
-  console.log(json_data);
-  const apiEndpoint = "http://192.168.1.39:8002/api/method/tyre.api.store_vehicle_details"
-  axios.post(apiEndpoint, json_data)
-      .then(response => {
-          // updateVehicleDetails(json_data);
-          console.log('vehicle add after response', response);
-          // responseData.value = response.data
-          check.value = true;
-          if (responseData.value && responseData.value.message) {
-              responseData.value = {
-                  message: [
-                      response.data.message[0],
-                      response.data.message[1] === "" ? 'no data' : {
-                          current_owner: '',
-                          owner_mobile_no: '',
-                          current_driver: [{
-                              current_driver: '',
-                              name: '',
-                              mobile_no: ''
-                          }],
-                          contact_person: [{
-                              contact_person_name: '',
-                              contact_person_mobile: ''
-                          }]
-                      }
-                  ]
-              }
-              // message[0] = response.data.message[0];
-              console.log("vehicle data in responseData.value:", responseData.value.message[0].alignment);
-              console.log("vehicle data in responseData.value:", responseData.value.message[0].name);
-              console.log("vehicle data in responseData.value:", responseData.value.message[0])
-              console.log("vehicle data in responseData.value:", responseData.value)
-              alert("Successfully added Vehicle!")
-          } else {
-              console.error("responseData.value or responseData.value.message is undefined");
-          }
-      })
-      .catch(error => {
-          console.error(error);
-      });
+    fieldNames.forEach(fieldName => {
+        const value = vehicleData.value[fieldName].trim();
+        if (value == '') {
+            return
+        }
+        data[fieldName] = value;
+    });
+    console.log(data);
+    const json_data = { data: JSON.stringify(data) }
+    console.log(json_data);
+    console.log('vehicle number:', data.name);
+    const isVehicleExist = await returnSearch(data.name)
+    console.log('isvehicle exist :', isVehicleExist.message[0].name)
+    if (isVehicleExist.message[0].name) {
+        alert("Vehicle already Exist!")
+        return
+    }
+    else {
+        axios.post("http://192.168.1.39:8002/api/method/tyre.api.store_vehicle_details", json_data)
+            .then(response => {
+                console.log('vehicle add after response', response);
+                if (responseData.value && responseData.value.message) {
+                    check.value = true;
+                    responseData.value = {
+                        message: [
+                            response.data.message[0],
+                            response.data.message[1] === "" ? 'no data' : {
+                                current_owner: '',
+                                owner_mobile_no: '',
+                                current_driver: [{
+                                    current_driver: '',
+                                    name: '',
+                                    mobile_no: ''
+                                }],
+                                contact_person: [{
+                                    contact_person_name: '',
+                                    contact_person_mobile: ''
+                                }]
+                            }
+                        ]
+                    }
+                    console.log("vehicle data in responseData.value:", responseData.value.message[0].alignment);
+                    console.log("vehicle data in responseData.value:", responseData.value.message[0].name);
+                    console.log("vehicle data in responseData.value:", responseData.value.message[0])
+                    console.log("vehicle data in responseData.value:", responseData.value)
+                    alert("Successfully added Vehicle!")
+
+                } else {
+                    check.value = false;
+                    console.error("responseData.value or responseData.value.message is undefined");
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
 };
 
 const addModifiedData = async () => {
-  const modifiedData = {
-      name: responseData.value.message[0].name,
-      vehicle_brand: responseData.value.message[0].vehicle_brand,
-      vehicle_model: responseData.value.message[0].vehicle_model,
-      chassis_no: responseData.value.message[0].chassis_no,
-      fuel_type: responseData.value.message[0].fuel_type,
-      last_odometer_reading: responseData.value.message[0].last_odometer_reading,
-      tyre_change: responseData.value.message[0].tyre_change,
-      alignment: responseData.value.message[0].alignment
-  };
-  console.log(modifiedData)
-  try {
-      const json_data = { data: JSON.stringify(modifiedData) }
-      const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.store_vehicle_details", json_data);
-      console.log(response);
-      search()
-      alert("Successfully Modified Vehicle Data!")
-  } catch (error) {
-      console.error(error);
-  }
+    const name = responseData.value.message[1].name
+    const modifiedData = {
+        name: responseData.value.message[0].name,
+        vehicle_brand: responseData.value.message[0].vehicle_brand,
+        vehicle_model: responseData.value.message[0].vehicle_model,
+        chassis_no: responseData.value.message[0].chassis_no,
+        fuel_type: responseData.value.message[0].fuel_type,
+        last_odometer_reading: responseData.value.message[0].last_odometer_reading,
+        tyre_change: responseData.value.message[0].tyre_change,
+        alignment: responseData.value.message[0].alignment
+    };
+    console.log(modifiedData)
+    try {
+        const json_data = { data: JSON.stringify(modifiedData) }
+        const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.store_vehicle_details", json_data);
+        console.log(response);
+        returnSearch(name)
+        alert("Successfully Modified Vehicle Data!")
+    } catch (error) {
+        console.error(error);
+    }
 };
 
 const updateEmployeeType = (employee) => {
-  console.log(employee);
-  return employee.parentfield
+    console.log(employee);
+    return employee.parentfield
 }
 
-const addCustomerModifiedData = async () => {
-  const name= responseData.value.message[1].name
-  console.log('modified data',name);
-  const modifiedData = {
-      name: responseData.value.message[1].name,
-      current_owner: responseData.value.message[1].current_owner,
-      owner_mobile_no: responseData.value.message[1].owner_mobile_no,
-      employees: []
-  };
+const employees = ref([{
+    driver_name: '',
+    type: '',
+    mobile_no: '',
+    whatsappChecked1: 0,
+    callChecked1: 0,
+    smsChecked1: 0,
+    primary: 0
+}]);
 
-  const driver = responseData.value.message[1].current_driver;
-  const contactPerson = responseData.value.message[1].contact_person;
-
-
-  driver.forEach((employee, index) => {
-      let i = index
-      const name = employee.current_driver.trim();
-      if (name !== '') {
-          modifiedData.employees.push({
-              current_driver: name || '',
-              name: responseData.value.message[1].current_driver[0].name ? responseData.value.message[1].current_driver[i].name : '',
-              type: updateEmployeeType(employee) || '',
-              mobile_no: employee.mobile_no || ''
-          });
-      }
-      i += 1;
-      console.log('index driver', i);
-  });
-  contactPerson.forEach((employee, index) => {
-      let i = index
-      const name = employee.contact_person_name.trim();
-      if (name !== '') {
-          modifiedData.employees.push({
-              contact_person_name: name || '',
-              name: responseData.value.message[1].contact_person[0].name ? responseData.value.message[1].contact_person[i].name : '',
-              type: updateEmployeeType(employee) || '',
-              contact_person_mobile: employee.contact_person_mobile || ''
-          });
-      }
-      i += 1;
-      console.log('index contact', i);
-  });
-
-  console.log('modify checking', modifiedData);
-  const json_data = { data: JSON.stringify(modifiedData) };
-  console.log("Modified data", json_data)
-  try {
-      const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.store_customer_details", json_data);
-      check.value = true;
-      console.log(response);
-      search1(name)
-      alert("Successfully Modified customer data!")
-
-  } catch (error) {
-      console.error("Error while processing request:", error.message);
-  }
-};
-const removeModifiedCustomerData = () => {
-  responseData.value.message[1].current_owner = '';
-  responseData.value.message[1].owner_mobile_no = '';
-  responseData.value.message[1].employees = [];
+function moreEmployee() {
+    employees.value.push({
+        driver_name: '',
+        type: '',
+        mobile_no: '',
+        whatsappChecked1: 0,
+        callChecked1: 0,
+        smsChecked1: 0,
+        primary: 0
+    });
 }
 
-const clearModifiedVehicleData = () => {
-  Object.keys(vehicleDetails.value).forEach(key => {
-      vehicleDetails.value[key] = '';
-  });
-}
+const modifiedMoreEmployee = async (type) => {
+    try {
+        const newEmployee = {
+            mobile_no: '',
+            current_driver: '',
+            name: '',
+            type: type,
+        };
 
-const clearVehicleData = () => {
-  Object.keys(vehicleData.value).forEach(key => {
-      vehicleData.value[key] = '';
-  });
+        if (type === 'current_driver') {
+            const lastDriverIndex = responseData.value.message[1].current_driver.length - 1;
+            newEmployee.whatsapp = responseData.value.message[1].current_driver[lastDriverIndex]?.whatsapp;
+            console.log("cbdsicbewcbdcnwdocn:", newEmployee.whatsapp);
+            newEmployee.call = responseData.value.message[1].current_driver[lastDriverIndex]?.call;
+            newEmployee.sms = responseData.value.message[1].current_driver[lastDriverIndex]?.sms;
+            responseData.value.message[1].current_driver.push(newEmployee);
+        } else if (type === 'contact_person') {
+            const lastContactIndex = responseData.value.message[1].contact_person.length - 1;
+            newEmployee.custom_whatsapp = responseData.value.message[1].contact_person[lastContactIndex]?.custom_whatsapp;
+            newEmployee.custom_call = responseData.value.message[1].contact_person[lastContactIndex]?.custom_call;
+            newEmployee.custom_sms = responseData.value.message[1].contact_person[lastContactIndex]?.custom_sms;
+            responseData.value.message[1].contact_person.push(newEmployee);
+        } else {
+            console.error('Invalid employee type:', type);
+            return;
+        }
+    } catch (error) {
+        console.error('Error adding more employees:', error);
+    }
 };
 
 const customerData = ref({
-  name: '',
-  current_owner: '',
-  owner_mobile_no: '',
-  employees: employees.value,
+    name: '',
+    current_owner: '',
+    owner_mobile_no: '',
+    employees: employees.value,
+    whatsappChecked: 0,
+    callChecked: 0,
+    smsChecked: 0,
 });
 
-
-const search1 = async (search) => {
-  const data = {
-      "license_plate": search
-  };
-  console.log('checking data', data);
-  try {
-      if (data.license_plate.trim() !== "") {
-          const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.get_details", data);
-          check.value = true;
-          console.log('search1 data',response);
-          if (response.data.message === "") {
-              responseData.value = {
-                  message: [{
-                      name: 'No data',
-                      vehicle_brand: 'No data',
-                      vehicle_model: '',
-                      chassis_no: '',
-                      fuel_type: '',
-                      last_odometer_reading: '',
-                      tyre_change: '',
-                      alignment: ''
-                  },
-                  {
-                      current_owner: '',
-                      owner_mobile_no: '',
-                      current_driver: [{
-                          current_driver: '',
-                          name: '',
-                          mobile_no: ''
-                      }],
-                      contact_person: [{
-                          contact_person_name: '',
-                          contact_person_mobile: ''
-                      }]
-                  }]
-              };
-              alert("No data found");
-              console.log(response.data);
-          } else {
-              responseData.value = response.data;
-              console.log('cutomer details checking now', responseData.value);
-              return responseData.value; // Return the response data
-          }
-      } else {
-          alert("Please enter search value");
-          console.log("Please enter search value");
-      }
-  } catch (error) {
-      console.error("Error:", error);
-  }
+const handlePrimaryCheckbox = (clickedEmployee) => {
+    if (clickedEmployee.type === 'contact_person') {
+        employees.value.forEach(employee => {
+            if (employee.type === 'contact_person' && employee !== clickedEmployee) {
+                employee.primary = false;
+            }
+        });
+    } else if (clickedEmployee.type === 'current_driver') {
+        employees.value.forEach(employee => {
+            if (employee.type === 'current_driver' && employee !== clickedEmployee) {
+                employee.primary = false;
+            }
+        });
+    }
+};
+const handlePrimaryCheckboxModify = (clickedEmployee) => {
+    if (clickedEmployee.parentfield === 'contact_person') {
+        responseData.value.message[1]?.contact_person.forEach(employee => {
+            if (employee !== clickedEmployee) {
+                employee.custom_primary = false;
+            }
+        });
+    } else if (clickedEmployee.parentfield === 'current_driver') {
+        responseData.value.message[1]?.current_driver.forEach(employee => {
+            if (employee !== clickedEmployee) {
+                employee.primary = false;
+            }
+        });
+    }
 };
 
-// var button = document.getElementById("customerId")
-// button.disabled = ref(false);
 const addCustomerData = async () => {
-  const name = customerData.value.name.trim();
-  const name1 = await search1(name);
-  console.log('filtering process', name1.message[1].current_owner);
-  const ownerName = customerData.value.current_owner.trim();
-  const ownerMobile = customerData.value.owner_mobile_no.trim();
-  // console.log("owner name now",name1)
-  if ( !name1.message[1].current_owner) {
+    const name = customerData.value.name.trim();
+    const existingData = await returnSearch(name);
+    console.log('filtering process', existingData.message[1].current_owner);
+    console.log('vehicle number during customer add:', existingData.message[0].name);
+    if (!existingData.message[0].name) {
+        console.log("Vehicle not exist!");
+        alert("Vehicle not exist!")
+        return
+    }
+    else if (existingData.message[0].name && !existingData.message[1].current_owner) {
+        const ownerName = customerData.value.current_owner.trim();
+        const ownerMobile = customerData.value.owner_mobile_no.trim();
 
-      if (!ownerName && !ownerMobile && !name) {
-          alert("Please fill in at least one of the fields: Owner Name or Owner Mobile");
-          return;
-      }
-      if (employees.value.length === 0) {
-          alert("Please add at least one employee");
-          return;
-      }
-      const isAnyEmployeeDataMissing = employees.value.some(employee => {
-          return !employee.driver_name.trim() || !employee.mobile_no.trim();
-      });
-      if (isAnyEmployeeDataMissing) {
-          alert("Please fill in all fields for all employees");
-          return;
-      }
-      const data = {
-          current_owner: customerData.value.current_owner,
-          owner_mobile_no: customerData.value.owner_mobile_no,
-          name: customerData.value.name,
-          employees: []
-      };
+        if (!ownerName && !ownerMobile && !name) {
+            alert("Please fill in at least one of the fields: Owner Name or Owner Mobile");
+            return;
+        }
+        if (employees.value.length === 0) {
+            alert("Please add at least one employee");
+            return;
+        }
+        const isAnyEmployeeDataMissing = employees.value.some(employee => {
+            return !employee.driver_name.trim() || !employee.mobile_no.trim();
+        });
+        if (isAnyEmployeeDataMissing) {
+            alert("Please fill in all fields for all employees");
+            return;
+        }
+        // const primaryDriverCount = employees.value.filter(employee => employee.primary).length;
+        // if (primaryDriverCount !== 1) {
+        //     alert("Please select exactly one primary driver.");
+        //     return;
+        // }
+        const data = {
+            current_owner: customerData.value.current_owner,
+            owner_mobile_no: customerData.value.owner_mobile_no,
+            name: customerData.value.name,
+            whatsappChecked: customerData.value.whatsappChecked,
+            callChecked: customerData.value.callChecked,
+            smsChecked: customerData.value.smsChecked,
+            employees: []
+        };
 
-      employees.value.forEach(employee => {
-          data.employees.push({
-              driver_name: employee.driver_name,
-              mobile_no: employee.mobile_no,
-              type: employee.type
-          });
-      });
-      console.log('before checking customer data', data);
-      const json_data = { data: JSON.stringify(data) }
-      console.log('before checking customer json_data', json_data);
-      console.log(json_data);
-      // if (customerData.value.name) {
-      // button.disabled = true
-      const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.store_customer_details", json_data)
-      check.value = true;
-      console.log(response);
-      // responseData.value = response.data
-      if (responseData.value && responseData.value.message) {
-          responseData.value = {
-              message: [
-                  response.data.message[0] === "" ? 'no data' : {
-                      name: 'No data',
-                      vehicle_brand: 'No data',
-                      vehicle_model: '',
-                      chassis_no: '',
-                      fuel_type: '',
-                      last_odometer_reading: '',
-                      tyre_change: '',
-                      alignment: ''
-                  },
-                  response.data.message[1]
-              ]
-          }
-          // message[1] = response.data.message[1];
-          console.log("Customer data in responseData.value:", responseData.value.message[1].owner_mobile_no);
-          console.log("Customer data in responseData.value:", responseData.value.message[1].current_owner);
-          console.log("Customer data in responseData.value:", responseData.value.message[1]);
-          alert("Successfully added customer data!")
-          search1(name)
-      } else {
-          console.error("responseData.value or responseData.value.message is undefined");
-      }
-      // }
-      // else {
-      //     alert("Add vehicle first")
-      // }
-      // Object.keys(customerData.value).forEach(key => {
-      //     customerData.value[key] = '';
-      // });
-      // employees.value = [{ name: '', type: '' }];
+        employees.value.forEach(employee => {
+            data.employees.push({
+                driver_name: employee.driver_name,
+                mobile_no: employee.mobile_no,
+                type: employee.type,
+                whatsappChecked1: employee.whatsappChecked1,
+                callChecked1: employee.callChecked1,
+                smsChecked1: employee.smsChecked1,
+                primary: employee.primary
+            });
+        });
+        console.log('before checking customer data', data);
+        const json_data = { data: JSON.stringify(data) }
+        console.log('before checking customer json_data', json_data);
+        console.log(json_data);
+        try {
+            const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.store_customer_details", json_data)
+            check.value = true;
+            console.log(response);
+            if (responseData.value && responseData.value.message) {
+                responseData.value = {
+                    message: [
+                        response.data.message[0] === "" ? 'no data' : {
+                            name: 'No data',
+                            vehicle_brand: 'No data',
+                            vehicle_model: '',
+                            chassis_no: '',
+                            fuel_type: '',
+                            last_odometer_reading: '',
+                            tyre_change: '',
+                            alignment: ''
+                        },
+                        response.data.message[1]
+                    ]
+                }
+                alert("Successfully added customer data!")
+                console.log("Customer data in responseData.value:", responseData.value.message[1].owner_mobile_no);
+                console.log("Customer data in responseData.value:", responseData.value.message[1].current_owner);
+                console.log(responseData.value.message[1].call);
+                console.log("Customer data in responseData.value:", responseData.value.message[1]);
+                console.log("Customer data in responseData.value.message:", responseData.value.message);
+                if (name) {
+                    returnSearch(name)
+                }
+            } else {
+                console.log("responseData.value or responseData.value.message is undefined");
+            }
+            // Object.keys(customerData.value).forEach(key => {
+            //     customerData.value[key] = '';
+            // });
+            // employees.value = [{ name: '', type: '', mobile_no: ''}];
 
-      console.log("Owner name:", data.current_owner);
-      console.log("Owner mobile:", data.owner_mobile_no);
+            console.log("Owner name:", data.current_owner);
+            console.log("Owner mobile:", data.owner_mobile_no);
 
-      data.employees.forEach(employee => {
-          console.log("Employee Name:", employee.driver_name);
-          console.log("Employee Type:", employee.type);
-          console.log("Employee Type:", employee.mobile_no);
-      });
+            data.employees.forEach(employee => {
+                console.log("Employee Name:", employee.driver_name);
+                console.log("Employee Type:", employee.type);
+                console.log("Employee Type:", employee.mobile_no);
+            });
 
-      console.log(data);
-  }
-  else {
-      alert("Customer already added to this vehicle!")
-  }
+            console.log(data);
+        } catch (error) {
+            console.log('add customer error:', error);
+        }
+    }
+    else {
+        alert("Customer already added to this vehicle!")
+    }
+};
+
+
+const addCustomerModifiedData = async () => {
+    const name = responseData.value.message[1].name
+    console.log('modified data', name);
+    const modifiedData = {
+        name: responseData.value.message[1].name,
+        current_owner: responseData.value.message[1].current_owner,
+        owner_data: responseData.value.message[1].owner_data,
+        owner_mobile_no: responseData.value.message[1].owner_mobile_no,
+        whatsapp: responseData.value.message[1].whatsapp,
+        call: responseData.value.message[1].call,
+        sms: responseData.value.message[1].sms,
+        employees: []
+    };
+
+    const driver = responseData.value.message[1].current_driver;
+    const contactPerson = responseData.value.message[1].contact_person;
+
+
+    driver.forEach((employee, index) => {
+        let i = index
+        const name = employee?.current_driver?.trim();
+        if (name !== '') {
+            modifiedData.employees.push({
+                current_driver: name || '',
+                name: responseData.value.message[1].current_driver[0].name ? responseData.value.message[1].current_driver[i].name : '',
+                type: updateEmployeeType(employee) || '',
+                mobile_no: employee.mobile_no || '',
+                whatsapp: employee.whatsapp,
+                call: employee.call,
+                sms: employee.sms,
+                primary: employee.primary,
+                key: i
+            });
+        }
+        else {
+            alert("Enter Driver name!")
+            return
+        }
+        i += 1;
+        console.log('index driver', i);
+    });
+    contactPerson.forEach((employee, index) => {
+        let i = index
+        const name = employee?.contact_person_name?.trim();
+        if (name !== '') {
+            modifiedData.employees.push({
+                contact_person_name: name || '',
+                name: responseData.value.message[1].contact_person[0].name ? responseData.value.message[1].contact_person[i].name : '',
+                type: updateEmployeeType(employee) || '',
+                contact_person_mobile: employee.contact_person_mobile || '',
+                custom_whatsapp: employee.custom_whatsapp,
+                custom_call: employee.custom_call,
+                custom_sms: employee.custom_sms,
+                custom_primary: employee.custom_primary,
+                key: i
+            });
+        }
+        else {
+            alert("Enter Contact Person name!")
+            return
+        }
+        i += 1;
+        console.log('index contact', i);
+    });
+
+    console.log('modify checking', modifiedData);
+    const json_data = { data: JSON.stringify(modifiedData) };
+    console.log("Modified data", json_data)
+    try {
+        const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.store_customer_details", json_data);
+        check.value = true;
+        console.log(response);
+        returnSearch(name)
+        alert("Successfully Modified customer data!")
+
+    } catch (error) {
+        console.error("Error while processing request:", error.message);
+    }
+};
+
+const removeModifiedCustomerData = () => {
+    responseData.value.message[1].current_owner = '';
+    responseData.value.message[1].owner_mobile_no = '';
+    responseData.value.message[1].employees = [];
+}
+
+const clearModifiedVehicleData = () => {
+    Object.keys(vehicleDetails.value).forEach(key => {
+        vehicleDetails.value[key] = '';
+    });
+}
+
+const clearVehicleData = () => {
+    Object.keys(vehicleData.value).forEach(key => {
+        vehicleData.value[key] = '';
+    });
+};
+
+const returnSearch = async (search) => {
+    const data = {
+        "license_plate": search
+    };
+    console.log('checking data', data);
+    try {
+        if (data.license_plate.trim() !== "") {
+            const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.get_details", data);
+            check.value = true;
+            console.log('returnSearch data', response);
+            if (response.data.message === "") {
+                responseData.value = {
+                    message: [{
+                        name: '',
+                        vehicle_brand: '',
+                        vehicle_model: '',
+                        chassis_no: '',
+                        fuel_type: '',
+                        last_odometer_reading: '',
+                        tyre_change: '',
+                        alignment: ''
+                    },
+                    {
+                        current_owner: '',
+                        owner_mobile_no: '',
+                        current_driver: [{
+                            current_driver: '',
+                            name: '',
+                            mobile_no: ''
+                        }],
+                        contact_person: [{
+                            contact_person_name: '',
+                            contact_person_mobile: ''
+                        }]
+                    }]
+                };
+                console.log(response.data);
+                return responseData.value;
+            } else {
+                responseData.value = response.data;
+                console.log('cutomer details checking now', responseData.value);
+                return responseData.value;
+            }
+        } else {
+            alert("Please enter search value");
+            console.log("Please enter search value");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
 };
 
 const removeCustomerData = () => {
-  Object.keys(customerData.value).forEach(key => {
-      customerData.value[key] = '';
-  });
-  employees.value = [{ name: '', type: '' }];
+    Object.keys(customerData.value).forEach(key => {
+        customerData.value[key] = '';
+    });
+    employees.value = [{ name: '', type: '' }];
 }
 
 const removeEmployee2 = (index) => {
-  responseData.value.message[1].current_driver.splice(index, 1);
+    responseData.value.message[1].current_driver.splice(index, 1);
 };
 const removeEmployee3 = (index) => {
-  responseData.value.message[1].contact_person.splice(index, 1);
+    responseData.value.message[1].contact_person.splice(index, 1);
 };
 const removeEmployee1 = (index) => {
-  employees.value.splice(index, 1);
+    employees.value.splice(index, 1);
 };
 
 
@@ -1727,9 +2026,9 @@ const addTyre = () => {
 
 
 const updateTyreData = (index) => {
-  const tyre = tyreDatas.value[index];
-  console.log('Updated tyre data:', tyre);
-  console.log(tyreDatas.value);
+    const tyre = tyreDatas.value[index];
+    console.log('Updated tyre data:', tyre);
+    console.log(tyreDatas.value);
 };
 
 const deleteTyre = (index) => {
@@ -2039,86 +2338,90 @@ const tyres = ref([{
     //   tyres.value.splice(index, 1)
   }
 
-//===================================================>>>Last Page <<<=========================================================================================//
+//===================================================>>> Billing Details <<<=========================================================================================//
 
 const tableData = ref([{ itemCode: '', sourceWarehouse: '', rate: '', requiredQuantity: '', cost: '' }]);
 const totalRate = ref(0);
 const totalQuantity = ref(0);
 const totalCost = ref(0);
-const discountRate = ref(0);
+const discountRate = ref();
 const finalAmount = ref(0);
 
 const calculateTotals = () => {
-  let sumRate = 0;
-  let sumQuantity = 0;
-  let sumCost = 0;
+    let sumRate = 0;
+    let sumQuantity = 0;
+    let sumCost = 0;
 
-  tableData.value.forEach(row => {
-      const rate = parseFloat(row.rate) || 0;
-      const quantity = parseFloat(row.requiredQuantity) || 0;
-      row.cost = (rate * quantity).toFixed(2);
-      sumRate += rate;
-      sumQuantity += quantity;
-      sumCost += rate * quantity;
-  });
+    tableData.value.forEach(row => {
+        const rate = parseFloat(row.rate) || 0;
+        const quantity = parseFloat(row.requiredQuantity) || 0;
+        row.cost = (rate * quantity).toFixed(2);
+        sumRate += rate;
+        sumQuantity += quantity;
+        sumCost += rate * quantity;
+    });
 
-  totalRate.value = sumRate;
-  totalQuantity.value = sumQuantity;
-  totalCost.value = sumCost;
+    totalRate.value = sumRate;
+    totalQuantity.value = sumQuantity;
+    totalCost.value = sumCost;
 
-  calculateDiscountRate();
+    calculateDiscountRate();
 };
 
 const calculateDiscountRate = () => {
-  if (discountRate.value == 0) {
-      finalAmount.value = totalCost.value;
-      return
-  }
-  finalAmount.value = totalCost.value - discountRate.value;
+    if (discountRate.value == 0) {
+        finalAmount.value = totalCost.value;
+        return
+    }
+    finalAmount.value = totalCost.value - discountRate.value;
 };
 
 const addNewRow = () => {
-  tableData.value.push({
-      sno: '',
-      itemCode: '',
-      sourceWarehouse: '',
-      rate: '',
-      requiredQuantity: '',
-      cost: '',
-  });
-  calculateTotals();
+    tableData.value.push({
+        sno: '',
+        itemCode: '',
+        sourceWarehouse: '',
+        rate: '',
+        requiredQuantity: '',
+        cost: '',
+    });
+    calculateTotals();
 };
 
+
+const submitData = () => {
+    console.log("hi", tableData.itemCode, totalRate, totalQuantity, totalCost, discountRate, finalAmount);
+}
 const removeRow = (index) => {
-  tableData.value.splice(index, 1);
-  calculateTotals();
+    tableData.value.splice(index, 1);
+    calculateTotals();
 };
 
 </script>
 
 <style scoped>
 .dark-hr {
-  height: 2px;
-  background-color: #000000 !important;
+    height: 2px;
+    background-color: #000000 !important;
 }
 
 
 .bottom-div {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: #f0f0f0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f0f0f0;
 }
 
 .active {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 .person-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  /* Center align the items horizontally */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Center align the items horizontally */
 }
 </style>
