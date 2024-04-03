@@ -132,8 +132,8 @@
   "column_break_fxsa",
   "puncture",
   "tyre_edge",
-  "tyre_batch",
-  "mushroom_batch",
+  "tyre_patch",
+  "mushroom_patch",
   "alignment_details_section",
   "last_alignment_kms",
   "column_break_ygkr",
@@ -164,6 +164,12 @@
   "rear_tyres_psi",
   "column_break_tibf",
   "column_break_gxps",
+  "section_break_5ixv",
+  "ac_service_detail",
+  "battery_detail",
+  "column_break_9mgd",
+  "wiper_detail",
+  "car_wash_detail",
   "replacement_tyre_details_tab",
   "front_left_tyre_section",
   "fl_tyre_brand",
@@ -886,18 +892,6 @@
    "label": "Tyre Edge"
   },
   {
-   "default": "0",
-   "fieldname": "tyre_batch",
-   "fieldtype": "Check",
-   "label": "Tyre Batch"
-  },
-  {
-   "default": "0",
-   "fieldname": "mushroom_batch",
-   "fieldtype": "Check",
-   "label": "Mushroom Batch"
-  },
-  {
    "fieldname": "alignment_details_section",
    "fieldtype": "Section Break",
    "label": "Alignment Details"
@@ -1347,12 +1341,52 @@
    "fieldname": "contact_mail",
    "fieldtype": "Check",
    "label": "Mail"
+  },
+  {
+   "fieldname": "section_break_5ixv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "ac_service_detail",
+   "fieldtype": "Data",
+   "label": "AC Service Detail"
+  },
+  {
+   "fieldname": "battery_detail",
+   "fieldtype": "Data",
+   "label": "Battery Detail"
+  },
+  {
+   "fieldname": "wiper_detail",
+   "fieldtype": "Data",
+   "label": "Wiper Detail"
+  },
+  {
+   "fieldname": "car_wash_detail",
+   "fieldtype": "Data",
+   "label": "Car Wash Detail"
+  },
+  {
+   "fieldname": "column_break_9mgd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "tyre_patch",
+   "fieldtype": "Check",
+   "label": "TyrePatch"
+  },
+  {
+   "default": "0",
+   "fieldname": "mushroom_patch",
+   "fieldtype": "Check",
+   "label": "Mushroom Patch"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-03-17 22:36:57.381122",
+ "modified": "2024-04-03 15:44:55.419368",
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "Tyre Job Card",
