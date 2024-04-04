@@ -12,7 +12,8 @@
   "naming_series",
   "whatsapp",
   "sms",
-  "call"
+  "call",
+  "custom_primary"
  ],
  "fields": [
   {
@@ -54,11 +55,17 @@
    "fieldname": "call",
    "fieldtype": "Check",
    "label": "Call"
+  },
+  {
+   "default": "0",
+   "fieldname": "custom_primary",
+   "fieldtype": "Check",
+   "label": "Primary"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-04-01 19:26:43.397880",
+ "modified": "2024-04-03 16:14:53.071259",
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "ContactPerson",

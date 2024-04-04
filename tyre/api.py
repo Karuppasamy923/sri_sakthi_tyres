@@ -9,6 +9,7 @@ def get_details(license_plate):
     if license_plate:
         vehicle_details = ''
         customer_details = ''
+        primary_details=[]
 
         # Check if Vehicle Details exist
         if frappe.db.exists("Vehicle Details", {"name": license_plate}):
@@ -22,16 +23,21 @@ def get_details(license_plate):
                 print(data.full_name)
                 current_driver.name=current_driver.current_driver
                 current_driver.current_driver=data.full_name
+                if data.custom_primary:
+                    primary_details.append(data)
                
                 
             for contact_person in customer_details.contact_person:
                 data= frappe.get_doc("ContactPerson",{"name":contact_person.contact_person_name})
-                print(data.contact_person_name)
+                # print(data.contact_person_name)
                 contact_person.name=contact_person.contact_person_name
                 contact_person.contact_person_name=data.contact_person_name
-                print(contact_person.contact_person_name)
+                # print(contact_person.contact_person_name)
+                if data.custom_primary:
+                    primary_details.append(data)
                             
-            print(customer_details.current_owner)
+            # print(customer_details.current_owner)
+                
 
         # print(customer_details.call)
         print("Vehicle Details:", vehicle_details)
@@ -39,7 +45,7 @@ def get_details(license_plate):
         # print(customer_details.employee_name)
 
         if vehicle_details or customer_details :
-            return [vehicle_details, customer_details]
+            return [vehicle_details, customer_details,primary_details]
         else:
             return ""
 
@@ -119,6 +125,7 @@ def store_customer_details(data):
                     new_driver.custom_whatsapp_check=driver_data.get('whatsapp')
                     new_driver.custom_sms_check=driver_data.get('sms')
                     new_driver.custom_call_check=driver_data.get('call')
+                    new_driver.custom_primary=driver_data.get('primary')
                     new_driver.save(ignore_permissions=True)
                     driver = new_driver.name
                     doc.append("current_driver", {"current_driver": driver, "mobile_no": driver_data.get('mobile_no')})
@@ -133,6 +140,10 @@ def store_customer_details(data):
                     new_driver.custom_whatsapp_check=driver_data.get('whatsapp')
                     new_driver.custom_sms_check=driver_data.get('sms')
                     new_driver.custom_call_check=driver_data.get('call')
+                    if driver_data.get('primary')== True:
+                        new_driver.custom_primary=1
+                    else:
+                        new_driver.custom_primary=0    
                     new_driver.save(ignore_permissions=True)
                     # driver = new_driver.name  
             else:
@@ -148,6 +159,7 @@ def store_customer_details(data):
                     new_driver.whatsapp=driver_data.get("custom_whatsapp")
                     new_driver.sms=driver_data.get("custom_sms")
                     new_driver.call=driver_data.get("custom_call")
+                    new_driver.custom_primary=driver_data.get('custom_primary')
                     new_driver.save(ignore_permissions=True)
                     cPerson = new_driver.name
                     doc.append("contact_person", {"contact_person_name": cPerson, "contact_person_mobile": driver_data.get('contact_person_mobile')})
@@ -161,6 +173,11 @@ def store_customer_details(data):
                     new_driver.whatsapp=driver_data.get("custom_whatsapp")
                     new_driver.sms=driver_data.get("custom_sms")
                     new_driver.call=driver_data.get("custom_call")
+                    # new_driver.custom_primary=driver_data.get('primary')
+                    if driver_data.get('custom_primary')== True:
+                        new_driver.custom_primary=1
+                    else:
+                        new_driver.custom_primary=0
                     new_driver.save(ignore_permissions=True)
                     # cPerson = new_driver.name 
                 # Append new Contact Person document to the parent document
@@ -203,6 +220,7 @@ def store_customer_details(data):
                     new_driver.custom_whatsapp_check=driver_data.get('whatsappChecked1')
                     new_driver.custom_sms_check=driver_data.get('smsChecked1')
                     new_driver.custom_call_check=driver_data.get('callChecked1')
+                    new_driver.custom_primary=driver_data.get('primary')
                     new_driver.save(ignore_permissions=True)
                     driver = new_driver.name
                 doc.append("current_driver", {"current_driver": driver, "mobile_no": driver_data.get('mobile_no')})
@@ -215,6 +233,7 @@ def store_customer_details(data):
                     new_driver.whatsapp=driver_data.get('whatsappChecked1')
                     new_driver.sms=driver_data.get('smsChecked1')
                     new_driver.call=driver_data.get('callChecked1')
+                    new_driver.custom_primary=driver_data.get('custom_primary')
                     new_driver.save(ignore_permissions=True)
                     cPerson = new_driver.name
                 # Append new Contact Person document to the parent document
@@ -230,5 +249,42 @@ def store_customer_details(data):
 @frappe.whitelist(allow_guest=True)
 def job_card(data):
     data = json.loads(data)
-    for da in data:
-        print(da.get("tyre"))
+    print(data)
+    doc=frappe.new_doc("Tyre Job Card")
+    doc.alignment=data.get("Alignment")
+    doc.rotation=data.get("Rotation")
+    doc.oil_change=data.get("Oil_change")
+    doc.balancing=data.get("Balancing")
+    doc.inflation=data.get("Inflation")
+    doc.ac_service=data.get("AcService")
+    doc.battery=data.get("Battery")
+    doc.wiper=data.get("Wiper")
+    doc.car_wash=data.get("CarWash")
+    doc.puncture=data.get("puncture")
+    doc.tyre_edge=data.get("tyre_edge")
+    doc.tyre_patch=data.get("tyre_patch")
+    doc.mushroom_patch=data.get("mashroom_patch")
+    doc.last_alignment_kms=data["alignment"].get("lastAlignment")
+    doc.next_alignment_kms=data["alignment"].get("nextAlignment")
+    doc.rim=data["rotation"].get("rim")
+    doc.wheel=data["rotation"].get("wheel")
+    doc.oil_quality=data["oil_change"].get("oil_quality")
+    doc.oil_quantity=data["oil_change"].get("oil_quantity")
+    doc.front_left_gm=data["balancing"].get("fl")
+    doc.front_right_gms=data["balancing"].get("fr")
+    doc.rear_left_gms=data["balancing"].get("bl")
+    doc.rear_right_gms=data["balancing"].get("br")
+    doc.spare_tyre_gms=data["balancing"].get("st")
+    print(data["inflation"].get("type"))
+    if data["inflation"].get("type")=='air':
+        doc.air=1
+    if data["inflation"].get("type")=='nitrogen':
+        doc.nitrogen=1
+    doc.front_tyres_psi=data["inflation"].get("ft")
+    doc.rear_tyres_psi=data["inflation"].get("rt")
+    doc.ac_service_detail=data.get("ac")
+    doc.battery_detail=data.get("battery")
+    doc.wiper_detail=data.get("wiper")
+    doc.car_wash_detail=data.get("car_wash")
+    doc.save(ignore_permissions=True)
+    print(doc)
