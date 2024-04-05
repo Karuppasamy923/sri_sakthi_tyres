@@ -1256,19 +1256,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class=" pb-5 p-8">
-                  <div v-for="(position, index) in setValue.index" :key="index" class=" p-4">
-                      <div class=" rounded h-24  w-full bg-white" >
-                          <div class=" grid grid-cols-4">
-                              <p>hi</p>
-                              <p>hi</p>
-                              <p>hi</p>
-                              <p>hi</p>
-                              <p>hi</p>
-                          </div>
-                      </div>
-                  </div>
-                </div> -->
                 </div>
             </div>
             <!-- Billing Details -->
@@ -1436,6 +1423,8 @@ function submitPin() {
         }
     }
 }
+
+const jobCard =[]
 //==========================================================>>> Main Page <<<================================================================================//
 
 const isEditMode = ref(false)
@@ -1517,8 +1506,25 @@ function nextPageAndHighlight() {
     if (currentstep.value < maxStep) {
         currentstep.value++;
         currentPage.value = getPageName(currentstep.value);
-        if (currentstep.value == 3) {
-            checkup(requireService)
+        // if (currentstep.value == 3) {
+        //     checkup(requireService)
+        // }
+        switch(currentstep.value){
+            case 1:
+            jobCard[0]=responseData.value;
+                console.log(jobCard)
+                break;
+            case 2:
+                jobCard[1]=tyreDatas.value;
+                console.log(jobCard)
+                break;
+            case 3:
+                jobCard[2]=requireService.value
+                console.log(jobCard)
+                break;
+            case 4:
+                checkup(jobCard)
+                break;            
         }
     }
 }
@@ -2133,21 +2139,6 @@ const deleteTyre = (index) => {
     //   tyreDatas.value.splice(index, 1);
     //   console.log(tyreDatas.value);
 };
-
-// function checkup(data){
-//     console.log("*******")
-//     console.log(data.value);
-//     console.log("*******")
-//     const json_data = { data: JSON.stringify(data.value) }
-//     console.log(json_data);
-//     try{
-//         const response= axios.post("http://192.168.1.39:8002/api/method/tyre.api.job_card",json_data);
-//         console.log(response);
-//     }catch (error){
-//         console.error("error");
-//     }
-// }
-
 //========================================================>>> Required Services <<<============================================================================//
 
 let selectedCheckbox = null;
@@ -2250,12 +2241,12 @@ function checkup(data) {
     console.log(data.value)
     const json_data = { data: JSON.stringify(data.value) }
     console.log(json_data);
-    try {
-        const response = axios.post("http://192.168.1.39:8002/api/method/tyre.api.job_card", json_data);
-        console.log(response);
-    } catch (error) {
-        console.error("error");
-    }
+    // try {
+    //     const response = axios.post("http://192.168.1.39:8002/api/method/tyre.api.job_card", json_data);
+    //     console.log(response);
+    // } catch (error) {
+    //     console.error("error");
+    // }
 }
 function shooo() {
     console.log(requireService.value);
