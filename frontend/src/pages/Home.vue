@@ -596,19 +596,15 @@
                                             <div class="flex flex-col ml-3">
                                                 <label class="mt-2">Brand</label>
                                                 <select class="w-[75%] h-[100%] rounded-sm border-solid border border-black" v-model="selectedBrand">
-                                                    <option value="MRF Tyres">MRF Tyres</option>
-                                                    <option value="Michelin"> Michelin</option>
-                                                    <option value="JK Tyres"> JK Tyres</option>
-                                                    <option value="Bridgestone"> Bridgestone</option>
-                                                    <option value="Goodyear"> Goodyear</option>
-                                                    <option value="Apollo"> Apollo</option>
-                                                    <option value="Ceat"> Ceat</option>
-                                                    <option value="Yokohama"> Yokohama</option>
+                                                    <option v-for="tyre in responseData.message" :key="tyre" >{{ tyre.name }} </option>
                                                 </select>
                                             </div>
                                             <div class="flex flex-col ml-3">
-                                              <label class="mt-2">Size</label>
-                                              <input class="w-[75%] h-[100%] rounded-sm border-solid border border-black" type="text" v-model="size">
+                                                <label class="mt-2">Size</label>
+                                                <!-- <select class="w-[75%] h-[100%] rounded-sm border-solid border border-black" v-model="selectedBrand">
+                                                    <option v-for="(tyre,index) in responseData.message[0].variants" :key="index" >{{ index }} </option> -->
+                                                <!-- </select> -->
+                                              <!-- <input class="w-[75%] h-[100%] rounded-sm border-solid border border-black" type="text" v-model="size"> -->
                                             </div>
                                             <div class="flex flex-col ml-3">
                                               <label class="mt-2">Quantity</label>
@@ -2026,10 +2022,21 @@ const handleCustomer =async ()=>{
     }
 }
 
-const handleEnquiry = async() =>{
-    const response = await axios.get("http://192.168.1.39:8002/api/method/tyre.api.stock_details")
-    console.log('response data for customer details', response.data);
-}
+const handleEnquiry = async () => {
+    try {
+        const response = await axios.get("http://192.168.1.39:8002/api/method/tyre.api.stock_details");
+        console.log('response data for customer details', response.data);
+        responseData.value = response.data;
+        console.log(responseData.value);
+        
+        // Assuming responseTyreData.value.message is an array of objects
+        for (let tyre of responseData.value.message) {
+            console.log(tyre.name);
+        }
+    } catch (error) {
+        console.error('Error fetching tyre data:', error);
+    }
+};
 
 const clearVehicleData = () => {
     Object.keys(vehicleData.value).forEach(key => {
