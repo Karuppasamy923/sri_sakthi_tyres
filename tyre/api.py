@@ -254,6 +254,11 @@ def job_card(data):
     data = json.loads(data)
     print(data)
     doc=frappe.new_doc("Tyre Job Card")
+    ##=======Main Page===============##
+    
+    
+    
+    ##=======Require Services========##
     doc.alignment=data.get("Alignment")
     doc.rotation=data.get("Rotation")
     doc.oil_change=data.get("Oil_change")
@@ -295,29 +300,20 @@ def job_card(data):
 # function to create job card
 @frappe.whitelist(allow_guest=True)
 def stock_details():
-    items_grouped_by_brand = {}
-
-    # Get list of items
+    items_grouped_by_brand = []
     items = frappe.get_all("Item", filters={"has_variants": 1}, fields=["name", "item_name", "brand"])
 
     for item in items:
-        brand = item['brand']
-
-        if brand not in items_grouped_by_brand:
-            items_grouped_by_brand[brand] = []
-
         item_data = {
             "name": item['item_name'],
             "variants": []
         }
-        
-        # Get variants of the item
         variants = frappe.get_all("Item", filters={"variant_of": item['name']}, fields=["name", "item_name"])
         
         for variant in variants:
             item_data["variants"].append(variant['item_name'])
         
-        items_grouped_by_brand[brand].append(item_data)
+        items_grouped_by_brand.append(item_data)
 
     print(items_grouped_by_brand)
     return items_grouped_by_brand
