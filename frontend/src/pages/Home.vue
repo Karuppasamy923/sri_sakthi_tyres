@@ -1370,8 +1370,8 @@ import { ref, reactive, watch,computed } from 'vue';
 import { FeatherIcon } from 'frappe-ui'
 import axios from 'axios';
 
-const selectImg = ref(true);
-const Auth = ref(true)
+const selectImg = ref(falseq);
+const Auth = ref(false)
 const incorrect = ref(false);
 const currentstep = ref(0);
 
@@ -1517,6 +1517,7 @@ function nextPageAndHighlight() {
             case 3:
                 jobCard[2]=requireService.value
                 console.log(jobCard)
+                checkup(jobCard)
                 break;
             case 4:
                 checkup(jobCard)
@@ -2245,15 +2246,15 @@ const requireService = ref({
 })
 function checkup(data) {
     console.log("******")
-    console.log(data.value)
-    const json_data = { data: JSON.stringify(data.value) }
+    console.log(data)
+    const json_data = { data: data }
     console.log(json_data);
-    // try {
-    //     const response = axios.post("http://192.168.1.39:8002/api/method/tyre.api.job_card", json_data);
-    //     console.log(response);
-    // } catch (error) {
-    //     console.error("error");
-    // }
+    try {
+        const response = axios.post("http://192.168.1.39:8002/api/method/tyre.api.job_card", json_data);
+        console.log(response);
+    } catch (error) {
+        console.error("error");
+    }
 }
 function shooo() {
     console.log(requireService.value);
