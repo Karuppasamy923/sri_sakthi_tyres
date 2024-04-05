@@ -108,8 +108,8 @@
                             <button class="bg-blue-500 w-[150px] text-white font-bold text-base p-4 rounded-lg ml-3"
                                 @click="search">Search</button>
                         </div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <Card>
+                        <div class="grid grid-cols-2 gap-3" v-if="responseData && responseData.message">
+                            <Card class="bg-gray-200">
                                 <div>
                                     <h4 class="text-[20px] font-bold">Vehicle Details</h4>
                                     <hr class="dark-hr">
@@ -183,7 +183,7 @@
                                     </div>
                                 </div>
                             </Card>
-                            <Card>
+                            <Card class="bg-gray-200">
                                 <div>
                                     <h4 class="text-[20px] font-bold">Customer Details</h4>
                                     <hr class="dark-hr">
@@ -333,7 +333,14 @@
                                 </div>
                             </Card>
                         </div>
-                        <!-- <div class=" h-64" v-if="check == false"></div> -->
+                        <div class="flex justify-center" v-else>
+                            <Card class="w-[75%] h-[20rem] text-center bg-gray-200" @click="showMessage(`Nothing to Show ! 😄`)">
+                                <div class="flex justify-center mt-9">
+                                    <img src="https://img.freepik.com/free-vector/hand-drawn-no-data-concept_52683-127823.jpg?w=996&t=st=1712321166~exp=1712321766~hmac=ae2f4e19eb0e1185d52ac8a07c158e9dc5afa741284e9526a8e8a0165573735b" alt="No data" class="w-[25%] opacity-60">
+                                </div>
+                                <p class="mt-4 text-[1.7rem]">No data !</p>
+                            </Card>
+                        </div>
 
                         <div v-if="showNewVehicle"
                             class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-end items-center pb-10">
@@ -593,22 +600,21 @@
                                         <label>Tyre</label>
                                         <hr class="dark-hr">
                                         <div class="grid grid-cols-3 gap-4">
-                                            <div class="flex flex-col ml-3">
+                                            <div class="flex flex-col ml-1">
                                                 <label class="mt-2">Brand</label>
-                                                <select class="w-[75%] h-[100%] rounded-sm border-solid border border-black" v-model="selectedBrand">
-                                                    <option v-for="tyre in responseData.message" :key="tyre" >{{ tyre.name }} </option>
+                                                <select class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black" v-model="selectedBrand">
+                                                  <option v-for="(tyre, index) in responseData.message" :key="index">{{ tyre.name }}</option>
                                                 </select>
-                                            </div>
-                                            <div class="flex flex-col ml-3">
-                                                <label class="mt-2">Size</label>
-                                                <!-- <select class="w-[75%] h-[100%] rounded-sm border-solid border border-black" v-model="selectedBrand">
-                                                    <option v-for="(tyre,index) in responseData.message[0].variants" :key="index" >{{ index }} </option> -->
-                                                <!-- </select> -->
-                                              <!-- <input class="w-[75%] h-[100%] rounded-sm border-solid border border-black" type="text" v-model="size"> -->
-                                            </div>
-                                            <div class="flex flex-col ml-3">
+                                              </div>
+                                              <div class="flex flex-col ml-1">
+                                                <label class="mt-2">Variants</label>
+                                                <select class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black" v-model="selectedVariant">
+                                                  <option v-for="(variant, index) in selectedBrandVariants" :key="index">{{ variant }}</option>
+                                                </select>
+                                              </div>
+                                            <div class="flex flex-col ml-1">
                                               <label class="mt-2">Quantity</label>
-                                              <input class="w-[75%] h-[100%] rounded-sm border-solid border border-black" type="text" v-model="quantity">
+                                              <input class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black" type="text" v-model="quantity">
                                             </div>
                                           </div>
                                             <label>Services</label>
@@ -1209,6 +1215,10 @@
                             <div class="ml-[100px]">
                                 <div>
                                     <label :for="'brand' + index">Brand</label>
+                                    <select class="w-[16rem] h-[100%] rounded-sm border-solid border border-black" v-model="selectedBrand">
+                                        <option v-for="(tyre, index) in responseData.message" :key="index">{{ tyre.name }}</option>
+                                      </select>
+
                                     <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                         :id="'brand' + index" type="text" v-model="tyre.brand"
                                         @change="saveData(index)">
@@ -1433,6 +1443,11 @@ function submitPin() {
     }
 }
 //==========================================================>>> Main Page <<<================================================================================//
+
+
+const showMessage = (message) => {
+  alert(message);
+};
 
 const isEditMode = ref(false)
 const searchQuery = ref('');
@@ -1975,8 +1990,8 @@ const clearModifiedVehicleData = () => {
 }
 
 const handle = ref(false);
-const size = ref('');
-const selectedBrand = ref('');
+const selectedVariant = ref(null);
+const selectedBrand = ref(null);
 const quantity = ref('');
 const serviceDetails = ref({
     alignment:0,
@@ -1998,23 +2013,38 @@ const handleCustomer =async ()=>{
     const customerDetails = {
         current_owner:customerData.value.current_owner,
         owner_mobile_no:customerData.value.owner_mobile_no,
-        size:size.value,
         selectedBrand:selectedBrand.value,
+        variant:selectedVariant.value,
+        quantity:quantity.value,
         whatsapp:customerData.value.whatsappChecked,
         call:customerData.value.callChecked,
         sms:customerData.value.smsChecked,
+        services:serviceDetails.value
     }
     console.log("checking Customer Details",customerDetails)
     try {
         const json_data = { data: JSON.stringify(customerDetails) };
-        // console.log('checking customer details',json_data);
-        // const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.store_customer_details", json_data)
-        // console.log('response from customer details',response.data);
+        console.log('checking customer details',json_data);
+        const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.store_customer_details", json_data)
+        console.log('response from customer details',response.data);
 
     } catch (error) {
-        
+        console.log("Temporary customer details page:",error)
     }
 }
+
+
+const selectedBrandVariants = computed(() => {
+    console.log('checking',selectedBrand.value);
+    if(selectedBrand.value){
+        for(let brand of responseData.value.message){
+            if(brand.name === selectedBrand.value){
+                console.log('variants checking',brand.variants);
+                return brand.variants
+            }
+        }
+    }
+});
 
 const handleEnquiry = async () => {
     try {
@@ -2022,8 +2052,6 @@ const handleEnquiry = async () => {
         console.log('response data for customer details', response.data);
         responseData.value = response.data;
         console.log(responseData.value);
-        
-        // Assuming responseTyreData.value.message is an array of objects
         for (let tyre of responseData.value.message) {
             console.log(tyre.name);
         }
