@@ -1218,23 +1218,28 @@
                                     <option value="Stephanie">Spare-wheel</option>
                                 </select>
                                 <!-- <p class="text-[20px] font-bold mt-8">{{ position }} Tyre</p> -->
-                                <div class="mt-[20px]">
+                                <!-- <div class="mt-[20px]">
                                     <label :for="'loadIndex' + index">Load Index</label><br>
                                     <input class="w-[15rem] h-[52px] rounded-sm border-solid border border-black"
                                         :id="'loadIndex' + index" type="text" v-model="tyre.loadIndex"
                                         @change="saveData(index)">
+                                </div> -->
+                                <div class="mt-[20px]">
+                                    <label :for="'size' + index">Size</label>
+                                    <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
+                                        :id="'size' + index" type="text" v-model="tyre.size" @change="saveData(index)">
                                 </div>
                             </div>
                             <div class="ml-[100px]">
                                 <div>
                                     <label :for="'brand' + index">Brand</label>
-                                    <select class="w-[16rem] h-[100%] rounded-sm border-solid border border-black" v-model="selectedBrand">
+                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black" v-model="tyre.brand" @change="saveData(index)">
                                         <option v-for="(tyre, index) in responseData.message" :key="index">{{ tyre.name }}</option>
                                       </select>
 
-                                    <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
+                                    <!-- <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                         :id="'brand' + index" type="text" v-model="tyre.brand"
-                                        @change="saveData(index)">
+                                        @change="saveData(index)"> -->
                                 </div>
                                 <div class="mt-[20px] w-[16rem]">
                                     <label :for="'speedRating' + index">Speed Rating</label>
@@ -1246,15 +1251,21 @@
                             <div class="ml-[200px]">
                                 <div>
                                     <label :for="'pattern' + index">Pattern</label>
-                                    <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
+                                    <input class="w-[15rem] h-[52px] rounded-sm border-solid border border-black"
                                         :id="'pattern' + index" type="text" v-model="tyre.pattern"
                                         @change="saveData(index)">
                                 </div>
                                 <div class="mt-[20px]">
+                                    <label :for="'loadIndex' + index">Load Index</label><br>
+                                    <input class="w-[15rem] h-[52px] rounded-sm border-solid border border-black"
+                                        :id="'loadIndex' + index" type="text" v-model="tyre.loadIndex"
+                                        @change="saveData(index)">
+                                </div>
+                                <!-- <div class="mt-[20px]">
                                     <label :for="'size' + index">Size</label>
                                     <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                         :id="'size' + index" type="text" v-model="tyre.size" @change="saveData(index)">
-                                </div>
+                                </div> -->
                             </div>
                             <div class="ml-[300px]">
                                 <div>
@@ -1443,7 +1454,7 @@ function submitPin() {
     }
 }
 
-const jobCard =[]
+const jobCard ={}
 //==========================================================>>> Main Page <<<================================================================================//
 
 
@@ -1558,21 +1569,29 @@ function nextPageAndHighlight() {
         // }
         switch(currentstep.value){
             case 1:
-            jobCard[0]=responseData.value;
+            jobCard["user"]=responseData.value;
                 console.log(jobCard)
+                console.log("****1****")
                 break;
             case 2:
-                jobCard[1]=tyreDatas.value;
+                jobCard["checkup"]=tyreDatas.value;
                 console.log(jobCard)
+                console.log("****2****")
                 break;
             case 3:
-                jobCard[2]=requireService.value
+                jobCard["service"]=requireService.value
                 console.log(jobCard)
-                checkup(jobCard)
+                console.log("****3****")
                 break;
             case 4:
-                checkup(jobCard)
+                jobCard["replace"]=tyres.value
+                console.log(jobCard)
+                console.log("****4****")
+                checkup(jobCard);
                 break;            
+            case 5:
+                checkup(jobCard);
+                break;    
         }
     }
 }
@@ -2442,16 +2461,6 @@ function handelCheck(data) {
 //===================================================>>> Replacement Tyre Details <<<========================================================================//
 
 const tyrePositions = ['Front Left', 'Front Right', 'Rear Left', 'Rear Right', 'Spare'];
-
-// const tyres = ref(Array.from({ length: tyrePositions.length }, () => ({
-//   loadIndex: '',
-//   brand: '',
-//   speedRating: '',
-//   pattern: '',
-//   size: '',
-//   ttTl: '',
-//   item: ''
-// })));
 
 const tyres = ref([{
     type: '',

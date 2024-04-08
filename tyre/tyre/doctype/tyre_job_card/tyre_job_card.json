@@ -332,8 +332,9 @@
    "label": "Vehicle Model"
   },
   {
+   "default": "0",
    "fieldname": "free_alignment_kms",
-   "fieldtype": "Int",
+   "fieldtype": "Check",
    "label": "Free Alignment (kms)"
   },
   {
@@ -346,8 +347,9 @@
    "label": "Monthly Avg Km"
   },
   {
+   "default": "0",
    "fieldname": "paid_alignment_kms",
-   "fieldtype": "Int",
+   "fieldtype": "Check",
    "label": "Paid Alignment (kms)"
   },
   {
@@ -1386,7 +1388,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-04-03 15:44:55.419368",
+ "modified": "2024-04-08 18:03:41.092944",
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "Tyre Job Card",
