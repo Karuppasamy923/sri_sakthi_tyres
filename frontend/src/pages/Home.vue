@@ -333,13 +333,26 @@
                                 </div>
                             </Card>
                         </div>
-                        <div class="flex justify-center" v-else>
-                            <Card class="w-[75%] h-[20rem] text-center bg-gray-200" @click="showMessage(`Nothing to Show ! 😄`)">
-                                <div class="flex justify-center mt-9">
-                                    <img src="https://img.freepik.com/free-vector/hand-drawn-no-data-concept_52683-127823.jpg?w=996&t=st=1712321166~exp=1712321766~hmac=ae2f4e19eb0e1185d52ac8a07c158e9dc5afa741284e9526a8e8a0165573735b" alt="No data" class="w-[25%] opacity-60">
-                                </div>
-                                <p class="mt-4 text-[1.7rem]">No data !</p>
-                            </Card>
+                        <div v-else>
+                            <div class="flex justify-center">
+                                <Card class="w-[75%] h-[20rem] text-center bg-gray-200" @click="showMessage(`Nothing to Show ! 😄`)">
+                                    <div class="flex justify-center mt-9">
+                                        <img src="https://img.freepik.com/free-vector/hand-drawn-no-data-concept_52683-127823.jpg?w=996&t=st=1712321166~exp=1712321766~hmac=ae2f4e19eb0e1185d52ac8a07c158e9dc5afa741284e9526a8e8a0165573735b" alt="No data" class="w-[25%] opacity-60">
+                                    </div>
+                                    <p class="mt-4 text-[1.7rem]">No data !</p>
+                                </Card>
+                            </div>
+                            <div  class="flex justify-center m-5">
+                                <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
+                                    @click="addVehicle">
+                                    Add Vehicle
+                                </button>
+                                <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
+                                    @click="addCustomer" id="customerId">
+                                    Add Customer
+                                </button>
+
+                            </div>
                         </div>
 
                         <div v-if="showNewVehicle"
@@ -386,18 +399,18 @@
                                         </select>
                                     </p>
                                     <p class="m-2">Odometer Value <br>
-                                        <input type="text"
+                                        <input type="number"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="vehicleData.last_odometer_reading"
                                             placeholder="Enter Odometer Value">
                                     </p>
                                     <p class="m-2">Tyre Change (kms) <br>
-                                        <input type="text"
+                                        <input type="number"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="vehicleData.tyre_change" placeholder="Enter Tyre Change">
                                     </p>
                                     <p class="m-2">Alignment (kms) <br>
-                                        <input type="text"
+                                        <input type="number"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="vehicleData.alignment" placeholder="Enter Alignment">
                                     </p>
@@ -458,19 +471,19 @@
                                         </select>
                                     </p>
                                     <p class="m-2">Odometer Value <br>
-                                        <input type="text" v-if="check"
+                                        <input type="number" v-if="check"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="responseData.message[0].last_odometer_reading"
                                             placeholder="Enter Odometer Value">
                                     </p>
                                     <p class="m-2">Tyre Change (kms) <br>
-                                        <input type="text" v-if="check"
+                                        <input type="number" v-if="check"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="responseData.message[0].tyre_change"
                                             placeholder="Enter Tyre Change">
                                     </p>
                                     <p class="m-2">Alignment (kms) <br>
-                                        <input type="text" v-if="check"
+                                        <input type="number" v-if="check"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="responseData.message[0].alignment" placeholder="Enter Alignment">
                                     </p>
@@ -527,7 +540,7 @@
                                             placeholder="Enter Customer Name">
                                     </p>
                                     <p class="m-2">Customer Mobile No <br>
-                                        <input type="text" v-model="customerData.owner_mobile_no"
+                                        <input type="tel" v-model="customerData.owner_mobile_no"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Customer Mobile No.">
                                     </p>
@@ -561,7 +574,7 @@
                                                 </select>
                                             </p>
                                             <p class="m-2">Phone <br>
-                                                <input type="text" v-model="employee.mobile_no"
+                                                <input type="tel" v-model="employee.mobile_no"
                                                     class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                                     placeholder="Enter Mobile No.">
                                             </p>
@@ -694,7 +707,7 @@
                                             placeholder="Enter your Owner Name">
                                     </p>
                                     <p class="m-2">Owner Mobile No <br>
-                                        <input type="text" v-if="check"
+                                        <input type="tel" v-if="check"
                                             v-model="responseData.message[1].owner_mobile_no"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Owner Mobile No.">
@@ -739,7 +752,7 @@
                                             </select>
                                         </p>
                                         <p class="m-2">Phone <br>
-                                            <input type="text" v-model="employee.mobile_no"
+                                            <input type="tel" v-model="employee.mobile_no"
                                                 class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
                                         </p>
                                         <input type="checkbox" v-if="check" :checked="employee.whatsapp === 1"
@@ -785,7 +798,7 @@
                                             </select>
                                         </p>
                                         <p class="m-2">Phone <br>
-                                            <input type="text" v-model="contact.contact_person_mobile"
+                                            <input type="tel" v-model="contact.contact_person_mobile"
                                                 class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
                                         </p>
                                         <input type="checkbox" v-if="check" :checked="contact.custom_whatsapp === 1"
@@ -1459,22 +1472,9 @@ const spacing = (plate) => {
     console.log('after spacing :', spaced_plate);
     return spaced_plate;
 };
-const check = ref(false)
-const search = async () => {
-    const data = {
-        "license_plate": searchQuery.value
-    };
-    console.log('checking data', data);
-    try {
-        if (data.license_plate.trim() !== "") {
-            const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.get_details", data);
-            if (response.data.message === "") {
-                alert("No data found");
-                check.value = false;
-                console.log(response.data);
-            } else {
-                check.value = true;
-                responseData.value = {
+
+const dataAssignment = (response) => {
+    responseData.value = {
                     message: [
                         response.data.message[0],
                         response.data.message[1] ? response.data.message[1] : {
@@ -1499,9 +1499,45 @@ const search = async () => {
                                 custom_whatsapp: '',
                                 custom_sms: ''
                             }]
-                        }, response.data.message[2]
+                        }, 
+                        response.data.message[2] ? response.data.message[2]:{
+                            current_driver: [{
+                                current_driver: '',
+                                name: '',
+                                mobile_no: '',
+                                call: '',
+                                whatsapp: '',
+                                sms: ''
+
+                            }],
+                            contact_person: [{
+                                contact_person_name: '',
+                                contact_person_mobile: '',
+                                custom_call: '',
+                                custom_whatsapp: '',
+                                custom_sms: ''
+                            }]
+                        }
                     ]
                 };
+    return responseData.value;
+}
+const check = ref(false)
+const search = async () => {
+    const data = {
+        "license_plate": searchQuery.value
+    };
+    console.log('checking data', data);
+    try {
+        if (data.license_plate.trim() !== "") {
+            const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.get_details", data);
+            if (response.data.message === "") {
+                alert("No data found");
+                check.value = false;
+                console.log(response.data);
+            } else {
+                check.value = true;
+                dataAssignment(response)
                 console.log("Response:", response.data);
             }
         } else {
@@ -1601,17 +1637,19 @@ const addVehicleData = async () => {
     const data = {};
 
     fieldNames.forEach(fieldName => {
-        const value = vehicleData.value[fieldName].trim();
+        const value = vehicleData.value[fieldName];
         if (value == '') {
             return
         }
         data[fieldName] = value;
     });
+    const searchData = data.name
+    console.log("searchData",searchData);
     console.log(data);
     const json_data = { data: JSON.stringify(data) }
     console.log(json_data);
     console.log('vehicle number:', data.name);
-    const isVehicleExist = await returnSearch(data.name)
+    const isVehicleExist = await returnSearch(searchData)
     console.log('isvehicle exist :', isVehicleExist.message[0].name)
     if (isVehicleExist.message[0].name) {
         alert("Vehicle already Exist!")
@@ -1646,6 +1684,7 @@ const addVehicleData = async () => {
                     console.log("vehicle data in responseData.value:", responseData.value.message[0])
                     console.log("vehicle data in responseData.value:", responseData.value)
                     alert("Successfully added Vehicle!")
+                    returnSearch(searchData)
 
                 } else {
                     check.value = false;
@@ -2105,9 +2144,8 @@ const returnSearch = async (search) => {
                 console.log(response.data);
                 return responseData.value;
             } else {
-                responseData.value = response.data;
+                dataAssignment(response)
                 console.log('cutomer details checking now', responseData.value);
-                return responseData.value;
             }
         } else {
             alert("Please enter search value");
