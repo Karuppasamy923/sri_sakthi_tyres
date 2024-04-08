@@ -1380,8 +1380,8 @@ import { ref, reactive, watch,computed } from 'vue';
 import { FeatherIcon } from 'frappe-ui'
 import axios from 'axios';
 
-const selectImg = ref(falseq);
-const Auth = ref(false)
+const selectImg = ref(true);
+const Auth = ref(true)
 const incorrect = ref(false);
 const currentstep = ref(0);
 

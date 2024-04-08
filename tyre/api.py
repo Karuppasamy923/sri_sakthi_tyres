@@ -1,53 +1,64 @@
 import frappe
 import datetime
 import json
+import re
 
 # function to get the vehicle & customer details (parameter = license plate)
 @frappe.whitelist(allow_guest=True)
 def get_details(license_plate):
-    print(license_plate)
-    if license_plate:
-        vehicle_details = ''
-        customer_details = ''
-        primary_details=[]
+    regex = "^[A-Z]{2}[\\s-]{0,1}[0-9]{2}[\\s-]{0,1}[A-Z]{1,2}[\\s-]{0,1}[0-9]{4}$"
+    p = re.compile(regex)
+    license_plate=license_plate.upper()
+    if(license_plate == None):
+        return "NO Data Found"
+    else:   
+        print(license_plate)
+        if(re.search(p, license_plate)):
+            print(license_plate)
+            if license_plate:
+                vehicle_details = ''
+                customer_details = ''
+                primary_details=[]
 
-        # Check if Vehicle Details exist
-        if frappe.db.exists("Vehicle Details", {"name": license_plate}):
-            vehicle_details = frappe.get_doc("Vehicle Details", {"name": license_plate})
+                # Check if Vehicle Details exist
+                if frappe.db.exists("Vehicle Details", {"name": license_plate}):
+                    vehicle_details = frappe.get_doc("Vehicle Details", {"name": license_plate})
 
-        # Check if Customer Details exist
-        if frappe.db.exists("Customer Details", {"name": license_plate}):
-            customer_details = frappe.get_doc("Customer Details", {"name": license_plate})
-            for current_driver in customer_details.current_driver:
-                data= frappe.get_doc("Driver",{"name":current_driver.current_driver})
-                print(data.full_name)
-                current_driver.name=current_driver.current_driver
-                current_driver.current_driver=data.full_name
-                if data.custom_primary:
-                    primary_details.append(data)
+                # Check if Customer Details exist
+                if frappe.db.exists("Customer Details", {"name": license_plate}):
+                    customer_details = frappe.get_doc("Customer Details", {"name": license_plate})
+                    for current_driver in customer_details.current_driver:
+                        data= frappe.get_doc("Driver",{"name":current_driver.current_driver})
+                        print(data.full_name)
+                        current_driver.name=current_driver.current_driver
+                        current_driver.current_driver=data.full_name
+                        if data.custom_primary:
+                            primary_details.append(data)
                
                 
-            for contact_person in customer_details.contact_person:
-                data= frappe.get_doc("ContactPerson",{"name":contact_person.contact_person_name})
-                # print(data.contact_person_name)
-                contact_person.name=contact_person.contact_person_name
-                contact_person.contact_person_name=data.contact_person_name
-                # print(contact_person.contact_person_name)
-                if data.custom_primary:
-                    primary_details.append(data)
+                    for contact_person in customer_details.contact_person:
+                        data= frappe.get_doc("ContactPerson",{"name":contact_person.contact_person_name})
+                        # print(data.contact_person_name)
+                        contact_person.name=contact_person.contact_person_name
+                        contact_person.contact_person_name=data.contact_person_name
+                        # print(contact_person.contact_person_name)
+                        if data.custom_primary:
+                            primary_details.append(data)
                             
-            # print(customer_details.current_owner)
+                    # print(customer_details.current_owner)
                 
 
-        # print(customer_details.call)
-        print("Vehicle Details:", vehicle_details)
-        print("Customer Details:", customer_details)
-        # print(customer_details.employee_name)
+                # print(customer_details.call)
+                print("Vehicle Details:", vehicle_details)
+                print("Customer Details:", customer_details)
+                # print(customer_details.employee_name)
 
-        if vehicle_details or customer_details :
-            return [vehicle_details, customer_details,primary_details]
+                if vehicle_details or customer_details :
+                    return [vehicle_details, customer_details,primary_details]
+                else:
+                    return ""
         else:
-            return ""
+            return "Enter a Valid vehicle number"        
 
 
 # function to store new vehicle details
