@@ -94,14 +94,33 @@
                 <div class="pt-24">
                     <div v-if="currentstep == 0">
                         <div>
-                            <input type="button"
-                                class="bg-blue-500 w-[150px] text-white font-bold text-base p-4 rounded-lg ml-3"
-                                value="Create Customer">
                             <div class="flex justify-end">
                                 <FeatherIcon name="arrow-right" class="w-8 h-8 cursor-pointer text-blue-500"
                                     @click="nextPageAndHighlight" />
                             </div>
                         </div>
+                        <div v-if="noData">
+                            <div class="flex justify-center">
+                                <span class="font-medium text-red-500">No data found!</span>
+                            </div>
+                        </div>
+                        <div v-if="successData">
+                            <div class="flex justify-center">
+                                <span class="font-medium text-green-500">Data added successfully!</span>
+                            </div>
+                        </div>
+
+                        <div v-if="showConfirmation" class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                            <div class="bg-white rounded-lg p-8 shadow-xl">
+                              <h2 class="text-xl font-semibold mb-4">Confirm Save</h2>
+                              <p class="mb-4">Are you sure you want to save the data?</p>
+                              <div class="flex justify-end">
+                                <button @click="confirmSave" class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
+                                <button @click="cancelSave" class="bg-red-500 text-white font-semibold px-4 py-2 rounded">Cancel</button>
+                              </div>
+                            </div>
+                          </div>    
+
                         <div class="flex justify-center m-5">
                             <input type="text" class="w-[338px] h-[52px] rounded-sm border-solid border border-black"
                                 v-model="searchQuery" @keyup.enter="search" placeholder="Enter your Vehicle Number">
@@ -216,7 +235,7 @@
                                             <div class="mt-2">
                                                 <label>Driver Name&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">
-                                                    {{ responseData && responseData.message && responseData &&
+                                                    {{ responseData &&
                 responseData.message && responseData.message[2][0]?.full_name || 'No data' }}
                                                 </label>
                                                 <br>
@@ -616,7 +635,7 @@
                                             <div class="flex flex-col ml-1">
                                                 <label class="mt-2">Brand</label>
                                                 <select class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black" v-model="selectedBrand">
-                                                  <option v-for="(tyre, index) in responseData.message" :key="index">{{ tyre.name }}</option>
+                                                  <option v-for="(tyre, index) in responseTyreData.message" :key="index">{{ tyre.name }}</option>
                                                 </select>
                                               </div>
                                               <div class="flex flex-col ml-1">
@@ -1457,7 +1476,8 @@ function submitPin() {
 }
 //==========================================================>>> Main Page <<<================================================================================//
 
-
+const noData = ref(false)
+const successData = ref(false)
 const showMessage = (message) => {
   alert(message);
 };
@@ -1520,6 +1540,7 @@ const dataAssignment = (response) => {
                         }
                     ]
                 };
+        console.log("data assignment", responseData.value);
     return responseData.value;
 }
 const check = ref(false)
@@ -1531,17 +1552,20 @@ const search = async () => {
     try {
         if (data.license_plate.trim() !== "") {
             const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.get_details", data);
-            if (response.data.message === "") {
-                alert("No data found");
+            if(response.data.message === "Enter a Valid vehicle number"){
                 check.value = false;
-                console.log(response.data);
-            } else {
+                noData.value = true;
+                setTimeout(() => {
+                    noData.value = false;
+                }, 2000);
+            }
+            else {
                 check.value = true;
-                dataAssignment(response)
                 console.log("Response:", response.data);
+                return dataAssignment(response)
             }
         } else {
-            alert("Please enter search value");
+            alert("Please enter search value !");
             console.log("Please enter search value");
         }
     } catch (error) {
@@ -1632,6 +1656,8 @@ const vehicleData = ref({
     alignment: ''
 });
 
+const showConfirmation = ref(false);
+
 const addVehicleData = async () => {
     const fieldNames = Object.keys(vehicleData.value);
     const data = {};
@@ -1639,62 +1665,85 @@ const addVehicleData = async () => {
     fieldNames.forEach(fieldName => {
         const value = vehicleData.value[fieldName];
         if (value == '') {
-            return
+            return;
         }
         data[fieldName] = value;
     });
-    const searchData = data.name
-    console.log("searchData",searchData);
-    console.log(data);
-    const json_data = { data: JSON.stringify(data) }
-    console.log(json_data);
-    console.log('vehicle number:', data.name);
-    const isVehicleExist = await returnSearch(searchData)
-    console.log('isvehicle exist :', isVehicleExist.message[0].name)
-    if (isVehicleExist.message[0].name) {
-        alert("Vehicle already Exist!")
-        return
-    }
-    else {
-        axios.post("http://192.168.1.39:8002/api/method/tyre.api.store_vehicle_details", json_data)
-            .then(response => {
-                console.log('vehicle add after response', response);
-                if (responseData.value && responseData.value.message) {
-                    check.value = true;
-                    responseData.value = {
-                        message: [
-                            response.data.message[0],
-                            response.data.message[1] === "" ? 'no data' : {
-                                current_owner: '',
-                                owner_mobile_no: '',
-                                current_driver: [{
-                                    current_driver: '',
-                                    name: '',
-                                    mobile_no: ''
-                                }],
-                                contact_person: [{
-                                    contact_person_name: '',
-                                    contact_person_mobile: ''
-                                }]
-                            }
-                        ]
-                    }
-                    console.log("vehicle data in responseData.value:", responseData.value.message[0].alignment);
-                    console.log("vehicle data in responseData.value:", responseData.value.message[0].name);
-                    console.log("vehicle data in responseData.value:", responseData.value.message[0])
-                    console.log("vehicle data in responseData.value:", responseData.value)
-                    alert("Successfully added Vehicle!")
-                    returnSearch(searchData)
 
-                } else {
-                    check.value = false;
-                    console.error("responseData.value or responseData.value.message is undefined");
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+    const searchData = data.name;
+    console.log("searchData", searchData);
+    if (!searchData) {
+        alert("Enter the vehicle number & required fields!");
+        return;
     }
+
+    console.log('vehicle number:', data.name);
+    // const vehicleValidate = await spacing(searchData);
+    // if (!vehicleValidate) {
+    //     alert("Please enter valid data");
+    //     return;
+    // }
+
+    const isVehicleExist = await returnSearch(searchData);
+    console.log('isvehicle exist :', isVehicleExist.message[0].name);
+    if (isVehicleExist.message[0].name) {
+        alert("Vehicle already Exist!");
+        return;
+    }
+    else{
+        showConfirmation.value = true;
+        showNewVehicle.value = false;
+    }
+};
+
+
+const confirmSave = async () => {
+    console.log('confirm page');
+    showConfirmation.value = false;
+    const fieldNames = Object.keys(vehicleData.value);
+    const data = {};
+
+    fieldNames.forEach(fieldName => {
+        const value = vehicleData.value[fieldName];
+        if (value == '') {
+            return;
+        }
+        data[fieldName] = value;
+    });
+    const searchData = data.name;
+    console.log('searchdata in confirm page:',searchData);
+    const json_data = { data: JSON.stringify(data) };
+    console.log(json_data);
+    try {
+        const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.store_vehicle_details", json_data);
+        console.log('vehicle add after response', response);
+        if (responseData.value && responseData.value.message) {
+            check.value = true;
+            dataAssignment(response);
+            console.log("vehicle data in responseData.value:", responseData.value.message[0].alignment);
+            console.log("vehicle data in responseData.value:", responseData.value.message[0].name);
+            console.log("vehicle data in responseData.value:", responseData.value.message[0]);
+            console.log("vehicle data in responseData.value:", responseData.value);
+            // alert("Successfully added Vehicle!")
+            successData.value = true;
+            // showNewVehicle.value = false;
+            setTimeout(() => {
+                successData.value = false;
+            }, 2000);
+            clearVehicleData();
+            returnSearch(searchData);
+        } else {
+            check.value = false;
+            console.error("responseData.value or responseData.value.message is undefined");
+        }
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+const cancelSave = () => {
+  showConfirmation.value = false;
+  clearVehicleData();
 };
 
 const addModifiedData = async () => {
@@ -1716,6 +1765,7 @@ const addModifiedData = async () => {
         console.log(response);
         returnSearch(name)
         alert("Successfully Modified Vehicle Data!")
+        showModifyVehicle.value = false;
     } catch (error) {
         console.error(error);
     }
@@ -1849,11 +1899,6 @@ const addCustomerData = async () => {
             alert("Please fill in all fields for all employees");
             return;
         }
-        // const primaryDriverCount = employees.value.filter(employee => employee.primary).length;
-        // if (primaryDriverCount !== 1) {
-        //     alert("Please select exactly one primary driver.");
-        //     return;
-        // }
         const data = {
             current_owner: customerData.value.current_owner,
             owner_mobile_no: customerData.value.owner_mobile_no,
@@ -1884,22 +1929,10 @@ const addCustomerData = async () => {
             check.value = true;
             console.log(response);
             if (responseData.value && responseData.value.message) {
-                responseData.value = {
-                    message: [
-                        response.data.message[0] === "" ? 'no data' : {
-                            name: 'No data',
-                            vehicle_brand: 'No data',
-                            vehicle_model: '',
-                            chassis_no: '',
-                            fuel_type: '',
-                            last_odometer_reading: '',
-                            tyre_change: '',
-                            alignment: ''
-                        },
-                        response.data.message[1]
-                    ]
-                }
+                showNewCustomer.value = false;
+                dataAssignment(response)
                 alert("Successfully added customer data!")
+                removeCustomerData()
                 console.log("Customer data in responseData.value:", responseData.value.message[1].owner_mobile_no);
                 console.log("Customer data in responseData.value:", responseData.value.message[1].current_owner);
                 console.log(responseData.value.message[1].call);
@@ -1911,11 +1944,6 @@ const addCustomerData = async () => {
             } else {
                 console.log("responseData.value or responseData.value.message is undefined");
             }
-            // Object.keys(customerData.value).forEach(key => {
-            //     customerData.value[key] = '';
-            // });
-            // employees.value = [{ name: '', type: '', mobile_no: ''}];
-
             console.log("Owner name:", data.current_owner);
             console.log("Owner mobile:", data.owner_mobile_no);
 
@@ -2009,6 +2037,7 @@ const addCustomerModifiedData = async () => {
         check.value = true;
         console.log(response);
         returnSearch(name)
+        showModifyCustomer.value = false;
         alert("Successfully Modified customer data!")
 
     } catch (error) {
@@ -2027,7 +2056,7 @@ const clearModifiedVehicleData = () => {
         vehicleDetails.value[key] = '';
     });
 }
-
+const responseTyreData = ref({})
 const handle = ref(false);
 const selectedVariant = ref(null);
 const selectedBrand = ref(null);
@@ -2089,9 +2118,9 @@ const handleEnquiry = async () => {
     try {
         const response = await axios.get("http://192.168.1.39:8002/api/method/tyre.api.stock_details");
         console.log('response data for customer details', response.data);
-        responseData.value = response.data;
-        console.log(responseData.value);
-        for (let tyre of responseData.value.message) {
+        responseTyreData.value = response.data;
+        console.log(responseTyreData.value);
+        for (let tyre of responseTyreData.value.message) {
             console.log(tyre.name);
         }
     } catch (error) {
@@ -2129,23 +2158,52 @@ const returnSearch = async (search) => {
                     },
                     {
                         current_owner: '',
-                        owner_mobile_no: '',
+                            owner_mobile_no: '',
+                            call: '',
+                            whatsapp: '',
+                            sms: '',
+                            current_driver: [{
+                                current_driver: '',
+                                name: '',
+                                mobile_no: '',
+                                call: '',
+                                whatsapp: '',
+                                sms: ''
+
+                            }],
+                            contact_person: [{
+                                contact_person_name: '',
+                                contact_person_mobile: '',
+                                custom_call: '',
+                                custom_whatsapp: '',
+                                custom_sms: ''
+                            }]
+                    },
+                    {
                         current_driver: [{
-                            current_driver: '',
-                            name: '',
-                            mobile_no: ''
-                        }],
-                        contact_person: [{
-                            contact_person_name: '',
-                            contact_person_mobile: ''
-                        }]
-                    }]
+                                current_driver: '',
+                                name: '',
+                                mobile_no: '',
+                                call: '',
+                                whatsapp: '',
+                                sms: ''
+
+                            }],
+                            contact_person: [{
+                                contact_person_name: '',
+                                contact_person_mobile: '',
+                                custom_call: '',
+                                custom_whatsapp: '',
+                                custom_sms: ''
+                            }]
+                    }
+                ]
                 };
                 console.log(response.data);
                 return responseData.value;
             } else {
-                dataAssignment(response)
                 console.log('cutomer details checking now', responseData.value);
+                return dataAssignment(response)
             }
         } else {
             alert("Please enter search value");
