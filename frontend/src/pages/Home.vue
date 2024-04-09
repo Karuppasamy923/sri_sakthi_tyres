@@ -1588,12 +1588,13 @@ function nextPageAndHighlight() {
     if (currentstep.value < maxStep) {
         currentstep.value++;
         currentPage.value = getPageName(currentstep.value);
+        console.log(searchQuery.value+"******")
         // if (currentstep.value == 3) {
         //     checkup(requireService)
         // }
         switch(currentstep.value){
-            case 1:
-            jobCard["user"]=responseData.value;
+            case 1: 
+                jobCard["vehicle_number"]=searchQuery.value;
                 console.log(jobCard)
                 console.log("****1****")
                 break;
