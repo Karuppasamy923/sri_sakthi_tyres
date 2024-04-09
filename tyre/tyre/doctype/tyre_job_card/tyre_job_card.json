@@ -172,7 +172,7 @@
   "car_wash_detail",
   "replacement_tyre_details_tab",
   "front_left_tyre_section",
-  "fl_tyre_brand",
+  "fl_brand",
   "fl_load_index",
   "column_break_kjli",
   "fl_pattern",
@@ -226,19 +226,12 @@
   "sp_tt_tl",
   "sp_size",
   "column_break_bwhf",
-  "sp_item"
+  "sp_item",
+  "billing_details_tab",
+  "billing_items",
+  "total_amount"
  ],
  "fields": [
-  {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Tyre Job Card",
-   "print_hide": 1,
-   "read_only": 1,
-   "search_index": 1
-  },
   {
    "fieldname": "service_advisor",
    "fieldtype": "Link",
@@ -332,9 +325,8 @@
    "label": "Vehicle Model"
   },
   {
-   "default": "0",
    "fieldname": "free_alignment_kms",
-   "fieldtype": "Check",
+   "fieldtype": "Int",
    "label": "Free Alignment (kms)"
   },
   {
@@ -347,9 +339,8 @@
    "label": "Monthly Avg Km"
   },
   {
-   "default": "0",
    "fieldname": "paid_alignment_kms",
-   "fieldtype": "Check",
+   "fieldtype": "Int",
    "label": "Paid Alignment (kms)"
   },
   {
@@ -372,44 +363,22 @@
    "label": "Mobile No"
   },
   {
-   "fieldname": "refer_by",
-   "fieldtype": "Select",
-   "label": "Refer By",
-   "options": "Leaflet\nWhatsapp\nRepeat\nWeb\nOW Workshop\nGarages\nFriend\nExisting Customer\nNew"
+   "default": "0",
+   "fieldname": "whatsapp",
+   "fieldtype": "Check",
+   "label": "Whatsapp"
   },
   {
-   "depends_on": "eval:doc.refer_from==\"Web\" ",
-   "fieldname": "website",
-   "fieldtype": "Link",
-   "label": "Website",
-   "options": "Shop Websites"
+   "default": "0",
+   "fieldname": "call",
+   "fieldtype": "Check",
+   "label": "Call"
   },
   {
-   "depends_on": "eval:doc.refer_from==\"OW Workshop\"",
-   "fieldname": "workshop_name",
-   "fieldtype": "Link",
-   "label": "Workshop Name",
-   "options": "OW Workshop"
-  },
-  {
-   "depends_on": "eval:doc.refer_from==\"Garages\"",
-   "fieldname": "garage_name",
-   "fieldtype": "Link",
-   "label": "Garage Name",
-   "options": "Garages"
-  },
-  {
-   "depends_on": "eval:doc.refer_from==\"Friend\"",
-   "fieldname": "friend_name",
-   "fieldtype": "Data",
-   "label": "Friend Name"
-  },
-  {
-   "depends_on": "eval:doc.refer_from==\"Existing Customer\"",
-   "fieldname": "customer_refer",
-   "fieldtype": "Link",
-   "label": "Customer",
-   "options": "Customer"
+   "default": "0",
+   "fieldname": "mail",
+   "fieldtype": "Check",
+   "label": "Mail"
   },
   {
    "fieldname": "cb_7",
@@ -428,6 +397,24 @@
    "fieldname": "driver_mobile",
    "fieldtype": "Data",
    "label": "Mobile No"
+  },
+  {
+   "default": "0",
+   "fieldname": "driver_whatsapp",
+   "fieldtype": "Check",
+   "label": "Whatsapp"
+  },
+  {
+   "default": "0",
+   "fieldname": "driver_call",
+   "fieldtype": "Check",
+   "label": "Call"
+  },
+  {
+   "default": "0",
+   "fieldname": "driver_mail",
+   "fieldtype": "Check",
+   "label": "Mail"
   },
   {
    "fieldname": "cb_8",
@@ -457,6 +444,24 @@
   },
   {
    "default": "0",
+   "fieldname": "contact_whatsapp",
+   "fieldtype": "Check",
+   "label": "Whatsapp"
+  },
+  {
+   "default": "0",
+   "fieldname": "contact_call",
+   "fieldtype": "Check",
+   "label": "Call"
+  },
+  {
+   "default": "0",
+   "fieldname": "contact_mail",
+   "fieldtype": "Check",
+   "label": "Mail"
+  },
+  {
+   "default": "0",
    "fieldname": "contact_check",
    "fieldtype": "Check",
    "hidden": 1,
@@ -467,22 +472,54 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "0",
-   "fieldname": "whatsapp",
-   "fieldtype": "Check",
-   "label": "Whatsapp"
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Tyre Job Card",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
   },
   {
-   "default": "0",
-   "fieldname": "call",
-   "fieldtype": "Check",
-   "label": "Call"
+   "fieldname": "refer_by",
+   "fieldtype": "Select",
+   "label": "Refer By",
+   "options": "Leaflet\nWhatsapp\nRepeat\nWeb\nOW Workshop\nGarages\nFriend\nExisting Customer\nNew"
   },
   {
-   "default": "0",
-   "fieldname": "mail",
-   "fieldtype": "Check",
-   "label": "Mail"
+   "depends_on": "eval:doc.refer_from==\"Web\" ",
+   "fieldname": "website",
+   "fieldtype": "Link",
+   "label": "Website",
+   "options": "Shop Websites"
+  },
+  {
+   "depends_on": "eval:doc.refer_from==\"OW Workshop\"",
+   "fieldname": "workshop_name",
+   "fieldtype": "Link",
+   "label": "Workshop Name",
+   "options": "OW Workshop"
+  },
+  {
+   "depends_on": "eval:doc.refer_from==\"Friend\"",
+   "fieldname": "friend_name",
+   "fieldtype": "Data",
+   "label": "Friend Name"
+  },
+  {
+   "depends_on": "eval:doc.refer_from==\"Garages\"",
+   "fieldname": "garage_name",
+   "fieldtype": "Link",
+   "label": "Garage Name",
+   "options": "Garages"
+  },
+  {
+   "depends_on": "eval:doc.refer_from==\"Existing Customer\"",
+   "fieldname": "customer_refer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
   },
   {
    "fieldname": "5_points_checkup_tab",
@@ -894,6 +931,18 @@
    "label": "Tyre Edge"
   },
   {
+   "default": "0",
+   "fieldname": "tyre_patch",
+   "fieldtype": "Check",
+   "label": "TyrePatch"
+  },
+  {
+   "default": "0",
+   "fieldname": "mushroom_patch",
+   "fieldtype": "Check",
+   "label": "Mushroom Patch"
+  },
+  {
    "fieldname": "alignment_details_section",
    "fieldtype": "Section Break",
    "label": "Alignment Details"
@@ -1038,6 +1087,34 @@
    "fieldtype": "Column Break"
   },
   {
+   "fieldname": "section_break_5ixv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "ac_service_detail",
+   "fieldtype": "Data",
+   "label": "AC Service Detail"
+  },
+  {
+   "fieldname": "battery_detail",
+   "fieldtype": "Data",
+   "label": "Battery Detail"
+  },
+  {
+   "fieldname": "column_break_9mgd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "wiper_detail",
+   "fieldtype": "Data",
+   "label": "Wiper Detail"
+  },
+  {
+   "fieldname": "car_wash_detail",
+   "fieldtype": "Data",
+   "label": "Car Wash Detail"
+  },
+  {
    "fieldname": "replacement_tyre_details_tab",
    "fieldtype": "Tab Break",
    "label": "Replacement Tyre Details"
@@ -1048,7 +1125,7 @@
    "label": "Front Left Tyre"
   },
   {
-   "fieldname": "fl_tyre_brand",
+   "fieldname": "fl_brand",
    "fieldtype": "Data",
    "label": "Brand"
   },
@@ -1309,86 +1386,26 @@
    "label": "Item"
   },
   {
-   "default": "0",
-   "fieldname": "driver_whatsapp",
-   "fieldtype": "Check",
-   "label": "Whatsapp"
+   "fieldname": "billing_details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Billing Details"
   },
   {
-   "default": "0",
-   "fieldname": "driver_call",
-   "fieldtype": "Check",
-   "label": "Call"
+   "fieldname": "billing_items",
+   "fieldtype": "Table",
+   "label": "Billing Items",
+   "options": "Tyre Billing Details"
   },
   {
-   "default": "0",
-   "fieldname": "driver_mail",
-   "fieldtype": "Check",
-   "label": "Mail"
-  },
-  {
-   "default": "0",
-   "fieldname": "contact_whatsapp",
-   "fieldtype": "Check",
-   "label": "Whatsapp"
-  },
-  {
-   "default": "0",
-   "fieldname": "contact_call",
-   "fieldtype": "Check",
-   "label": "Call"
-  },
-  {
-   "default": "0",
-   "fieldname": "contact_mail",
-   "fieldtype": "Check",
-   "label": "Mail"
-  },
-  {
-   "fieldname": "section_break_5ixv",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "ac_service_detail",
-   "fieldtype": "Data",
-   "label": "AC Service Detail"
-  },
-  {
-   "fieldname": "battery_detail",
-   "fieldtype": "Data",
-   "label": "Battery Detail"
-  },
-  {
-   "fieldname": "wiper_detail",
-   "fieldtype": "Data",
-   "label": "Wiper Detail"
-  },
-  {
-   "fieldname": "car_wash_detail",
-   "fieldtype": "Data",
-   "label": "Car Wash Detail"
-  },
-  {
-   "fieldname": "column_break_9mgd",
-   "fieldtype": "Column Break"
-  },
-  {
-   "default": "0",
-   "fieldname": "tyre_patch",
-   "fieldtype": "Check",
-   "label": "TyrePatch"
-  },
-  {
-   "default": "0",
-   "fieldname": "mushroom_patch",
-   "fieldtype": "Check",
-   "label": "Mushroom Patch"
+   "fieldname": "total_amount",
+   "fieldtype": "Currency",
+   "label": "Total Amount"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-04-08 18:03:41.092944",
+ "modified": "2024-04-09 13:10:59.403323",
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "Tyre Job Card",

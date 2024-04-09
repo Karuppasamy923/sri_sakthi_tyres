@@ -899,11 +899,11 @@
                                         :id="'type' + index" style="border: 1px solid black;"
                                         @change="updateTyreData(index)">
                                         <option value="" selected disabled hidden>Please select...</option>
-                                        <option value="Front-Left">Front-Left</option>
-                                        <option value="Front-Right">Front-Right</option>
-                                        <option value="Back-Left">Back-Left</option>
-                                        <option value="Back-Right">Back-Right</option>
-                                        <option value="Stephanie">Spare-wheel</option>
+                                        <option value="Front Left">Front Left</option>
+                                        <option value="Front Right">Front Right</option>
+                                        <option value="Rear Left">Rear Left</option>
+                                        <option value="Rear-Right">Rear Right</option>
+                                        <option value="Spare Tyre">Spare Tyre</option>
                                     </select>
                                 </div>
                                 <div class="flex flex-col space-y-1">
@@ -1237,8 +1237,12 @@
             <!-- Replacement Tyre Details -->
             <div v-if="currentstep == 3">
                 <div class="pt-24 p-12">
-                    <div class=" flex flex-row justify-between">
+                    <div class="flex flex-row justify-between">
                         <h1 class="text-[20px] font-bold mb-1">Tyre Replacement Details</h1>
+
+                        <button class=" text-[1.2rem]  text-white w-[12rem] h-[3rem] bg-blue-500 rounded-lg"
+                            @click="addTyreReplacement">Add</button>
+
                     </div>
                     <hr class="mt-2 " :style="{ borderWidth: '2px', borderColor: 'gray' }">
                     <div class="pb-5 ">
@@ -1248,33 +1252,29 @@
                                 <label class="pt-2" :for="'type' + index">Tyre Position <span
                                         class="text-red-600 font-bold">*</span></label><br>
                                 <select class="w-[15rem] h-[52px] rounded-sm border-solid border border-black"
-                                    v-model="tyres.tyrePositions" :id="'type' + index" @change="saveData(index)">
+
+                                    v-model="tyre.type" :id="'type' + index">
                                     <option value="" selected disabled hidden>Please select...</option>
-                                    <option
-                                        v-for="(tyrePositions, tyrePositionsIndex) in temporaryData.message.tyrePositions"
-                                        :key="tyrePositionsIndex">{{ tyrePositions }}</option>
+                                    <option value="Front Left">Front Left</option>
+                                    <option value="Front Right">Front Right</option>
+                                    <option value="Rear Left">Rear Left</option>
+                                    <option value="Rear Right">Rear Right</option>
+                                    <option value="Spare Tyre">Spare Tyre</option>
                                 </select>
                                 <div class="mt-[20px]">
-                                    <label :for="'size' + index">Size</label>
-                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                        v-model="tyres.size" @change="saveData(index, 'size')">
-                                        <option v-for="(size, sizeIndex) in temporaryData.message.size"
-                                            :key="sizeIndex">
-                                            {{ size }}
-                                        </option>
-                                    </select>
+                                    <label :for="'loadIndex' + index">Load Index</label><br>
+                                    <input class="w-[15rem] h-[52px] rounded-sm border-solid border border-black"
+                                        :id="'loadIndex' + index" type="text" v-model="tyre.loadIndex" @change="saveData(index)">
+
                                 </div>
                             </div>
                             <div class="ml-[100px]">
                                 <div>
-                                    <label for="brand">Brand</label>
-                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                        id="brand" v-model="tyres.brand" @change="saveData(selectedBrand, 'brand')">
-                                        <option v-for="(brand, index) in temporaryData.message.brand" :key="index"
-                                            :value="brand">
-                                            {{ brand }}
-                                        </option>
-                                    </select>
+
+                                    <label :for="'brand' + index">Brand</label>
+                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black" v-model="tyre.brand" @change="saveData(index)">
+                                        <option v-for="(tyre, index) in resData" :key="index">{{ tyre.brand }}</option>
+                                      </select>
                                 </div>
                                 <div class="mt-[20px] w-[16rem]">
                                     <label :for="'speedRating' + index">Speed Rating</label>
@@ -1289,24 +1289,17 @@
                             </div>
                             <div class="ml-[200px]">
                                 <div>
-                                    <label :for="'pattern' + index">Pattern</label>
-                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                        v-model="tyres.pattern" @change="saveData(index, 'pattern')">
-                                        <option v-for="(pattern, patternIndex) in temporaryData.message.pattern"
-                                            :key="patternIndex">
-                                            {{ pattern }}
-                                        </option>
-                                    </select>
+
+                                    <label :for="'size' + index">Size</label>
+                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black" v-model="tyre.size" @change="updateFields(tyres[index].size,index,tyres[index].brand)">
+                                        <option v-for="(tyre, index) in getSizesForSelectedBrand(tyres[index].brand)" :key="index">{{ tyre }}</option>
+                                      </select>
                                 </div>
                                 <div class="mt-[20px]">
-                                    <label :for="'loadIndex' + index">LoadIndex</label><br>
-                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                        v-model="tyres.loadIndex" @change="saveData(index, 'loadIndex')">
-                                        <option v-for="(loadIndex, index) in temporaryData.message.loadIndex"
-                                            :key="index">
-                                            {{ loadIndex }}
-                                        </option>
-                                    </select>
+                                    <label :for="'pattern' + index">Pattern</label>
+                                    <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
+                                        :id="'pattern' + index" type="text" v-model="tyre.pattern" @change="saveData(index)">    
+
                                 </div>
                             </div>
                             <div class="ml-[300px]">
@@ -1320,16 +1313,13 @@
                                         </option>
                                     </select>
                                 </div>
-                                <div class="mt-[20px]">
+                                <!-- <div class="mt-[20px]">
                                     <label :for="'item' + index">Item</label>
-                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                        v-model="tyres.item" @change="saveData(index, 'item')">
-                                        <option v-for="(item, itemIndex) in temporaryData.message.item"
-                                            :key="itemIndex">
-                                            {{ item }}
-                                        </option>
-                                    </select>
-                                </div>
+
+                                    <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
+                                        :id="'item' + index" type="text" v-model="tyre.item" @change="saveData(index)">
+                                </div> -->
+
                             </div>
                             <div class="ml-[400px]">
                                 <FeatherIcon name="trash-2" class="mt-0 ml-2 w-6 h-6 cursor-pointer text-red-500"
@@ -1346,7 +1336,7 @@
             <!-- Billing Details -->
             <div v-if="currentstep == 4">
                 <div class="pt-24 p-12">
-                    <h1 class="text-[20px] font-bold mb-1">Raw Materials</h1>
+                    <h1 class="text-[20px] font-bold mb-1">Items</h1>
                     <hr class="mt-2" :style="{ borderWidth: '2px', borderColor: 'gray' }">
                     <div class="pt-5">
                         <table
@@ -1354,11 +1344,11 @@
                             <thead>
                                 <tr>
                                     <th class="border border-gray-800 px-4 py-4 w-[10rem]">SI.No</th>
-                                    <th class="border border-gray-800 px-4 py-4 w-[10rem]">Item Code</th>
-                                    <th class="border border-gray-800 px-4 py-4 w-[16rem]">Source Warehouse</th>
-                                    <th class="border border-gray-800 px-4 py-4 w-[16rem]">Required Quantity</th>
+                                    <th class="border border-gray-800 px-4 py-4 w-[10rem]">Item</th>
+                                    <th class="border border-gray-800 px-4 py-4 w-[16rem]">Warehouse</th>
+                                    <th class="border border-gray-800 px-4 py-4 w-[16rem]">Quantity</th>
                                     <th class="border border-gray-800 px-4 py-4 w-[10rem]">Rate</th>
-                                    <th class="border border-gray-800 px-4 py-4 w-[10rem]">Cost</th>
+                                    <th class="border border-gray-800 px-4 py-4 w-[10rem]">Amount</th>
                                 </tr>
                             </thead>
                             <tbody class="border border-gray-800 text-center">
@@ -1416,7 +1406,7 @@
                             <label>Discount Rate: <input type="text" v-model="discountRate"
                                     @input="calculateDiscountRate"
                                     class="w-[338px] h-[52px] rounded-sm border-solid border border-black"></label>
-                            <label class="ml-auto pr-5">Final Amount: <input type="text" v-model="finalAmount" readonly
+                            <label class="ml-auto pr-5">Total Amount: <input type="text" v-model="finalAmount" readonly
                                     class="w-[338px] h-[52px] rounded-sm border-solid border border-black"></label>
                         </div>
                     </div>
@@ -1466,10 +1456,13 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, computed } from 'vue';
+
+import { ref, reactive, watch,computed, onMounted } from 'vue';
+
 import { FeatherIcon } from 'frappe-ui'
 import axios from 'axios';
 
+const even=window.location.origin
 const selectImg = ref(true);
 const Auth = ref(true)
 const incorrect = ref(false);
@@ -1520,7 +1513,62 @@ function submitPin() {
     }
 }
 
-const jobCard = {}
+
+const jobCard ={}
+const brand=ref([])
+const resData=ref({})
+onMounted(() => {
+    axios.get(`${even}/api/method/tyre.api.get_brand_details`)
+    .then(response => {
+      resData.value=response.data.message;
+      brand.value=Object.keys(response.data.message);
+    })
+});
+
+
+const getSizesForSelectedBrand = (brand) => {
+  const sizesObject = resData.value[brand];
+  if (sizesObject) {
+    const sizesArray = Object.values(sizesObject);
+    const validSizesArray = sizesArray.filter(Array.isArray);
+    const sizes = validSizesArray.flatMap(tyres => tyres.map(tyre => tyre.size));
+    return sizes;
+  }
+};
+
+const updateFields = (sizes, index,brand) => {
+    console.log("%^&*((");
+    console.log(sizes);
+    console.log(index);
+    console.log(brand);
+    console.log(resData.value)
+    console.log(typeof tyres[index])
+    // Check if tyres[index] is defined before accessing it
+    if (tyres[index].size) {
+        console.log(tyres[index]);
+        const tyre = tyres[index];
+
+        // Ensure resData.value[brand] is defined before calling find
+        if (resData.value && resData.value[brand]) {
+            const sizeData = resData.value[brand].find(tyre => tyre.size === sizes);
+            console.log("#$%))");
+            console.log(sizeData);
+            if (sizeData) {
+                // Update the tyre object properties
+                tyre.ttTl = sizeData.ttTl;
+                tyre.loadIndex = sizeData.loadIndex;
+                tyre.speedRating = sizeData.speedRating;
+            } else {
+                console.log("Size data not found.");
+            }
+        } else {
+            console.log(`No data found for brand ${brand}.`);
+        }
+    } else {
+        console.log(`Tyre at index ${index} is undefined.`);
+    }
+};
+
 //==========================================================>>> Main Page <<<================================================================================//
 
 const hasResponse = ref(true);
@@ -1599,8 +1647,10 @@ const search = async () => {
     console.log('checking data', data);
     try {
         if (data.license_plate.trim() !== "") {
-            const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.get_details", data);
-            if (response.data.message === "Enter a Valid vehicle number") {
+
+            const response = await axios.post(`${even}/api/method/tyre.api.get_details`, data);
+            if(response.data.message === "Enter a Valid vehicle number"){
+
                 check.value = false;
                 noData.value = true;
                 hasResponse.value = true
@@ -1645,12 +1695,15 @@ function nextPageAndHighlight() {
     if (currentstep.value < maxStep) {
         currentstep.value++;
         currentPage.value = getPageName(currentstep.value);
+        console.log(searchQuery.value+"******")
         // if (currentstep.value == 3) {
         //     checkup(requireService)
         // }
-        switch (currentstep.value) {
-            case 1:
-                jobCard["user"] = responseData.value;
+
+        switch(currentstep.value){
+            case 1: 
+                jobCard["vehicle_number"]=searchQuery.value;
+
                 console.log(jobCard)
                 console.log("****1****")
                 break;
@@ -1820,7 +1873,7 @@ const confirmSave = async () => {
     const json_data = { data: JSON.stringify(data) };
     console.log(json_data);
     try {
-        const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.store_vehicle_details", json_data);
+        const response = await axios.post(`${even}/api/method/tyre.api.store_vehicle_details`, json_data);
         console.log('vehicle add after response', response);
         if (responseData.value && responseData.value.message) {
             enable.value = true;
@@ -1869,7 +1922,7 @@ const addModifiedData = async () => {
     console.log(modifiedData)
     try {
         const json_data = { data: JSON.stringify(modifiedData) }
-        const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.store_vehicle_details", json_data);
+        const response = await axios.post(`${even}/api/method/tyre.api.store_vehicle_details`, json_data);
         console.log(response);
         returnSearch(name)
         alert("Successfully Modified Vehicle Data!")
@@ -2033,7 +2086,7 @@ const addCustomerData = async () => {
         console.log('before checking customer json_data', json_data);
         console.log(json_data);
         try {
-            const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.store_customer_details", json_data)
+            const response = await axios.post(`${even}/api/method/tyre.api.store_customer_details`, json_data)
             check.value = true;
             console.log(response);
             if (responseData.value && responseData.value.message) {
@@ -2141,7 +2194,7 @@ const addCustomerModifiedData = async () => {
     const json_data = { data: JSON.stringify(modifiedData) };
     console.log("Modified data", json_data)
     try {
-        const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.store_customer_details", json_data);
+        const response = await axios.post(`${even}/api/method/tyre.api.store_customer_details`, json_data);
         check.value = true;
         console.log(response);
         returnSearch(name)
@@ -2200,9 +2253,11 @@ const handleCustomer = async () => {
     console.log("checking Customer Details", customerDetails)
     try {
         const json_data = { data: JSON.stringify(customerDetails) };
-        console.log('checking customer details', json_data);
-        const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.store_customer_details", json_data)
-        console.log('response from customer details', response.data);
+
+        console.log('checking customer details',json_data);
+        const response = await axios.post(`${even}/api/method/tyre.api.store_customer_details`, json_data)
+        console.log('response from customer details',response.data);
+
 
     } catch (error) {
         console.log("Temporary customer details page:", error)
@@ -2224,7 +2279,7 @@ const selectedBrandVariants = computed(() => {
 
 const handleEnquiry = async () => {
     try {
-        const response = await axios.get("http://192.168.1.39:8002/api/method/tyre.api.stock_details");
+        const response = await axios.get(`${even}/api/method/tyre.api.stock_details`);
         console.log('response data for customer details', response.data);
         responseTyreData.value = response.data;
         console.log(responseTyreData.value);
@@ -2249,7 +2304,7 @@ const returnSearch = async (search) => {
     console.log('checking data', data);
     try {
         if (data.license_plate.trim() !== "") {
-            const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.get_details", data);
+            const response = await axios.post(`${even}/api/method/tyre.api.get_details`, data);
             check.value = true;
             console.log('returnSearch data', response);
             if (response.data.message === "") {
@@ -2359,8 +2414,8 @@ const addTyre = () => {
 
 const updateTyreData = (index) => {
     const tyre = tyreDatas.value[index];
-    console.log('Updated tyre data:', tyre);
-    console.log(tyreDatas.value);
+    // console.log('Updated tyre data:', tyre);
+    // console.log(tyreDatas.value);
 };
 
 const deleteTyre = (index) => {
@@ -2475,7 +2530,7 @@ function checkup(data) {
     const json_data = { data: data }
     console.log(json_data);
     try {
-        const response = axios.post("http://192.168.1.39:8002/api/method/tyre.api.job_card", json_data);
+        const response = axios.post(`${even}/api/method/tyre.api.job_card`, json_data);
         console.log(response);
     } catch (error) {
         console.error("error");
@@ -2613,29 +2668,19 @@ const tyres = ref([{
     item: ''
 }]);
 
-const temporaryData = ref({
-    message: {
-        tyrePositions: ['Front Left', 'Front Right', 'Rear Left', 'Rear Right', 'Spare'],
-        loadIndex: [62, 63, 64, 65, 66, 67, 68, 69, 70],
-        brand: ['MRF', 'CEAT', 'Michelin', 'tyres'],
-        speedRating: ['F', 'G', 'J', 'K', 'L', 'M', 'N'],
-        pattern: ['Symmetrical Tread', 'Asymmetrical Tread', 'Directional Tread', 'Asymmetrical & directional'],
-        size: [13, 14, 15, 16, 17],
-        ttTl: ['Tube Tyre', 'Tubeless Tyre'],
-        item: [1, 2, 3, 4],
-    }
-});
 
-for (let key in temporaryData.value.message) {
-    if (Object.prototype.hasOwnProperty.call(temporaryData.value.message, key)) {
-        console.log(key, temporaryData.value.message[key]);
-    }
-}
+const size =ref([])
 
 const saveData = (index) => {
-    const tyreValues = tyres.value[index];
-    console.log('Updated tyre data:', tyreValues);
+    console.log(resData.value);
     console.log(tyres.value);
+    console.log(tyres.value[index].brand);
+
+    // console.log(resData.value[tyres.brand])
+    // const brandSize = resData.value[tyres.brand];
+    // console.log(brandSize.value)
+    // console.log(size.value);
+
 };
 
 const setValue = reactive({
