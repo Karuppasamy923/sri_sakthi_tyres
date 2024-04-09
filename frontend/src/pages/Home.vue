@@ -95,8 +95,6 @@
                     <div v-if="currentstep == 0">
                         <div>
                             <div class="flex justify-end">
-                                <FeatherIcon name="arrow-right" class="w-8 h-8 cursor-pointer text-blue-500"
-                                    @click="nextPageAndHighlight" />
                             </div>
                         </div>
                         <div v-if="noData">
@@ -110,24 +108,36 @@
                             </div>
                         </div>
 
-                        <div v-if="showConfirmation" class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                        <div v-if="showConfirmation"
+                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
                             <div class="bg-white rounded-lg p-8 shadow-xl">
-                              <h2 class="text-xl font-semibold mb-4">Confirm Save</h2>
-                              <p class="mb-4">Are you sure you want to save the data?</p>
-                              <div class="flex justify-end">
-                                <button @click="confirmSave" class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
-                                <button @click="cancelSave" class="bg-red-500 text-white font-semibold px-4 py-2 rounded">Cancel</button>
-                              </div>
+                                <h2 class="text-xl font-semibold mb-4">Confirm Save</h2>
+                                <p class="mb-4">Are you sure want to save the data?</p>
+                                <div class="flex justify-end">
+                                    <button @click="confirmSave"
+                                        class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
+                                    <button @click="cancelSave"
+                                        class="bg-red-500 text-white font-semibold px-4 py-2 rounded">Cancel</button>
+                                </div>
                             </div>
-                          </div>    
+                        </div>
+                        <div v-if="showWarning"
+                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                            <div class="bg-white rounded-lg p-8 shadow-xl">
+                                <p class="mb-4">Please fill the required fields</p>
+                                <div class="flex justify-center">
+                                    <button @click="close" class="bg-red-500 text-white font-semibold px-4 py-2 rounded mr-2">Ok</button>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="flex justify-center m-5">
                             <input type="text" class="w-[338px] h-[52px] rounded-sm border-solid border border-black"
-                                v-model="searchQuery" @keyup.enter="search" placeholder="Enter your Vehicle Number">
+                                v-model="searchQuery" @keyup.enter="search" placeholder="Vehicle Number">
                             <button class="bg-blue-500 w-[150px] text-white font-bold text-base p-4 rounded-lg ml-3"
                                 @click="search">Search</button>
                         </div>
-                        <div class="grid grid-cols-2 gap-3" v-if="responseData && responseData.message">
+                        <div class="grid grid-cols-2 gap-3" v-if="responseData && responseData.message && enable">
                             <Card class="bg-gray-200">
                                 <div>
                                     <h4 class="text-[20px] font-bold">Vehicle Details</h4>
@@ -138,28 +148,28 @@
                                                 <label>Vehicle Number&emsp;&nbsp;:&nbsp;</label>
                                                 <label>
                                                     {{ responseData && responseData.message &&
-                responseData.message[0]?.name || 'No data' }}
+                                                        responseData.message[0]?.name || 'No data' }}
                                                 </label>
                                             </div>
                                             <div class="mt-2">
                                                 <label>Vehicle Brand&emsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3"> {{
-                responseData && responseData.message &&
-                responseData.message[0]?.vehicle_brand || 'No data' }}</label>
+                                                    responseData && responseData.message &&
+                                                    responseData.message[0]?.vehicle_brand || 'No data' }}</label>
                                             </div>
                                             <div class="mt-2">
                                                 <label>Fuel
                                                     Type&nbsp;&nbsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3"> {{ responseData && responseData.message &&
-                responseData.message[0]?.fuel_type
-                || 'No data'
+                                                    responseData.message[0]?.fuel_type
+                                                    || 'No data'
                                                     }}</label>
                                             </div>
                                             <div class="mt-2">
                                                 <label>Tyre Change(kms)&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">{{ responseData && responseData.message &&
-                responseData.message[0]?.tyre_change
-                || 'No data'
+                                                    responseData.message[0]?.tyre_change
+                                                    || 'No data'
                                                     }}</label>
                                             </div>
                                         </div>
@@ -168,26 +178,26 @@
                                                 <label>Vehicle Model&nbsp;&nbsp;: </label>
                                                 <label class="mt-3">
                                                     {{ responseData && responseData.message &&
-                responseData.message[0]?.vehicle_model || 'No data' }}</label>
+                                                        responseData.message[0]?.vehicle_model || 'No data' }}</label>
                                             </div>
                                             <div class="mt-2">
                                                 <label>Chassis No&nbsp;&nbsp;:&nbsp; </label>
                                                 <label class="mt-3">{{ responseData && responseData.message &&
-                responseData.message[0]?.chassis_no
-                || 'No data' }}</label>
+                                                    responseData.message[0]?.chassis_no
+                                                    || 'No data' }}</label>
                                             </div>
                                             <div class="mt-2">
                                                 <label>Odometer Value&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">
                                                     {{ responseData && responseData.message &&
-                responseData.message[0]?.last_odometer_reading
-                || 'No data' }}</label>
+                                                        responseData.message[0]?.last_odometer_reading
+                                                        || 'No data' }}</label>
                                             </div>
                                             <div class="mt-2">
                                                 <label>Alignment (kms)&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3"> {{ responseData && responseData.message &&
-                responseData.message[0]?.alignment
-                || 'No data'
+                                                    responseData.message[0]?.alignment
+                                                    || 'No data'
                                                     }}</label>
                                             </div>
                                         </div>
@@ -212,7 +222,7 @@
                                                 <label>Customer Name&nbsp;&nbsp;:&nbsp; </label>
                                                 <label class="mt-3">
                                                     {{ responseData && responseData.message &&
-                responseData.message[1]?.current_owner || 'No data' }}
+                                                        responseData.message[1]?.current_owner || 'No data' }}
                                                 </label>
                                                 <br>
                                                 <input type="checkbox"
@@ -230,13 +240,12 @@
                                                     &nbsp;&nbsp;<label>Call</label>
                                                 </span>
                                             </div>
-                                            <!-- <div v-for="(employee, index) in responseData.message[1]?.current_driver"
-                                                :key="index"> -->
                                             <div class="mt-2">
                                                 <label>Driver Name&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">
                                                     {{ responseData &&
-                responseData.message && responseData.message[2][0]?.full_name || 'No data' }}
+                                                        responseData.message && responseData.message[2][0]?.full_name ||
+                                                        'No data' }}
                                                 </label>
                                                 <br>
                                                 <input type="checkbox"
@@ -254,14 +263,11 @@
                                                     &nbsp;&nbsp;<label>Call</label>
                                                 </span>
                                             </div>
-                                            <!-- </div> -->
-                                            <!-- <div v-for="(contact, index) in responseData.message[1]?.contact_person"
-                                                :key="index"> -->
                                             <div class="mt-2">
                                                 <label>Contact Person&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">
                                                     {{ responseData && responseData.message &&
-                responseData.message[2][1]?.contact_person_name || 'No data' }}
+                                                        responseData.message[2][1]?.contact_person_name || 'No data' }}
                                                 </label>
                                                 <br>
                                                 <input type="checkbox"
@@ -279,14 +285,13 @@
                                                     &nbsp;&nbsp;<label>Call</label>
                                                 </span>
                                             </div>
-                                            <!-- </div> -->
                                         </div>
                                         <div>
                                             <div class="mt-2">
                                                 <label>Customer Mobile&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">
                                                     {{ responseData && responseData.message &&
-                responseData.message[1]?.owner_mobile_no || 'No data' }}
+                                                        responseData.message[1]?.owner_mobile_no || 'No data' }}
                                                 </label>
                                                 <br>
                                                 <span class="ml-5">
@@ -298,14 +303,12 @@
                                                     &nbsp;&nbsp;<label>SMS</label>
                                                 </span>
                                             </div>
-                                            <!-- <div v-for="(employee, index) in responseData.message[1]?.current_driver"
-                                                :key="index"> -->
                                             <div class="mt-2">
                                                 <label>Driver Mobile&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">
                                                     {{ responseData && responseData.message &&
-                responseData.message[2][0]?.cell_number
-                || 'No data' }}
+                                                        responseData.message[2][0]?.cell_number
+                                                        || 'No data' }}
                                                 </label>
                                                 <br>
                                                 <span class="ml-5">
@@ -317,15 +320,12 @@
                                                     &nbsp;&nbsp;<label>SMS</label>
                                                 </span>
                                             </div>
-                                            <!-- </div> -->
-                                            <!-- <div v-for="(contact, index) in responseData.message[1]?.contact_person"
-                                                :key="index"> -->
                                             <div class="mt-2">
                                                 <label>Contact Person&nbsp;&nbsp;:&nbsp; </label>
                                                 <label class="mt-3">
                                                     {{ responseData && responseData.message &&
-                responseData.message[2][1]?.contact_person_mobile
-                || 'No data' }}
+                                                        responseData.message[2][1]?.contact_person_mobile
+                                                        || 'No data' }}
                                                 </label>
                                                 <br>
                                                 <span class="ml-5">
@@ -337,8 +337,6 @@
                                                     &nbsp;&nbsp;<label>SMS</label>
                                                 </span>
                                             </div>
-                                            <!-- </div> -->
-
                                         </div>
                                     </div>
                                     <div class="float-right mt-[20px] flex flex-row space-x-9">
@@ -354,14 +352,12 @@
                         </div>
                         <div v-else>
                             <div class="flex justify-center">
-                                <Card class="w-[75%] h-[20rem] text-center bg-gray-200" @click="showMessage(`Nothing to Show ! 😄`)">
-                                    <div class="flex justify-center mt-9">
-                                        <img src="https://img.freepik.com/free-vector/hand-drawn-no-data-concept_52683-127823.jpg?w=996&t=st=1712321166~exp=1712321766~hmac=ae2f4e19eb0e1185d52ac8a07c158e9dc5afa741284e9526a8e8a0165573735b" alt="No data" class="w-[25%] opacity-60">
-                                    </div>
-                                    <p class="mt-4 text-[1.7rem]">No data !</p>
-                                </Card>
+                                <div class="flex justify-center mt-9">
+                                    <img src="https://img.freepik.com/free-vector/hand-drawn-no-data-concept_52683-127823.jpg?w=996&t=st=1712321166~exp=1712321766~hmac=ae2f4e19eb0e1185d52ac8a07c158e9dc5afa741284e9526a8e8a0165573735b"
+                                        alt="No data" class="w-[25%]" @click="showMessage(`Nothing to Show ! 😄`)">
+                                </div>
                             </div>
-                            <div  class="flex justify-center m-5">
+                            <div class="flex justify-center m-5">
                                 <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
                                     @click="addVehicle">
                                     Add Vehicle
@@ -634,66 +630,89 @@
                                         <div class="grid grid-cols-3 gap-4">
                                             <div class="flex flex-col ml-1">
                                                 <label class="mt-2">Brand</label>
-                                                <select class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black" v-model="selectedBrand">
-                                                  <option v-for="(tyre, index) in responseTyreData.message" :key="index">{{ tyre.name }}</option>
+                                                <select
+                                                    class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
+                                                    v-model="selectedBrand">
+                                                    <option v-for="(tyre, index) in responseTyreData.message"
+                                                        :key="index">{{ tyre.name }}</option>
                                                 </select>
-                                              </div>
-                                              <div class="flex flex-col ml-1">
-                                                <label class="mt-2">Variants</label>
-                                                <select class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black" v-model="selectedVariant">
-                                                  <option v-for="(variant, index) in selectedBrandVariants" :key="index">{{ variant }}</option>
-                                                </select>
-                                              </div>
-                                            <div class="flex flex-col ml-1">
-                                              <label class="mt-2">Quantity</label>
-                                              <input class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black" type="text" v-model="quantity">
                                             </div>
-                                          </div>
-                                            <label>Services</label>
+                                            <div class="flex flex-col ml-1">
+                                                <label class="mt-2">Variants</label>
+                                                <select
+                                                    class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
+                                                    v-model="selectedVariant">
+                                                    <option v-for="(variant, index) in selectedBrandVariants"
+                                                        :key="index">{{ variant }}</option>
+                                                </select>
+                                            </div>
+                                            <div class="flex flex-col ml-1">
+                                                <label class="mt-2">Quantity</label>
+                                                <input
+                                                    class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
+                                                    type="text" v-model="quantity">
+                                            </div>
+                                        </div>
+                                        <label>Services</label>
                                         <hr class="dark-hr">
                                         <div class="grid grid-cols-2 mt-5">
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.alignment" class="bg-gray-300 rounded-sm"> <label>Alignment</label>
+                                                <input type="checkbox" v-model="serviceDetails.alignment"
+                                                    class="bg-gray-300 rounded-sm"> <label>Alignment</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.rotation" class="bg-gray-300 rounded-sm"> <label>Rotation</label>
+                                                <input type="checkbox" v-model="serviceDetails.rotation"
+                                                    class="bg-gray-300 rounded-sm"> <label>Rotation</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.oil_change" class="bg-gray-300 rounded-sm"> <label>Oil Change</label>
+                                                <input type="checkbox" v-model="serviceDetails.oil_change"
+                                                    class="bg-gray-300 rounded-sm"> <label>Oil Change</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.balancing" class="bg-gray-300 rounded-sm"> <label>Balancing</label>
+                                                <input type="checkbox" v-model="serviceDetails.balancing"
+                                                    class="bg-gray-300 rounded-sm"> <label>Balancing</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.inflation" class="bg-gray-300 rounded-sm"> <label>Inflation</label>
+                                                <input type="checkbox" v-model="serviceDetails.inflation"
+                                                    class="bg-gray-300 rounded-sm"> <label>Inflation</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.puncture" class="bg-gray-300 rounded-sm"> <label>Puncture</label>
+                                                <input type="checkbox" v-model="serviceDetails.puncture"
+                                                    class="bg-gray-300 rounded-sm"> <label>Puncture</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.tyre_edge" class="bg-gray-300 rounded-sm"> <label>Tyre Edge</label>
+                                                <input type="checkbox" v-model="serviceDetails.tyre_edge"
+                                                    class="bg-gray-300 rounded-sm"> <label>Tyre Edge</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.tyre_patch" class="bg-gray-300 rounded-sm"> <label>Tyre Patch</label>
+                                                <input type="checkbox" v-model="serviceDetails.tyre_patch"
+                                                    class="bg-gray-300 rounded-sm"> <label>Tyre Patch</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.mushroom_patch" class="bg-gray-300 rounded-sm"> <label>Mushroom Patch</label>
+                                                <input type="checkbox" v-model="serviceDetails.mushroom_patch"
+                                                    class="bg-gray-300 rounded-sm"> <label>Mushroom Patch</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.ac_service" class="bg-gray-300 rounded-sm"> <label>AC Service</label>
+                                                <input type="checkbox" v-model="serviceDetails.ac_service"
+                                                    class="bg-gray-300 rounded-sm"> <label>AC Service</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.battery" class="bg-gray-300 rounded-sm"> <label>Battery</label>
+                                                <input type="checkbox" v-model="serviceDetails.battery"
+                                                    class="bg-gray-300 rounded-sm"> <label>Battery</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.wiper" class="bg-gray-300 rounded-sm"> <label>Wiper</label>
+                                                <input type="checkbox" v-model="serviceDetails.wiper"
+                                                    class="bg-gray-300 rounded-sm"> <label>Wiper</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.car_wash" class="bg-gray-300 rounded-sm"> <label>Car Wash</label>
+                                                <input type="checkbox" v-model="serviceDetails.car_wash"
+                                                    class="bg-gray-300 rounded-sm"> <label>Car Wash</label>
                                             </div>
                                         </div>
                                         <div>
-                                            <button class="bg-green-500 w-[100%]  text-white font-bold 0 text-base p-4 rounded-lg m-3" @click="handleCustomer">Save</button>
+                                            <button
+                                                class="bg-green-500 w-[100%]  text-white font-bold 0 text-base p-4 rounded-lg m-3"
+                                                @click="handleCustomer">Save</button>
                                         </div>
                                     </div>
                                 </div>
@@ -726,8 +745,7 @@
                                             placeholder="Enter your Owner Name">
                                     </p>
                                     <p class="m-2">Owner Mobile No <br>
-                                        <input type="tel" v-if="check"
-                                            v-model="responseData.message[1].owner_mobile_no"
+                                        <input type="tel" v-if="check" v-model="responseData.message[1].owner_mobile_no"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Owner Mobile No.">
                                     </p>
@@ -868,8 +886,6 @@
                 <div class="p-12 pt-24 w-screen ">
                     <div class="flex flex-row justify-between p-1">
                         <h1 class="text-[1.2rem] font-bold mt-5">5 Points Checkup</h1>
-                        <button class="text-[1.2rem]  text-white w-[12rem] h-[3rem] bg-blue-500 rounded-lg"
-                            @click="addTyre">Add</button>
                     </div>
                     <hr class="mt-2 " :style="{ borderWidth: '2px', borderColor: 'gray' }">
                     <div class="grid grid-row space-y-5 mt-4  p-4 mr-[0.1rem] bg-gray-200 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg"
@@ -877,7 +893,8 @@
                         <div class="flex">
                             <div class="grid grid-cols-4 w-[90%] gap-4">
                                 <div class="flex flex-col space-y-1 ml-4">
-                                    <label class="mt-2" :for="'tyre' + index">Tyre</label>
+                                    <label class="mt-2" :for="'tyre' + index">Tyre <span
+                                            class="text-red-500 font-bold">*</span> </label>
                                     <select class="w-[100%] h-[100%] rounded-sm" v-model="tyreData.tyre"
                                         :id="'type' + index" style="border: 1px solid black;"
                                         @change="updateTyreData(index)">
@@ -945,6 +962,10 @@
                                 <label for="PUN">Puncture</label>
                             </div>
                         </div>
+                    </div>
+                    <div class="mt-5">
+                        <button class="text-[1.2rem]  text-white w-[12rem] h-[3rem] bg-blue-500 rounded-lg"
+                            @click="addTyre">Add</button>
                     </div>
                 </div>
             </div>
@@ -1218,16 +1239,20 @@
                 <div class="pt-24 p-12">
                     <div class="flex flex-row justify-between">
                         <h1 class="text-[20px] font-bold mb-1">Tyre Replacement Details</h1>
+
                         <button class=" text-[1.2rem]  text-white w-[12rem] h-[3rem] bg-blue-500 rounded-lg"
                             @click="addTyreReplacement">Add</button>
+
                     </div>
                     <hr class="mt-2 " :style="{ borderWidth: '2px', borderColor: 'gray' }">
                     <div class="pb-5 ">
-                        <div v-for="(tyre, index) in tyres" :key="index"
+                        <div v-for="(tyres, index) in tyres" :key="index"
                             class="grid grid-cols-10 gap-[11rem] mt-7 pb-5 ml-2 border-b border-gray-900 p-2 bg-gray-200 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg">
                             <div class="ml-5 w-[16rem]">
-                                <label class="pt-2" :for="'type' + index">Tyer Position</label><br>
+                                <label class="pt-2" :for="'type' + index">Tyre Position <span
+                                        class="text-red-600 font-bold">*</span></label><br>
                                 <select class="w-[15rem] h-[52px] rounded-sm border-solid border border-black"
+
                                     v-model="tyre.type" :id="'type' + index">
                                     <option value="" selected disabled hidden>Please select...</option>
                                     <option value="Front Left">Front Left</option>
@@ -1240,10 +1265,12 @@
                                     <label :for="'loadIndex' + index">Load Index</label><br>
                                     <input class="w-[15rem] h-[52px] rounded-sm border-solid border border-black"
                                         :id="'loadIndex' + index" type="text" v-model="tyre.loadIndex" @change="saveData(index)">
+
                                 </div>
                             </div>
                             <div class="ml-[100px]">
                                 <div>
+
                                     <label :for="'brand' + index">Brand</label>
                                     <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black" v-model="tyre.brand" @change="saveData(index)">
                                         <option v-for="(tyre, index) in resData" :key="index">{{ tyre.brand }}</option>
@@ -1251,13 +1278,18 @@
                                 </div>
                                 <div class="mt-[20px] w-[16rem]">
                                     <label :for="'speedRating' + index">Speed Rating</label>
-                                    <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                        :id="'speedRating' + index" type="text" v-model="tyre.speedRating"
-                                        @change="saveData(index)">
+                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
+                                        v-model="tyres.speedRating" @change="saveData(index, 'speedRating')">
+                                        <option v-for="(speedRating, speedIndex) in temporaryData.message.speedRating"
+                                            :key="speedIndex">
+                                            {{ speedRating }}
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="ml-[200px]">
                                 <div>
+
                                     <label :for="'size' + index">Size</label>
                                     <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black" v-model="tyre.size" @change="updateFields(tyres[index].size,index,tyres[index].brand)">
                                         <option v-for="(tyre, index) in getSizesForSelectedBrand(tyres[index].brand)" :key="index">{{ tyre }}</option>
@@ -1267,26 +1299,37 @@
                                     <label :for="'pattern' + index">Pattern</label>
                                     <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                         :id="'pattern' + index" type="text" v-model="tyre.pattern" @change="saveData(index)">    
+
                                 </div>
                             </div>
                             <div class="ml-[300px]">
                                 <div>
                                     <label :for="'ttTl' + index">TT/TL</label>
-                                    <input :id="'ttTl' + index"
-                                        class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                        type="text" v-model="tyre.ttTl" @change="saveData(index)">
+                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
+                                        v-model="tyres.ttTl" @change="saveData(index, 'ttTl')">
+                                        <option v-for="(ttTl, ttTlIndex) in temporaryData.message.ttTl"
+                                            :key="ttTlIndex">
+                                            {{ ttTl }}
+                                        </option>
+                                    </select>
                                 </div>
                                 <!-- <div class="mt-[20px]">
                                     <label :for="'item' + index">Item</label>
+
                                     <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                         :id="'item' + index" type="text" v-model="tyre.item" @change="saveData(index)">
                                 </div> -->
+
                             </div>
                             <div class="ml-[400px]">
-                                <FeatherIcon name="x" class="mt-0 ml-2 w-6 h-6 cursor-pointer text-red-500"
+                                <FeatherIcon name="trash-2" class="mt-0 ml-2 w-6 h-6 cursor-pointer text-red-500"
                                     @click="deleteTyreReplacement" />
                             </div>
                         </div>
+                    </div>
+                    <div>
+                        <button class="text-[1.2rem]  text-white w-[12rem] h-[3rem] bg-blue-500 rounded-lg"
+                            @click="addTyreReplacement">Add</button>
                     </div>
                 </div>
             </div>
@@ -1375,25 +1418,36 @@
                         class="bg-blue-500 w-[45%] text-white font-bold  text-base p-4 rounded-lg"
                         @click="previousPage">Previous
                     </button>
-                    <button v-if="currentstep != 4"
+                    <button v-if="currentstep != 4 && responseData && responseData.message && enable"
                         class="bg-blue-500 w-[45%] text-white font-bold  text-base p-4 rounded-lg"
                         @click="nextPageAndHighlight">Next
                     </button>
+                    <button v-if="currentstep == 4" 
+                        @click="dataFinalSubmission"
+                        class="bg-green-700 w-[45%] text-white font-bold  text-base p-4 rounded-lg">
+                        Submit
+                    </button>
                 </div>
                 <div class="bottom-div">
-                    <div class="m-0 p-4">
-                        <ul class="ml-[100px] flex space-x-[120px] text-center">
-                            <li type="disc" :class="{ 'active': currentPage === 'details' }"
-                                @click="setCurrentPage('details', 0)">Details</li>
-                            <li type="disc" :class="{ 'active': currentPage === '5 Points Checkup' }"
-                                @click="setCurrentPage('5 Points Checkup', 1)">5 Points Checkup</li>
-                            <li type="disc" :class="{ 'active': currentPage === 'Required Services' }"
-                                @click="setCurrentPage('Required Services', 2)">Required Services</li>
-                            <li type="disc" :class="{ 'active': currentPage === 'Tyre Replacement Details' }"
-                                @click="setCurrentPage('Tyre Replacement Details', 3)">Tyre Replacement Details</li>
-                            <li type="disc" :class="{ 'active': currentPage === 'Billing Details' }"
-                                @click="setCurrentPage('Billing Details', 4)">Billing Details</li>
-                        </ul>
+                    <div class="bottom-div">
+                        <div class="m-0 p-4">
+                            <ul class="ml-[100px] flex space-x-[120px] text-center">
+                                <li type="disc" :class="{ 'active': currentPage === 'details' }"
+                                    @click="setCurrentPage('details', 0)">Details</li>
+                                <li type="disc" :class="{ 'active': currentPage === '5 Points Checkup' }"
+                                    @click="setCurrentPage('5 Points Checkup', 1)" :disabled="!hasResponse">5 Points
+                                    Checkup</li>
+                                <li type="disc" :class="{ 'active': currentPage === 'Required Services' }"
+                                    @click="setCurrentPage('Required Services', 2)" :disabled="!hasResponse">Required
+                                    Services</li>
+                                <li type="disc" :class="{ 'active': currentPage === 'Tyre Replacement Details' }"
+                                    @click="setCurrentPage('Tyre Replacement Details', 3)" :disabled="!hasResponse">Tyre
+                                    Replacement Details</li>
+                                <li type="disc" :class="{ 'active': currentPage === 'Billing Details' }"
+                                    @click="setCurrentPage('Billing Details', 4)" :disabled="!hasResponse">Billing
+                                    Details</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1402,7 +1456,9 @@
 </template>
 
 <script setup>
+
 import { ref, reactive, watch,computed, onMounted } from 'vue';
+
 import { FeatherIcon } from 'frappe-ui'
 import axios from 'axios';
 
@@ -1456,6 +1512,7 @@ function submitPin() {
         }
     }
 }
+
 
 const jobCard ={}
 const brand=ref([])
@@ -1511,12 +1568,14 @@ const updateFields = (sizes, index,brand) => {
         console.log(`Tyre at index ${index} is undefined.`);
     }
 };
+
 //==========================================================>>> Main Page <<<================================================================================//
 
+const hasResponse = ref(true);
 const noData = ref(false)
 const successData = ref(false)
 const showMessage = (message) => {
-  alert(message);
+    alert(message);
 };
 
 const isEditMode = ref(false)
@@ -1532,52 +1591,52 @@ const spacing = (plate) => {
 
 const dataAssignment = (response) => {
     responseData.value = {
-                    message: [
-                        response.data.message[0],
-                        response.data.message[1] ? response.data.message[1] : {
-                            current_owner: '',
-                            owner_mobile_no: '',
-                            call: '',
-                            whatsapp: '',
-                            sms: '',
-                            current_driver: [{
-                                current_driver: '',
-                                name: '',
-                                mobile_no: '',
-                                call: '',
-                                whatsapp: '',
-                                sms: ''
+        message: [
+            response.data.message[0],
+            response.data.message[1] ? response.data.message[1] : {
+                current_owner: '',
+                owner_mobile_no: '',
+                call: '',
+                whatsapp: '',
+                sms: '',
+                current_driver: [{
+                    current_driver: '',
+                    name: '',
+                    mobile_no: '',
+                    call: '',
+                    whatsapp: '',
+                    sms: ''
 
-                            }],
-                            contact_person: [{
-                                contact_person_name: '',
-                                contact_person_mobile: '',
-                                custom_call: '',
-                                custom_whatsapp: '',
-                                custom_sms: ''
-                            }]
-                        }, 
-                        response.data.message[2] ? response.data.message[2]:{
-                            current_driver: [{
-                                current_driver: '',
-                                name: '',
-                                mobile_no: '',
-                                call: '',
-                                whatsapp: '',
-                                sms: ''
+                }],
+                contact_person: [{
+                    contact_person_name: '',
+                    contact_person_mobile: '',
+                    custom_call: '',
+                    custom_whatsapp: '',
+                    custom_sms: ''
+                }]
+            },
+            response.data.message[2] ? response.data.message[2] : {
+                current_driver: [{
+                    current_driver: '',
+                    name: '',
+                    mobile_no: '',
+                    call: '',
+                    whatsapp: '',
+                    sms: ''
 
-                            }],
-                            contact_person: [{
-                                contact_person_name: '',
-                                contact_person_mobile: '',
-                                custom_call: '',
-                                custom_whatsapp: '',
-                                custom_sms: ''
-                            }]
-                        }
-                    ]
-                };
-        console.log("data assignment", responseData.value);
+                }],
+                contact_person: [{
+                    contact_person_name: '',
+                    contact_person_mobile: '',
+                    custom_call: '',
+                    custom_whatsapp: '',
+                    custom_sms: ''
+                }]
+            }
+        ]
+    };
+    console.log("data assignment", responseData.value);
     return responseData.value;
 }
 const check = ref(false)
@@ -1588,16 +1647,23 @@ const search = async () => {
     console.log('checking data', data);
     try {
         if (data.license_plate.trim() !== "") {
+
             const response = await axios.post(`${even}/api/method/tyre.api.get_details`, data);
             if(response.data.message === "Enter a Valid vehicle number"){
+
                 check.value = false;
                 noData.value = true;
+                hasResponse.value = true
                 setTimeout(() => {
                     noData.value = false;
                 }, 2000);
+                // The entire UI will show no data if searchdata has no value.
+                return dataAssignment(response)
             }
             else {
                 check.value = true;
+                enable.value = true;
+                hasResponse.value = false;
                 console.log("Response:", response.data);
                 return dataAssignment(response)
             }
@@ -1620,6 +1686,10 @@ function previousPage() {
         currentPage.value = getPageName(currentstep.value);
     }
 }
+const showWarning = ref(false)
+const close = () => {
+    showWarning.value = false;
+}
 
 function nextPageAndHighlight() {
     if (currentstep.value < maxStep) {
@@ -1629,31 +1699,52 @@ function nextPageAndHighlight() {
         // if (currentstep.value == 3) {
         //     checkup(requireService)
         // }
+
         switch(currentstep.value){
             case 1: 
                 jobCard["vehicle_number"]=searchQuery.value;
+
                 console.log(jobCard)
                 console.log("****1****")
                 break;
             case 2:
-                jobCard["checkup"]=tyreDatas.value;
+                jobCard["checkup"] = tyreDatas.value;
+                for (let i = 0; i < tyreDatas.value.length; i++) {
+                    const tyre = tyreDatas.value[i];
+                    console.log('tyre name', tyre.tyre);
+                    if (!tyre.tyre) {
+                        showWarning.value = true
+                        console.log('showwarning value', showWarning.value);
+                        currentstep.value = 1;
+                        return;
+                    }
+                }
                 console.log(jobCard)
                 console.log("****2****")
                 break;
             case 3:
-                jobCard["service"]=requireService.value
+                jobCard["service"] = requireService.value
                 console.log(jobCard)
                 console.log("****3****")
                 break;
             case 4:
-                jobCard["replace"]=tyres.value
+                jobCard["replace"] = tyres.value
                 console.log(jobCard)
                 console.log("****4****")
+                for (let i = 0; i < tyres.value.length; i++) {
+                    const tyre = tyres.value[i];
+                    if (!tyre.tyrePositions) {
+                        showWarning.value = true
+                        alert("Please fill required fields!");
+                        currentstep.value = 3;
+                        return;
+                    }
+                }
                 checkup(jobCard);
-                break;            
+                break;
             case 5:
                 checkup(jobCard);
-                break;    
+                break;
         }
     }
 }
@@ -1676,9 +1767,12 @@ function getPageName(step) {
 }
 
 const setCurrentPage = (page, step) => {
-    currentPage.value = page;
-    currentstep.value = step;
-}
+    if (!hasResponse.value) {
+        currentPage.value = page;
+        currentstep.value = step;
+    }
+};
+
 const vehicleDetails = ref({
     name: '',
     vehicle_brand: '',
@@ -1754,13 +1848,13 @@ const addVehicleData = async () => {
         alert("Vehicle already Exist!");
         return;
     }
-    else{
+    else {
         showConfirmation.value = true;
         showNewVehicle.value = false;
     }
 };
 
-
+const enable = ref(false);
 const confirmSave = async () => {
     console.log('confirm page');
     showConfirmation.value = false;
@@ -1775,14 +1869,16 @@ const confirmSave = async () => {
         data[fieldName] = value;
     });
     const searchData = data.name;
-    console.log('searchdata in confirm page:',searchData);
+    console.log('searchdata in confirm page:', searchData);
     const json_data = { data: JSON.stringify(data) };
     console.log(json_data);
     try {
         const response = await axios.post(`${even}/api/method/tyre.api.store_vehicle_details`, json_data);
         console.log('vehicle add after response', response);
         if (responseData.value && responseData.value.message) {
+            enable.value = true;
             check.value = true;
+            hasResponse.value = false;
             dataAssignment(response);
             console.log("vehicle data in responseData.value:", responseData.value.message[0].alignment);
             console.log("vehicle data in responseData.value:", responseData.value.message[0].name);
@@ -1806,8 +1902,9 @@ const confirmSave = async () => {
 };
 
 const cancelSave = () => {
-  showConfirmation.value = false;
-  clearVehicleData();
+    showConfirmation.value = false;
+    enable.value = false;
+    clearVehicleData();
 };
 
 const addModifiedData = async () => {
@@ -2126,52 +2223,54 @@ const selectedVariant = ref(null);
 const selectedBrand = ref(null);
 const quantity = ref('');
 const serviceDetails = ref({
-    alignment:0,
-    oil_change:0,
-    inflation:0,
-    tyre_edge:0,
-    mushroom_patch:0,
-    battery:0,
-    car_wash:0,
-    rotation:0,
-    balancing:0,
-    puncture:0,
-    tyre_patch:0,
-    ac_service:0,
-    wiper:0
+    alignment: 0,
+    oil_change: 0,
+    inflation: 0,
+    tyre_edge: 0,
+    mushroom_patch: 0,
+    battery: 0,
+    car_wash: 0,
+    rotation: 0,
+    balancing: 0,
+    puncture: 0,
+    tyre_patch: 0,
+    ac_service: 0,
+    wiper: 0
 })
 
-const handleCustomer =async ()=>{
+const handleCustomer = async () => {
     const customerDetails = {
-        current_owner:customerData.value.current_owner,
-        owner_mobile_no:customerData.value.owner_mobile_no,
-        selectedBrand:selectedBrand.value,
-        variant:selectedVariant.value,
-        quantity:quantity.value,
-        whatsapp:customerData.value.whatsappChecked,
-        call:customerData.value.callChecked,
-        sms:customerData.value.smsChecked,
-        services:serviceDetails.value
+        current_owner: customerData.value.current_owner,
+        owner_mobile_no: customerData.value.owner_mobile_no,
+        selectedBrand: selectedBrand.value,
+        variant: selectedVariant.value,
+        quantity: quantity.value,
+        whatsapp: customerData.value.whatsappChecked,
+        call: customerData.value.callChecked,
+        sms: customerData.value.smsChecked,
+        services: serviceDetails.value
     }
-    console.log("checking Customer Details",customerDetails)
+    console.log("checking Customer Details", customerDetails)
     try {
         const json_data = { data: JSON.stringify(customerDetails) };
+
         console.log('checking customer details',json_data);
         const response = await axios.post(`${even}/api/method/tyre.api.store_customer_details`, json_data)
         console.log('response from customer details',response.data);
 
+
     } catch (error) {
-        console.log("Temporary customer details page:",error)
+        console.log("Temporary customer details page:", error)
     }
 }
 
 
 const selectedBrandVariants = computed(() => {
-    console.log('checking',selectedBrand.value);
-    if(selectedBrand.value){
-        for(let brand of responseData.value.message){
-            if(brand.name === selectedBrand.value){
-                console.log('variants checking',brand.variants);
+    console.log('checking', selectedBrand.value);
+    if (selectedBrand.value) {
+        for (let brand of responseData.value.message) {
+            if (brand.name === selectedBrand.value) {
+                console.log('variants checking', brand.variants);
                 return brand.variants
             }
         }
@@ -2222,46 +2321,46 @@ const returnSearch = async (search) => {
                     },
                     {
                         current_owner: '',
-                            owner_mobile_no: '',
+                        owner_mobile_no: '',
+                        call: '',
+                        whatsapp: '',
+                        sms: '',
+                        current_driver: [{
+                            current_driver: '',
+                            name: '',
+                            mobile_no: '',
                             call: '',
                             whatsapp: '',
-                            sms: '',
-                            current_driver: [{
-                                current_driver: '',
-                                name: '',
-                                mobile_no: '',
-                                call: '',
-                                whatsapp: '',
-                                sms: ''
+                            sms: ''
 
-                            }],
-                            contact_person: [{
-                                contact_person_name: '',
-                                contact_person_mobile: '',
-                                custom_call: '',
-                                custom_whatsapp: '',
-                                custom_sms: ''
-                            }]
+                        }],
+                        contact_person: [{
+                            contact_person_name: '',
+                            contact_person_mobile: '',
+                            custom_call: '',
+                            custom_whatsapp: '',
+                            custom_sms: ''
+                        }]
                     },
                     {
                         current_driver: [{
-                                current_driver: '',
-                                name: '',
-                                mobile_no: '',
-                                call: '',
-                                whatsapp: '',
-                                sms: ''
+                            current_driver: '',
+                            name: '',
+                            mobile_no: '',
+                            call: '',
+                            whatsapp: '',
+                            sms: ''
 
-                            }],
-                            contact_person: [{
-                                contact_person_name: '',
-                                contact_person_mobile: '',
-                                custom_call: '',
-                                custom_whatsapp: '',
-                                custom_sms: ''
-                            }]
+                        }],
+                        contact_person: [{
+                            contact_person_name: '',
+                            contact_person_mobile: '',
+                            custom_call: '',
+                            custom_whatsapp: '',
+                            custom_sms: ''
+                        }]
                     }
-                ]
+                    ]
                 };
                 console.log(response.data);
                 return responseData.value;
@@ -2559,7 +2658,7 @@ function handelCheck(data) {
 const tyrePositions = ['Front Left', 'Front Right', 'Rear Left', 'Rear Right', 'Spare'];
 
 const tyres = ref([{
-    type: '',
+    tyrePositions: '',
     loadIndex: '',
     brand: '',
     speedRating: '',
@@ -2569,7 +2668,9 @@ const tyres = ref([{
     item: ''
 }]);
 
+
 const size =ref([])
+
 const saveData = (index) => {
     console.log(resData.value);
     console.log(tyres.value);
@@ -2666,6 +2767,10 @@ const removeRow = (index) => {
     tableData.value.splice(index, 1);
     calculateTotals();
 };
+
+const dataFinalSubmission = () => {
+    console.log("Final submission process going on....");
+}
 
 </script>
 
