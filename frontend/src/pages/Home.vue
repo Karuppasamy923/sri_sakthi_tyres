@@ -2279,8 +2279,8 @@ const addTyre = () => {
 
 const updateTyreData = (index) => {
     const tyre = tyreDatas.value[index];
-    console.log('Updated tyre data:', tyre);
-    console.log(tyreDatas.value);
+    // console.log('Updated tyre data:', tyre);
+    // console.log(tyreDatas.value);
 };
 
 const deleteTyre = (index) => {
