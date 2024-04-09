@@ -310,23 +310,30 @@ def job_card(data):
 @frappe.whitelist(allow_guest=True)
 def get_brand_details():
 	result = {}
-	data = frappe.db.sql(""" SELECT  Distinct b.name,bp.pattern,bp.size,s.load_index,s.speed_rating,bp.tyer_type  FROM `tabBrand` as b 
-						join `tabBrand Details` as bp on b.name = bp.parent 
-						 JOIN `tabSize` as s ON bp.size = s.name """,as_dict=True)
+	data = frappe.db.sql("""
+		SELECT DISTINCT b.name, bp.pattern, bp.size, s.load_index, s.speed_rating, bp.tyer_type
+		FROM `tabBrand` AS b 
+		JOIN `tabBrand Details` AS bp ON b.name = bp.parent 
+		JOIN `tabSize` AS s ON bp.size = s.name
+	""", as_dict=True)
 
-	# print(data)
 	for row in data:
+		brand_name = row["name"]
+		size_info = {
+			"size": row["size"],
+			"load_index": row["load_index"],
+			"speed_rating": row["speed_rating"],
+			"tyer_type": row["tyer_type"],
+			"pattern": row["pattern"]
+		}
 
-		if row.name not in result:
-			result[row.name] = {row.size: [{"load_index": row.load_index,"speed_rating": row.speed_rating, "tyer_type": row.tyer_type , "pattern": row.pattern}]}
+		if brand_name not in result:
+			result[brand_name] = {"brand": brand_name, brand_name: []}
 
-		elif row.size in result[row.name]:
-			result[row.name][row.size].append({"load_index": row.load_index,"speed_rating": row.speed_rating, "tyer_type": row.tyer_type , "pattern": row.pattern})
+		if size_info not in result[brand_name][brand_name]:
+			result[brand_name][brand_name].append(size_info)
 
-
-		elif row.size not in result[row.name]:
-			result[row.name][row.size] = [{"load_index": row.load_index,"speed_rating": row.speed_rating, "tyer_type": row.tyer_type , "pattern": row.pattern}]
-
+	print(result)
 	return result
 
 # function to create job card
