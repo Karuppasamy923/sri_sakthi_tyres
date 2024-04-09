@@ -226,7 +226,10 @@
   "sp_tt_tl",
   "sp_size",
   "column_break_bwhf",
-  "sp_item"
+  "sp_item",
+  "billing_details_tab",
+  "billing_items",
+  "total_amount"
  ],
  "fields": [
   {
@@ -1374,6 +1377,22 @@
    "label": "Mushroom Patch"
   },
   {
+<<<<<<< HEAD
+   "fieldname": "billing_details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Billing Details"
+  },
+  {
+   "fieldname": "billing_items",
+   "fieldtype": "Table",
+   "label": "Billing Items",
+   "options": "Tyre Billing Details"
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Currency",
+   "label": "Total Amount"
+=======
    "default": "0",
    "fieldname": "sms",
    "fieldtype": "Check",
@@ -1384,12 +1403,17 @@
    "fieldname": "driver_sms",
    "fieldtype": "Check",
    "label": "SMS"
+>>>>>>> 70e7cf62a589e7929af522f644de1c071c57b783
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
+<<<<<<< HEAD
+ "modified": "2024-04-09 12:16:40.866840",
+=======
  "modified": "2024-04-09 11:25:54.505292",
+>>>>>>> 70e7cf62a589e7929af522f644de1c071c57b783
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "Tyre Job Card",
