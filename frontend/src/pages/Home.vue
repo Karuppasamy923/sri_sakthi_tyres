@@ -1282,6 +1282,8 @@ function submitPin() {
         }
     }
 }
+
+const jobCard ={}
 //==========================================================>>> Main Page <<<================================================================================//
 
 const isEditMode = ref(false)
@@ -1468,13 +1470,32 @@ function previousPage() {
 }
 
 function nextPageAndHighlight() {
-  if (currentstep.value < maxStep) {
-      currentstep.value++;
-      currentPage.value = getPageName(currentstep.value);
-      if(currentstep.value == 3){
-        checkup(requireService)
-      }
-  }
+    if (currentstep.value < maxStep) {
+        currentstep.value++;
+        currentPage.value = getPageName(currentstep.value);
+        // if (currentstep.value == 3) {
+        //     checkup(requireService)
+        // }
+        switch(currentstep.value){
+            case 1:
+                jobCard["user"]=responseData.value;
+                console.log(jobCard)
+                break;
+            case 2:
+                jobCard["checkup"]=tyreDatas.value;
+                console.log(jobCard)
+                break;
+            case 3:
+                jobCard["service"]=requireService.value
+                console.log(jobCard)
+                checkup(jobCard)
+                break;
+            case 4:
+                jobCard["replace"]=tyres.value
+                checkup(jobCard)
+                break;            
+        }
+    }
 }
 
 function getPageName(step) {
@@ -2027,8 +2048,8 @@ const addTyre = () => {
 
 const updateTyreData = (index) => {
     const tyre = tyreDatas.value[index];
-    console.log('Updated tyre data:', tyre);
-    console.log(tyreDatas.value);
+    // console.log('Updated tyre data:', tyre);
+    // console.log(tyreDatas.value);
 };
 
 const deleteTyre = (index) => {
@@ -2154,13 +2175,13 @@ const requireService=ref({
 })
 function checkup(data){
     console.log("******")
-    console.log(data.value)
-    const json_data = { data: JSON.stringify(data.value) }
+    console.log(data)
+    const json_data = { data: data }
     console.log(json_data);
-    try{
-        const response= axios.post("http://192.168.1.39:8002/api/method/tyre.api.job_card",json_data);
+    try {
+        const response = axios.post("http://192.168.1.53:8001/api/method/tyre.api.job_card", json_data);
         console.log(response);
-    }catch (error){
+    } catch (error) {
         console.error("error");
     }
 }
