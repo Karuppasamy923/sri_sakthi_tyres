@@ -882,11 +882,11 @@
                                         :id="'type' + index" style="border: 1px solid black;"
                                         @change="updateTyreData(index)">
                                         <option value="" selected disabled hidden>Please select...</option>
-                                        <option value="Front-Left">Front-Left</option>
-                                        <option value="Front-Right">Front-Right</option>
-                                        <option value="Back-Left">Back-Left</option>
-                                        <option value="Back-Right">Back-Right</option>
-                                        <option value="Stephanie">Spare-wheel</option>
+                                        <option value="Front Left">Front Left</option>
+                                        <option value="Front Right">Front Right</option>
+                                        <option value="Rear Left">Rear Left</option>
+                                        <option value="Rear-Right">Rear Right</option>
+                                        <option value="Spare Tyre">Spare Tyre</option>
                                     </select>
                                 </div>
                                 <div class="flex flex-col space-y-1">
@@ -1236,18 +1236,18 @@
                                     <option value="Back-Right">Back-Right</option>
                                     <option value="Stephanie">Spare-wheel</option>
                                 </select>
-                                <!-- <p class="text-[20px] font-bold mt-8">{{ position }} Tyre</p> -->
-                                <!-- <div class="mt-[20px]">
+                                <p class="text-[20px] font-bold mt-8">{{ position }} Tyre</p>
+                                <div class="mt-[20px]">
                                     <label :for="'loadIndex' + index">Load Index</label><br>
                                     <input class="w-[15rem] h-[52px] rounded-sm border-solid border border-black"
                                         :id="'loadIndex' + index" type="text" v-model="tyre.loadIndex"
                                         @change="saveData(index)">
-                                </div> -->
-                                <div class="mt-[20px]">
+                                </div>
+                                <!-- <div class="mt-[20px]">
                                     <label :for="'size' + index">Size</label>
                                     <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                         :id="'size' + index" type="text" v-model="tyre.size" @change="saveData(index)">
-                                </div>
+                                </div> -->
                             </div>
                             <div class="ml-[100px]">
                                 <div>
@@ -1423,6 +1423,7 @@ import { ref, reactive, watch,computed } from 'vue';
 import { FeatherIcon } from 'frappe-ui'
 import axios from 'axios';
 
+const even=window.location.origin
 const selectImg = ref(true);
 const Auth = ref(true)
 const incorrect = ref(false);
@@ -1551,7 +1552,7 @@ const search = async () => {
     console.log('checking data', data);
     try {
         if (data.license_plate.trim() !== "") {
-            const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.get_details", data);
+            const response = await axios.post(`${even}/api/method/tyre.api.get_details`, data);
             if(response.data.message === "Enter a Valid vehicle number"){
                 check.value = false;
                 noData.value = true;
@@ -1742,7 +1743,7 @@ const confirmSave = async () => {
     const json_data = { data: JSON.stringify(data) };
     console.log(json_data);
     try {
-        const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.store_vehicle_details", json_data);
+        const response = await axios.post(`${even}/api/method/tyre.api.store_vehicle_details`, json_data);
         console.log('vehicle add after response', response);
         if (responseData.value && responseData.value.message) {
             check.value = true;
@@ -1788,7 +1789,7 @@ const addModifiedData = async () => {
     console.log(modifiedData)
     try {
         const json_data = { data: JSON.stringify(modifiedData) }
-        const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.store_vehicle_details", json_data);
+        const response = await axios.post(`${even}/api/method/tyre.api.store_vehicle_details`, json_data);
         console.log(response);
         returnSearch(name)
         alert("Successfully Modified Vehicle Data!")
@@ -1952,7 +1953,7 @@ const addCustomerData = async () => {
         console.log('before checking customer json_data', json_data);
         console.log(json_data);
         try {
-            const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.store_customer_details", json_data)
+            const response = await axios.post(`${even}/api/method/tyre.api.store_customer_details`, json_data)
             check.value = true;
             console.log(response);
             if (responseData.value && responseData.value.message) {
@@ -2060,7 +2061,7 @@ const addCustomerModifiedData = async () => {
     const json_data = { data: JSON.stringify(modifiedData) };
     console.log("Modified data", json_data)
     try {
-        const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.store_customer_details", json_data);
+        const response = await axios.post(`${even}/api/method/tyre.api.store_customer_details`, json_data);
         check.value = true;
         console.log(response);
         returnSearch(name)
@@ -2120,7 +2121,7 @@ const handleCustomer =async ()=>{
     try {
         const json_data = { data: JSON.stringify(customerDetails) };
         console.log('checking customer details',json_data);
-        const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.store_customer_details", json_data)
+        const response = await axios.post(`${even}/api/method/tyre.api.store_customer_details`, json_data)
         console.log('response from customer details',response.data);
 
     } catch (error) {
@@ -2143,7 +2144,7 @@ const selectedBrandVariants = computed(() => {
 
 const handleEnquiry = async () => {
     try {
-        const response = await axios.get("http://192.168.1.39:8002/api/method/tyre.api.stock_details");
+        const response = await axios.get(`${even}/api/method/tyre.api.stock_details`);
         console.log('response data for customer details', response.data);
         responseTyreData.value = response.data;
         console.log(responseTyreData.value);
@@ -2168,7 +2169,7 @@ const returnSearch = async (search) => {
     console.log('checking data', data);
     try {
         if (data.license_plate.trim() !== "") {
-            const response = await axios.post("http://192.168.1.39:8002/api/method/tyre.api.get_details", data);
+            const response = await axios.post(`${even}/api/method/tyre.api.get_details`, data);
             check.value = true;
             console.log('returnSearch data', response);
             if (response.data.message === "") {
@@ -2394,7 +2395,7 @@ function checkup(data) {
     const json_data = { data: data }
     console.log(json_data);
     try {
-        const response = axios.post("http://192.168.1.39:8002/api/method/tyre.api.job_card", json_data);
+        const response = axios.post(`${even}/api/method/tyre.api.job_card`, json_data);
         console.log(response);
     } catch (error) {
         console.error("error");

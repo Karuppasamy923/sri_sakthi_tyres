@@ -328,6 +328,7 @@ def get_brand_details():
 			result[row.name][row.size] = [{"load_index": row.load_index,"speed_rating": row.speed_rating, "tyer_type": row.tyer_type , "pattern": row.pattern}]
 
 	return result
+
 # function to create job card
 @frappe.whitelist(allow_guest=True)
 def stock_details():
