@@ -32,13 +32,13 @@
   "mobile_no",
   "whatsapp",
   "call",
-  "mail",
+  "sms",
   "cb_7",
   "driver_name",
   "driver_mobile",
   "driver_whatsapp",
   "driver_call",
-  "driver_mail",
+  "driver_sms",
   "cb_8",
   "contact_person",
   "contact_mobile_no",
@@ -417,8 +417,9 @@
   },
   {
    "fieldname": "driver_name",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "in_filter": 1,
+   "in_list_view": 1,
    "label": "Driver",
    "options": "Driver"
   },
@@ -477,12 +478,6 @@
    "fieldname": "call",
    "fieldtype": "Check",
    "label": "Call"
-  },
-  {
-   "default": "0",
-   "fieldname": "mail",
-   "fieldtype": "Check",
-   "label": "Mail"
   },
   {
    "fieldname": "5_points_checkup_tab",
@@ -1322,12 +1317,6 @@
   },
   {
    "default": "0",
-   "fieldname": "driver_mail",
-   "fieldtype": "Check",
-   "label": "Mail"
-  },
-  {
-   "default": "0",
    "fieldname": "contact_whatsapp",
    "fieldtype": "Check",
    "label": "Whatsapp"
@@ -1383,12 +1372,24 @@
    "fieldname": "mushroom_patch",
    "fieldtype": "Check",
    "label": "Mushroom Patch"
+  },
+  {
+   "default": "0",
+   "fieldname": "sms",
+   "fieldtype": "Check",
+   "label": "SMS"
+  },
+  {
+   "default": "0",
+   "fieldname": "driver_sms",
+   "fieldtype": "Check",
+   "label": "SMS"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-04-08 18:03:41.092944",
+ "modified": "2024-04-09 11:25:54.505292",
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "Tyre Job Card",
