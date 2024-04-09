@@ -32,13 +32,13 @@
   "mobile_no",
   "whatsapp",
   "call",
-  "mail",
+  "sms",
   "cb_7",
   "driver_name",
   "driver_mobile",
   "driver_whatsapp",
   "driver_call",
-  "driver_mail",
+  "driver_sms",
   "cb_8",
   "contact_person",
   "contact_mobile_no",
@@ -335,8 +335,9 @@
    "label": "Vehicle Model"
   },
   {
+   "default": "0",
    "fieldname": "free_alignment_kms",
-   "fieldtype": "Int",
+   "fieldtype": "Check",
    "label": "Free Alignment (kms)"
   },
   {
@@ -349,8 +350,9 @@
    "label": "Monthly Avg Km"
   },
   {
+   "default": "0",
    "fieldname": "paid_alignment_kms",
-   "fieldtype": "Int",
+   "fieldtype": "Check",
    "label": "Paid Alignment (kms)"
   },
   {
@@ -418,8 +420,9 @@
   },
   {
    "fieldname": "driver_name",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "in_filter": 1,
+   "in_list_view": 1,
    "label": "Driver",
    "options": "Driver"
   },
@@ -478,12 +481,6 @@
    "fieldname": "call",
    "fieldtype": "Check",
    "label": "Call"
-  },
-  {
-   "default": "0",
-   "fieldname": "mail",
-   "fieldtype": "Check",
-   "label": "Mail"
   },
   {
    "fieldname": "5_points_checkup_tab",
@@ -1323,12 +1320,6 @@
   },
   {
    "default": "0",
-   "fieldname": "driver_mail",
-   "fieldtype": "Check",
-   "label": "Mail"
-  },
-  {
-   "default": "0",
    "fieldname": "contact_whatsapp",
    "fieldtype": "Check",
    "label": "Whatsapp"
@@ -1386,6 +1377,7 @@
    "label": "Mushroom Patch"
   },
   {
+<<<<<<< HEAD
    "fieldname": "billing_details_tab",
    "fieldtype": "Tab Break",
    "label": "Billing Details"
@@ -1400,12 +1392,28 @@
    "fieldname": "total_amount",
    "fieldtype": "Currency",
    "label": "Total Amount"
+=======
+   "default": "0",
+   "fieldname": "sms",
+   "fieldtype": "Check",
+   "label": "SMS"
+  },
+  {
+   "default": "0",
+   "fieldname": "driver_sms",
+   "fieldtype": "Check",
+   "label": "SMS"
+>>>>>>> 70e7cf62a589e7929af522f644de1c071c57b783
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2024-04-09 12:16:40.866840",
+=======
+ "modified": "2024-04-09 11:25:54.505292",
+>>>>>>> 70e7cf62a589e7929af522f644de1c071c57b783
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "Tyre Job Card",
