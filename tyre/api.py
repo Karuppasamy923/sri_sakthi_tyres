@@ -278,15 +278,31 @@ def store_customer_details(data):
 # function to create job card
 @frappe.whitelist(allow_guest=True)
 def job_card(data):
-    print(data.get("user").get("message"))
+    print(data)
     
     doc=frappe.new_doc("Tyre Job Card")
     ##=======Main Page===============##
+    ##*******vehicle details*********##
     doc.vehicle_no=data.get("user").get("message")[0]['license_plate'] if len(data.get("user").get("message")) and "license_plate" in data.get("user").get("message")[0] else ""
     doc.vehicle_brand=data.get("user").get("message")[0]['vehicle_brand'] if len(data.get("user").get("message")) and "vehicle_brand" in data.get("user").get("message")[0] else ""
     doc.vehicle_model_name=data.get("user").get("message")[0]['vehicle_model'] if len(data.get("user").get("message")) and "vehicle_model" in data.get("user").get("message")[0] else ""
     doc.tyre_change_km=data.get("user").get("message")[0]['tyre_change'] if len(data.get("user").get("message")) and "tyre_change" in data.get("user").get("message")[0] else ""
     doc.odo_reading_kms=data.get("user").get("message")[0]['last_odometer_reading'] if len(data.get("user").get("message")) and "last_odometer_reading" in data.get("user").get("message")[0] else ""
+    ##*******owner Details***********##
+    doc.customer=data.get("user").get("message")[1]['current_owner'] if len(data.get("user").get("message")) and "current_owner" in data.get("user").get("message")[1] else ""
+    doc.mobile_no=data.get("user").get("message")[1]['owner_mobile_no'] if len(data.get("user").get("message")) and "owner_mobile_no" in data.get("user").get("message")[1] else ""
+    print(data.get("user").get("message")[1]['owner_mobile_no'])
+    print(doc.mobile_no)
+    doc.whatsapp=data.get("user").get("message")[1]['whatsapp'] if len(data.get("user").get("message")) and "whatsapp" in data.get("user").get("message")[1] else ""
+    doc.call=data.get("user").get("message")[1]['call'] if len(data.get("user").get("message")) and "call" in data.get("user").get("message")[1] else ""
+    doc.sms=data.get("user").get("message")[1]['sms'] if len(data.get("user").get("message")) and "sms" in data.get("user").get("message")[1] else ""
+    ##******primary details**********##
+    doc.driver_name=data.get("user").get("message")[2][0]['full_name'] if len(data.get("user").get("message")) and len(data.get("user").get("message")[2]) and "full_name" in data.get("user").get("message")[2][0] else ""
+    print(doc.driver_name)
+    doc.driver_mobile=data.get("user").get("message")[2][0]['cell_number'] if len(data.get("user").get("message")) and len(data.get("user").get("message")[2]) and "cell_number" in data.get("user").get("message")[2][0] else ""
+    doc.driver_whatsapp=data.get("user").get("message")[2][0]['custom_whatsapp_check'] if len(data.get("user").get("message")) and len(data.get("user").get("message")[2]) and "custom_whatsapp_check" in data.get("user").get("message")[2][0] else ""
+    doc.driver_call=data.get("user").get("message")[2][0]['custom_call_check'] if len(data.get("user").get("message")) and len(data.get("user").get("message")[2]) and "custom_call_check" in data.get("user").get("message")[2][0] else ""
+    doc.driver_sms=data.get("user").get("message")[2][0]['custom_sms_check'] if len(data.get("user").get("message")) and len(data.get("user").get("message")[2]) and "custom_sms_check" in data.get("user").get("message")[2][0] else ""
     ##=======5point check up===============##
     
     
@@ -328,7 +344,7 @@ def job_card(data):
     doc.wiper_detail=data.get("service").get("wiper")
     doc.car_wash_detail=data.get("service").get("car_wash")
     doc.save(ignore_permissions=True)
-    print(doc)
+    print(doc.name)
     
 # function to create job card
 @frappe.whitelist(allow_guest=True)
