@@ -361,6 +361,7 @@ def job_card(data):
 	}
 
 @frappe.whitelist(allow_guest=True)
+
 def lead(data):
 	data = frappe._dict(data)
 	lead_user_details = {
@@ -415,6 +416,7 @@ def get_size(brand):
 @frappe.whitelist(allow_guest=True)
 def get_pattern(brand, size):
 	return frappe.get_all("Brand Details", {"parent": brand, "size": size}, ["pattern", "tyer_type"])
+
 
 # function to create job card
 @frappe.whitelist(allow_guest=True)
