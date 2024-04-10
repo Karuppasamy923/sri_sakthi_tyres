@@ -93,26 +93,22 @@
             <div v-if="currentstep == 0 && Auth">
                 <div class="pt-24">
                     <div v-if="currentstep == 0">
-                        <div>
-                            <div class="flex justify-end">
-                            </div>
-                        </div>
                         <div v-if="noData">
                             <div class="flex justify-center">
                                 <span class="font-medium text-red-500">No data found!</span>
                             </div>
                         </div>
-                        <!-- <div v-if="successData">
+                        <div v-if="successData">
                             <div class="flex justify-center">
                                 <span class="font-medium text-green-500">Data added successfully!</span>
                             </div>
-                        </div> -->
+                        </div>
 
                         <div v-if="showConfirmation"
                             class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
                             <div class="bg-white rounded-lg p-8 shadow-xl">
                                 <h2 class="text-xl font-semibold mb-4">Confirm Save</h2>
-                                <p class="mb-4">Are you sure want to save the data?</p>
+                                <p class="mb-4">Are you sure you want to save the details?</p>
                                 <div class="flex justify-end">
                                     <button @click="confirmSave"
                                         class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
@@ -121,6 +117,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div v-if="showWarning"
                             class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
                             <div class="bg-white rounded-lg p-8 shadow-xl">
@@ -136,14 +133,16 @@
                             <div class="bg-white rounded-lg p-8 shadow-xl">
                                 <p class="mb-4" v-if="vehicleNumber">Please fill the required fields</p>
                                 <p class="mb-4" v-if="vehicleExist">Vehicle already exists</p>
-                                <p class="mb-4" v-if="successData">Data added successfully</p>
+                                <p class="mb-4" v-if="successData">Details added successfully</p>
                                 <p class="mb-4" v-if="modifyAlert">Successfully modified vehicle data</p>
                                 <p class="mb-4" v-if="notVehicleAlert">Vehicle not exists</p>
-                                <p class="mb-4" v-if="notCustomerAlert">Please fill the Customer details & Vehicle number</p>
+                                <p class="mb-4" v-if="noVehicleNumber">Enter vehicle number</p>
+                                <p class="mb-4" v-if="notCustomerAlert">Please fill the Customer details</p>
                                 <p class="mb-4" v-if="notEmployeeAlert">Please add atleast one Employee</p>
                                 <p class="mb-4" v-if="notEmpDetailAlert">Please fill required Employee details</p>
                                 <div class="flex justify-center">
-                                    <button @click="closed" v-if="vehicleNumber || vehicleExist || notCustomerAlert || notEmployeeAlert || notEmpDetailAlert || notVehicleAlert"
+                                    <button @click="closed"
+                                        v-if="vehicleNumber || vehicleExist || notCustomerAlert || notEmployeeAlert || notEmpDetailAlert || notVehicleAlert || noVehicleNumber"
                                         class="bg-red-500 text-white font-semibold px-4 py-2 rounded mr-2">Ok</button>
                                     <button @click="close" v-if="successData || modifyAlert"
                                         class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Ok</button>
@@ -153,11 +152,11 @@
 
                         <div class="flex justify-center m-5">
                             <input type="text" class="w-[338px] h-[52px] rounded-sm border-solid border border-black"
-                                v-model="searchQuery" @keyup.enter="search" placeholder="Vehicle Number">
+                                v-model="searchQuery" @keyup.enter="search" placeholder="Enter Vehicle Number">
                             <button class="bg-blue-500 w-[150px] text-white font-bold text-base p-4 rounded-lg ml-3"
                                 @click="search">Search</button>
                         </div>
-                        <div class="grid grid-cols-2 gap-3" v-if="responseData && responseData.message && enable">
+                        <div class="grid grid-cols-2 gap-3" v-if="responseData && responseData.message && check">
                             <Card class="bg-gray-200">
                                 <div>
                                     <h4 class="text-[20px] font-bold">Vehicle Details</h4>
@@ -168,7 +167,7 @@
                                                 <label>Vehicle Number&emsp;&nbsp;:&nbsp;</label>
                                                 <label>
                                                     {{ responseData && responseData.message &&
-                                                        responseData.message[0]?.name || 'No data' }}
+                                                    responseData.message[0]?.name || 'No data' }}
                                                 </label>
                                             </div>
                                             <div class="mt-2">
@@ -211,7 +210,7 @@
                                                 <label class="mt-3">
                                                     {{ responseData && responseData.message &&
                                                         responseData.message[0]?.last_odometer_reading
-                                                        || 'No data' }}</label>
+                                                    || 'No data' }}</label>
                                             </div>
                                             <div class="mt-2">
                                                 <label>Alignment (kms)&nbsp;&nbsp;:&nbsp;</label>
@@ -260,12 +259,13 @@
                                                     &nbsp;&nbsp;<label>Call</label>
                                                 </span>
                                             </div>
+                                            <!-- <div v-for="(employee, index) in responseData.message[1]?.current_driver"
+                                                :key="index"> -->
                                             <div class="mt-2">
                                                 <label>Driver Name&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">
                                                     {{ responseData &&
-                                                        responseData.message && responseData.message[2][0]?.full_name ||
-                                                        'No data' }}
+                                                        responseData.message && responseData.message[2][0]?.full_name || 'No data' }}
                                                 </label>
                                                 <br>
                                                 <input type="checkbox"
@@ -283,6 +283,9 @@
                                                     &nbsp;&nbsp;<label>Call</label>
                                                 </span>
                                             </div>
+                                            <!-- </div> -->
+                                            <!-- <div v-for="(contact, index) in responseData.message[1]?.contact_person"
+                                                :key="index"> -->
                                             <div class="mt-2">
                                                 <label>Contact Person&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">
@@ -305,6 +308,7 @@
                                                     &nbsp;&nbsp;<label>Call</label>
                                                 </span>
                                             </div>
+                                            <!-- </div> -->
                                         </div>
                                         <div>
                                             <div class="mt-2">
@@ -323,12 +327,14 @@
                                                     &nbsp;&nbsp;<label>SMS</label>
                                                 </span>
                                             </div>
+                                            <!-- <div v-for="(employee, index) in responseData.message[1]?.current_driver"
+                                                :key="index"> -->
                                             <div class="mt-2">
                                                 <label>Driver Mobile&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">
                                                     {{ responseData && responseData.message &&
                                                         responseData.message[2][0]?.cell_number
-                                                        || 'No data' }}
+                                                    || 'No data' }}
                                                 </label>
                                                 <br>
                                                 <span class="ml-5">
@@ -340,12 +346,15 @@
                                                     &nbsp;&nbsp;<label>SMS</label>
                                                 </span>
                                             </div>
+                                            <!-- </div> -->
+                                            <!-- <div v-for="(contact, index) in responseData.message[1]?.contact_person"
+                                                :key="index"> -->
                                             <div class="mt-2">
                                                 <label>Contact Person&nbsp;&nbsp;:&nbsp; </label>
                                                 <label class="mt-3">
                                                     {{ responseData && responseData.message &&
                                                         responseData.message[2][1]?.contact_person_mobile
-                                                        || 'No data' }}
+                                                    || 'No data' }}
                                                 </label>
                                                 <br>
                                                 <span class="ml-5">
@@ -357,6 +366,8 @@
                                                     &nbsp;&nbsp;<label>SMS</label>
                                                 </span>
                                             </div>
+                                            <!-- </div> -->
+
                                         </div>
                                     </div>
                                     <div class="float-right mt-[20px] flex flex-row space-x-9">
@@ -564,17 +575,17 @@
                                         </span>
                                     </div>
                                     <hr class="dark-hr">
-                                    <p class="m-2" v-if="!handle">Vehicle Number <br>
+                                    <p class="m-2" v-if="!handle">Vehicle Number <span class="text-red-500 font-bold">*</span><br>
                                         <input type="text" v-model="customerData.name"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter your Vehicle Number">
                                     </p>
-                                    <p class="m-2">Customer Name <br>
+                                    <p class="m-2">Customer Name <span class="text-red-500 font-bold">*</span><br>
                                         <input type="text" v-model="customerData.current_owner"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Customer Name">
                                     </p>
-                                    <p class="m-2">Customer Mobile No <br>
+                                    <p class="m-2">Customer Mobile No <span class="text-red-500 font-bold">*</span><br>
                                         <input type="tel" v-model="customerData.owner_mobile_no"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Customer Mobile No.">
@@ -592,7 +603,7 @@
                                     <div v-if="!handle">
                                         <div v-for="(employee, index) in employees" :key="index" class="mt-2">
                                             <hr class="dark-hr m-4">
-                                            <p class="m-2">Employee Name
+                                            <p class="m-2">Employee Name <span class="text-red-500 font-bold">*</span>
                                                 <button
                                                     class="bg-blue-500 w-[100px] text-white font-bold  text-base p-4 rounded-lg mb-1 float-right"
                                                     @click="removeEmployee1(index)">Remove</button> <br>
@@ -601,14 +612,14 @@
                                                     class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                                     placeholder="Enter your Name">
                                             </p>
-                                            <p class="m-2">Employee Type<br>
+                                            <p class="m-2">Employee Type <span class="text-red-500 font-bold">*</span><br>
                                                 <select v-model="employee.type"
                                                     class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
                                                     <option value="current_driver">Driver</option>
                                                     <option value="contact_person">Contact Person</option>
                                                 </select>
                                             </p>
-                                            <p class="m-2">Phone <br>
+                                            <p class="m-2">Phone <span class="text-red-500 font-bold">*</span><br>
                                                 <input type="tel" v-model="employee.mobile_no"
                                                     class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                                     placeholder="Enter Mobile No.">
@@ -913,8 +924,7 @@
                         <div class="flex">
                             <div class="grid grid-cols-4 w-[90%] gap-4">
                                 <div class="flex flex-col space-y-1 ml-4">
-                                    <label class="mt-2" :for="'tyre' + index">Tyre <span
-                                            class="text-red-500 font-bold">*</span> </label>
+                                    <label class="mt-2" :for="'tyre' + index">Tyre<span class="text-red-500 font-bold">*</span></label>
                                     <select class="w-[100%] h-[100%] rounded-sm" v-model="tyreData.tyre"
                                         :id="'type' + index" style="border: 1px solid black;"
                                         @change="updateTyreData(index)">
@@ -985,7 +995,7 @@
                     </div>
                     <div class="mt-5">
                         <button class="text-[1.2rem]  text-white w-[12rem] h-[3rem] bg-blue-500 rounded-lg"
-                            @click="addTyre">Add</button>
+                        @click="addTyre">Add</button>
                     </div>
                 </div>
             </div>
@@ -1259,32 +1269,27 @@
                 <div class="pt-24 p-12">
                     <div class="flex flex-row justify-between">
                         <h1 class="text-[20px] font-bold mb-1">Tyre Replacement Details</h1>
-
-                        <button class=" text-[1.2rem]  text-white w-[12rem] h-[3rem] bg-blue-500 rounded-lg"
-                            @click="addTyreReplacement">Add</button>
-
                     </div>
                     <hr class="mt-2 " :style="{ borderWidth: '2px', borderColor: 'gray' }">
                     <div class="pb-5 ">
                         <div v-for="(tyre, index) in tyres" :key="index"
                             class="grid grid-cols-10 gap-[11rem] mt-7 pb-5 ml-2 border-b border-gray-900 p-2 bg-gray-200 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg">
                             <div class="ml-5 w-[16rem]">
-                                <label class="pt-2" :for="'type' + index">Tyre Position <span
-                                        class="text-red-600 font-bold">*</span></label><br>
+                                <label class="pt-2" :for="'type' + index">Tyre Position<span class="text-red-500 font-bold">*</span></label><br>
                                 <select class="w-[15rem] h-[52px] rounded-sm border-solid border border-black"
                                     v-model="tyre.type" :id="'type' + index">
                                     <option value="" selected disabled hidden>Please select...</option>
-                                    <option :value="tyrePositions"
-                                        v-for="(tyrePositions, index) in temporaryData.message.tyrePositions"
-                                        :key="index">{{ tyrePositions }} </option>
+                                    <option value="Front Left">Front Left</option>
+                                    <option value="Front Right">Front Right</option>
+                                    <option value="Rear Left">Rear Left</option>
+                                    <option value="Rear Right">Rear Right</option>
+                                    <option value="Spare Tyre">Spare Tyre</option>
                                 </select>
                                 <div class="mt-[20px]">
                                     <label :for="'loadIndex' + index">Load Index</label><br>
-                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                        v-model="tyre.brand" @change="saveData(index)">
-                                        <option v-for="(loadIndex, index) in temporaryData.message.loadIndex"
-                                            :key="index">{{ loadIndex }}</option>
-                                    </select>
+                                    <input class="w-[15rem] h-[52px] rounded-sm border-solid border border-black"
+                                        :id="'loadIndex' + index" type="text" v-model="tyre.loadIndex"
+                                        @change="saveData(index)">
                                 </div>
                             </div>
                             <div class="ml-[100px]">
@@ -1292,19 +1297,14 @@
                                     <label :for="'brand' + index">Brand</label>
                                     <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                         v-model="tyre.brand" @change="saveData(index)">
-                                        <option v-for="(brand, index) in temporaryData.message.brand" :key="index">{{
-                                            brand }}</option>
+                                        <option v-for="(tyre, index) in resData" :key="index">{{ tyre.brand }}</option>
                                     </select>
                                 </div>
                                 <div class="mt-[20px] w-[16rem]">
                                     <label :for="'speedRating' + index">Speed Rating</label>
-                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                        v-model="tyre.speedRating" @change="saveData(index, 'speedRating')">
-                                        <option v-for="(speedRating, speedIndex) in temporaryData.message.speedRating"
-                                            :key="speedIndex">
-                                            {{ speedRating }}
-                                        </option>
-                                    </select>
+                                    <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
+                                        :id="'speedRating' + index" type="text" v-model="tyre.speedRating"
+                                        @change="saveData(index)">
                                 </div>
                             </div>
                             <div class="ml-[200px]">
@@ -1313,50 +1313,39 @@
                                     <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                         v-model="tyre.size"
                                         @change="updateFields(tyres[index].size, index, tyres[index].brand)">
-                                        <option v-for="(size, index) in temporaryData.message.size" :key="index">{{ size
-                                            }}</option>
+                                        <option v-for="(tyre, index) in getSizesForSelectedBrand(tyres[index].brand)"
+                                            :key="index">{{ tyre }}</option>
                                     </select>
                                 </div>
                                 <div class="mt-[20px]">
                                     <label :for="'pattern' + index">Pattern</label>
-                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                        v-model="tyre.size"
-                                        @change="updateFields(tyres[index].size, index, tyres[index].brand)">
-                                        <option v-for="(pattern, index) in temporaryData.message.pattern" :key="index">{{
-                                            pattern }}</option>
-                                    </select>
+                                    <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
+                                        :id="'pattern' + index" type="text" v-model="tyre.pattern"
+                                        @change="saveData(index)">
                                 </div>
                             </div>
                             <div class="ml-[300px]">
                                 <div>
                                     <label :for="'ttTl' + index">TT/TL</label>
-                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                        v-model="tyre.ttTl" @change="saveData(index, 'ttTl')">
-                                        <option v-for="(ttTl, ttTlIndex) in temporaryData.message.ttTl"
-                                            :key="ttTlIndex">
-                                            {{ ttTl }}
-                                        </option>
-                                    </select>
+                                    <input :id="'ttTl' + index"
+                                        class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
+                                        type="text" v-model="tyre.ttTl" @change="saveData(index)">
                                 </div>
-                                <div class="mt-[20px]">
+                                <!-- <div class="mt-[20px]">
                                     <label :for="'item' + index">Item</label>
-                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                        v-model="tyre.size"
-                                        @change="updateFields(tyres[index].size, index, tyres[index].brand)">
-                                        <option v-for="(item, index) in temporaryData.message.item" :key="index">{{
-                                            item }}</option>
-                                    </select>
-                                </div>
+                                    <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
+                                        :id="'item' + index" type="text" v-model="tyre.item" @change="saveData(index)">
+                                </div> -->
                             </div>
                             <div class="ml-[400px]">
-                                <FeatherIcon name="trash-2" class="mt-0 ml-2 w-6 h-6 cursor-pointer text-red-500"
+                                <FeatherIcon name="x" class="mt-0 ml-2 w-6 h-6 cursor-pointer text-red-500"
                                     @click="deleteTyreReplacement" />
                             </div>
                         </div>
                     </div>
                     <div>
-                        <button class="text-[1.2rem]  text-white w-[12rem] h-[3rem] bg-blue-500 rounded-lg"
-                            @click="addTyreReplacement">Add</button>
+                        <button class=" text-[1.2rem]  text-white w-[12rem] h-[3rem] bg-blue-500 rounded-lg"
+                        @click="addTyreReplacement">Add</button>
                     </div>
                 </div>
             </div>
@@ -1482,9 +1471,7 @@
 </template>
 
 <script setup>
-
 import { ref, reactive, watch, computed, onMounted } from 'vue';
-
 import { FeatherIcon } from 'frappe-ui'
 import axios from 'axios';
 
@@ -1539,7 +1526,6 @@ function submitPin() {
     }
 }
 
-
 const jobCard = {}
 const brand = ref([])
 const resData = ref({})
@@ -1563,29 +1549,27 @@ const getSizesForSelectedBrand = (brand) => {
 };
 
 const updateFields = (sizes, index, brand) => {
-    console.log("%^&*((");
-    console.log(sizes);
-    console.log(index);
-    console.log(brand);
-    console.log(resData.value)
-    console.log(typeof tyres[index])
     // Check if tyres[index] is defined before accessing it
-    if (tyres[index].size) {
-        console.log(tyres[index]);
-        const tyre = tyres[index];
+    if (tyres.value[index].size) {
+        const tyre = tyres.value[index];
 
         // Ensure resData.value[brand] is defined before calling find
         if (resData.value && resData.value[brand]) {
-            const sizeData = resData.value[brand].find(tyre => tyre.size === sizes);
-            console.log("#$%))");
-            console.log(sizeData);
-            if (sizeData) {
-                // Update the tyre object properties
-                tyre.ttTl = sizeData.ttTl;
-                tyre.loadIndex = sizeData.loadIndex;
-                tyre.speedRating = sizeData.speedRating;
+            const sizeData = Object.values(resData.value[brand])
+            if (Array.isArray(sizeData)) {
+                const arrayData = sizeData.filter(Array.isArray);
+                const valueData = arrayData.flatMap(tyres => tyres.find(tyre => tyre.size === sizes))
+                if (valueData) {
+                    tyres.value[index].ttTl = valueData[0].tyer_type;
+                    tyres.value[index].loadIndex = valueData[0].load_index;
+                    tyres.value[index].speedRating = valueData[0].speed_rating;
+                    tyres.value[index].pattern = valueData[0].pattern;
+                    tyres.value[index].item = valueData[0].item_code;
+                } else {
+                    console.log("Size data not found.");
+                }
             } else {
-                console.log("Size data not found.");
+                console.log("no array")
             }
         } else {
             console.log(`No data found for brand ${brand}.`);
@@ -1594,9 +1578,7 @@ const updateFields = (sizes, index, brand) => {
         console.log(`Tyre at index ${index} is undefined.`);
     }
 };
-
 //==========================================================>>> Main Page <<<================================================================================//
-
 const hasResponse = ref(true);
 const noData = ref(false)
 const successData = ref(false)
@@ -1607,6 +1589,7 @@ const showMessage = (message) => {
 const isEditMode = ref(false)
 const searchQuery = ref('');
 const responseData = ref({});
+
 
 const spacing = (plate) => {
     console.log('space checking', plate);
@@ -1712,6 +1695,7 @@ function previousPage() {
         currentPage.value = getPageName(currentstep.value);
     }
 }
+
 const showWarning = ref(false)
 const close = () => {
     showWarning.value = false;
@@ -1721,17 +1705,18 @@ const close = () => {
 }
 const closed = () => {
     showAlerts.value = false;
-    if(vehicleNumber.value || vehicleExist.value){
+    if (vehicleNumber.value || vehicleExist.value) {
         vehicleNumber.value = false;
         vehicleExist.value = false;
         showNewVehicle.value = true
         console.log('vehicle page');
     }
-    else if(notVehicleAlert.value || notCustomerAlert.value || notEmployeeAlert.value || notEmpDetailAlert.value ){
+    else if (notVehicleAlert.value || notCustomerAlert.value || notEmployeeAlert.value || notEmpDetailAlert.value || noVehicleNumber.value) {
         notVehicleAlert.value = false;
         notCustomerAlert.value = false;
         notEmployeeAlert.value = false;
         notEmpDetailAlert.value = false;
+        noVehicleNumber.value = false;
         showNewCustomer.value = true;
         console.log('customer page');
     }
@@ -1818,7 +1803,6 @@ const setCurrentPage = (page, step) => {
         currentstep.value = step;
     }
 };
-
 const vehicleDetails = ref({
     name: '',
     vehicle_brand: '',
@@ -1869,6 +1853,7 @@ const notVehicleAlert = ref(false);
 const notCustomerAlert = ref(false)
 const notEmployeeAlert = ref(false)
 const notEmpDetailAlert = ref(false)
+const noVehicleNumber = ref(false)
 
 const addVehicleData = async () => {
     const fieldNames = Object.keys(vehicleData.value);
@@ -2159,7 +2144,9 @@ const addCustomerData = async () => {
             if (responseData.value && responseData.value.message) {
                 showNewCustomer.value = false;
                 dataAssignment(response)
-                alert("Successfully added customer data!")
+                showAlerts.value = true;
+                successData.value = true;
+                // alert("Successfully added customer data!")
                 removeCustomerData()
                 console.log("Customer data in responseData.value:", responseData.value.message[1].owner_mobile_no);
                 console.log("Customer data in responseData.value:", responseData.value.message[1].current_owner);
@@ -2190,7 +2177,6 @@ const addCustomerData = async () => {
         alert("Customer already added to this vehicle!")
     }
 };
-
 
 const addCustomerModifiedData = async () => {
     const name = responseData.value.message[1].name
@@ -2266,7 +2252,9 @@ const addCustomerModifiedData = async () => {
         console.log(response);
         returnSearch(name)
         showModifyCustomer.value = false;
-        alert("Successfully Modified customer data!")
+        showAlerts.value = true;
+        modifyAlert.value = true;
+        // alert("Successfully Modified customer data!")
 
     } catch (error) {
         console.error("Error while processing request:", error.message);
@@ -2320,11 +2308,9 @@ const handleCustomer = async () => {
     console.log("checking Customer Details", customerDetails)
     try {
         const json_data = { data: JSON.stringify(customerDetails) };
-
         console.log('checking customer details', json_data);
         const response = await axios.post(`http://192.168.1.39:8002/api/method/tyre.api.store_customer_details`, json_data)
         console.log('response from customer details', response.data);
-
 
     } catch (error) {
         console.log("Temporary customer details page:", error)
@@ -2436,8 +2422,11 @@ const returnSearch = async (search) => {
                 return dataAssignment(response)
             }
         } else {
-            alert("Please enter search value");
-            console.log("Please enter search value");
+            showNewCustomer.value = false;
+            showAlerts.value = true;
+            noVehicleNumber.value = true;
+            // alert("Enter Vehicle Number");
+            console.log("Enter Vehicle Number");
         }
     } catch (error) {
         console.error("Error:", error);
@@ -2723,9 +2712,9 @@ function handelCheck(data) {
 //===================================================>>> Replacement Tyre Details <<<========================================================================//
 
 const tyrePositions = ['Front Left', 'Front Right', 'Rear Left', 'Rear Right', 'Spare'];
-
+let billIndex = 0;
 const tyres = ref([{
-    tyrePositions: '',
+    type: '',
     loadIndex: '',
     brand: '',
     speedRating: '',
@@ -2735,21 +2724,7 @@ const tyres = ref([{
     item: ''
 }]);
 
-const temporaryData = ref({
-    message: {
-        tyrePositions: ['Front Left', 'Front Right', 'Rear Left', 'Rear Right', 'Spare'],
-        brand: ['Tata', 'abc', 'xyz'],
-        loadIndex: [1, 2, 3, 4, 5, 6],
-        speedRating: [67, 68, 69, 70, 71, 72, 73],
-        size: ['J', 'K', 'L', 'M', 'N', 'U', 'Y', 'R', 'S'],
-        pattern: ['Symmetric', 'Asymmetric',],
-        ttTl: ['Tyre tube', 'Tyreless tube'],
-        item: [7, 8, 9, 10, 11, 12]
-    }
-})
-
 const size = ref([])
-
 const saveData = (index) => {
     console.log(resData.value);
     console.log(tyres.value);
@@ -2787,10 +2762,32 @@ const deleteTyreReplacement = (index) => {
     }
     //   tyres.value.splice(index, 1)
 }
+function addValue(data) {
+    data.forEach(item => {
+        console.log(item.item)
+        // console.log(data.value[item])
+        // Ensure that tableData.value[billIndex] is initialized as an array of arrays
+        if (!Array.isArray(tableData.value[billIndex])) {
+            tableData.value[billIndex] = [];
+        }
+
+        // Push a new array containing the object into the array at the specified billIndex
+        tableData.value[billIndex].push([{
+            itemCode: item.item,
+            sourceWarehouse: '', // Add default values if needed
+            rate: '',
+            requiredQuantity: '',
+            cost: ''
+        }]);
+        console.log(tableData.value)
+        billIndex++;
+    });
+}
+
 
 //===================================================>>> Billing Details <<<=========================================================================================//
 
-const tableData = ref([{ itemCode: '', sourceWarehouse: '', rate: '', requiredQuantity: '', cost: '' }]);
+const tableData = ref([]);
 const totalRate = ref(0);
 const totalQuantity = ref(0);
 const totalCost = ref(0);
