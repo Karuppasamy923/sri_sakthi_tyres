@@ -932,7 +932,7 @@
                                         <option value="Front Left">Front Left</option>
                                         <option value="Front Right">Front Right</option>
                                         <option value="Rear Left">Rear Left</option>
-                                        <option value="Rear-Right">Rear Right</option>
+                                        <option value="Rear Right">Rear Right</option>
                                         <option value="Spare Tyre">Spare Tyre</option>
                                     </select>
                                 </div>
@@ -1371,23 +1371,23 @@
                                 <tr v-for="(data, index) in tableData" :key="index">
                                     <td class="border border-gray-800 px-4 py-2 w-[10rem]">{{ index + 1 }}</td>
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="text" v-model="data.itemCode"
+                                        <input type="text" v-model="data[0].itemCode"
                                             class="w-[10rem] rounded-sm border-solid border border-black">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="text" v-model="data.sourceWarehouse"
+                                        <input type="text" v-model="data[0].sourceWarehouse"
                                             class="w-[10rem] rounded-sm border-solid border border-black">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="text" v-model="data.requiredQuantity" @input="calculateTotals"
+                                        <input type="text" v-model="data[0].requiredQuantity" @change="calculateTotals"
                                             class="w-[10rem] rounded-sm border-solid border border-black">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="text" v-model="data.rate" @input="calculateTotals"
+                                        <input type="text" v-model="data[0].rate" @change="calculateTotals"
                                             class="w-[10rem] rounded-sm border-solid border border-black">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="text" v-model="data.cost" readonly
+                                        <input type="text" v-model="data[0].cost" readonly
                                             class=" w-[10rem] rounded-sm border-solid border border-black">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
@@ -1416,7 +1416,7 @@
                         </table>
                         <div class="mb-9">
                             <button class="bg-blue-500 text-white font-bold text-base p-3 rounded-lg mt-3"
-                                @click="addNewRow">Add row</button>
+                                @click="addNewRow(billIndex)">Add row</button>
                         </div>
                         <div class="flex">
                             <label>Discount Rate: <input type="text" v-model="discountRate"
@@ -1757,6 +1757,7 @@ function nextPageAndHighlight() {
                 jobCard["service"] = requireService.value
                 console.log(jobCard)
                 console.log("****3****")
+                addValue(requireService.value)
                 break;
             case 4:
                 jobCard["replace"] = tyres.value
@@ -2762,28 +2763,84 @@ const deleteTyreReplacement = (index) => {
     }
     //   tyres.value.splice(index, 1)
 }
-function addValue(data) {
+
+let step = ref(0)
+function addValue(data){
+    console.log(data.Alignment);
+
+// Check if data is an array
+if (Array.isArray(data)) {
+    // Data is a list (array)
     data.forEach(item => {
-        console.log(item.item)
-        // console.log(data.value[item])
-        // Ensure that tableData.value[billIndex] is initialized as an array of arrays
-        if (!Array.isArray(tableData.value[billIndex])) {
-            tableData.value[billIndex] = [];
+        console.log(item.item);
+
+            // Ensure that tableData.value[billIndex] is initialized as an array
+            if (!Array.isArray(tableData.value[billIndex])) {
+                tableData.value[billIndex] = [];
+            }
+            console.log(tableData.value)
+                console.log(Object.values(tableData.value)[billIndex])
+    
+            // console.log(Object.values(tableData.value[billIndex]))
+        // Find the index of the item with the same itemCode, if it exists
+        const existingItemIndex = Object.values(tableData.value)[billIndex].findIndex(existingItem => existingItem.itemCode === item.item);
+        console.log(existingItemIndex)
+        if (existingItemIndex !== -1) {
+            console.log(tableData.value[billIndex][existingItemIndex])
+            tableData.value[billIndex][existingItemIndex].requiredQuantity++;
+        } else {
+            // Otherwise, create a new object for the item
+            const newData = {
+                itemCode: item.item,
+                sourceWarehouse: '',
+                rate: '',
+                requiredQuantity: 1, // Set initial quantity to 1
+                cost: ''
+            };
+
+            // Push the new object into the array at the specified billIndex
+            tableData.value[billIndex].push(newData);
         }
 
-        // Push a new array containing the object into the array at the specified billIndex
-        tableData.value[billIndex].push([{
-            itemCode: item.item,
-            sourceWarehouse: '', // Add default values if needed
-            rate: '',
-            requiredQuantity: '',
-            cost: ''
-        }]);
-        console.log(tableData.value)
         billIndex++;
     });
 }
+ else if (typeof data === 'object') {
+    // Data is a dictionary (object)
+    for (const key in data) {
+    if (Object.hasOwnProperty.call(data, key)) {
+        // Check if the value corresponding to the key is true
+        if (data[key] === true) {
+            console.log(data[key]); // Access the value corresponding to each key
 
+            // Create a new object using the value of each key
+            const newData = {
+                itemCode: key,
+                sourceWarehouse: '',
+                rate: '',
+                requiredQuantity: 1,
+                cost: ''
+            };
+
+            // Ensure that tableData.value[billIndex] is initialized as an array
+            if (!Array.isArray(tableData.value[billIndex])) {
+                tableData.value[billIndex] = [];
+            }
+
+            // Push the new object into the array at the specified billIndex
+            tableData.value[billIndex].push(newData);
+
+            billIndex++;
+        }
+    }
+
+}
+
+}
+
+// Update the step variable
+step = billIndex;
+}
 
 //===================================================>>> Billing Details <<<=========================================================================================//
 
@@ -2800,9 +2857,10 @@ const calculateTotals = () => {
     let sumCost = 0;
 
     tableData.value.forEach(row => {
-        const rate = parseFloat(row.rate) || 0;
-        const quantity = parseFloat(row.requiredQuantity) || 0;
-        row.cost = (rate * quantity).toFixed(2);
+        // Assuming each row is an object
+        const rate = parseFloat(row[0].rate) || 0;
+        const quantity = parseFloat(row[0].requiredQuantity) || 0;
+        row[0].cost = (rate * quantity).toFixed(2);
         sumRate += rate;
         sumQuantity += quantity;
         sumCost += rate * quantity;
@@ -2815,6 +2873,7 @@ const calculateTotals = () => {
     calculateDiscountRate();
 };
 
+
 const calculateDiscountRate = () => {
     if (discountRate.value == 0) {
         finalAmount.value = totalCost.value;
@@ -2823,16 +2882,27 @@ const calculateDiscountRate = () => {
     finalAmount.value = totalCost.value - discountRate.value;
 };
 
-const addNewRow = () => {
-    tableData.value.push({
-        sno: '',
+const addNewRow = (billIndex) => {
+    // Check if tableData[billIndex] is defined and is an array
+    console.log(step)
+    if (!Array.isArray(tableData.value[step])) {
+        tableData.value[step] = [];
+    }
+
+    // Push a new object into tableData[billIndex]
+    tableData.value[step].push({
         itemCode: '',
         sourceWarehouse: '',
         rate: '',
         requiredQuantity: '',
         cost: '',
     });
-    calculateTotals();
+    step++;
+    console.log("^&*()_")
+    // Calculate totals after adding the new row
+    // calculateTotals();
+
+    console.log('New row added at billIndex:', billIndex);
 };
 
 
