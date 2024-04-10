@@ -2621,12 +2621,19 @@ if (Array.isArray(data)) {
     data.forEach(item => {
         console.log(item.item);
 
-        console.log(typeof tableData.value[billIndex])
+            // Ensure that tableData.value[billIndex] is initialized as an array
+            if (!Array.isArray(tableData.value[billIndex])) {
+                tableData.value[billIndex] = [];
+            }
+            console.log(tableData.value)
+                console.log(Object.values(tableData.value)[billIndex])
+    
+            // console.log(Object.values(tableData.value[billIndex]))
         // Find the index of the item with the same itemCode, if it exists
-        const existingItemIndex = tableData.value[billIndex].findIndex(existingItem => existingItem.itemCode === item.item);
-
+        const existingItemIndex = Object.values(tableData.value)[billIndex].findIndex(existingItem => existingItem.itemCode === item.item);
+        console.log(existingItemIndex)
         if (existingItemIndex !== -1) {
-            // If the item already exists, increase its quantity
+            console.log(tableData.value[billIndex][existingItemIndex])
             tableData.value[billIndex][existingItemIndex].requiredQuantity++;
         } else {
             // Otherwise, create a new object for the item
@@ -2637,11 +2644,6 @@ if (Array.isArray(data)) {
                 requiredQuantity: 1, // Set initial quantity to 1
                 cost: ''
             };
-
-            // Ensure that tableData.value[billIndex] is initialized as an array
-            if (!Array.isArray(tableData.value[billIndex])) {
-                tableData.value[billIndex] = [];
-            }
 
             // Push the new object into the array at the specified billIndex
             tableData.value[billIndex].push(newData);
