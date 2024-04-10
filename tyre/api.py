@@ -356,26 +356,18 @@ def job_card(data):
 	}
 		
 @frappe.whitelist(allow_guest=True)
-def get_brand_details():
-	result = {}
-	data = frappe.db.sql(""" SELECT  Distinct b.name,bp.pattern,bp.size,s.load_index,s.speed_rating,bp.tyer_type  FROM `tabBrand` as b 
-						join `tabBrand Details` as bp on b.name = bp.parent 
-						 JOIN `tabSize` as s ON bp.size = s.name """,as_dict=True)
+def get_brand():
+	return frappe.get_all("Brand", pluck="name")
 
-	list = []
-	for row in data:
-
-		if row.name not in result:
-			result[row.name] = {[{"Size" : row.size}]: [{"load_index": row.load_index,"speed_rating": row.speed_rating, "tyer_type": row.tyer_type , "pattern": row.pattern}]}
-
-		elif row.size in result[row.name]:
-			result[row.name][row.size].append({"load_index": row.load_index,"speed_rating": row.speed_rating, "tyer_type": row.tyer_type , "pattern": row.pattern})
+		
+@frappe.whitelist(allow_guest=True)
+def get_size(brand):
+	return list(set(frappe.get_all("Brand Details", {"parent": brand}, pluck="size")))
 
 
-		elif row.size not in result[row.name]:
-			result[row.name][row.size] = [{"load_index": row.load_index,"speed_rating": row.speed_rating, "tyer_type": row.tyer_type , "pattern": row.pattern}]
-
-	return result
+@frappe.whitelist(allow_guest=True)
+def get_pattern(brand, size):
+	return frappe.get_all("Brand Details", {"parent": brand, "size": size}, ["pattern", "tyer_type"])
 
 # function to create job card
 @frappe.whitelist(allow_guest=True)
