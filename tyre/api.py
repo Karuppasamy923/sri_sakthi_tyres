@@ -362,7 +362,8 @@ def get_brand():
 		
 @frappe.whitelist(allow_guest=True)
 def get_size(brand):
-	return list(set(frappe.get_all("Brand Details", {"parent": brand}, pluck="size")))
+	return frappe.db.sql("""select distinct bd.size, s.load_index, s.speed_rating from `tabBrand Details` as bd join `tabSize` as s on s.name=bd.size where bd.parent='MRF' """, as_dict = True)
+
 
 
 @frappe.whitelist(allow_guest=True)
