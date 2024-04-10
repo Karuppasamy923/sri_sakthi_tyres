@@ -311,7 +311,7 @@ def job_card(data):
 def get_brand_details():
 	result = {}
 	data = frappe.db.sql("""
-		SELECT DISTINCT b.name, bp.pattern, bp.size, s.load_index, s.speed_rating, bp.tyer_type
+		SELECT DISTINCT b.name, bp.pattern, bp.size, s.load_index, s.speed_rating, bp.tyer_type, bp.item_code
 		FROM `tabBrand` AS b 
 		JOIN `tabBrand Details` AS bp ON b.name = bp.parent 
 		JOIN `tabSize` AS s ON bp.size = s.name
@@ -324,7 +324,8 @@ def get_brand_details():
 			"load_index": row["load_index"],
 			"speed_rating": row["speed_rating"],
 			"tyer_type": row["tyer_type"],
-			"pattern": row["pattern"]
+			"pattern": row["pattern"],
+			"item_code":row["item_code"]
 		}
 
 		if brand_name not in result:
