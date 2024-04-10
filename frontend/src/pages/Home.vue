@@ -104,54 +104,20 @@
                                 <span class="font-medium text-red-500">No data found!</span>
                             </div>
                         </div>
-                        <!-- <div v-if="successData">
+                        <div v-if="successData">
                             <div class="flex justify-center">
                                 <span class="font-medium text-green-500">Data added successfully!</span>
                             </div>
-                        </div> -->
+                        </div>
 
                         <div v-if="showConfirmation" class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
                             <div class="bg-white rounded-lg p-8 shadow-xl">
-
-                                <h2 class="text-xl font-semibold mb-4">Confirm Save</h2>
-                                <p class="mb-4">Are you sure want to save the data?</p>
-                                <div class="flex justify-end">
-                                    <button @click="confirmSave"
-                                        class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
-                                    <button @click="cancelSave"
-                                        class="bg-red-500 text-white font-semibold px-4 py-2 rounded">Cancel</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-if="showWarning"
-                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
-                            <div class="bg-white rounded-lg p-8 shadow-xl">
-                                <p class="mb-4">Please fill the required fields</p>
-                                <div class="flex justify-center">
-                                    <button @click="close"
-                                        class="bg-red-500 text-white font-semibold px-4 py-2 rounded mr-2">Ok</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-if="showAlerts"
-                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
-                            <div class="bg-white rounded-lg p-8 shadow-xl">
-                                <p class="mb-4" v-if="vehicleNumber">Please fill the required fields</p>
-                                <p class="mb-4" v-if="vehicleExist">Vehicle already exists</p>
-                                <p class="mb-4" v-if="successData">Data added successfully</p>
-                                <p class="mb-4" v-if="modifyAlert">Successfully modified vehicle data</p>
-                                <p class="mb-4" v-if="notVehicleAlert">Vehicle not exists</p>
-                                <p class="mb-4" v-if="notCustomerAlert">Please fill the Customer details & Vehicle number</p>
-                                <p class="mb-4" v-if="notEmployeeAlert">Please add atleast one Employee</p>
-                                <p class="mb-4" v-if="notEmpDetailAlert">Please fill required Employee details</p>
-                                <div class="flex justify-center">
-                                    <button @click="closed" v-if="vehicleNumber || vehicleExist || notCustomerAlert || notEmployeeAlert || notEmpDetailAlert || notVehicleAlert"
-                                        class="bg-red-500 text-white font-semibold px-4 py-2 rounded mr-2">Ok</button>
-                                    <button @click="close" v-if="successData || modifyAlert"
-                                        class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Ok</button>
-                                </div>
-
-                           
+                              <h2 class="text-xl font-semibold mb-4">Confirm Save</h2>
+                              <p class="mb-4">Are you sure you want to save the data?</p>
+                              <div class="flex justify-end">
+                                <button @click="confirmSave" class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
+                                <button @click="cancelSave" class="bg-red-500 text-white font-semibold px-4 py-2 rounded">Cancel</button>
+                              </div>
                             </div>
                           </div>    
 
@@ -1264,70 +1230,57 @@
                                 <select class="w-[15rem] h-[52px] rounded-sm border-solid border border-black"
                                     v-model="tyre.type" :id="'type' + index">
                                     <option value="" selected disabled hidden>Please select...</option>
-                                    <option :value="tyrePositions"
-                                        v-for="(tyrePositions, index) in temporaryData.message.tyrePositions"
-                                        :key="index">{{ tyrePositions }} </option>
+                                    <option value="Front Left">Front Left</option>
+                                    <option value="Front Right">Front Right</option>
+                                    <option value="Rear Left">Rear Left</option>
+                                    <option value="Rear Right">Rear Right</option>
+                                    <option value="Spare Tyre">Spare Tyre</option>
                                 </select>
                                 <div class="mt-[20px]">
                                     <label :for="'loadIndex' + index">Load Index</label><br>
-
                                     <input class="w-[15rem] h-[52px] rounded-sm border-solid border border-black"
                                         :id="'loadIndex' + index" type="text" v-model="tyre.loadIndex" @change="saveData(index)">
-
                                 </div>
                             </div>
                             <div class="ml-[100px]">
                                 <div>
                                     <label :for="'brand' + index">Brand</label>
-                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                        v-model="tyre.brand" @change="saveData(index)">
-                                        <option v-for="(brand, index) in temporaryData.message.brand" :key="index">{{
-                                            brand }}</option>
-                                    </select>
+                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black" v-model="tyre.brand" @change="saveData(index)">
+                                        <option v-for="(tyre, index) in resData" :key="index">{{ tyre.brand }}</option>
+                                      </select>
                                 </div>
                                 <div class="mt-[20px] w-[16rem]">
                                     <label :for="'speedRating' + index">Speed Rating</label>
-
                                     <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                         :id="'speedRating' + index" type="text" v-model="tyre.speedRating"
                                         @change="saveData(index)">
-
                                 </div>
                             </div>
                             <div class="ml-[200px]">
                                 <div>
                                     <label :for="'size' + index">Size</label>
-                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                        v-model="tyre.size"
-                                        @change="updateFields(tyres[index].size, index, tyres[index].brand)">
-                                        <option v-for="(size, index) in temporaryData.message.size" :key="index">{{ size
-                                            }}</option>
-                                    </select>
+                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black" v-model="tyre.size" @change="updateFields(tyres[index].size,index,tyres[index].brand)">
+                                        <option v-for="(tyre, index) in getSizesForSelectedBrand(tyres[index].brand)" :key="index">{{ tyre }}</option>
+                                      </select>
                                 </div>
                                 <div class="mt-[20px]">
                                     <label :for="'pattern' + index">Pattern</label>
-
                                     <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                         :id="'pattern' + index" type="text" v-model="tyre.pattern" @change="saveData(index)">    
-
                                 </div>
                             </div>
                             <div class="ml-[300px]">
                                 <div>
                                     <label :for="'ttTl' + index">TT/TL</label>
-
                                     <input :id="'ttTl' + index"
                                         class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                         type="text" v-model="tyre.ttTl" @change="saveData(index)">
-
                                 </div>
-                                <div class="mt-[20px]">
+                                <!-- <div class="mt-[20px]">
                                     <label :for="'item' + index">Item</label>
-
                                     <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                         :id="'item' + index" type="text" v-model="tyre.item" @change="saveData(index)">
                                 </div> -->
-
                             </div>
                             <div class="ml-[400px]">
                                 <FeatherIcon name="x" class="mt-0 ml-2 w-6 h-6 cursor-pointer text-red-500"
@@ -1426,13 +1379,6 @@
                         class="bg-blue-500 w-[45%] text-white font-bold  text-base p-4 rounded-lg"
                         @click="nextPageAndHighlight">Next
                     </button>
-
-                    <button v-if="currentstep == 4" @click="dataFinalSubmission"
-                        class="bg-green-700 w-[45%] text-white font-bold  text-base p-4 rounded-lg">
-                        Submit
-                    </button>
-
-
                 </div>
                 <div class="bottom-div">
                     <div class="m-0 p-4">
@@ -1456,13 +1402,11 @@
 </template>
 
 <script setup>
-
 import { ref, reactive, watch,computed, onMounted } from 'vue';
-
 import { FeatherIcon } from 'frappe-ui'
 import axios from 'axios';
 
-const even = window.location.origin
+const even=window.location.origin
 const selectImg = ref(true);
 const Auth = ref(true)
 const incorrect = ref(false);
@@ -1513,34 +1457,29 @@ function submitPin() {
     }
 }
 
-
 const jobCard ={}
 const brand=ref([])
 const resData=ref({})
-
 onMounted(() => {
-    axios.get(`http://192.168.1.39:8002/api/method/tyre.api.get_brand_details`)
-        .then(response => {
-            resData.value = response.data.message;
-            brand.value = Object.keys(response.data.message);
-        })
+    axios.get(`${even}/api/method/tyre.api.get_brand_details`)
+    .then(response => {
+      resData.value=response.data.message;
+      brand.value=Object.keys(response.data.message);
+    })
 });
 
 
 const getSizesForSelectedBrand = (brand) => {
-    const sizesObject = resData.value[brand];
-    if (sizesObject) {
-        const sizesArray = Object.values(sizesObject);
-        const validSizesArray = sizesArray.filter(Array.isArray);
-        const sizes = validSizesArray.flatMap(tyres => tyres.map(tyre => tyre.size));
-        return sizes;
-    }
+  const sizesObject = resData.value[brand];
+  if (sizesObject) {
+    const sizesArray = Object.values(sizesObject);
+    const validSizesArray = sizesArray.filter(Array.isArray);
+    const sizes = validSizesArray.flatMap(tyres => tyres.map(tyre => tyre.size));
+    return sizes;
+  }
 };
 
-
-
 const updateFields = (sizes, index,brand) => {
-
     // Check if tyres[index] is defined before accessing it
     if (tyres.value[index].size) {
         const tyre = tyres.value[index];
@@ -1648,10 +1587,8 @@ const search = async () => {
     console.log('checking data', data);
     try {
         if (data.license_plate.trim() !== "") {
-
             const response = await axios.post(`${even}/api/method/tyre.api.get_details`, data);
             if(response.data.message === "Enter a Valid vehicle number"){
-
                 check.value = false;
                 noData.value = true;
                 setTimeout(() => {
@@ -1683,63 +1620,22 @@ function previousPage() {
     }
 }
 
-const showWarning = ref(false)
-const close = () => {
-    showWarning.value = false;
-    showAlerts.value = false;
-    modifyAlert.value = false;
-    successData.value = false
-}
-const closed = () => {
-    showAlerts.value = false;
-    if(vehicleNumber.value || vehicleExist.value){
-        vehicleNumber.value = false;
-        vehicleExist.value = false;
-        showNewVehicle.value = true
-        console.log('vehicle page');
-    }
-    else if(notVehicleAlert.value || notCustomerAlert.value || notEmployeeAlert.value || notEmpDetailAlert.value ){
-        notVehicleAlert.value = false;
-        notCustomerAlert.value = false;
-        notEmployeeAlert.value = false;
-        notEmpDetailAlert.value = false;
-        showNewCustomer.value = true;
-        console.log('customer page');
-    }
-}
-
-
 function nextPageAndHighlight() {
     if (currentstep.value < maxStep) {
         currentstep.value++;
         currentPage.value = getPageName(currentstep.value);
-        console.log(searchQuery.value + "******")
+        console.log(searchQuery.value+"******")
         // if (currentstep.value == 3) {
         //     checkup(requireService)
         // }
-
         switch(currentstep.value){
             case 1: 
                 jobCard["vehicle_number"]=searchQuery.value;
-
                 console.log(jobCard)
                 console.log("****1****")
                 break;
             case 2:
-
-                jobCard["checkup"] = tyreDatas.value;
-                for (let i = 0; i < tyreDatas.value.length; i++) {
-                    const tyre = tyreDatas.value[i];
-                    console.log('tyre name', tyre.tyre);
-                    if (!tyre.tyre) {
-                        showWarning.value = true
-                        alert("please fill the required fields")
-                        console.log('showwarning value', showWarning.value);
-                        currentstep.value = 1;
-                        return;
-                    }
-                }
-
+                jobCard["checkup"]=tyreDatas.value;
                 console.log(jobCard)
                 console.log("****2****")
                 break;
@@ -1753,21 +1649,8 @@ function nextPageAndHighlight() {
                 console.log("****4****")
                 console.log(jobCard)
                 console.log("****4****")
-
-                for (let i = 0; i < tyres.value.length; i++) {
-                    const tyre = tyres.value[i];
-                    if (!tyre.type) {
-                        showWarning.value = true
-                        alert("Please fill required fields!");
-                        currentstep.value = 3;
-                        return;
-                    }
-                }
-                checkup(jobCard);
-
                 addValue(tyres.value)
                 break;            
-
             case 5:
                 jobCard["Bill"]=tableData.value
                 console.log("****5****")
@@ -1841,14 +1724,6 @@ const vehicleData = ref({
 });
 
 const showConfirmation = ref(false);
-const showAlerts = ref(false)
-const vehicleNumber = ref(false)
-const vehicleExist = ref(false)
-const modifyAlert = ref(false);
-const notVehicleAlert = ref(false);
-const notCustomerAlert = ref(false)
-const notEmployeeAlert = ref(false)
-const notEmpDetailAlert = ref(false)
 
 const addVehicleData = async () => {
     const fieldNames = Object.keys(vehicleData.value);
@@ -1865,10 +1740,7 @@ const addVehicleData = async () => {
     const searchData = data.name;
     console.log("searchData", searchData);
     if (!searchData) {
-        showNewVehicle.value = false
-        showAlerts.value = true
-        vehicleNumber.value = true
-        // alert("Enter the vehicle number & required fields!");
+        alert("Enter the vehicle number & required fields!");
         return;
     }
 
@@ -1882,10 +1754,7 @@ const addVehicleData = async () => {
     const isVehicleExist = await returnSearch(searchData);
     console.log('isvehicle exist :', isVehicleExist.message[0].name);
     if (isVehicleExist.message[0].name) {
-        showNewVehicle.value = false
-        showAlerts.value = true
-        vehicleExist.value = true
-        // alert("Vehicle already Exist!");
+        alert("Vehicle already Exist!");
         return;
     }
     else{
@@ -1913,20 +1782,21 @@ const confirmSave = async () => {
     const json_data = { data: JSON.stringify(data) };
     console.log(json_data);
     try {
-        const response = await axios.post(`http://192.168.1.39:8002/api/method/tyre.api.store_vehicle_details`, json_data);
+        const response = await axios.post(`${even}/api/method/tyre.api.store_vehicle_details`, json_data);
         console.log('vehicle add after response', response);
         if (responseData.value && responseData.value.message) {
             check.value = true;
-
-            hasResponse.value = false;
-            showAlerts.value = true
-            successData.value = true;
-
             dataAssignment(response);
             console.log("vehicle data in responseData.value:", responseData.value.message[0].alignment);
             console.log("vehicle data in responseData.value:", responseData.value.message[0].name);
             console.log("vehicle data in responseData.value:", responseData.value.message[0]);
             console.log("vehicle data in responseData.value:", responseData.value);
+            // alert("Successfully added Vehicle!")
+            successData.value = true;
+            // showNewVehicle.value = false;
+            setTimeout(() => {
+                successData.value = false;
+            }, 2000);
             clearVehicleData();
             returnSearch(searchData);
         } else {
@@ -1958,14 +1828,11 @@ const addModifiedData = async () => {
     console.log(modifiedData)
     try {
         const json_data = { data: JSON.stringify(modifiedData) }
-        const response = await axios.post(`http://192.168.1.39:8002/api/method/tyre.api.store_vehicle_details`, json_data);
+        const response = await axios.post(`${even}/api/method/tyre.api.store_vehicle_details`, json_data);
         console.log(response);
         returnSearch(name)
+        alert("Successfully Modified Vehicle Data!")
         showModifyVehicle.value = false;
-        showAlerts.value = true;
-        modifyAlert.value = true;
-        // alert("Successfully Modified Vehicle Data!")
-        // showModifyVehicle.value = false;
     } catch (error) {
         console.error(error);
     }
@@ -2077,9 +1944,7 @@ const addCustomerData = async () => {
     console.log('vehicle number during customer add:', existingData.message[0].name);
     if (!existingData.message[0].name) {
         console.log("Vehicle not exist!");
-        showAlerts.value = true;
-        notVehicleAlert.value = true;
-        showNewCustomer.value = false
+        alert("Vehicle not exist!")
         return
     }
     else if (existingData.message[0].name && !existingData.message[1].current_owner) {
@@ -2087,24 +1952,18 @@ const addCustomerData = async () => {
         const ownerMobile = customerData.value.owner_mobile_no.trim();
 
         if (!ownerName && !ownerMobile && !name) {
-            showAlerts.value = true;
-            notCustomerAlert.value = true
-            showNewCustomer.value = false
+            alert("Please fill in at least one of the fields: Owner Name or Owner Mobile");
             return;
         }
         if (employees.value.length === 0) {
-            showAlerts.value = true
-            notEmployeeAlert.value = true
-            showNewCustomer.value = false
+            alert("Please add at least one employee");
             return;
         }
         const isAnyEmployeeDataMissing = employees.value.some(employee => {
             return !employee.driver_name.trim() || !employee.mobile_no.trim();
         });
         if (isAnyEmployeeDataMissing) {
-            showAlerts.value = true;
-            notEmpDetailAlert.value = true;
-            showNewCustomer.value = false
+            alert("Please fill in all fields for all employees");
             return;
         }
         const data = {
@@ -2133,7 +1992,7 @@ const addCustomerData = async () => {
         console.log('before checking customer json_data', json_data);
         console.log(json_data);
         try {
-            const response = await axios.post(`http://192.168.1.39:8002/api/method/tyre.api.store_customer_details`, json_data)
+            const response = await axios.post(`${even}/api/method/tyre.api.store_customer_details`, json_data)
             check.value = true;
             console.log(response);
             if (responseData.value && responseData.value.message) {
@@ -2241,7 +2100,7 @@ const addCustomerModifiedData = async () => {
     const json_data = { data: JSON.stringify(modifiedData) };
     console.log("Modified data", json_data)
     try {
-        const response = await axios.post(`http://192.168.1.39:8002/api/method/tyre.api.store_customer_details`, json_data);
+        const response = await axios.post(`${even}/api/method/tyre.api.store_customer_details`, json_data);
         check.value = true;
         console.log(response);
         returnSearch(name)
@@ -2300,11 +2159,9 @@ const handleCustomer =async ()=>{
     console.log("checking Customer Details",customerDetails)
     try {
         const json_data = { data: JSON.stringify(customerDetails) };
-
         console.log('checking customer details',json_data);
         const response = await axios.post(`${even}/api/method/tyre.api.store_customer_details`, json_data)
         console.log('response from customer details',response.data);
-
 
     } catch (error) {
         console.log("Temporary customer details page:",error)
@@ -2326,7 +2183,7 @@ const selectedBrandVariants = computed(() => {
 
 const handleEnquiry = async () => {
     try {
-        const response = await axios.get(`http://192.168.1.39:8002/api/method/tyre.api.stock_details`);
+        const response = await axios.get(`${even}/api/method/tyre.api.stock_details`);
         console.log('response data for customer details', response.data);
         responseTyreData.value = response.data;
         console.log(responseTyreData.value);
@@ -2351,7 +2208,7 @@ const returnSearch = async (search) => {
     console.log('checking data', data);
     try {
         if (data.license_plate.trim() !== "") {
-            const response = await axios.post(`http://192.168.1.39:8002/api/method/tyre.api.get_details`, data);
+            const response = await axios.post(`${even}/api/method/tyre.api.get_details`, data);
             check.value = true;
             console.log('returnSearch data', response);
             if (response.data.message === "") {
@@ -2577,7 +2434,7 @@ function checkup(data) {
     const json_data = { data: data }
     console.log(json_data);
     try {
-        const response = axios.post(`http://192.168.1.39:8002/api/method/tyre.api.job_card`, json_data);
+        const response = axios.post(`${even}/api/method/tyre.api.job_card`, json_data);
         console.log(response);
     } catch (error) {
         console.error("error");
@@ -2715,9 +2572,7 @@ const tyres = ref([{
     item: ''
 }]);
 
-
 const size =ref([])
-
 const saveData = (index) => {
     console.log(resData.value);
     console.log(tyres.value);
