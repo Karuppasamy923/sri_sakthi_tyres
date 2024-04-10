@@ -278,34 +278,84 @@ def store_customer_details(data):
 # function to create job card
 @frappe.whitelist(allow_guest=True)
 def job_card(data):
+	data = frappe._dict(data)
 	five_point_checkup = {}
 	tyre_abbr = {"Rear Left": "rl_", "Front Right": "fr_", "Front Left": "fl_", "Rear Right": "rr_","Spare Tyre": "sp1_"}
 	for checkup in data.checkup:
-		abbr = tyre_abbr[checkup.tyre]
-		five_point_checkup.update({
-				abbr + "remaining_tread_depth": checkup.depth,
-				abbr + "tyre_pressure": checkup.pressure,
-				abbr + "comment": checkup.comment,
-				abbr + "irregular_wear": checkup.wear,
-				abbr + "run_flat_mark": checkup.mark,
-				abbr + "bulge": checkup.bulge,
-				abbr + "cut_damage": checkup.cut,
-				abbr + "damage": checkup.damage,
-				abbr + "inflation": checkup.puncture,
-		})
+		checkup = frappe._dict(checkup)
+		if checkup.tyre :
+			abbr = tyre_abbr[checkup.tyre]
+			five_point_checkup.update({
+					abbr + "remaining_tread_depth": checkup.depth,
+					abbr + "tyre_pressure": checkup.pressure,
+					abbr + "comment": checkup.comment,
+					abbr + "irregular_wear": checkup.wear,
+					abbr + "run_flat_mark": checkup.mark,
+					abbr + "bulge": checkup.bulge,
+					abbr + "cut_damage": checkup.cut,
+					abbr + "damage": checkup.damage,
+					abbr + "inflation": checkup.puncture,
+			})
 	tyre_replacement = {}
 	tyre_types = {"Front-Left": "fl", "Front-Right": "fr", "Back-Left": "rl", "Back-Right": "rr", "Stephanie": "sp"}
 	for replacement in data.replace:
-		abbr = tyre_types[replacement.tyre]
-		tyre_replacement.update({
-				abbr + "_brand": replacement.brand,
-				abbr + "_load_index": replacement.loadIndex,
-				abbr + "_pattern": replacement.pattern,
-				abbr + "_speed_rating": replacement.speedRating,
-				abbr + "_tt_tl": replacement.ttTl,
-				abbr + "_size": replacement.size,
-				abbr + "_item": replacement.item
-		})
+		replacement = frappe._dict(replacement)
+		if replacement.type :
+			abbr = tyre_types[replacement.type]
+			tyre_replacement.update({
+					abbr + "_brand": replacement.brand,
+					abbr + "_load_index": replacement.loadIndex,
+					abbr + "_pattern": replacement.pattern,
+					abbr + "_speed_rating": replacement.speedRating,
+					abbr + "_tt_tl": replacement.ttTl,
+					abbr + "_size": replacement.size,
+					abbr + "_item": replacement.item
+			})
+	vehicle_number = data.vehicle_number
+	user_details = frappe.db.sql(""" SELECT vd.license_plate as vehicle_no, vd.vehicle_brand as vehicle_brand, vd.vehicle_model as vehicle_model_name, vd.vehicle_type, 
+								vd.tyre_change as tyre_change_km, vd.last_odometer_reading as odo_reading_kms, vd.alignment as free_alignment_kms, 
+						 		cd.current_driver as driver_name, cd.mobile_no, cd.whatsapp as driver_whatsapp, cd.sms as driver_sms, cd.call as driver_call,
+						 		cp.contact_person_name as contact_person, cp.contact_person_mobile as contact_mobile_no, cp.contact_person_email as email, cp.department as department, 
+						 		cp.custom_whatsapp as contact_whatsapp, cp.custom_sms as contatct_sms, cp.custom_call as contact_call,
+						 		cud.current_owner, cud.owner_mobile_no, cud.whatsapp as whatsapp, cud.call as `call`, cud.sms as sms, cud.owner_data as customer FROM `tabVehicle Details` as vd
+						 		join `tabCurrent Driver` as cd on cd.parent = vd.name 
+						 		join `tabCustomer Details` as cud on cud.license_plate = vd.name 
+						 		join `tabContact Person` as cp on cp.parent = vd.name WHERE vd.license_plate = %s AND cd.primary = 1 AND cp.custom_primary = 1""", vehicle_number,as_dict = True)[0] 
+	print(data.service)
+	val = frappe._dict(data.service)
+	# print(val.alignment['lastAlignment'])
+	
+	air,nitrogen = False,False
+
+	if val.inflation['type'] == 'air' :
+		air = True
+		nitrogen = False
+	elif val.inflation['type'] == 'nitrogen' :
+		air = False
+		nitrogen = True
+	else:
+		air = False
+		nitrogen = False
+	
+	service = {"alignment": val.Alignment, "rotation": val.Rotation, "oil_change": val.Oil_change, "balancing": val.Balancing, "inflation": val.Inflation,
+				"ac_service": val.AcService, "battery": val.Battery, "wiper": val.Wiper, "car_wash": val.CarWash, "puncture": val.puncture, "tyre_edge" :val.tyre_edge,
+				"tyre_patch": val.tyre_patch, "mushroom_patch": val.mashroom_patch, "last_alignment_kms": val.alignment['lastAlignment'], "next_alignment_kms": val.alignment['nextAlignment'],
+				"rim": val.rotation['rim'], "wheel": val.rotation['wheel'], "oil_quality": val.oil_change['oil_quality'], "oil_quantity": val.oil_change['oil_quantity'], "front_left_gm": val.balancing['fl'],
+				"front_right_gms": val.balancing['fr'], "rear_left_gms":val.balancing['bl'], "rear_right_gms":val.balancing['br'], "spare_tyre_gms": val.balancing['st'], "air": air, "nitrogen": nitrogen, "front_tyres_psi":val.inflation['ft'],
+				"rear_tyres_psi": val.inflation['rt'], "ac_service_detail": val.ac, "wiper_detail": val.wiper, "battery_detail": val.battery, "car_wash_detail":val.car_wash   }
+
+
+	try:
+		doc = frappe.new_doc("Tyre Job Card")
+		doc.update(five_point_checkup)
+		doc.update(tyre_replacement)
+		doc.update(user_details)
+		doc.update(service)
+		print(doc.as_dict())
+		doc.save(ignore_permissions=True)  # Save customer document
+
+	except Exception as e:
+		print(frappe.get_traceback())
 		
 @frappe.whitelist(allow_guest=True)
 def get_brand_details():
@@ -314,11 +364,11 @@ def get_brand_details():
 						join `tabBrand Details` as bp on b.name = bp.parent 
 						 JOIN `tabSize` as s ON bp.size = s.name """,as_dict=True)
 
-	# print(data)
+	list = []
 	for row in data:
 
 		if row.name not in result:
-			result[row.name] = {row.size: [{"load_index": row.load_index,"speed_rating": row.speed_rating, "tyer_type": row.tyer_type , "pattern": row.pattern}]}
+			result[row.name] = {[{"Size" : row.size}]: [{"load_index": row.load_index,"speed_rating": row.speed_rating, "tyer_type": row.tyer_type , "pattern": row.pattern}]}
 
 		elif row.size in result[row.name]:
 			result[row.name][row.size].append({"load_index": row.load_index,"speed_rating": row.speed_rating, "tyer_type": row.tyer_type , "pattern": row.pattern})
@@ -326,8 +376,8 @@ def get_brand_details():
 
 		elif row.size not in result[row.name]:
 			result[row.name][row.size] = [{"load_index": row.load_index,"speed_rating": row.speed_rating, "tyer_type": row.tyer_type , "pattern": row.pattern}]
-
-	return result
+	print(result)
+	# return result
 # function to create job card
 @frappe.whitelist(allow_guest=True)
 def stock_details():
