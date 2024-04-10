@@ -47,13 +47,15 @@
    "fieldname": "owner_mobile_no",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Owner Mobile No"
+   "label": "Owner Mobile No",
+   "options": "Phone"
   },
   {
    "fetch_from": "owner_data.email_id",
    "fieldname": "owner_email_id",
    "fieldtype": "Data",
-   "label": "Owner Email ID"
+   "label": "Owner Email ID",
+   "options": "Email"
   },
   {
    "fieldname": "section_break_tufh",
@@ -108,7 +110,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-04-01 19:15:54.943185",
+ "modified": "2024-04-10 10:26:01.351550",
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "Customer Details",

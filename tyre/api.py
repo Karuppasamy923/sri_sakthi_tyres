@@ -280,7 +280,7 @@ def store_customer_details(data):
 def job_card(data):
 	data = frappe._dict(data)
 	five_point_checkup = {}
-	tyre_abbr = {"Rear Left": "rl_", "Front Right": "fr_", "Front Left": "fl_", "Rear Right": "rr_","Spare Tyre": "sp1_"}
+	tyre_abbr = {"Rear Left": "rl_", "Front Right": "fr_", "Front Left": "fl_", "Rear-Right": "rr_","Spare Tyre": "sp1_"}
 	for checkup in data.checkup:
 		checkup = frappe._dict(checkup)
 		if checkup.tyre :
@@ -320,8 +320,7 @@ def job_card(data):
 						 		cud.current_owner, cud.owner_mobile_no, cud.whatsapp as whatsapp, cud.call as `call`, cud.sms as sms, cud.owner_data as customer FROM `tabVehicle Details` as vd
 						 		join `tabCurrent Driver` as cd on cd.parent = vd.name 
 						 		join `tabCustomer Details` as cud on cud.license_plate = vd.name 
-						 		join `tabContact Person` as cp on cp.parent = vd.name WHERE vd.license_plate = %s AND cd.primary = 1 AND cp.custom_primary = 1""", vehicle_number,as_dict = True)[0] 
-	print(data.service)
+						 		join `tabContact Person` as cp on cp.parent = vd.name WHERE vd.license_plate = %s AND cd.primary = 1 AND cp.custom_primary = 1""", vehicle_number,as_dict = True)
 	val = frappe._dict(data.service)
 	# print(val.alignment['lastAlignment'])
 	
@@ -345,17 +344,16 @@ def job_card(data):
 				"rear_tyres_psi": val.inflation['rt'], "ac_service_detail": val.ac, "wiper_detail": val.wiper, "battery_detail": val.battery, "car_wash_detail":val.car_wash   }
 
 
-	try:
-		doc = frappe.new_doc("Tyre Job Card")
-		doc.update(five_point_checkup)
-		doc.update(tyre_replacement)
-		doc.update(user_details)
-		doc.update(service)
-		print(doc.as_dict())
-		doc.save(ignore_permissions=True)  # Save customer document
-
-	except Exception as e:
-		print(frappe.get_traceback())
+	doc = frappe.new_doc("Tyre Job Card")
+	doc.update(five_point_checkup)
+	doc.update(tyre_replacement)
+	doc.update(user_details)
+	doc.update(service)
+	doc.save(ignore_permissions=True)  # Save customer document
+	return {
+		"status": 200,
+		"message": "Jobcard Created Successfully"
+	}
 		
 @frappe.whitelist(allow_guest=True)
 def get_brand_details():
@@ -376,8 +374,9 @@ def get_brand_details():
 
 		elif row.size not in result[row.name]:
 			result[row.name][row.size] = [{"load_index": row.load_index,"speed_rating": row.speed_rating, "tyer_type": row.tyer_type , "pattern": row.pattern}]
-	print(result)
-	# return result
+
+	return result
+
 # function to create job card
 @frappe.whitelist(allow_guest=True)
 def stock_details():
