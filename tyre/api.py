@@ -342,19 +342,65 @@ def job_card(data):
 				"rim": val.rotation['rim'], "wheel": val.rotation['wheel'], "oil_quality": val.oil_change['oil_quality'], "oil_quantity": val.oil_change['oil_quantity'], "front_left_gm": val.balancing['fl'],
 				"front_right_gms": val.balancing['fr'], "rear_left_gms":val.balancing['bl'], "rear_right_gms":val.balancing['br'], "spare_tyre_gms": val.balancing['st'], "air": air, "nitrogen": nitrogen, "front_tyres_psi":val.inflation['ft'],
 				"rear_tyres_psi": val.inflation['rt'], "ac_service_detail": val.ac, "wiper_detail": val.wiper, "battery_detail": val.battery, "car_wash_detail":val.car_wash   }
-
+	
+	
+		
 
 	doc = frappe.new_doc("Tyre Job Card")
 	doc.update(five_point_checkup)
 	doc.update(tyre_replacement)
 	doc.update(user_details)
 	doc.update(service)
+	for billing in data.Bill:
+		billing = frappe._dict(billing)
+		doc.append("billing_items", {"item_code": billing.item_code, "warehouse": billing.sourcewarehouse, "quantity" : billing.required_quantity, "amount" :billing.cost})
 	doc.save(ignore_permissions=True)  # Save customer document
 	return {
 		"status": 200,
 		"message": "Jobcard Created Successfully"
 	}
-		
+
+@frappe.whitelist(allow_guest=True)
+def lead(data):
+	data = frappe._dict(data)
+	lead_user_details = {
+		"first_name": data.current_owner,
+		"mobile_no": data.owner_mobile_no,
+		"custom_whatsapp": data.whatsapp,
+		"custom_sms": data.sms,
+		"custom_call": data.call,
+	}
+	services = frappe._dict(data.services)
+
+	service_details = {
+		"custom_alignment": services.alignment,
+		"custom_oil_change": services.oil_change,
+		"custom_inflation": services.inflation,
+		"custom_tyre_edge": services.tyre_edge,
+		"custom_mushroom_patch": services.mushroom_patch,
+		"custom_battery": services.battery,
+		"custom_car_wash": services.car_wash,
+		"custom_rotation": services.rotation,
+		"custom_balancing": services.balancing,
+		"custom_wiper": services.wiper,
+		"custom_ac_service": services.ac_service,
+		"custom_puncture": services.puncture,
+		"custom_tyre_patch": services.tyre_patch,
+	}
+
+	doc = frappe.new_doc("Lead")
+	doc.update(lead_user_details)
+	doc.update(service_details)
+	for items_deatils in data.items:
+		items_deatils = frappe._dict(items_deatils)
+		doc.append("custom_lead_items", {"brand": items_deatils.brand, "size": items_deatils.size, "quantity" : items_deatils.required_quantity})
+	doc.save(ignore_permissions=True)  # Save customer document
+	return {
+        "status": 200,
+        "message": "Lead Created Successfully"
+    }
+
+
 @frappe.whitelist(allow_guest=True)
 def get_brand():
 	return frappe.get_all("Brand", pluck="name")
