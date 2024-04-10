@@ -519,7 +519,7 @@
                         <div v-if="showNewCustomer"
                             class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-end items-center pb-9">
                             <div class="fixed inset-0" @click="addCustomer"></div>
-                            <div class="max-w-md w-full bg-white shadow-xl h-full overflow-y-auto relative">
+                            <div class="max-w-xl w-full bg-white shadow-xl h-full overflow-y-auto relative">
                                 <button class="absolute to text-gray pt-5 font-bold p-2 right-2 px-2 py-1 rounded"
                                     @click="addCustomer">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
@@ -631,7 +631,7 @@
                                     <div v-else>
                                         <label>Tyre</label>
                                         <hr class="dark-hr">
-                                        <div class="grid grid-cols-3 gap-4">
+                                        <div class="grid grid-cols-4 gap-10">
                                             <div class="flex flex-col ml-1">
                                                 <label class="mt-2">Brand</label>
                                                 <select class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black" v-model="selectedBrand">
@@ -641,12 +641,16 @@
                                               <div class="flex flex-col ml-1">
                                                 <label class="mt-2">Variants</label>
                                                 <select class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black" v-model="selectedVariant">
-                                                  <option v-for="(variant, index) in selectedBrandVariants" :key="index">{{ variant }}</option>
+                                                  <option v-for="(variant, index) in getSizesForSelectedBrand(selectedBrand)" :key="index">{{ variant }}</option>
                                                 </select>
                                               </div>
                                             <div class="flex flex-col ml-1">
                                               <label class="mt-2">Quantity</label>
                                               <input class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black" type="text" v-model="quantity">
+                                            </div>
+                                            <div class="flex flex-col ml-1">
+                                              <!-- <label class="mt-2">Add</label> -->
+                                              <Button class="w-[4rem] mt-10" type="text" v-model="price">Add</Button>
                                             </div>
                                           </div>
                                             <label>Services</label>
@@ -1464,6 +1468,7 @@ onMounted(() => {
     axios.get(`${even}/api/method/tyre.api.get_brand_details`)
     .then(response => {
       resData.value=response.data.message;
+      console.log(resData.value);
       brand.value=Object.keys(response.data.message);
     })
 });
