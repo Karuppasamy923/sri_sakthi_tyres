@@ -6,6 +6,8 @@ import re
 # function to get the vehicle & customer details (parameter = license plate)
 @frappe.whitelist(allow_guest=True)
 def get_details(license_plate):
+	print("****")
+	print(license_plate)
 	license_plate = re.sub(r'[^a-zA-Z0-9]', '', license_plate)
 	regex = "^[A-Z]{2}[0-9]{2}[A-Z]{1,2}[0-9]{4}$"
 	p = re.compile(regex)
@@ -13,12 +15,11 @@ def get_details(license_plate):
 	# p = re.compile(regex)
 	license_plate=license_plate.upper()
 	if license_plate is None:
-		print("error")
 		return "NO Data Found!!!!"
 	else:   
-		print(license_plate)
+		print(license_plate.upper())
 		if(re.search(p, license_plate)):
-			print("currect")
+			print("*****currect*******")
 			print(license_plate)
 			if license_plate:
 				vehicle_details = ''
@@ -61,6 +62,7 @@ def get_details(license_plate):
 				if vehicle_details or customer_details :
 					return [vehicle_details, customer_details,primary_details]
 				else:
+					print("*******")
 					return ""
 		else:
 			return "Enter a Valid vehicle number"        
@@ -361,7 +363,6 @@ def job_card(data):
 	}
 
 @frappe.whitelist(allow_guest=True)
-
 def lead(data):
 	data = frappe._dict(data)
 	lead_user_details = {
@@ -397,24 +398,31 @@ def lead(data):
 		doc.append("custom_lead_items", {"brand": items_deatils.brand, "size": items_deatils.size, "quantity" : items_deatils.required_quantity})
 	doc.save(ignore_permissions=True)  # Save customer document
 	return {
-        "status": 200,
-        "message": "Lead Created Successfully"
-    }
+		"status": 200,
+		"message": "Lead Created Successfully"
+	}
 
 
 @frappe.whitelist(allow_guest=True)
 def get_brand():
 	return frappe.get_all("Brand", pluck="name")
 
-		
 @frappe.whitelist(allow_guest=True)
 def get_size(brand):
-	return frappe.db.sql("""select distinct bd.size, s.load_index, s.speed_rating from `tabBrand Details` as bd join `tabSize` as s on s.name=bd.size where bd.parent='MRF' """, as_dict = True)
-
-
+	query = """
+		SELECT DISTINCT bd.size, s.load_index, s.speed_rating
+		FROM `tabBrand Details` AS bd
+		JOIN `tabSize` AS s ON s.name = bd.size
+		WHERE bd.parent = %(brand)s
+	"""
+	# Execute the SQL query
+	result = frappe.db.sql(query, {"brand": brand}, as_dict=True)
+	return result
 
 @frappe.whitelist(allow_guest=True)
 def get_pattern(brand, size):
+	print(brand)
+	print(size)
 	return frappe.get_all("Brand Details", {"parent": brand, "size": size}, ["pattern", "tyer_type"])
 
 

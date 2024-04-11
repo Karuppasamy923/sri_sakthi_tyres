@@ -1296,8 +1296,8 @@
                                 <div>
                                     <label :for="'brand' + index">Brand</label>
                                     <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                        v-model="tyre.brand" @change="saveData(index)">
-                                        <option v-for="(tyre, index) in resData" :key="index">{{ tyre.brand }}</option>
+                                        v-model="tyre.brand" @change="getSize(tyre.brand,index)">
+                                        <option v-for="(tyre, index) in brand" :key="index">{{ tyre }}</option>
                                     </select>
                                 </div>
                                 <div class="mt-[20px] w-[16rem]">
@@ -1311,10 +1311,8 @@
                                 <div>
                                     <label :for="'size' + index">Size</label>
                                     <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                        v-model="tyre.size"
-                                        @change="updateFields(tyres[index].size, index, tyres[index].brand)">
-                                        <option v-for="(tyre, index) in getSizesForSelectedBrand(tyres[index].brand)"
-                                            :key="index">{{ tyre }}</option>
+                                    v-model="tyre.size" @change="getOther(tyre.brand,tyre.size,index)">
+                                    <option v-for="(size, index) in sizes[index]" :key="index">{{ size.size }}</option>
                                     </select>
                                 </div>
                                 <div class="mt-[20px]">
@@ -1339,7 +1337,7 @@
                             </div>
                             <div class="ml-[400px]">
                                 <FeatherIcon name="x" class="mt-0 ml-2 w-6 h-6 cursor-pointer text-red-500"
-                                    @click="deleteTyreReplacement" />
+                                    @click="deleteTyreReplacement(index)" />
                             </div>
                         </div>
                     </div>
@@ -1486,6 +1484,11 @@ const data = reactive({
     selectedAlt: ''
 });
 
+const  headers={
+    'Content-Type': 'application/json',
+    'Authorization': 'token 91fd9d5af4c6543:439956d0e92eab0'
+}
+
 const pin1 = ref('');
 const pin2 = ref('');
 const pin3 = ref('');
@@ -1528,56 +1531,47 @@ function submitPin() {
 
 const jobCard = {}
 const brand = ref([])
-const resData = ref({})
+const sizes =ref([])
+const BaseURL=window.location.origin
+
 onMounted(() => {
-    axios.get(`http://192.168.1.39:8002/api/method/tyre.api.get_brand_details`)
+    axios.get(`${BaseURL}/api/method/tyre.api.get_brand`,{headers: headers} )
         .then(response => {
-            resData.value = response.data.message;
-            brand.value = Object.keys(response.data.message);
+            brand.value = response.data.message;
         })
 });
 
+const getSize = (data,index) =>{
+    axios.post(`${BaseURL}/api/method/tyre.api.get_size`,{brand:data},{headers:headers})
+        .then(response =>{
+            sizes.value[index]=response.data.message;
+        })
+}
 
-const getSizesForSelectedBrand = (brand) => {
-    const sizesObject = resData.value[brand];
-    if (sizesObject) {
-        const sizesArray = Object.values(sizesObject);
-        const validSizesArray = sizesArray.filter(Array.isArray);
-        const sizes = validSizesArray.flatMap(tyres => tyres.map(tyre => tyre.size));
-        return sizes;
-    }
-};
-
-const updateFields = (sizes, index, brand) => {
-    // Check if tyres[index] is defined before accessing it
-    if (tyres.value[index].size) {
-        const tyre = tyres.value[index];
-
-        // Ensure resData.value[brand] is defined before calling find
-        if (resData.value && resData.value[brand]) {
-            const sizeData = Object.values(resData.value[brand])
-            if (Array.isArray(sizeData)) {
-                const arrayData = sizeData.filter(Array.isArray);
-                const valueData = arrayData.flatMap(tyres => tyres.find(tyre => tyre.size === sizes))
-                if (valueData) {
-                    tyres.value[index].ttTl = valueData[0].tyer_type;
-                    tyres.value[index].loadIndex = valueData[0].load_index;
-                    tyres.value[index].speedRating = valueData[0].speed_rating;
-                    tyres.value[index].pattern = valueData[0].pattern;
-                    tyres.value[index].item = valueData[0].item_code;
-                } else {
-                    console.log("Size data not found.");
-                }
-            } else {
-                console.log("no array")
-            }
-        } else {
-            console.log(`No data found for brand ${brand}.`);
+const getOther = (brand,data,index)=>{
+    let i=0;
+    for (const co in sizes.value[index]) {
+        const sizeData =sizes.value[index][i]
+        if(sizeData.size == data){
+            tyres.value[index].loadIndex=sizeData.load_index;
+            tyres.value[index].speedRating=sizeData.speed_rating;
+            getPatterType(brand,data,index)
         }
-    } else {
-        console.log(`Tyre at index ${index} is undefined.`);
+        i++;
     }
-};
+}
+const getPatterType = (brand,data,index) => {
+    console.log(brand)
+    console.log(data)
+    console.log(index)
+    axios.post(`${BaseURL}/api/method/tyre.api.get_pattern`,{brand:brand,size:data},{headers:headers})
+        .then(response =>{
+            console.log(response.data.message)
+            console.log(response.data.message[0].tyer_type);
+            tyres.value[index].pattern=response.data.message[0].pattern;
+            tyres.value[index].ttTl=response.data.message[0].tyer_type;
+        })
+}
 //==========================================================>>> Main Page <<<================================================================================//
 const hasResponse = ref(true);
 const noData = ref(false)
@@ -1655,9 +1649,11 @@ const search = async () => {
     };
     console.log('checking data', data);
     try {
+        console.log("#$%^&")
         if (data.license_plate.trim() !== "") {
-
-            const response = await axios.post(`http://192.168.1.39:8002/api/method/tyre.api.get_details`, data);
+            console.log("*****")
+            const response = await axios.post(`${BaseURL}/api/method/tyre.api.get_details`, {license_plate:data.license_plate},{headers:headers});
+            console.log(response.data.message);
             if (response.data.message === "Enter a Valid vehicle number") {
 
                 check.value = false;
@@ -1772,7 +1768,7 @@ function nextPageAndHighlight() {
                         return;
                     }
                 }
-                checkup(jobCard);
+                addValue(tyres.value)
                 break;
             case 5:
                 checkup(jobCard);
@@ -1916,10 +1912,8 @@ const confirmSave = async () => {
     });
     const searchData = data.name;
     console.log('searchdata in confirm page:', searchData);
-    const json_data = { data: JSON.stringify(data) };
-    console.log(json_data);
     try {
-        const response = await axios.post(`http://192.168.1.39:8002/api/method/tyre.api.store_vehicle_details`, json_data);
+        const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_vehicle_details`, {data:JSON.stringify(data)},{headers:headers});
         console.log('vehicle add after response', response);
         if (responseData.value && responseData.value.message) {
             enable.value = true;
@@ -1964,7 +1958,7 @@ const addModifiedData = async () => {
     console.log(modifiedData)
     try {
         const json_data = { data: JSON.stringify(modifiedData) }
-        const response = await axios.post(`http://192.168.1.39:8002/api/method/tyre.api.store_vehicle_details`, json_data);
+        const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_vehicle_details`,{data:JSON.stringify(data)},{headers:headers});
         console.log(response);
         returnSearch(name)
         showModifyVehicle.value = false;
@@ -2135,11 +2129,8 @@ const addCustomerData = async () => {
             });
         });
         console.log('before checking customer data', data);
-        const json_data = { data: JSON.stringify(data) }
-        console.log('before checking customer json_data', json_data);
-        console.log(json_data);
         try {
-            const response = await axios.post(`http://192.168.1.39:8002/api/method/tyre.api.store_customer_details`, json_data)
+            const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_customer_details`,{data:JSON.stringify(data)},{headers:headers})
             check.value = true;
             console.log(response);
             if (responseData.value && responseData.value.message) {
@@ -2245,10 +2236,8 @@ const addCustomerModifiedData = async () => {
     });
 
     console.log('modify checking', modifiedData);
-    const json_data = { data: JSON.stringify(modifiedData) };
-    console.log("Modified data", json_data)
     try {
-        const response = await axios.post(`http://192.168.1.39:8002/api/method/tyre.api.store_customer_details`, json_data);
+        const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_customer_details`,{data:JSON.stringify(data)},{headers:headers});
         check.value = true;
         console.log(response);
         returnSearch(name)
@@ -2310,7 +2299,7 @@ const handleCustomer = async () => {
     try {
         const json_data = { data: JSON.stringify(customerDetails) };
         console.log('checking customer details', json_data);
-        const response = await axios.post(`http://192.168.1.39:8002/api/method/tyre.api.store_customer_details`, json_data)
+        const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_customer_details`,{data:JSON.stringify(data)},{headers:headers})
         console.log('response from customer details', response.data);
 
     } catch (error) {
@@ -2333,7 +2322,7 @@ const selectedBrandVariants = computed(() => {
 
 const handleEnquiry = async () => {
     try {
-        const response = await axios.get(`http://192.168.1.39:8002/api/method/tyre.api.stock_details`);
+        const response = await axios.get("http://192.168.1.39:8002/api/method/tyre.api.stock_details");
         console.log('response data for customer details', response.data);
         responseTyreData.value = response.data;
         console.log(responseTyreData.value);
@@ -2358,7 +2347,7 @@ const returnSearch = async (search) => {
     console.log('checking data', data);
     try {
         if (data.license_plate.trim() !== "") {
-            const response = await axios.post(`http://192.168.1.39:8002/api/method/tyre.api.get_details`, data);
+            const response = await axios.post(`${BaseURL}/api/method/tyre.api.get_details`,{license_plate:JSON.stringify(data)},{headers:headers});
             check.value = true;
             console.log('returnSearch data', response);
             if (response.data.message === "") {
@@ -2584,10 +2573,8 @@ const requireService = ref({
 function checkup(data) {
     console.log("******")
     console.log(data)
-    const json_data = { data: data }
-    console.log(json_data);
     try {
-        const response = axios.post(`http://192.168.1.39:8002/api/method/tyre.api.job_card`, json_data);
+        const response = axios.post(`${BaseURL}/api/method/tyre.api.job_card`,{data:JSON.stringify(data)},{headers:headers});
         console.log(response);
     } catch (error) {
         console.error("error");
@@ -2756,7 +2743,7 @@ const addTyreReplacement = () => {
         setValue.index++;
     }
 }
-const deleteTyreReplacement = (index) => {
+const deleteTyreReplacement= (index) => {
     if (setValue.index > 1) {
         tyres.value.splice(index, 1)
         setValue.index--;
@@ -2766,11 +2753,11 @@ const deleteTyreReplacement = (index) => {
 
 let step = ref(0)
 function addValue(data){
-    console.log(data.Alignment);
-
 // Check if data is an array
+console.log(data)
 if (Array.isArray(data)) {
     // Data is a list (array)
+    console.log(data)
     data.forEach(item => {
         console.log(item.item);
 
@@ -2790,6 +2777,7 @@ if (Array.isArray(data)) {
             tableData.value[billIndex][existingItemIndex].requiredQuantity++;
         } else {
             // Otherwise, create a new object for the item
+            console.log(item.item)
             const newData = {
                 itemCode: item.item,
                 sourceWarehouse: '',
