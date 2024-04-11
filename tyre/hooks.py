@@ -232,17 +232,21 @@ website_route_rules = [{'from_route': '/frontend/<path:app_path>', 'to_route': '
 
 whitelist = ["GET", "POST"]
 
-app_list = ['get_details','store_vehicle_details','job_card', 'stock_details']
+app_list = ['get_details','store_vehicle_details','job_card', 'stock_details','get_brand','get_size','get_pattern']
 
-from tyre.api import get_details, store_vehicle_details, job_card, stock_details
+from tyre.api import get_details, store_vehicle_details, job_card, stock_details,get_brand,get_size,get_pattern
 
 api_routes = {
     "GET": {
         "/api/method/tyre.api.store_vehicle_details": store_vehicle_details,
         "/api/method/tyre.api.stock_details":stock_details,
+        "/api/method/tyre.api.get_brand":get_brand,
+        
     },
     "POST": {
         "/api/method/tyre/api/get_details": get_details,
         "/api/method/tyre.api.job_card": job_card,
+        "/api/method/tyre.api.get_size":get_size,
+        "/api/method/tyre.api.get_pattern":get_pattern,
     }
 }
