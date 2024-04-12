@@ -98,19 +98,15 @@
                                 <span class="font-medium text-red-500">No data found!</span>
                             </div>
                         </div>
-                        <div v-if="successData">
-                            <div class="flex justify-center">
-                                <span class="font-medium text-green-500">Data added successfully!</span>
-                            </div>
-                        </div>
-
                         <div v-if="showConfirmation"
                             class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
                             <div class="bg-white rounded-lg p-8 shadow-xl">
                                 <h2 class="text-xl font-semibold mb-4">Confirm Save</h2>
                                 <p class="mb-4">Are you sure you want to save the details?</p>
-                                <div class="flex justify-end">
-                                    <button @click="confirmSave"
+                                <div class="flex justify-center">
+                                    <button @click="confirmSave" v-if="newVehicleSave"
+                                        class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
+                                    <button @click="confirmCustomerSave" v-if="newCustomerSave"
                                         class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
                                     <button @click="cancelSave"
                                         class="bg-red-500 text-white font-semibold px-4 py-2 rounded">Cancel</button>
@@ -487,27 +483,29 @@
                                 <div class="p-8 mt-[140px]  ">
                                     <h2 class="text-2xl font-semibold mb-4 ">Vehicle Details</h2>
                                     <hr class="dark-hr">
-                                    <p class="m-2">Vehicle Number <br>
+                                    <p class="m-2">Vehicle Number <span class="text-red-500 font-bold">*</span><br>
                                         <input type="text"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                            v-model="vehicleData.name" placeholder="Enter your Vehicle Number">
+                                            v-model="vehicleData.name" placeholder="Enter Vehicle Number">
                                     </p>
-                                    <p class="m-2">Vehicle Brand <br>
+                                    <p class="m-2">Vehicle Brand <span class="text-red-500 font-bold">*</span><br>
                                         <input type="text"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="vehicleData.vehicle_brand" placeholder="Enter Vehicle Brand">
                                     </p>
-                                    <p class="m-2">Vehicle Model <br>
+                                    <p class="m-2">Vehicle Model <span class="text-red-500 font-bold">*</span><br>
                                         <input type="text"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="vehicleData.vehicle_model" placeholder="Enter Vehicle Model">
                                     </p>
-                                    <p class="m-2">Chassis No <br>
+
+                                    <p class="m-2">Chassis No <span class="text-red-500 font-bold">*</span><br>
+
                                         <input type="text"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="vehicleData.chassis_no" placeholder="Enter Chassis No">
                                     </p>
-                                    <p class="m-2">Fuel Type <br>
+                                    <p class="m-2">Fuel Type <span class="text-red-500 font-bold">*</span><br>
                                         <select v-model="vehicleData.fuel_type"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
                                             <option value="Petrol">Petrol</option>
@@ -515,18 +513,18 @@
                                             <option value="EV">Electical Vehicle</option>
                                         </select>
                                     </p>
-                                    <p class="m-2">Odometer Value <br>
+                                    <p class="m-2">Odometer Value <span class="text-red-500 font-bold">*</span><br>
                                         <input type="number"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="vehicleData.last_odometer_reading"
                                             placeholder="Enter Odometer Value">
                                     </p>
-                                    <p class="m-2">Tyre Change (kms) <br>
+                                    <p class="m-2">Tyre Change (kms) <span class="text-red-500 font-bold">*</span><br>
                                         <input type="number"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="vehicleData.tyre_change" placeholder="Enter Tyre Change">
                                     </p>
-                                    <p class="m-2">Alignment (kms) <br>
+                                    <p class="m-2">Alignment (kms) <span class="text-red-500 font-bold">*</span><br>
                                         <input type="number"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="vehicleData.alignment" placeholder="Enter Alignment">
@@ -626,21 +624,21 @@
                                             d="M6 18L18 6M6 6l12 12" />
                                     </svg>
                                 </button>
-                                <div class="p-8 mt-[150px]">
-                                    <div class="pb-4 m-2 grid grid-cols-2" v-if="handle">
+                                <div class="p-8 mt-[110px]">
+                                    <div class="pb-4 grid grid-cols-2 ml-24" v-if="handle">
                                         <input type="tel"
                                             class="w-[19rem] h-[3rem] mt-1 rounded-sm border-solid border border-black"
-                                            placeholder="Enter Your Mobile Number" v-model="searchMobile">
+                                            placeholder="Enter Customer Mobile No.">
                                         <div class="w-[3rem] h-[3rem] mt-1 ml-[7.6rem] bg-blue-600 rounded-sm">
                                             <FeatherIcon name="search" class="m-2 w-8 h-8 cursor-pointer text-gray-100"
                                                 @click="handleSearch" />
                                         </div>
                                     </div>
-                                    <div class="grid grid-cols-2">
-                                        <div class="mt-0.5">
+                                    <div class="grid grid-cols-2 mt-[1.5rem]">
+                                        <div>
                                             <h2 class="text-2xl font-semibold mb-4">Customer Details</h2>
                                         </div>
-                                        <span class="ml-[4rem]">
+                                        <span class="ml-[9rem]">
                                             <input type="checkbox" v-model="handle" @click="handleEnquiry"
                                                 class="bg-gray-300 rounded-sm pb-4">&nbsp;&nbsp;<label>Enquiry</label>
                                         </span>
@@ -650,7 +648,7 @@
                                             class="text-red-500 font-bold">*</span><br>
                                         <input type="text" v-model="customerData.name"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                            placeholder="Enter your Vehicle Number">
+                                            placeholder="Enter Vehicle Number">
                                     </p>
                                     <p class="m-2">Customer Name <span class="text-red-500 font-bold">*</span><br>
                                         <input type="text" v-model="leadDetails.lead_name" v-if="leadDetails" :readonly="handle == 1"
@@ -658,7 +656,7 @@
                                             placeholder="Enter Customer Name">
                                         <input type="text" v-model="customerData.current_owner" v-if="!leadDetails"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                            placeholder="Enter Customer Name">
+                                            placeholder="Enter Name">
                                     </p>
                                     <p class="m-2">Customer Mobile No <span class="text-red-500 font-bold">*</span><br>
                                         <input type="tel" v-model="leadDetails.mobile_no" v-if="leadDetails" :readonly="handle == 1"
@@ -666,7 +664,7 @@
                                             placeholder="Enter Customer Mobile No.">
                                         <input type="tel" v-model="customerData.owner_mobile_no" v-if="!leadDetails"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                            placeholder="Enter Customer Mobile No.">
+                                            placeholder="Enter Mobile No.">
                                     </p>
                                     <input type="checkbox" v-model="customerData.whatsappChecked" :checked="leadDetails.custom_whatsapp == '1'" :disabled="handle == 1 && leadDetails != null && leadDetails != undefined"
                                         class="bg-gray-300 rounded-sm">&nbsp;&nbsp; <label>WhatsApp</label>
@@ -681,19 +679,20 @@
                                     <div v-if="!handle">
                                         <div v-for="(employee, index) in employees" :key="index" class="mt-2">
                                             <hr class="dark-hr m-4">
+                                            <button
+                                                class="bg-blue-500 w-[100px] text-white font-bold  text-base p-4 rounded-lg mb-1 float-right"
+                                                @click="removeEmployee1(index)">Remove</button> <br>
                                             <p class="m-2">Employee Name <span class="text-red-500 font-bold">*</span>
-                                                <button
-                                                    class="bg-blue-500 w-[100px] text-white font-bold  text-base p-4 rounded-lg mb-1 float-right"
-                                                    @click="removeEmployee1(index)">Remove</button> <br>
                                                 <br>
                                                 <input type="text" v-model="employee.driver_name"
                                                     class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                                    placeholder="Enter your Name">
+                                                    placeholder="Enter Name">
                                             </p>
                                             <p class="m-2">Employee Type <span
                                                     class="text-red-500 font-bold">*</span><br>
                                                 <select v-model="employee.type"
                                                     class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
+                                                    <option value="" selected disabled>Please select..</option>
                                                     <option value="current_driver">Driver</option>
                                                     <option value="contact_person">Contact Person</option>
                                                 </select>
@@ -735,7 +734,7 @@
                                         </div>
                                     </div>
                                     <div v-else>
-                                        <label>Tyre</label>
+                                        <label class="font-semibold">Tyre</label>
                                         <hr class="dark-hr">
                                         <div class="grid grid-cols-4 gap-10" v-if="boolDetails.state == 0">
                                             <div class="flex flex-col ml-1">
@@ -764,7 +763,8 @@
                                             </div>
                                             <div class="flex flex-col ml-1">
                                                 <!-- <label class="mt-2">Add</label> -->
-                                                <Button class="w-[4rem] mt-10" type="text" @click="addItem">Add</Button>
+                                                <Button class="w-[4rem] mt-10" type="text" v-model="price"
+                                                    @click="addItem">Add</Button>
                                             </div>
                                         </div>
                                         <div v-if="tableDetails">
@@ -803,9 +803,9 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <label>Services</label>
+                                        <label class="font-semibold">Services</label>
                                         <hr class="dark-hr">
-                                        <div class="grid grid-cols-2 mt-5">
+                                        <div class="grid grid-cols-3 mt-5">
                                             <div>
                                                 <input type="checkbox" v-model="serviceDetails.alignment" :checked = "leadDetails.custom_alignment == '1'" :disabled="handle == 1 && leadDetails != null && leadDetails != undefined"
                                                     class="bg-gray-300 rounded-sm"> <label>Alignment</label>
@@ -1618,7 +1618,9 @@ const data = reactive({
 
 const headers = {
     'Content-Type': 'application/json',
-    'Authorization': 'token b89ae1f0409875e:af8a0b78d948ebf'
+
+    'Authorization': 'token 7fa0cf7915ad42d :2a784f5c29d213b'
+
 }
 
 const pin1 = ref('');
@@ -1881,12 +1883,16 @@ function previousPage() {
     if (currentstep.value > 0) {
         currentstep.value--;
         currentPage.value = getPageName(currentstep.value);
+        console.log(currentPage.value)
     }
 }
 
 const showWarning = ref(false)
 const close = () => {
-    showWarning.value = false;
+    if(showWarning.value){
+        showWarning.value = false;
+        showNewCustomer.value = true;
+    }
     showAlerts.value = false;
     modifyAlert.value = false;
     successData.value = false
@@ -2034,6 +2040,8 @@ const vehicleData = ref({
 });
 
 const showConfirmation = ref(false);
+const newVehicleSave = ref(false);
+const newCustomerSave = ref(false);
 const showAlerts = ref(false)
 const vehicleNumber = ref(false)
 const vehicleExist = ref(false)
@@ -2084,6 +2092,7 @@ const addVehicleData = async () => {
     }
     else {
         showConfirmation.value = true;
+        newVehicleSave.value = true;
         showNewVehicle.value = false;
     }
 };
@@ -2092,6 +2101,7 @@ const enable = ref(false);
 const confirmSave = async () => {
     console.log('confirm page');
     showConfirmation.value = false;
+    newVehicleSave.value = false;
     const fieldNames = Object.keys(vehicleData.value);
     const data = {};
 
@@ -2208,6 +2218,7 @@ const modifiedMoreEmployee = async (type) => {
         } else if (type === 'contact_person') {
             const lastContactIndex = responseData.value.message[1].contact_person.length - 1;
             newEmployee.custom_whatsapp = responseData.value.message[1].contact_person[lastContactIndex]?.custom_whatsapp;
+            console.log(newEmployee.custom_whatsapp)
             newEmployee.custom_call = responseData.value.message[1].contact_person[lastContactIndex]?.custom_call;
             newEmployee.custom_sms = responseData.value.message[1].contact_person[lastContactIndex]?.custom_sms;
             responseData.value.message[1].contact_person.push(newEmployee);
@@ -2265,6 +2276,7 @@ const handlePrimaryCheckboxModify = (clickedEmployee) => {
 
 const addCustomerData = async () => {
     const name = customerData.value.name.trim();
+    console.log(name)
     const existingData = await returnSearch(name);
     console.log('filtering process', existingData.message[1].current_owner);
     console.log('vehicle number during customer add:', existingData.message[0].name);
@@ -2430,7 +2442,7 @@ const addCustomerModifiedData = async () => {
 
     console.log('modify checking', modifiedData);
     try {
-        const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_customer_details`, { data: JSON.stringify(data) }, { headers: headers });
+        const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_customer_details`,{data:JSON.stringify(modifiedData)},{headers:headers});
         check.value = true;
         console.log(response);
         returnSearch(name)
@@ -2477,10 +2489,18 @@ const serviceDetails = ref({
 })
 
 const handleCustomer = async () => {
-    if (boolDetails.state == 1){
-        alert("Unable to edit")
-        return
-    }
+    showNewCustomer.value = false;
+    showConfirmation.value = true;
+    newCustomerSave.value = true;
+}
+
+const confirmCustomerSave = async () => {
+    showConfirmation.value = false;
+    newCustomerSave.value = false;
+if (boolDetails.state == 1){
+    alert("Unable to edit")
+    return
+}
     const customerDetails = {
         current_owner: customerData.value.current_owner,
         owner_mobile_no: customerData.value.owner_mobile_no,
@@ -2553,10 +2573,11 @@ const returnSearch = async (search) => {
     const data = {
         "license_plate": search
     };
-    console.log('checking data', data);
+    console.log('checking data', data.license_plate);
     try {
         if (data.license_plate.trim() !== "") {
-            const response = await axios.post(`${BaseURL}/api/method/tyre.api.get_details`, { license_plate: JSON.stringify(data) }, { headers: headers });
+            console.log("**&**")
+            const response = await axios.post(`${BaseURL}/api/method/tyre.api.get_details`,{license_plate:JSON.stringify(data.license_plate)},{headers:headers});
             check.value = true;
             console.log('returnSearch data', response);
             if (response.data.message === "") {
