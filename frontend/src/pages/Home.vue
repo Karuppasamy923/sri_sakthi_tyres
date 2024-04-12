@@ -1524,7 +1524,7 @@ const data = reactive({
 
 const headers = {
     'Content-Type': 'application/json',
-    'Authorization': 'token b89ae1f0409875e:af8a0b78d948ebf'
+    'Authorization': 'token 7fa0cf7915ad42d :2a784f5c29d213b'
 }
 
 const pin1 = ref('');
@@ -2817,7 +2817,7 @@ const tyres = ref([{
     ttTl: '',
     item: '',
 
-    mandatory: false
+    mandatory: false,
     status: false
 
 }]);

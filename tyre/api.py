@@ -277,6 +277,15 @@ def store_customer_details(data):
 		return "Enter a valid number"
 
 
+@frappe.whitelist(allow_guest=True)
+def lead_details(data):
+	doc =  frappe.get_doc("Lead",{"mobile_no" : data})
+	if not doc :
+		return{
+			"message": "Lead not found"
+		}
+	return doc
+
 # function to create job card
 @frappe.whitelist(allow_guest=True)
 def job_card(data):
@@ -344,8 +353,6 @@ def job_card(data):
 				"rim": val.rotation['rim'], "wheel": val.rotation['wheel'], "oil_quality": val.oil_change['oil_quality'], "oil_quantity": val.oil_change['oil_quantity'], "front_left_gm": val.balancing['fl'],
 				"front_right_gms": val.balancing['fr'], "rear_left_gms":val.balancing['bl'], "rear_right_gms":val.balancing['br'], "spare_tyre_gms": val.balancing['st'], "air": air, "nitrogen": nitrogen, "front_tyres_psi":val.inflation['ft'],
 				"rear_tyres_psi": val.inflation['rt'], "ac_service_detail": val.ac, "wiper_detail": val.wiper, "battery_detail": val.battery, "car_wash_detail":val.car_wash   }
-	
-	
 		
 
 	doc = frappe.new_doc("Tyre Job Card")
@@ -353,9 +360,9 @@ def job_card(data):
 	doc.update(tyre_replacement)
 	doc.update(user_details)
 	doc.update(service)
-	for billing in data.Bill:
+	for billing in data.get('bill'):
 		billing = frappe._dict(billing)
-		doc.append("billing_items", {"item_code": billing.item_code, "warehouse": billing.sourcewarehouse, "quantity" : billing.required_quantity, "amount" :billing.cost})
+		doc.append("billing_items", {"item_code": billing.itemCode, "warehouse": billing.sourceWarehouse, "quantity" : billing.requiredQuantity, "amount" :billing.cost, "rate": billing.rate})
 	doc.save(ignore_permissions=True)  # Save customer document
 	return {
 		"status": 200,
@@ -390,17 +397,17 @@ def lead(data):
 		"custom_tyre_patch": services.tyre_patch,
 	}
 
-	doc = frappe.new_doc("Lead")
-	doc.update(lead_user_details)
-	doc.update(service_details)
-	for items_deatils in data.items:
-		items_deatils = frappe._dict(items_deatils)
-		doc.append("custom_lead_items", {"brand": items_deatils.brand, "size": items_deatils.size, "quantity" : items_deatils.required_quantity})
-	doc.save(ignore_permissions=True)  # Save customer document
-	return {
-		"status": 200,
-		"message": "Lead Created Successfully"
-	}
+	# doc = frappe.new_doc("Lead")
+	# doc.update(lead_user_details)
+	# doc.update(service_details)
+	# for items_deatils in data.items:
+	# 	items_deatils = frappe._dict(items_deatils)
+	# 	doc.append("custom_lead_items", {"brand": items_deatils.brand, "size": items_deatils.size, "quantity" : items_deatils.required_quantity})
+	# doc.save(ignore_permissions=True)  # Save customer document
+	# return {
+	# 	"status": 200,
+	# 	"message": "Lead Created Successfully"
+	# }
 
 
 @frappe.whitelist(allow_guest=True)
@@ -416,30 +423,54 @@ def get_size(brand):
 		WHERE bd.parent = %(brand)s
 	"""
 	result = frappe.db.sql(query, {"brand": brand}, as_dict=True)
-	return result
+	if result:
+		return result
+	else:
+		return {
+			"status": 400,
+			"message": "No Size Found"
+		}
 
 @frappe.whitelist(allow_guest=True)
 def get_type(brand, size):
-    results = frappe.get_all("Brand Details", {"parent": brand, "size": size}, ["tyer_type"])
-    unique_types = set()
-    for result in results:
-        tyer_type = result.get("tyer_type")
-        unique_types.add(tyer_type)
-    return list(unique_types)
+	results = frappe.get_all("Brand Details", {"parent": brand, "size": size}, ["tyer_type"])
+	unique_types = set()
+	for result in results:
+		tyer_type = result.get("tyer_type")
+		unique_types.add(tyer_type)
+	if unique_types:
+		return list(unique_types)
+	else:
+		return {
+			"status": 400,
+			"message": "No Type Found"
+		}
 
 
 @frappe.whitelist(allow_guest=True)
 def get_pattern(brand, size, tyer_type):
-    results = frappe.get_all("Brand Details", filters={"parent": brand, "size": size, "tyer_type": tyer_type}, fields=["pattern"])
-    unique_patterns = set(result.get("pattern") for result in results)
-    return list(unique_patterns)
+	results = frappe.get_all("Brand Details", filters={"parent": brand, "size": size, "tyer_type": tyer_type}, fields=["pattern"])
+	unique_patterns = set(result.get("pattern") for result in results)
+	if unique_patterns :
+		return list(unique_patterns)
+	else :
+		return {
+			"status": 400,
+			"message": "No Pattern Found"
+		}
 
 @frappe.whitelist(allow_guest=True)
 def get_ItemCode(brand, size, tyer_type,pattern):
-    results = frappe.get_all("Brand Details", filters={"parent": brand, "size": size, "tyer_type": tyer_type, "pattern":pattern}, fields=["item_code"])
-    print(results)
-    unique_code = set(result.get("item_code") for result in results)
-    return list(unique_code)
+	results = frappe.get_all("Brand Details", filters={"parent": brand, "size": size, "tyer_type": tyer_type, "pattern":pattern}, fields=["item_code"])
+	print(results)
+	unique_code = set(result.get("item_code") for result in results)
+	if unique_code :
+		return list(unique_code)
+	else :
+		return {
+            "status": 400,
+            "message": "No Item Code Found"
+        }
 
 # function to create job card
 @frappe.whitelist(allow_guest=True)
@@ -460,4 +491,10 @@ def stock_details():
 		items_grouped_by_brand.append(item_data)
 
 	print(items_grouped_by_brand)
-	return items_grouped_by_brand
+	if items_grouped_by_brand:
+		return items_grouped_by_brand
+	else:
+		return {
+            "status": 400,
+            "message": "No Item Found"
+        }
