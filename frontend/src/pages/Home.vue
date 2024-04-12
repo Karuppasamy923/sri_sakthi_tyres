@@ -399,12 +399,12 @@
                         <div v-else>
                             <div>
                                 <button @click="getJobCard" v-if="hide == 'false'" class="bg-blue-500 w-[100px] text-white font-bold  p-2 rounded-lg ml-3">Job Card</button>
-                                <button @click="hide = 'false'" v-if="hide != 'false'" class="bg-blue-500 w-[100px] text-white font-bold  p-2 rounded-lg ml-3 mb-4">Back</button>
+                                <button @click="hide = 'false'" v-if="hide != 'false'" class="bg-blue-500 w-[100px] text-white font-bold  p-2 rounded-lg ml-8 mb-4">Back</button>
                             </div>
                             <div>
                                 <div class="relative overflow-x-auto flex justify-center" v-if="hide != 'false'">
                                     <table
-                                        class="w-[100rem] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                        class="w-[75rem] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                         <thead
                                             class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400" >
                                             <tr>
@@ -724,14 +724,14 @@
                                     <div v-else>
                                         <label>Tyre</label>
                                         <hr class="dark-hr">
-                                        <div class="grid grid-cols-3 gap-4">
+                                        <div class="grid grid-cols-4 gap-10">
                                             <div class="flex flex-col ml-1">
                                                 <label class="mt-2">Brand</label>
                                                 <select
                                                     class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
-                                                    v-model="selectedBrand">
-                                                    <option v-for="(tyre, index) in responseTyreData.message"
-                                                        :key="index">{{ tyre.name }}</option>
+                                                    v-model="selectedBrand" @change="getSize(selectedBrand)">
+                                                    <option v-for="(tyre, index) in brand"
+                                                        :key="index">{{ tyre }}</option>
                                                 </select>
                                             </div>
                                             <div class="flex flex-col ml-1">
@@ -739,8 +739,8 @@
                                                 <select
                                                     class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
                                                     v-model="selectedVariant">
-                                                    <option v-for="(variant, index) in selectedBrandVariants"
-                                                        :key="index">{{ variant }}</option>
+                                                    <option v-for="(variant, index) in rs"
+                                                        :key="index">{{ variant.size }}</option>
                                                 </select>
                                             </div>
                                             <div class="flex flex-col ml-1">
@@ -749,7 +749,6 @@
                                                     class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
                                                     type="text" v-model="quantity">
                                             </div>
-
                                             <div class="flex flex-col ml-1">
                                                 <!-- <label class="mt-2">Add</label> -->
                                                 <Button class="w-[4rem] mt-10" type="text" v-model="price"
@@ -1590,6 +1589,20 @@ const pin2 = ref('');
 const pin3 = ref('');
 const pin4 = ref('');
 
+const items=ref([])
+const tableDetails =ref(false);
+const addItem = () => {
+    tableDetails.value = true;
+    console.log(selectedBrand.value)
+    if (selectedBrand.value && selectedVariant.value && quantity.value) {
+        items.value.push({
+            brand: selectedBrand.value,
+            variants: selectedVariant.value,
+            quantity: quantity.value
+        });
+    }
+};
+
 function handleImgSelection(event) {
     selectImg.value = true;
     data.selectedImgSrc = event.target.src;
@@ -1627,6 +1640,7 @@ function submitPin() {
 
 const jobCard = {}
 const brand = ref([])
+const rs=ref([])
 const sizes =ref([])
 const patterns = ref([])
 const types =ref([])
@@ -1642,7 +1656,11 @@ onMounted(() => {
 const getSize = (data,index) =>{
     axios.post(`${BaseURL}/api/method/tyre.api.get_size`,{brand:data},{headers:headers})
         .then(response =>{
-            sizes.value[index]=response.data.message;
+            if(index){
+                sizes.value[index]=response.data.message;
+            }else{
+                rs.value = response.data.message;
+            }
         })
 }
 
@@ -2431,9 +2449,7 @@ const handleCustomer = async () => {
     try {
         const json_data = { data: JSON.stringify(customerDetails) };
         console.log('checking customer details', json_data);
-
         const response = await axios.post(`${BaseURL}/api/method/tyre.api.lead`,  customerDetails , { headers: headers })
-
         console.log('response from customer details', response.data);
 
     } catch (error) {
