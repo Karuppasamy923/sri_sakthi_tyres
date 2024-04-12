@@ -280,6 +280,7 @@ def store_customer_details(data):
 # function to create job card
 @frappe.whitelist(allow_guest=True)
 def job_card(data):
+	print(data)
 	data = frappe._dict(data)
 	five_point_checkup = {}
 	tyre_abbr = {"Rear Left": "rl_", "Front Right": "fr_", "Front Left": "fl_", "Rear-Right": "rr_","Spare Tyre": "sp1_"}
@@ -363,8 +364,9 @@ def job_card(data):
 	}
 
 @frappe.whitelist(allow_guest=True)
-def lead(data):
-	data = frappe._dict(data)
+def lead(**args):
+	print(args, type(args))
+	data = frappe._dict(args)
 	lead_user_details = {
 		"first_name": data.current_owner,
 		"mobile_no": data.owner_mobile_no,
@@ -372,7 +374,16 @@ def lead(data):
 		"custom_sms": data.sms,
 		"custom_call": data.call,
 	}
-	services = frappe._dict(data.services)
+
+	doc = frappe.db.exists("Lead",{ "mobile_no" : data.owner_mobile_no})
+
+	if doc:
+		return {
+			"status": 400,
+			"message": "Lead Already Exists"
+		}
+	print( data.keys())
+	services = frappe._dict(data["services"])
 
 	service_details = {
 		"custom_alignment": services.alignment,
@@ -393,9 +404,11 @@ def lead(data):
 	doc = frappe.new_doc("Lead")
 	doc.update(lead_user_details)
 	doc.update(service_details)
-	for items_deatils in data.items:
+	# items = frappe._dict(data["items"])
+	# print(data.keys(), data["items"])
+	for items_deatils in data.get("items"):
 		items_deatils = frappe._dict(items_deatils)
-		doc.append("custom_lead_items", {"brand": items_deatils.brand, "size": items_deatils.size, "quantity" : items_deatils.required_quantity})
+		doc.append("custom_lead_items", {"brand": items_deatils.brand, "size": items_deatils.variants, "quantity" : items_deatils.quantity})
 	doc.save(ignore_permissions=True)  # Save customer document
 	return {
 		"status": 200,
@@ -403,6 +416,18 @@ def lead(data):
 	}
 
 
+
+@frappe.whitelist(allow_guest=True)
+def lead_details(data):
+	if frappe.db.get_value("Lead",{"mobile_no": data}):
+		return frappe.get_doc("Lead", frappe.db.get_value("Lead",{"mobile_no": data})).as_dict()
+	else:
+		return {
+            "status": 400,
+            "message": "Lead Not Found"
+        }
+	
+	
 @frappe.whitelist(allow_guest=True)
 def get_brand():
 	return frappe.get_all("Brand", pluck="name")
@@ -420,26 +445,26 @@ def get_size(brand):
 
 @frappe.whitelist(allow_guest=True)
 def get_type(brand, size):
-    results = frappe.get_all("Brand Details", {"parent": brand, "size": size}, ["tyer_type"])
-    unique_types = set()
-    for result in results:
-        tyer_type = result.get("tyer_type")
-        unique_types.add(tyer_type)
-    return list(unique_types)
+	results = frappe.get_all("Brand Details", {"parent": brand, "size": size}, ["tyer_type"])
+	unique_types = set()
+	for result in results:
+		tyer_type = result.get("tyer_type")
+		unique_types.add(tyer_type)
+	return list(unique_types)
 
 
 @frappe.whitelist(allow_guest=True)
 def get_pattern(brand, size, tyer_type):
-    results = frappe.get_all("Brand Details", filters={"parent": brand, "size": size, "tyer_type": tyer_type}, fields=["pattern"])
-    unique_patterns = set(result.get("pattern") for result in results)
-    return list(unique_patterns)
+	results = frappe.get_all("Brand Details", filters={"parent": brand, "size": size, "tyer_type": tyer_type}, fields=["pattern"])
+	unique_patterns = set(result.get("pattern") for result in results)
+	return list(unique_patterns)
 
 @frappe.whitelist(allow_guest=True)
 def get_ItemCode(brand, size, tyer_type,pattern):
-    results = frappe.get_all("Brand Details", filters={"parent": brand, "size": size, "tyer_type": tyer_type, "pattern":pattern}, fields=["item_code"])
-    print(results)
-    unique_code = set(result.get("item_code") for result in results)
-    return list(unique_code)
+	results = frappe.get_all("Brand Details", filters={"parent": brand, "size": size, "tyer_type": tyer_type, "pattern":pattern}, fields=["item_code"])
+	print(results)
+	unique_code = set(result.get("item_code") for result in results)
+	return list(unique_code)
 
 # function to create job card
 @frappe.whitelist(allow_guest=True)
@@ -461,3 +486,18 @@ def stock_details():
 
 	print(items_grouped_by_brand)
 	return items_grouped_by_brand
+
+@frappe.whitelist(allow_guest=True)
+def get_jobcard_details():
+	jobcards = frappe.get_all("Tyre Job Card", fields=["name", "time_in", "vehicle_no", "customer", "mobile_no"])
+	details_list = []
+	for jobcard in jobcards:
+		details = {
+			"id": jobcard.name,
+			"time_in": jobcard.time_in,
+			"vehicle_no": jobcard.vehicle_no,
+			"customer": jobcard.customer,
+			"mobile_no": jobcard.mobile_no,
+		}
+		details_list.append(details)
+	return details_list
