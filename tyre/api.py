@@ -280,6 +280,7 @@ def store_customer_details(data):
 # function to create job card
 @frappe.whitelist(allow_guest=True)
 def job_card(data):
+	print(data)
 	data = frappe._dict(data)
 	five_point_checkup = {}
 	tyre_abbr = {"Rear Left": "rl_", "Front Right": "fr_", "Front Left": "fl_", "Rear-Right": "rr_","Spare Tyre": "sp1_"}
@@ -420,26 +421,26 @@ def get_size(brand):
 
 @frappe.whitelist(allow_guest=True)
 def get_type(brand, size):
-    results = frappe.get_all("Brand Details", {"parent": brand, "size": size}, ["tyer_type"])
-    unique_types = set()
-    for result in results:
-        tyer_type = result.get("tyer_type")
-        unique_types.add(tyer_type)
-    return list(unique_types)
+	results = frappe.get_all("Brand Details", {"parent": brand, "size": size}, ["tyer_type"])
+	unique_types = set()
+	for result in results:
+		tyer_type = result.get("tyer_type")
+		unique_types.add(tyer_type)
+	return list(unique_types)
 
 
 @frappe.whitelist(allow_guest=True)
 def get_pattern(brand, size, tyer_type):
-    results = frappe.get_all("Brand Details", filters={"parent": brand, "size": size, "tyer_type": tyer_type}, fields=["pattern"])
-    unique_patterns = set(result.get("pattern") for result in results)
-    return list(unique_patterns)
+	results = frappe.get_all("Brand Details", filters={"parent": brand, "size": size, "tyer_type": tyer_type}, fields=["pattern"])
+	unique_patterns = set(result.get("pattern") for result in results)
+	return list(unique_patterns)
 
 @frappe.whitelist(allow_guest=True)
 def get_ItemCode(brand, size, tyer_type,pattern):
-    results = frappe.get_all("Brand Details", filters={"parent": brand, "size": size, "tyer_type": tyer_type, "pattern":pattern}, fields=["item_code"])
-    print(results)
-    unique_code = set(result.get("item_code") for result in results)
-    return list(unique_code)
+	results = frappe.get_all("Brand Details", filters={"parent": brand, "size": size, "tyer_type": tyer_type, "pattern":pattern}, fields=["item_code"])
+	print(results)
+	unique_code = set(result.get("item_code") for result in results)
+	return list(unique_code)
 
 # function to create job card
 @frappe.whitelist(allow_guest=True)
@@ -464,15 +465,15 @@ def stock_details():
 
 @frappe.whitelist(allow_guest=True)
 def get_jobcard_details():
-    jobcards = frappe.get_all("Tyre Job Card", fields=["name", "time_in", "vehicle_no", "customer", "mobile_no"])
-    details_list = []
-    for jobcard in jobcards:
-        details = {
-            "id": jobcard.name,
-            "time_in": jobcard.time_in,
-            "vehicle_no": jobcard.vehicle_no,
-            "customer": jobcard.customer,
-            "mobile_no": jobcard.mobile_no,
-        }
-        details_list.append(details)
-    return details_list
+	jobcards = frappe.get_all("Tyre Job Card", fields=["name", "time_in", "vehicle_no", "customer", "mobile_no"])
+	details_list = []
+	for jobcard in jobcards:
+		details = {
+			"id": jobcard.name,
+			"time_in": jobcard.time_in,
+			"vehicle_no": jobcard.vehicle_no,
+			"customer": jobcard.customer,
+			"mobile_no": jobcard.mobile_no,
+		}
+		details_list.append(details)
+	return details_list
