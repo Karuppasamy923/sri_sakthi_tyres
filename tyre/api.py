@@ -115,6 +115,7 @@ def store_vehicle_details(data):
 # function to store new customer details
 @frappe.whitelist(allow_guest=True)
 def store_customer_details(data):
+	print(data)
 	data = json.loads(data)
 	print(data)
 	license_plate = data.get('name').upper().replace(' ', '')
@@ -423,9 +424,9 @@ def lead_details(data):
 		return frappe.get_doc("Lead", frappe.db.get_value("Lead",{"mobile_no": data})).as_dict()
 	else:
 		return {
-            "status": 400,
-            "message": "Lead Not Found"
-        }
+			"status": 400,
+			"message": "Lead Not Found"
+		}
 	
 	
 @frappe.whitelist(allow_guest=True)
