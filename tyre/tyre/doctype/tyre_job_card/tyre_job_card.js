@@ -43,7 +43,7 @@ frappe.ui.form.on("Tyre Job Card", {
 	// },
 
 	mail: function (frm) {
-		debugger;
+		// debugger;
 		if (frm.doc.mail && frm.doc.email == undefined) {
 			frappe.msgprint({
 				title: __("Notify"),
