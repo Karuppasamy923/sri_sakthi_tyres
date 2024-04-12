@@ -444,7 +444,7 @@ def lead_details(data):
 			"message": "Lead Not Found"
 		}
 	
-	
+
 @frappe.whitelist(allow_guest=True)
 def get_brand():
 	return frappe.get_all("Brand", pluck="name")
