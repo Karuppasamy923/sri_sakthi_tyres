@@ -415,16 +415,31 @@ def get_size(brand):
 		JOIN `tabSize` AS s ON s.name = bd.size
 		WHERE bd.parent = %(brand)s
 	"""
-	# Execute the SQL query
 	result = frappe.db.sql(query, {"brand": brand}, as_dict=True)
 	return result
 
 @frappe.whitelist(allow_guest=True)
-def get_pattern(brand, size):
-	print(brand)
-	print(size)
-	return frappe.get_all("Brand Details", {"parent": brand, "size": size}, ["pattern", "tyer_type"])
+def get_type(brand, size):
+    results = frappe.get_all("Brand Details", {"parent": brand, "size": size}, ["tyer_type"])
+    unique_types = set()
+    for result in results:
+        tyer_type = result.get("tyer_type")
+        unique_types.add(tyer_type)
+    return list(unique_types)
 
+
+@frappe.whitelist(allow_guest=True)
+def get_pattern(brand, size, tyer_type):
+    results = frappe.get_all("Brand Details", filters={"parent": brand, "size": size, "tyer_type": tyer_type}, fields=["pattern"])
+    unique_patterns = set(result.get("pattern") for result in results)
+    return list(unique_patterns)
+
+@frappe.whitelist(allow_guest=True)
+def get_ItemCode(brand, size, tyer_type,pattern):
+    results = frappe.get_all("Brand Details", filters={"parent": brand, "size": size, "tyer_type": tyer_type, "pattern":pattern}, fields=["item_code"])
+    print(results)
+    unique_code = set(result.get("item_code") for result in results)
+    return list(unique_code)
 
 # function to create job card
 @frappe.whitelist(allow_guest=True)
