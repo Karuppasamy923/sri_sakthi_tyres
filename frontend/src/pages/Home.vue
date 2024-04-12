@@ -612,7 +612,7 @@
                         <div v-if="showNewCustomer"
                             class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-end items-center pb-9">
                             <div class="fixed inset-0" @click="addCustomer"></div>
-                            <div class="max-w-md w-full bg-white shadow-xl h-full overflow-y-auto relative">
+                            <div class="max-w-xl w-full bg-white shadow-xl h-full overflow-y-auto relative">
                                 <button class="absolute to text-gray pt-5 font-bold p-2 right-2 px-2 py-1 rounded"
                                     @click="addCustomer">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
@@ -729,7 +729,7 @@
                                                 <label class="mt-2">Brand</label>
                                                 <select
                                                     class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
-                                                    v-model="selectedBrand" @change="getSize(selectedBrand)">
+                                                    v-model="selectedBrand" @change="getSize(selectedBrand,-1)">
                                                     <option v-for="(tyre, index) in brand"
                                                         :key="index">{{ tyre }}</option>
                                                 </select>
@@ -1656,7 +1656,9 @@ onMounted(() => {
 const getSize = (data,index) =>{
     axios.post(`${BaseURL}/api/method/tyre.api.get_size`,{brand:data},{headers:headers})
         .then(response =>{
-            if(index){
+            console.log(index)
+            if(index != -1){
+                console.log(sizes.value)
                 sizes.value[index]=response.data.message;
             }else{
                 rs.value = response.data.message;
