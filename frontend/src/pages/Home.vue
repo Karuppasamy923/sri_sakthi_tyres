@@ -382,6 +382,10 @@
                             </Card>
                         </div>
                         <div v-else>
+                            <div>
+                                <button @click="getJobCard" v-if="hide == 'false'" class="bg-blue-500 w-[100px] text-white font-bold  p-2 rounded-lg ml-3">Job Card</button>
+                                <button @click="hide = 'false'" v-if="hide != 'false'" class="bg-blue-500 w-[100px] text-white font-bold  p-2 rounded-lg ml-3 mb-4">Back</button>
+                            </div>
                             <div class="flex justify-center">
                                 <div class="flex justify-center mt-9">
                                     <img src="https://img.freepik.com/free-vector/hand-drawn-no-data-concept_52683-127823.jpg?w=996&t=st=1712321166~exp=1712321766~hmac=ae2f4e19eb0e1185d52ac8a07c158e9dc5afa741284e9526a8e8a0165573735b"
@@ -2741,6 +2745,7 @@ const tyres = ref([{
     size: '',
     ttTl: '',
     item: '',
+    mandatory: false,
     status: false
 }]);
 
