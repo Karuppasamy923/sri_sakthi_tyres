@@ -231,8 +231,8 @@
   "column_break_bwhf",
   "sp_item",
   "billing_details_tab",
-  "billing_items",
-  "total_amount"
+  "total_amount",
+  "billing_details"
  ],
  "fields": [
   {
@@ -1394,12 +1394,6 @@
    "label": "Billing Details"
   },
   {
-   "fieldname": "billing_items",
-   "fieldtype": "Table",
-   "label": "Billing Items",
-   "options": "Tyre Billing Details"
-  },
-  {
    "fieldname": "total_amount",
    "fieldtype": "Currency",
    "label": "Total Amount"
@@ -1421,12 +1415,18 @@
    "fieldname": "contatct_sms",
    "fieldtype": "Check",
    "label": "SMS"
+  },
+  {
+   "fieldname": "billing_details",
+   "fieldtype": "Table",
+   "label": "Billing Details",
+   "options": "Tyre Billing Detail"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-04-10 15:26:59.565616",
+ "modified": "2024-04-12 18:28:27.962199",
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "Tyre Job Card",

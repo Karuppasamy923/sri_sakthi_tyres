@@ -493,7 +493,9 @@
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="vehicleData.vehicle_model" placeholder="Enter Vehicle Model">
                                     </p>
+
                                     <p class="m-2">Chassis No <span class="text-red-500 font-bold">*</span><br>
+
                                         <input type="text"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="vehicleData.chassis_no" placeholder="Enter Chassis No">
@@ -1578,7 +1580,9 @@ const data = reactive({
 
 const  headers={
     'Content-Type': 'application/json',
-    'Authorization': 'token 1aebabb56e8c6d8:b9d46d4b1f29202'
+
+    'Authorization': 'token 7fa0cf7915ad42d :2a784f5c29d213b'
+
 }
 
 const pin1 = ref('');
@@ -1841,6 +1845,7 @@ function previousPage() {
     if (currentstep.value > 0) {
         currentstep.value--;
         currentPage.value = getPageName(currentstep.value);
+        console.log(currentPage.value)
     }
 }
 
@@ -2175,6 +2180,7 @@ const modifiedMoreEmployee = async (type) => {
         } else if (type === 'contact_person') {
             const lastContactIndex = responseData.value.message[1].contact_person.length - 1;
             newEmployee.custom_whatsapp = responseData.value.message[1].contact_person[lastContactIndex]?.custom_whatsapp;
+            console.log(newEmployee.custom_whatsapp)
             newEmployee.custom_call = responseData.value.message[1].contact_person[lastContactIndex]?.custom_call;
             newEmployee.custom_sms = responseData.value.message[1].contact_person[lastContactIndex]?.custom_sms;
             responseData.value.message[1].contact_person.push(newEmployee);
@@ -2230,6 +2236,7 @@ const handlePrimaryCheckboxModify = (clickedEmployee) => {
 
 const addCustomerData = async () => {
     const name = customerData.value.name.trim();
+    console.log(name)
     const existingData = await returnSearch(name);
     console.log('filtering process', existingData.message[1].current_owner);
     console.log('vehicle number during customer add:', existingData.message[0].name);
@@ -2288,6 +2295,7 @@ const addCustomerData = async () => {
         });
         console.log('before checking customer data', data);
         try {
+            console.log("&&*&&")
             const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_customer_details`,{data:JSON.stringify(data)},{headers:headers})
             check.value = true;
             console.log(response);
@@ -2395,7 +2403,7 @@ const addCustomerModifiedData = async () => {
 
     console.log('modify checking', modifiedData);
     try {
-        const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_customer_details`,{data:JSON.stringify(data)},{headers:headers});
+        const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_customer_details`,{data:JSON.stringify(modifiedData)},{headers:headers});
         check.value = true;
         console.log(response);
         returnSearch(name)
@@ -2522,10 +2530,11 @@ const returnSearch = async (search) => {
     const data = {
         "license_plate": search
     };
-    console.log('checking data', data);
+    console.log('checking data', data.license_plate);
     try {
         if (data.license_plate.trim() !== "") {
-            const response = await axios.post(`${BaseURL}/api/method/tyre.api.get_details`,{license_plate:JSON.stringify(data)},{headers:headers});
+            console.log("**&**")
+            const response = await axios.post(`${BaseURL}/api/method/tyre.api.get_details`,{license_plate:JSON.stringify(data.license_plate)},{headers:headers});
             check.value = true;
             console.log('returnSearch data', response);
             if (response.data.message === "") {
@@ -3122,12 +3131,14 @@ const removeRow = (index) => {
 };
 const showConfirm = ref(false)
 const confirm =ref(false)
-const dataFinalSubmission = computed(() => {
+const dataFinalSubmission = () => {
     console.log("Final submission process going on....");
-    jobCard["bill"]=tableData.value 
+    console.log(jobCard['bill'])
+    jobCard['bill'] =[]
+    jobCard["bill"].push(...tableData.value)
     console.log(jobCard)
     checkup(jobCard)   
-})
+}
 
 </script>
 
