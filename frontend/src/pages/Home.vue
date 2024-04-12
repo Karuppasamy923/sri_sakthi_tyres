@@ -386,13 +386,60 @@
                                 <button @click="getJobCard" v-if="hide == 'false'" class="bg-blue-500 w-[100px] text-white font-bold  p-2 rounded-lg ml-3">Job Card</button>
                                 <button @click="hide = 'false'" v-if="hide != 'false'" class="bg-blue-500 w-[100px] text-white font-bold  p-2 rounded-lg ml-3 mb-4">Back</button>
                             </div>
-                            <div class="flex justify-center">
+                            <div>
+                                <div class="relative overflow-x-auto flex justify-center" v-if="hide != 'false'">
+                                    <table
+                                        class="w-[100rem] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                        <thead
+                                            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400" >
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+                                                   ID
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Time_in
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Vehicle No
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Owner
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Mobile Number
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="bg-white border-b  dark:border-gray-700 dark:text-black" v-for="jobcard in jobCardDetails" :key="jobcard">
+                                                <th scope="row"
+                                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
+                                                    {{ jobcard.id }}
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    {{jobcard.time_in}}
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    {{ jobcard.vehicle_no }}
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    {{jobcard.customer}}
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    {{ jobcard.mobile_no }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="flex justify-center" v-if="hide == 'false'">
                                 <div class="flex justify-center mt-9">
                                     <img src="https://img.freepik.com/free-vector/hand-drawn-no-data-concept_52683-127823.jpg?w=996&t=st=1712321166~exp=1712321766~hmac=ae2f4e19eb0e1185d52ac8a07c158e9dc5afa741284e9526a8e8a0165573735b"
                                         alt="No data" class="w-[25%]" @click="showMessage(`Nothing to Show ! 😄`)">
                                 </div>
                             </div>
-                            <div class="flex justify-center m-5">
+                            <div class="flex justify-center m-5" v-if="hide == 'false'">
                                 <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
                                     @click="addVehicle">
                                     Add Vehicle
@@ -563,7 +610,7 @@
                                     <div class="pb-4 m-2 grid grid-cols-2" v-if="handle">
                                         <input type="tel"
                                             class="w-[19rem] h-[3rem] mt-1 rounded-sm border-solid border border-black"
-                                            placeholder="Enter Your Mobile Number">
+                                            placeholder="Enter Your Mobile Number" v-model="searchMobile">
                                         <div class="w-[3rem] h-[3rem] mt-1 ml-[7.6rem] bg-blue-600 rounded-sm">
                                             <FeatherIcon name="search"
                                                 class="m-2 w-8 h-8 cursor-pointer text-gray-100" />
@@ -687,6 +734,32 @@
                                                     class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
                                                     type="text" v-model="quantity">
                                             </div>
+
+                                            <div class="flex flex-col ml-1">
+                                                <!-- <label class="mt-2">Add</label> -->
+                                                <Button class="w-[4rem] mt-10" type="text" v-model="price"
+                                                    @click="addItem">Add</Button>
+                                            </div>
+                                        </div>
+                                        <div v-if="tableDetails">
+                                            <table class="table-auto">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="pr-12">Brand</th>
+                                                        <th class="pr-12">Variants</th>
+                                                        <th>Quantity</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="(item, index) in items" :key="index">
+                                                        <td>{{ item.brand }}</td>
+                                                        <td>{{ item.variants }}</td>
+                                                        <td>{{ item.quantity }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+
                                         </div>
                                         <label>Services</label>
                                         <hr class="dark-hr">
@@ -1714,6 +1787,20 @@ const search = async () => {
     }
 };
 
+const hide = ref('false');
+const jobCardDetails = ref([]);
+const getJobCard = async () => {
+    hide.value = true;
+    try{
+        const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_jobcard_details`, { headers: headers });
+        jobCardDetails.value = response.data.message;
+        console.log(jobCardDetails.value);
+    }
+    catch(error){
+        console.error("Error:", error);
+    }
+}
+
 const currentPage = ref('details');
 // const currentstep = ref(0);
 const maxStep = 4;
@@ -2320,24 +2407,31 @@ const handleCustomer = async () => {
     const customerDetails = {
         current_owner: customerData.value.current_owner,
         owner_mobile_no: customerData.value.owner_mobile_no,
-        selectedBrand: selectedBrand.value,
-        variant: selectedVariant.value,
-        quantity: quantity.value,
         whatsapp: customerData.value.whatsappChecked,
         call: customerData.value.callChecked,
         sms: customerData.value.smsChecked,
+        items: items.value,
         services: serviceDetails.value
     }
     console.log("checking Customer Details", customerDetails)
     try {
         const json_data = { data: JSON.stringify(customerDetails) };
         console.log('checking customer details', json_data);
-        const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_customer_details`,{data:JSON.stringify(data)},{headers:headers})
+
+        const response = await axios.post(`${BaseURL}/api/method/tyre.api.lead`,  customerDetails , { headers: headers })
+
         console.log('response from customer details', response.data);
 
     } catch (error) {
         console.log("Temporary customer details page:", error)
     }
+}
+
+const searchMobile = ref('')
+
+const handleSearch = async () => {
+    const response = await axios.get(`${BaseURL}/api/method/tyre.api.search_customer`, searchMobile.value, { headers: headers })
+    
 }
 
 
