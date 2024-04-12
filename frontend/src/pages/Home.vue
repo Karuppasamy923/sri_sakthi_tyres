@@ -497,7 +497,7 @@
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="vehicleData.vehicle_model" placeholder="Enter Vehicle Model">
                                     </p>
-                                    <p class="m-2">Chassis No <br>
+                                    <p c:lass="m-2">Chassis No <br>
                                         <input type="text"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="vehicleData.chassis_no" placeholder="Enter Chassis No">
@@ -1581,7 +1581,7 @@ const data = reactive({
 
 const  headers={
     'Content-Type': 'application/json',
-    'Authorization': 'token 91fd9d5af4c6543:439956d0e92eab0'
+    'Authorization': 'token 7fa0cf7915ad42d :2a784f5c29d213b'
 }
 
 const pin1 = ref('');
@@ -3103,12 +3103,14 @@ const removeRow = (index) => {
 };
 const showConfirm = ref(false)
 const confirm =ref(false)
-const dataFinalSubmission = computed(() => {
+const dataFinalSubmission = () => {
     console.log("Final submission process going on....");
-    jobCard["bill"]=tableData.value 
+    console.log(jobCard['bill'])
+    jobCard['bill'] =[]
+    jobCard["bill"].push(...tableData.value)
     console.log(jobCard)
     checkup(jobCard)   
-})
+}
 
 </script>
 
