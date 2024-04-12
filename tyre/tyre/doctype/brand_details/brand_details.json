@@ -6,6 +6,7 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "item_code",
   "size",
   "pattern",
   "tyer_type"
@@ -31,12 +32,22 @@
    "in_list_view": 1,
    "label": "Tyer type",
    "options": "TT\nTL"
+  },
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Item Code"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2024-04-12 10:27:23.046082",
+=======
+ "modified": "2024-04-10 11:26:40.358735",
+>>>>>>> e3af71d8233e0374e5c4fe21029daac82434f221
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "Brand Details",
