@@ -33,12 +33,14 @@
   "whatsapp",
   "call",
   "mail",
+  "sms",
   "cb_7",
   "driver_name",
   "driver_mobile",
   "driver_whatsapp",
   "driver_call",
   "driver_mail",
+  "driver_sms",
   "cb_8",
   "contact_person",
   "contact_mobile_no",
@@ -47,6 +49,7 @@
   "contact_whatsapp",
   "contact_call",
   "contact_mail",
+  "contatct_sms",
   "contact_check",
   "cb_9",
   "amended_from",
@@ -424,7 +427,7 @@
    "fieldname": "contact_person",
    "fieldtype": "Link",
    "label": "Contact Person",
-   "options": "Contact"
+   "options": "ContactPerson"
   },
   {
    "fieldname": "contact_mobile_no",
@@ -1400,12 +1403,30 @@
    "fieldname": "total_amount",
    "fieldtype": "Currency",
    "label": "Total Amount"
+  },
+  {
+   "default": "0",
+   "fieldname": "sms",
+   "fieldtype": "Check",
+   "label": "SMS"
+  },
+  {
+   "default": "0",
+   "fieldname": "driver_sms",
+   "fieldtype": "Check",
+   "label": "SMS"
+  },
+  {
+   "default": "0",
+   "fieldname": "contatct_sms",
+   "fieldtype": "Check",
+   "label": "SMS"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-04-09 13:10:59.403323",
+ "modified": "2024-04-10 15:26:59.565616",
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "Tyre Job Card",

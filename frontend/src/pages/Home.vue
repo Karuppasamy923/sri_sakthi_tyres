@@ -118,6 +118,21 @@
                             </div>
                         </div>
 
+                        <div v-if="showConfirm && confirm"
+                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                            <div class="bg-white rounded-lg p-8 shadow-xl">
+                                <h2 class="text-xl font-semibold mb-4">Confirm Save</h2>
+                                <p class="mb-4">Are you sure you want to save the details?</p>
+                                <div class="flex justify-end">
+                                    <button @click="confirmSave"
+                                        class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
+                                    <button @click="cancelSave"
+                                        class="bg-red-500 text-white font-semibold px-4 py-2 rounded">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+
+
                         <div v-if="showWarning"
                             class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
                             <div class="bg-white rounded-lg p-8 shadow-xl">
@@ -382,13 +397,64 @@
                             </Card>
                         </div>
                         <div v-else>
-                            <div class="flex justify-center">
+                            <div>
+                                <button @click="getJobCard" v-if="hide == 'false'" class="bg-blue-500 w-[100px] text-white font-bold  p-2 rounded-lg ml-3">Job Card</button>
+                                <button @click="hide = 'false'" v-if="hide != 'false'" class="bg-blue-500 w-[100px] text-white font-bold  p-2 rounded-lg ml-8 mb-4">Back</button>
+                            </div>
+                            <div>
+                                <div class="relative overflow-x-auto flex justify-center" v-if="hide != 'false'">
+                                    <table
+                                        class="w-[75rem] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                        <thead
+                                            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400" >
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+                                                   ID
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Time_in
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Vehicle No
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Owner
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Mobile Number
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="bg-white border-b  dark:border-gray-700 dark:text-black" v-for="jobcard in jobCardDetails" :key="jobcard">
+                                                <th scope="row"
+                                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
+                                                    {{ jobcard.id }}
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    {{jobcard.time_in}}
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    {{ jobcard.vehicle_no }}
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    {{jobcard.customer}}
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    {{ jobcard.mobile_no }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="flex justify-center" v-if="hide == 'false'">
                                 <div class="flex justify-center mt-9">
                                     <img src="https://img.freepik.com/free-vector/hand-drawn-no-data-concept_52683-127823.jpg?w=996&t=st=1712321166~exp=1712321766~hmac=ae2f4e19eb0e1185d52ac8a07c158e9dc5afa741284e9526a8e8a0165573735b"
                                         alt="No data" class="w-[25%]" @click="showMessage(`Nothing to Show ! 😄`)">
                                 </div>
                             </div>
-                            <div class="flex justify-center m-5">
+                            <div class="flex justify-center m-5" v-if="hide == 'false'">
                                 <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
                                     @click="addVehicle">
                                     Add Vehicle
@@ -546,7 +612,7 @@
                         <div v-if="showNewCustomer"
                             class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-end items-center pb-9">
                             <div class="fixed inset-0" @click="addCustomer"></div>
-                            <div class="max-w-md w-full bg-white shadow-xl h-full overflow-y-auto relative">
+                            <div class="max-w-xl w-full bg-white shadow-xl h-full overflow-y-auto relative">
                                 <button class="absolute to text-gray pt-5 font-bold p-2 right-2 px-2 py-1 rounded"
                                     @click="addCustomer">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
@@ -559,7 +625,7 @@
                                     <div class="pb-4 m-2 grid grid-cols-2" v-if="handle">
                                         <input type="tel"
                                             class="w-[19rem] h-[3rem] mt-1 rounded-sm border-solid border border-black"
-                                            placeholder="Enter Your Mobile Number">
+                                            placeholder="Enter Your Mobile Number" v-model="searchMobile">
                                         <div class="w-[3rem] h-[3rem] mt-1 ml-[7.6rem] bg-blue-600 rounded-sm">
                                             <FeatherIcon name="search"
                                                 class="m-2 w-8 h-8 cursor-pointer text-gray-100" />
@@ -658,14 +724,14 @@
                                     <div v-else>
                                         <label>Tyre</label>
                                         <hr class="dark-hr">
-                                        <div class="grid grid-cols-3 gap-4">
+                                        <div class="grid grid-cols-4 gap-10">
                                             <div class="flex flex-col ml-1">
                                                 <label class="mt-2">Brand</label>
                                                 <select
                                                     class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
-                                                    v-model="selectedBrand">
-                                                    <option v-for="(tyre, index) in responseTyreData.message"
-                                                        :key="index">{{ tyre.name }}</option>
+                                                    v-model="selectedBrand" @change="getSize(selectedBrand,-1)">
+                                                    <option v-for="(tyre, index) in brand"
+                                                        :key="index">{{ tyre }}</option>
                                                 </select>
                                             </div>
                                             <div class="flex flex-col ml-1">
@@ -673,8 +739,8 @@
                                                 <select
                                                     class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
                                                     v-model="selectedVariant">
-                                                    <option v-for="(variant, index) in selectedBrandVariants"
-                                                        :key="index">{{ variant }}</option>
+                                                    <option v-for="(variant, index) in rs"
+                                                        :key="index">{{ variant.size }}</option>
                                                 </select>
                                             </div>
                                             <div class="flex flex-col ml-1">
@@ -683,6 +749,31 @@
                                                     class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
                                                     type="text" v-model="quantity">
                                             </div>
+                                            <div class="flex flex-col ml-1">
+                                                <!-- <label class="mt-2">Add</label> -->
+                                                <Button class="w-[4rem] mt-10" type="text" v-model="price"
+                                                    @click="addItem">Add</Button>
+                                            </div>
+                                        </div>
+                                        <div v-if="tableDetails">
+                                            <table class="table-auto">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="pr-12">Brand</th>
+                                                        <th class="pr-12">Variants</th>
+                                                        <th>Quantity</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="(item, index) in items" :key="index">
+                                                        <td>{{ item.brand }}</td>
+                                                        <td>{{ item.variants }}</td>
+                                                        <td>{{ item.quantity }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+
                                         </div>
                                         <label>Services</label>
                                         <hr class="dark-hr">
@@ -1296,8 +1387,8 @@
                                 <div>
                                     <label :for="'brand' + index">Brand</label>
                                     <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                        v-model="tyre.brand" @change="saveData(index)">
-                                        <option v-for="(tyre, index) in resData" :key="index">{{ tyre.brand }}</option>
+                                        v-model="tyre.brand" @change="getSize(tyre.brand,index)">
+                                        <option v-for="(tyre, index) in brand" :key="index">{{ tyre }}</option>
                                     </select>
                                 </div>
                                 <div class="mt-[20px] w-[16rem]">
@@ -1311,25 +1402,25 @@
                                 <div>
                                     <label :for="'size' + index">Size</label>
                                     <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                        v-model="tyre.size"
-                                        @change="updateFields(tyres[index].size, index, tyres[index].brand)">
-                                        <option v-for="(tyre, index) in getSizesForSelectedBrand(tyres[index].brand)"
-                                            :key="index">{{ tyre }}</option>
+                                    v-model="tyre.size" @change="getOther(tyre.brand,tyre.size,index)">
+                                    <option v-for="(size, index) in sizes[index]" :key="index">{{ size.size }}</option>
                                     </select>
                                 </div>
                                 <div class="mt-[20px]">
                                     <label :for="'pattern' + index">Pattern</label>
-                                    <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                        :id="'pattern' + index" type="text" v-model="tyre.pattern"
-                                        @change="saveData(index)">
+                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
+                                        v-model="tyre.pattern" @change="getItemCode(tyre.brand,tyre.size,tyre.ttTl,tyre.pattern,index)">
+                                        <option v-for="(pattern, index) in patterns[index]" :key="index">{{ pattern }}</option>
+                                    </select>    
                                 </div>
                             </div>
                             <div class="ml-[300px]">
                                 <div>
                                     <label :for="'ttTl' + index">TT/TL</label>
-                                    <input :id="'ttTl' + index"
-                                        class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                        type="text" v-model="tyre.ttTl" @change="saveData(index)">
+                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
+                                        v-model="tyre.ttTl" @change="getPattern(tyre.brand,tyre.size,tyre.ttTl,index)">
+                                        <option v-for="(type, index) in types[index]" :key="index">{{ type }}</option>
+                                    </select> 
                                 </div>
                                 <!-- <div class="mt-[20px]">
                                     <label :for="'item' + index">Item</label>
@@ -1339,7 +1430,7 @@
                             </div>
                             <div class="ml-[400px]">
                                 <FeatherIcon name="x" class="mt-0 ml-2 w-6 h-6 cursor-pointer text-red-500"
-                                    @click="deleteTyreReplacement" />
+                                    @click="deleteTyreReplacement(index)" />
                             </div>
                         </div>
                     </div>
@@ -1371,24 +1462,24 @@
                                 <tr v-for="(data, index) in tableData" :key="index">
                                     <td class="border border-gray-800 px-4 py-2 w-[10rem]">{{ index + 1 }}</td>
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="text" v-model="data[0].itemCode"
+                                        <input type="text" v-model="data[billIndex].itemCode"
                                             class="w-[10rem] rounded-sm border-solid border border-black">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="text" v-model="data[0].sourceWarehouse"
+                                        <input type="text" v-model="data[billIndex].sourceWarehouse"
                                             class="w-[10rem] rounded-sm border-solid border border-black">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="text" v-model="data[0].requiredQuantity" @change="calculateTotals"
+                                        <input type="number" v-model="data[billIndex].requiredQuantity" @input="calculateTotals"
                                             class="w-[10rem] rounded-sm border-solid border border-black">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="text" v-model="data[0].rate" @change="calculateTotals"
-                                            class="w-[10rem] rounded-sm border-solid border border-black">
+                                        <input type="float" v-model="data[billIndex].rate" @input="calculateTotals"
+                                            class="w-[10rem] h-[2.6rem] pl-[0.7rem] rounded-sm border-solid border border-black text-justify">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="text" v-model="data[0].cost" readonly
-                                            class=" w-[10rem] rounded-sm border-solid border border-black">
+                                        <input type="text" v-model="data[billIndex].cost" readonly
+                                            class=" w-[10rem] rounded-sm border-solid border border-black cursor-not-allowed">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
                                         <button
@@ -1402,13 +1493,13 @@
                                     <td colspan="3" class="border border-gray-800 px-4 py-2 text-center">
                                         Total
                                     </td>
-                                    <td class="border border-gray-800 px-4 py-2 text-center">
+                                    <td class="border border-gray-800 px-4 py-2 text-center cursor-not-allowed">
                                         {{ totalQuantity }}
                                     </td>
-                                    <td colspan="" class="border border-gray-800 px-4 py-2 text-center">
+                                    <td colspan="" class="border border-gray-800 px-4 py-2 text-center cursor-not-allowed">
                                         {{ totalRate.toFixed(2) }}
                                     </td>
-                                    <td colspan="2" class="border border-gray-800 px-4 py-2 text-center">
+                                    <td colspan="2" class="border border-gray-800 px-4 py-2 text-center cursor-not-allowed">
                                         {{ totalCost.toFixed(2) }}
                                     </td>
                                 </tr>
@@ -1422,8 +1513,10 @@
                             <label>Discount Rate: <input type="text" v-model="discountRate"
                                     @input="calculateDiscountRate"
                                     class="w-[338px] h-[52px] rounded-sm border-solid border border-black"></label>
-                            <label class="ml-auto pr-5">Total Amount: <input type="text" v-model="finalAmount" readonly
-                                    class="w-[338px] h-[52px] rounded-sm border-solid border border-black"></label>
+                                    <label class="ml-auto pr-5">Total Amount:
+                                        <input type="text" :value="finalAmount.toFixed(2)" readonly
+                                            class="w-[338px] h-[52px] rounded-sm border-solid border border-black cursor-not-allowed">
+                                    </label>
                         </div>
                     </div>
                 </div>
@@ -1486,10 +1579,29 @@ const data = reactive({
     selectedAlt: ''
 });
 
+const  headers={
+    'Content-Type': 'application/json',
+    'Authorization': 'token 91fd9d5af4c6543:439956d0e92eab0'
+}
+
 const pin1 = ref('');
 const pin2 = ref('');
 const pin3 = ref('');
 const pin4 = ref('');
+
+const items=ref([])
+const tableDetails =ref(false);
+const addItem = () => {
+    tableDetails.value = true;
+    console.log(selectedBrand.value)
+    if (selectedBrand.value && selectedVariant.value && quantity.value) {
+        items.value.push({
+            brand: selectedBrand.value,
+            variants: selectedVariant.value,
+            quantity: quantity.value
+        });
+    }
+};
 
 function handleImgSelection(event) {
     selectImg.value = true;
@@ -1528,56 +1640,79 @@ function submitPin() {
 
 const jobCard = {}
 const brand = ref([])
-const resData = ref({})
+const rs=ref([])
+const sizes =ref([])
+const patterns = ref([])
+const types =ref([])
+const BaseURL=window.location.origin
+
 onMounted(() => {
-    axios.get(`http://192.168.1.39:8002/api/method/tyre.api.get_brand_details`)
+    axios.get(`${BaseURL}/api/method/tyre.api.get_brand`,{headers: headers} )
         .then(response => {
-            resData.value = response.data.message;
-            brand.value = Object.keys(response.data.message);
+            brand.value = response.data.message;
         })
 });
 
-
-const getSizesForSelectedBrand = (brand) => {
-    const sizesObject = resData.value[brand];
-    if (sizesObject) {
-        const sizesArray = Object.values(sizesObject);
-        const validSizesArray = sizesArray.filter(Array.isArray);
-        const sizes = validSizesArray.flatMap(tyres => tyres.map(tyre => tyre.size));
-        return sizes;
-    }
-};
-
-const updateFields = (sizes, index, brand) => {
-    // Check if tyres[index] is defined before accessing it
-    if (tyres.value[index].size) {
-        const tyre = tyres.value[index];
-
-        // Ensure resData.value[brand] is defined before calling find
-        if (resData.value && resData.value[brand]) {
-            const sizeData = Object.values(resData.value[brand])
-            if (Array.isArray(sizeData)) {
-                const arrayData = sizeData.filter(Array.isArray);
-                const valueData = arrayData.flatMap(tyres => tyres.find(tyre => tyre.size === sizes))
-                if (valueData) {
-                    tyres.value[index].ttTl = valueData[0].tyer_type;
-                    tyres.value[index].loadIndex = valueData[0].load_index;
-                    tyres.value[index].speedRating = valueData[0].speed_rating;
-                    tyres.value[index].pattern = valueData[0].pattern;
-                    tyres.value[index].item = valueData[0].item_code;
-                } else {
-                    console.log("Size data not found.");
-                }
-            } else {
-                console.log("no array")
+const getSize = (data,index) =>{
+    axios.post(`${BaseURL}/api/method/tyre.api.get_size`,{brand:data},{headers:headers})
+        .then(response =>{
+            console.log(index)
+            if(index != -1){
+                console.log(sizes.value)
+                sizes.value[index]=response.data.message;
+            }else{
+                rs.value = response.data.message;
             }
-        } else {
-            console.log(`No data found for brand ${brand}.`);
+        })
+}
+
+const getOther = (brand,data,index)=>{
+    console.log(data)
+    let i=0;
+    for (const co in sizes.value[index]) {
+        const sizeData =sizes.value[index][i]
+        if(sizeData.size == data){
+            tyres.value[index].loadIndex=sizeData.load_index;
+            tyres.value[index].speedRating=sizeData.speed_rating;
+            getType(brand,data,index)
         }
-    } else {
-        console.log(`Tyre at index ${index} is undefined.`);
+        i++;
     }
-};
+}
+const getType = (brand, data, index) => {
+    console.log(brand)
+    console.log(size)
+    console.log(index)
+  axios.post(`${BaseURL}/api/method/tyre.api.get_type`, { brand: brand, size: data }, { headers: headers })
+    .then(response => {
+        console.log(response.data.message);
+        types.value[index]= response.data.message;
+        console.log(types.value)
+    });
+}
+const getPattern =(brand,size,type,index) =>{
+    console.log(brand)
+    console.log(size)
+    console.log(index)
+    console.log(type)
+  axios.post(`${BaseURL}/api/method/tyre.api.get_pattern`, { brand: brand, size: size,tyer_type:type }, { headers: headers })
+    .then(response => {
+        console.log(response.data.message);
+        patterns.value[index]= response.data.message;
+    });
+}
+const getItemCode = (brand,size,type,pattern,index)=>{
+    console.log(brand)
+    console.log(size)
+    console.log(index)
+    console.log(type)
+    console.log(pattern)
+    axios.post(`${BaseURL}/api/method/tyre.api.get_ItemCode`, { brand: brand, size: size,tyer_type:type,pattern:pattern }, { headers: headers })
+        .then(response => {
+        console.log(response.data.message[0]);
+        tyres.value[index].item=response.data.message[0]
+    });
+}
 //==========================================================>>> Main Page <<<================================================================================//
 const hasResponse = ref(true);
 const noData = ref(false)
@@ -1655,9 +1790,11 @@ const search = async () => {
     };
     console.log('checking data', data);
     try {
+        console.log("#$%^&")
         if (data.license_plate.trim() !== "") {
-
-            const response = await axios.post(`http://192.168.1.39:8002/api/method/tyre.api.get_details`, data);
+            console.log("*****")
+            const response = await axios.post(`${BaseURL}/api/method/tyre.api.get_details`, {license_plate:data.license_plate},{headers:headers});
+            console.log(response.data.message);
             if (response.data.message === "Enter a Valid vehicle number") {
 
                 check.value = false;
@@ -1684,6 +1821,20 @@ const search = async () => {
         console.error("Error:", error);
     }
 };
+
+const hide = ref('false');
+const jobCardDetails = ref([]);
+const getJobCard = async () => {
+    hide.value = true;
+    try{
+        const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_jobcard_details`, { headers: headers });
+        jobCardDetails.value = response.data.message;
+        console.log(jobCardDetails.value);
+    }
+    catch(error){
+        console.error("Error:", error);
+    }
+}
 
 const currentPage = ref('details');
 // const currentstep = ref(0);
@@ -1772,7 +1923,7 @@ function nextPageAndHighlight() {
                         return;
                     }
                 }
-                checkup(jobCard);
+                addValue(tyres.value,replace)
                 break;
             case 5:
                 checkup(jobCard);
@@ -1916,10 +2067,8 @@ const confirmSave = async () => {
     });
     const searchData = data.name;
     console.log('searchdata in confirm page:', searchData);
-    const json_data = { data: JSON.stringify(data) };
-    console.log(json_data);
     try {
-        const response = await axios.post(`http://192.168.1.39:8002/api/method/tyre.api.store_vehicle_details`, json_data);
+        const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_vehicle_details`, {data:JSON.stringify(data)},{headers:headers});
         console.log('vehicle add after response', response);
         if (responseData.value && responseData.value.message) {
             enable.value = true;
@@ -1963,8 +2112,7 @@ const addModifiedData = async () => {
     };
     console.log(modifiedData)
     try {
-        const json_data = { data: JSON.stringify(modifiedData) }
-        const response = await axios.post(`http://192.168.1.39:8002/api/method/tyre.api.store_vehicle_details`, json_data);
+        const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_vehicle_details`,{data: JSON.stringify(modifiedData)},{headers:headers});
         console.log(response);
         returnSearch(name)
         showModifyVehicle.value = false;
@@ -2135,11 +2283,8 @@ const addCustomerData = async () => {
             });
         });
         console.log('before checking customer data', data);
-        const json_data = { data: JSON.stringify(data) }
-        console.log('before checking customer json_data', json_data);
-        console.log(json_data);
         try {
-            const response = await axios.post(`http://192.168.1.39:8002/api/method/tyre.api.store_customer_details`, json_data)
+            const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_customer_details`,{data:JSON.stringify(data)},{headers:headers})
             check.value = true;
             console.log(response);
             if (responseData.value && responseData.value.message) {
@@ -2245,10 +2390,8 @@ const addCustomerModifiedData = async () => {
     });
 
     console.log('modify checking', modifiedData);
-    const json_data = { data: JSON.stringify(modifiedData) };
-    console.log("Modified data", json_data)
     try {
-        const response = await axios.post(`http://192.168.1.39:8002/api/method/tyre.api.store_customer_details`, json_data);
+        const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_customer_details`,{data:JSON.stringify(data)},{headers:headers});
         check.value = true;
         console.log(response);
         returnSearch(name)
@@ -2298,24 +2441,29 @@ const handleCustomer = async () => {
     const customerDetails = {
         current_owner: customerData.value.current_owner,
         owner_mobile_no: customerData.value.owner_mobile_no,
-        selectedBrand: selectedBrand.value,
-        variant: selectedVariant.value,
-        quantity: quantity.value,
         whatsapp: customerData.value.whatsappChecked,
         call: customerData.value.callChecked,
         sms: customerData.value.smsChecked,
+        items: items.value,
         services: serviceDetails.value
     }
     console.log("checking Customer Details", customerDetails)
     try {
         const json_data = { data: JSON.stringify(customerDetails) };
         console.log('checking customer details', json_data);
-        const response = await axios.post(`http://192.168.1.39:8002/api/method/tyre.api.store_customer_details`, json_data)
+        const response = await axios.post(`${BaseURL}/api/method/tyre.api.lead`,  customerDetails , { headers: headers })
         console.log('response from customer details', response.data);
 
     } catch (error) {
         console.log("Temporary customer details page:", error)
     }
+}
+
+const searchMobile = ref('')
+
+const handleSearch = async () => {
+    const response = await axios.get(`${BaseURL}/api/method/tyre.api.search_customer`, searchMobile.value, { headers: headers })
+    
 }
 
 
@@ -2333,7 +2481,7 @@ const selectedBrandVariants = computed(() => {
 
 const handleEnquiry = async () => {
     try {
-        const response = await axios.get(`http://192.168.1.39:8002/api/method/tyre.api.stock_details`);
+        const response = await axios.get("http://192.168.1.39:8002/api/method/tyre.api.stock_details");
         console.log('response data for customer details', response.data);
         responseTyreData.value = response.data;
         console.log(responseTyreData.value);
@@ -2358,7 +2506,7 @@ const returnSearch = async (search) => {
     console.log('checking data', data);
     try {
         if (data.license_plate.trim() !== "") {
-            const response = await axios.post(`http://192.168.1.39:8002/api/method/tyre.api.get_details`, data);
+            const response = await axios.post(`${BaseURL}/api/method/tyre.api.get_details`,{license_plate:JSON.stringify(data)},{headers:headers});
             check.value = true;
             console.log('returnSearch data', response);
             if (response.data.message === "") {
@@ -2426,7 +2574,6 @@ const returnSearch = async (search) => {
             showNewCustomer.value = false;
             showAlerts.value = true;
             noVehicleNumber.value = true;
-            // alert("Enter Vehicle Number");
             console.log("Enter Vehicle Number");
         }
     } catch (error) {
@@ -2584,10 +2731,8 @@ const requireService = ref({
 function checkup(data) {
     console.log("******")
     console.log(data)
-    const json_data = { data: data }
-    console.log(json_data);
     try {
-        const response = axios.post(`http://192.168.1.39:8002/api/method/tyre.api.job_card`, json_data);
+        const response = axios.post(`${BaseURL}/api/method/tyre.api.job_card`,{data:JSON.stringify(data)},{headers:headers});
         console.log(response);
     } catch (error) {
         console.error("error");
@@ -2713,6 +2858,9 @@ function handelCheck(data) {
 //===================================================>>> Replacement Tyre Details <<<========================================================================//
 
 const tyrePositions = ['Front Left', 'Front Right', 'Rear Left', 'Rear Right', 'Spare'];
+const replace = reactive({
+    target:false
+});
 let billIndex = 0;
 const tyres = ref([{
     type: '',
@@ -2722,7 +2870,9 @@ const tyres = ref([{
     pattern: '',
     size: '',
     ttTl: '',
-    item: ''
+    item: '',
+    mandatory: false,
+    status: false
 }]);
 
 const size = ref([])
@@ -2730,12 +2880,6 @@ const saveData = (index) => {
     console.log(resData.value);
     console.log(tyres.value);
     console.log(tyres.value[index].brand);
-
-    // console.log(resData.value[tyres.brand])
-    // const brandSize = resData.value[tyres.brand];
-    // console.log(brandSize.value)
-    // console.log(size.value);
-
 };
 
 const setValue = reactive({
@@ -2751,12 +2895,14 @@ const addTyreReplacement = () => {
             pattern: '',
             size: '',
             ttTl: '',
-            item: ''
+            item: '',
+            status: false
         })
         setValue.index++;
+        replace.target=false;
     }
 }
-const deleteTyreReplacement = (index) => {
+const deleteTyreReplacement= (index) => {
     if (setValue.index > 1) {
         tyres.value.splice(index, 1)
         setValue.index--;
@@ -2765,31 +2911,57 @@ const deleteTyreReplacement = (index) => {
 }
 
 let step = ref(0)
-function addValue(data){
-    console.log(data.Alignment);
-
+function addValue(data,replace){
 // Check if data is an array
+console.log(data)
 if (Array.isArray(data)) {
+    console.log(replace.target);
     // Data is a list (array)
-    data.forEach(item => {
+    if(!replace.target){
+        data.forEach(item => {
+        console.log(item);
         console.log(item.item);
 
-            // Ensure that tableData.value[billIndex] is initialized as an array
+        // Initialize existingItemIndex to -1
+        let existingItemIndex = -1;
+
+        // Check if tableData.value[billIndex] is an array
+        if (Array.isArray(tableData.value)) {
+            console.log(tableData.value)
+            tableData.value.forEach((rowData, index) => {
+                console.log(rowData);
+                console.log("*****")
+                    rowData.forEach(items => {
+                        console.log(items);
+                        console.log(items.itemCode);
+                        console.log(item.item);
+                    if(items.itemCode === item.item){
+
+                        existingItemIndex=index;
+                        console.log(existingItemIndex);
+                    }
+                    });
+                });
+            // Find the index of the item with the same itemCode, if it exists
+            // existingItemIndex = tableData.value[billIndex].findIndex(existingItem => existingItem.itemCode === item.item);
+        }
+
+        console.log(existingItemIndex);
+
+        if (existingItemIndex !== -1 && !item.status) {
+            // Increase the quantity of the existing item
+            console.log(tableData.value[existingItemIndex][0].requiredQuantity);
+            tableData.value[existingItemIndex][0].requiredQuantity++;
+            console.log(tableData.value[existingItemIndex][0].requiredQuantity);
+            item.status=true;
+        } else {
+            // If tableData.value[billIndex] is not an array, initialize it
             if (!Array.isArray(tableData.value[billIndex])) {
                 tableData.value[billIndex] = [];
             }
-            console.log(tableData.value)
-                console.log(Object.values(tableData.value)[billIndex])
-    
-            // console.log(Object.values(tableData.value[billIndex]))
-        // Find the index of the item with the same itemCode, if it exists
-        const existingItemIndex = Object.values(tableData.value)[billIndex].findIndex(existingItem => existingItem.itemCode === item.item);
-        console.log(existingItemIndex)
-        if (existingItemIndex !== -1) {
-            console.log(tableData.value[billIndex][existingItemIndex])
-            tableData.value[billIndex][existingItemIndex].requiredQuantity++;
-        } else {
-            // Otherwise, create a new object for the item
+
+            // Create a new object for the item
+            console.log(item.item)
             const newData = {
                 itemCode: item.item,
                 sourceWarehouse: '',
@@ -2800,44 +2972,50 @@ if (Array.isArray(data)) {
 
             // Push the new object into the array at the specified billIndex
             tableData.value[billIndex].push(newData);
+            item.status=true;
         }
 
+        calculateTotals();
         billIndex++;
     });
+    }
+    replace.target=true;
 }
- else if (typeof data === 'object') {
-    // Data is a dictionary (object)
+
+
+
+else if (typeof data === 'object') {
     for (const key in data) {
-    if (Object.hasOwnProperty.call(data, key)) {
-        // Check if the value corresponding to the key is true
-        if (data[key] === true) {
-            console.log(data[key]); // Access the value corresponding to each key
+        if (Object.hasOwnProperty.call(data, key)) {
+            if (data[key] === true) {
+                let itemExists = false;
+                tableData.value.forEach((rowData, index) => {
+                    rowData.forEach(item => {
+                    if(item.itemCode === key){
+                        itemExists=true;
+                    }
+                    });
+                });
+                if (!itemExists) {
+                    const newData = {
+                        itemCode: key,
+                        sourceWarehouse: '',
+                        rate: '',
+                        requiredQuantity: 1,
+                        cost: ''
+                    };
+                    if (!Array.isArray(tableData.value[billIndex])) {
+                        tableData.value[billIndex] = [];
+                    }
+                    tableData.value[billIndex].push(newData);
+                    calculateTotals();
 
-            // Create a new object using the value of each key
-            const newData = {
-                itemCode: key,
-                sourceWarehouse: '',
-                rate: '',
-                requiredQuantity: 1,
-                cost: ''
-            };
-
-            // Ensure that tableData.value[billIndex] is initialized as an array
-            if (!Array.isArray(tableData.value[billIndex])) {
-                tableData.value[billIndex] = [];
+                    billIndex++;
+                }
             }
-
-            // Push the new object into the array at the specified billIndex
-            tableData.value[billIndex].push(newData);
-
-            billIndex++;
         }
     }
-
 }
-
-}
-
 // Update the step variable
 step = billIndex;
 }
@@ -2849,7 +3027,7 @@ const totalRate = ref(0);
 const totalQuantity = ref(0);
 const totalCost = ref(0);
 const discountRate = ref();
-const finalAmount = ref(0);
+const finalAmount = ref();
 
 const calculateTotals = () => {
     let sumRate = 0;
@@ -2869,8 +3047,9 @@ const calculateTotals = () => {
     totalRate.value = sumRate;
     totalQuantity.value = sumQuantity;
     totalCost.value = sumCost;
+    finalAmount.value=sumCost;
 
-    calculateDiscountRate();
+    // calculateDiscountRate();
 };
 
 
@@ -2884,7 +3063,7 @@ const calculateDiscountRate = () => {
 
 const addNewRow = (billIndex) => {
     // Check if tableData[billIndex] is defined and is an array
-    console.log(step)
+    console.log("stepindex",step)
     if (!Array.isArray(tableData.value[step])) {
         tableData.value[step] = [];
     }
@@ -2898,6 +3077,8 @@ const addNewRow = (billIndex) => {
         cost: '',
     });
     step++;
+    billIndex=step
+    console.log("billIndex",billIndex)
     console.log("^&*()_")
     // Calculate totals after adding the new row
     // calculateTotals();
@@ -2910,13 +3091,24 @@ const submitData = () => {
     console.log("hi", tableData.itemCode, totalRate, totalQuantity, totalCost, discountRate, finalAmount);
 }
 const removeRow = (index) => {
+    console.log(billIndex)
+    console.log(step)
     tableData.value.splice(index, 1);
+    console.log(tableData.value)
+    step--;
+    billIndex=step;
+    console.log("billIndex:",billIndex)
+    console.log("stepIndex:",step)
     calculateTotals();
 };
-
-const dataFinalSubmission = () => {
+const showConfirm = ref(false)
+const confirm =ref(false)
+const dataFinalSubmission = computed(() => {
     console.log("Final submission process going on....");
-}
+    jobCard["bill"]=tableData.value 
+    console.log(jobCard)
+    checkup(jobCard)   
+})
 
 </script>
 
