@@ -278,13 +278,23 @@ def store_customer_details(data):
 		return "Enter a valid number"
 
 
+@frappe.whitelist(allow_guest=True)
+def lead_details(data):
+	doc =  frappe.get_doc("Lead",{"mobile_no" : data})
+	if not doc :
+		return{
+			"message": "Lead not found"
+		}
+	return doc
+
 # function to create job card
 @frappe.whitelist(allow_guest=True)
 def job_card(data):
-	print(data)
-	data = frappe._dict(data)
+	print(data, type(data))
+	data = frappe._dict(json.loads(data))
+	# print(data.checkup)
 	five_point_checkup = {}
-	tyre_abbr = {"Rear Left": "rl_", "Front Right": "fr_", "Front Left": "fl_", "Rear-Right": "rr_","Spare Tyre": "sp1_"}
+	tyre_abbr = {"Rear Left": "rl_", "Front Right": "fr_", "Front Left": "fl_", "Rear Right": "rr_","Spare Tyre": "sp1_"}
 	for checkup in data.checkup:
 		checkup = frappe._dict(checkup)
 		if checkup.tyre :
@@ -301,21 +311,22 @@ def job_card(data):
 					abbr + "inflation": checkup.puncture,
 			})
 	tyre_replacement = {}
-	tyre_types = {"Front-Left": "fl", "Front-Right": "fr", "Back-Left": "rl", "Back-Right": "rr", "Stephanie": "sp"}
+	tyre_types = {"Front Left": "fl", "Front Right": "fr", "Rear Left": "rl", "Rear Right": "rr", "Spare Tyre": "sp"}
 	for replacement in data.replace:
 		replacement = frappe._dict(replacement)
 		if replacement.type :
 			abbr = tyre_types[replacement.type]
 			tyre_replacement.update({
 					abbr + "_brand": replacement.brand,
-					abbr + "_load_index": replacement.loadIndex,
+					abbr + "_load_index": replacement.loadIndex,	
 					abbr + "_pattern": replacement.pattern,
 					abbr + "_speed_rating": replacement.speedRating,
 					abbr + "_tt_tl": replacement.ttTl,
 					abbr + "_size": replacement.size,
 					abbr + "_item": replacement.item
 			})
-	vehicle_number = data.vehicle_number
+	vehicle_number = data.user
+	# print(vehicle_number)
 	user_details = frappe.db.sql(""" SELECT vd.license_plate as vehicle_no, vd.vehicle_brand as vehicle_brand, vd.vehicle_model as vehicle_model_name, vd.vehicle_type, 
 								vd.tyre_change as tyre_change_km, vd.last_odometer_reading as odo_reading_kms, vd.alignment as free_alignment_kms, 
 						 		cd.current_driver as driver_name, cd.mobile_no, cd.whatsapp as driver_whatsapp, cd.sms as driver_sms, cd.call as driver_call,
@@ -324,7 +335,7 @@ def job_card(data):
 						 		cud.current_owner, cud.owner_mobile_no, cud.whatsapp as whatsapp, cud.call as `call`, cud.sms as sms, cud.owner_data as customer FROM `tabVehicle Details` as vd
 						 		join `tabCurrent Driver` as cd on cd.parent = vd.name 
 						 		join `tabCustomer Details` as cud on cud.license_plate = vd.name 
-						 		join `tabContact Person` as cp on cp.parent = vd.name WHERE vd.license_plate = %s AND cd.primary = 1 AND cp.custom_primary = 1""", vehicle_number,as_dict = True)
+						 		join `tabContact Person` as cp on cp.parent = vd.name WHERE vd.license_plate = %s AND cd.primary = 1 AND cp.custom_primary = 1""", vehicle_number,as_dict = True)[0]
 	val = frappe._dict(data.service)
 	# print(val.alignment['lastAlignment'])
 	
@@ -346,8 +357,6 @@ def job_card(data):
 				"rim": val.rotation['rim'], "wheel": val.rotation['wheel'], "oil_quality": val.oil_change['oil_quality'], "oil_quantity": val.oil_change['oil_quantity'], "front_left_gm": val.balancing['fl'],
 				"front_right_gms": val.balancing['fr'], "rear_left_gms":val.balancing['bl'], "rear_right_gms":val.balancing['br'], "spare_tyre_gms": val.balancing['st'], "air": air, "nitrogen": nitrogen, "front_tyres_psi":val.inflation['ft'],
 				"rear_tyres_psi": val.inflation['rt'], "ac_service_detail": val.ac, "wiper_detail": val.wiper, "battery_detail": val.battery, "car_wash_detail":val.car_wash   }
-	
-	
 		
 
 	doc = frappe.new_doc("Tyre Job Card")
@@ -355,10 +364,17 @@ def job_card(data):
 	doc.update(tyre_replacement)
 	doc.update(user_details)
 	doc.update(service)
-	for billing in data.Bill:
-		billing = frappe._dict(billing)
-		doc.append("billing_items", {"item_code": billing.item_code, "warehouse": billing.sourcewarehouse, "quantity" : billing.required_quantity, "amount" :billing.cost})
+	bills = [bill[0] for bill in data.bill]
+	print(bills, "bills")
+	billing_items = []
+	for items in bills:
+		items = frappe._dict(items)
+		billing_items.append({"item_code": items.itemCode, "warehouse": items.sourceWarehouse, "quantity" : items.requiredQuantity, "amount" :items.cost, "rate": items.rate})
+	print(doc.as_dict(), "as_dict")
+	doc.extend("billing_details", billing_items)
+
 	doc.save(ignore_permissions=True)  # Save customer document
+	print(doc.as_dict(), "as_dict")
 	return {
 		"status": 200,
 		"message": "Jobcard Created Successfully"
@@ -442,7 +458,13 @@ def get_size(brand):
 		WHERE bd.parent = %(brand)s
 	"""
 	result = frappe.db.sql(query, {"brand": brand}, as_dict=True)
-	return result
+	if result:
+		return result
+	else:
+		return {
+			"status": 400,
+			"message": "No Size Found"
+		}
 
 @frappe.whitelist(allow_guest=True)
 def get_type(brand, size):
@@ -451,21 +473,39 @@ def get_type(brand, size):
 	for result in results:
 		tyer_type = result.get("tyer_type")
 		unique_types.add(tyer_type)
-	return list(unique_types)
+	if unique_types:
+		return list(unique_types)
+	else:
+		return {
+			"status": 400,
+			"message": "No Type Found"
+		}
 
 
 @frappe.whitelist(allow_guest=True)
 def get_pattern(brand, size, tyer_type):
 	results = frappe.get_all("Brand Details", filters={"parent": brand, "size": size, "tyer_type": tyer_type}, fields=["pattern"])
 	unique_patterns = set(result.get("pattern") for result in results)
-	return list(unique_patterns)
+	if unique_patterns :
+		return list(unique_patterns)
+	else :
+		return {
+			"status": 400,
+			"message": "No Pattern Found"
+		}
 
 @frappe.whitelist(allow_guest=True)
 def get_ItemCode(brand, size, tyer_type,pattern):
 	results = frappe.get_all("Brand Details", filters={"parent": brand, "size": size, "tyer_type": tyer_type, "pattern":pattern}, fields=["item_code"])
 	print(results)
 	unique_code = set(result.get("item_code") for result in results)
-	return list(unique_code)
+	if unique_code :
+		return list(unique_code)
+	else :
+		return {
+            "status": 400,
+            "message": "No Item Code Found"
+        }
 
 # function to create job card
 @frappe.whitelist(allow_guest=True)
@@ -486,19 +526,10 @@ def stock_details():
 		items_grouped_by_brand.append(item_data)
 
 	print(items_grouped_by_brand)
-	return items_grouped_by_brand
-
-@frappe.whitelist(allow_guest=True)
-def get_jobcard_details():
-	jobcards = frappe.get_all("Tyre Job Card", fields=["name", "time_in", "vehicle_no", "customer", "mobile_no"])
-	details_list = []
-	for jobcard in jobcards:
-		details = {
-			"id": jobcard.name,
-			"time_in": jobcard.time_in,
-			"vehicle_no": jobcard.vehicle_no,
-			"customer": jobcard.customer,
-			"mobile_no": jobcard.mobile_no,
-		}
-		details_list.append(details)
-	return details_list
+	if items_grouped_by_brand:
+		return items_grouped_by_brand
+	else:
+		return {
+            "status": 400,
+            "message": "No Item Found"
+        }
