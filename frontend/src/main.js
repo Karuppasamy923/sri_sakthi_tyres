@@ -6,6 +6,7 @@ import App from './App.vue'
 
 import {
   Button,
+  Dialog,
   Card,
   Input,
   setConfig,
@@ -23,5 +24,6 @@ app.use(resourcesPlugin)
 app.component('Button', Button)
 app.component('Card', Card)
 app.component('Input', Input)
+app.component('Dialog',Dialog)
 
 app.mount('#app')
