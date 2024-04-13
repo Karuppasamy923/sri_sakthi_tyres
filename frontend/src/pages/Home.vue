@@ -628,7 +628,7 @@
                                     <div class="pb-4 grid grid-cols-2 ml-24" v-if="handle">
                                         <input type="tel"
                                             class="w-[19rem] h-[3rem] mt-1 rounded-sm border-solid border border-black"
-                                            placeholder="Enter Customer Mobile No.">
+                                            placeholder="Enter Customer Mobile No." v-model="searchMobile">
                                         <div class="w-[3rem] h-[3rem] mt-1 ml-[7.6rem] bg-blue-600 rounded-sm">
                                             <FeatherIcon name="search" class="m-2 w-8 h-8 cursor-pointer text-gray-100"
                                                 @click="handleSearch" />
@@ -651,29 +651,29 @@
                                             placeholder="Enter Vehicle Number">
                                     </p>
                                     <p class="m-2">Customer Name <span class="text-red-500 font-bold">*</span><br>
-                                        <input type="text" v-model="leadDetails.lead_name" v-if="leadDetails" :readonly="handle == 1"
+                                        <input type="text" v-model="leadDetails.lead_name" v-if="boolDetails.state == 1" :readonly="boolDetails.state == 1"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Customer Name">
-                                        <input type="text" v-model="customerData.current_owner" v-if="!leadDetails"
+                                        <input type="text" v-model="customerData.current_owner" v-if="boolDetails.state == 0"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Name">
                                     </p>
                                     <p class="m-2">Customer Mobile No <span class="text-red-500 font-bold">*</span><br>
-                                        <input type="tel" v-model="leadDetails.mobile_no" v-if="leadDetails" :readonly="handle == 1"
+                                        <input type="tel" v-model="leadDetails.mobile_no" v-if="boolDetails.state == 1" :readonly="boolDetails.state == 1"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Customer Mobile No.">
-                                        <input type="tel" v-model="customerData.owner_mobile_no" v-if="!leadDetails"
+                                        <input type="tel" v-model="customerData.owner_mobile_no" v-if="boolDetails.state == 0"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Mobile No.">
                                     </p>
-                                    <input type="checkbox" v-model="customerData.whatsappChecked" :checked="leadDetails.custom_whatsapp == '1'" :disabled="handle == 1 && leadDetails != null && leadDetails != undefined"
+                                    <input type="checkbox" v-model="customerData.whatsappChecked" :checked="leadDetails.custom_whatsapp == '1'" :disabled="boolDetails.state == 1"
                                         class="bg-gray-300 rounded-sm">&nbsp;&nbsp; <label>WhatsApp</label>
                                     <span class="ml-5">
-                                        <input type="checkbox" v-model="customerData.callChecked" :checked="leadDetails.custom_whatsapp == '1'" :disabled="handle == 1 && leadDetails != null && leadDetails != undefined"
+                                        <input type="checkbox" v-model="customerData.callChecked" :checked="leadDetails.custom_whatsapp == '1'" :disabled="boolDetails.state == 1"
                                             class="bg-gray-300 rounded-sm">&nbsp;&nbsp;<label>call</label>
                                     </span>
                                     <span class="ml-5">
-                                        <input type="checkbox" v-model="customerData.smsChecked" :checked="leadDetails.custom_whatsapp == '1'" :disabled="handle == 1 && leadDetails != null && leadDetails != undefined"
+                                        <input type="checkbox" v-model="customerData.smsChecked" :checked="leadDetails.custom_whatsapp == '1'" :disabled="boolDetails.state == 1"
                                             class="bg-gray-300 rounded-sm">&nbsp;&nbsp;<label>SMS</label>
                                     </span>
                                     <div v-if="!handle">
@@ -807,55 +807,55 @@
                                         <hr class="dark-hr">
                                         <div class="grid grid-cols-3 mt-5">
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.alignment" :checked = "leadDetails.custom_alignment == '1'" :disabled="handle == 1 && leadDetails != null && leadDetails != undefined"
+                                                <input type="checkbox" v-model="serviceDetails.alignment" :checked = "leadDetails.custom_alignment == '1'" :disabled="boolDetails.state == 1"
                                                     class="bg-gray-300 rounded-sm"> <label>Alignment</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.rotation" :checked = "leadDetails.custom_rotation == '1'" :disabled="handle == 1 && leadDetails != null && leadDetails != undefined"
+                                                <input type="checkbox" v-model="serviceDetails.rotation" :checked = "leadDetails.custom_rotation == '1'" :disabled="boolDetails.state == 1"
                                                     class="bg-gray-300 rounded-sm"> <label>Rotation</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.oil_change" :checked = "leadDetails.custom_oil_change == '1'" :disabled="handle == 1 && leadDetails != null && leadDetails != undefined"
+                                                <input type="checkbox" v-model="serviceDetails.oil_change" :checked = "leadDetails.custom_oil_change == '1'" :disabled="boolDetails.state == 1"
                                                     class="bg-gray-300 rounded-sm"> <label>Oil Change</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.balancing" :checked = "leadDetails.custom_balancing == '1'" :disabled="handle == 1 && leadDetails != null && leadDetails != undefined"
+                                                <input type="checkbox" v-model="serviceDetails.balancing" :checked = "leadDetails.custom_balancing == '1'" :disabled="boolDetails.state == 1"
                                                     class="bg-gray-300 rounded-sm"> <label>Balancing</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.inflation" :checked = "leadDetails.custom_inflation == '1'" :disabled="handle == 1 && leadDetails != null && leadDetails != undefined"
+                                                <input type="checkbox" v-model="serviceDetails.inflation" :checked = "leadDetails.custom_inflation == '1'" :disabled="boolDetails.state == 1"
                                                     class="bg-gray-300 rounded-sm"> <label>Inflation</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.puncture" :checked = "leadDetails.custom_puncture == '1'" :disabled="handle == 1 && leadDetails != null && leadDetails != undefined"
+                                                <input type="checkbox" v-model="serviceDetails.puncture" :checked = "leadDetails.custom_puncture == '1'" :disabled="boolDetails.state == 1"
                                                     class="bg-gray-300 rounded-sm"> <label>Puncture</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.tyre_edge" :checked = "leadDetails.custom_tyre_edge == '1'" :disabled="handle == 1 && leadDetails != null && leadDetails != undefined"
+                                                <input type="checkbox" v-model="serviceDetails.tyre_edge" :checked = "leadDetails.custom_tyre_edge == '1'" :disabled="boolDetails.state == 1"
                                                     class="bg-gray-300 rounded-sm"> <label>Tyre Edge</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.tyre_patch" :checked = "leadDetails.custom_tyre_edge == '1'" :disabled="handle == 1 && leadDetails != null && leadDetails != undefined"
+                                                <input type="checkbox" v-model="serviceDetails.tyre_patch" :checked = "leadDetails.custom_tyre_edge == '1'" :disabled="boolDetails.state == 1"
                                                     class="bg-gray-300 rounded-sm"> <label>Tyre Patch</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.mushroom_patch" :checked = "leadDetails.custom_mushroom_patch == '1'" :disabled="handle == 1 && leadDetails != null && leadDetails != undefined"
+                                                <input type="checkbox" v-model="serviceDetails.mushroom_patch" :checked = "leadDetails.custom_mushroom_patch == '1'" :disabled="boolDetails.state == 1"
                                                     class="bg-gray-300 rounded-sm"> <label>Mushroom Patch</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.ac_service" :checked = "leadDetails.custom_ac_service == '1'" :disabled="handle == 1 && leadDetails != null && leadDetails != undefined"
+                                                <input type="checkbox" v-model="serviceDetails.ac_service" :checked = "leadDetails.custom_ac_service == '1'" :disabled="boolDetails.state == 1"
                                                     class="bg-gray-300 rounded-sm"> <label>AC Service</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.battery" :checked = "leadDetails.custom_battery == '1'" :disabled="handle == 1 && leadDetails != null && leadDetails != undefined"
+                                                <input type="checkbox" v-model="serviceDetails.battery" :checked = "leadDetails.custom_battery == '1'" :disabled="boolDetails.state == 1"
                                                     class="bg-gray-300 rounded-sm"> <label>Battery</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.wiper" :checked = "leadDetails.custom_wiper == '1'" :disabled="handle == 1 && leadDetails != null && leadDetails != undefined"
+                                                <input type="checkbox" v-model="serviceDetails.wiper" :checked = "leadDetails.custom_wiper == '1'" :disabled="boolDetails.state == 1"
                                                     class="bg-gray-300 rounded-sm"> <label>Wiper</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.car_wash" :checked = "leadDetails.custom_car_wash == '1'" :disabled="handle == 1 && leadDetails != null && leadDetails != undefined"
+                                                <input type="checkbox" v-model="serviceDetails.car_wash" :checked = "leadDetails.custom_car_wash == '1'" :disabled="boolDetails.state == 1"
                                                     class="bg-gray-300 rounded-sm"> <label>Car Wash</label>
                                             </div>
                                         </div>
@@ -1619,7 +1619,7 @@ const data = reactive({
 const headers = {
     'Content-Type': 'application/json',
 
-    'Authorization': 'token 7fa0cf7915ad42d :2a784f5c29d213b'
+    'Authorization': 'token b89ae1f0409875e:af8a0b78d948ebf'
 
 }
 
@@ -2489,6 +2489,12 @@ const serviceDetails = ref({
 })
 
 const handleCustomer = async () => {
+
+    if (boolDetails.state == 1){
+    alert("Unable to edit")
+    return
+}
+
     showNewCustomer.value = false;
     showConfirmation.value = true;
     newCustomerSave.value = true;
@@ -2497,10 +2503,7 @@ const handleCustomer = async () => {
 const confirmCustomerSave = async () => {
     showConfirmation.value = false;
     newCustomerSave.value = false;
-if (boolDetails.state == 1){
-    alert("Unable to edit")
-    return
-}
+
     const customerDetails = {
         current_owner: customerData.value.current_owner,
         owner_mobile_no: customerData.value.owner_mobile_no,
@@ -2524,6 +2527,7 @@ const boolDetails = reactive({
 });
 
 const handleSearch = async () => {
+    try{
     const response = await axios.get(`${BaseURL}/api/method/tyre.api.lead_details`, {
         params: {
             data: searchMobile.value
@@ -2532,8 +2536,11 @@ const handleSearch = async () => {
     });
     leadDetails.value = response.data.message;
     boolDetails.state = 1;
-
     console.log('lead details', leadDetails.value);
+}catch (e) {
+    console.log(e)
+}
+
 }
 
 
