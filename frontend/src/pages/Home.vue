@@ -727,7 +727,7 @@
                                             class="bg-gray-300 rounded-sm">&nbsp;&nbsp;<label>SMS</label>
                                     </span>
                                     <div v-if="!handle">
-                                        <div v-for="(employee, index) in employees" :key="index" class="mt-2">
+                                        <div v-for="(employee, index) in employees" :key="index" class="mt-2"><div v-show="False">{{sample22 = index}}</div>
                                             <hr class="dark-hr m-4">
                                             <button
                                                 class="bg-blue-500 w-[100px] text-white font-bold  text-base p-4 rounded-lg mb-1 float-right"
@@ -740,7 +740,7 @@
                                             </p>
                                             <p class="m-2">Employee Type <span
                                                     class="text-red-500 font-bold">*</span><br>
-                                                <select v-model="employee.type"
+                                                <select v-model="employee.type" @click="setPrimary"
                                                     class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
                                                     <option value="" selected disabled>Please select..</option>
                                                     <option value="current_driver">Driver</option>
@@ -2240,6 +2240,8 @@ const updateEmployeeType = (employee) => {
     return employee.parentfield
 }
 
+let primaryValue = ref(false)
+const sample22 = reactive(ref(0))
 const employees = ref([{
     driver_name: '',
     type: '',
@@ -2247,8 +2249,30 @@ const employees = ref([{
     whatsappChecked1: 0,
     callChecked1: 0,
     smsChecked1: 0,
-    primary: 0
+    primary: primaryValue,
 }]);
+
+const setPrimary = () => {
+    let sample_driver = 0;
+    let sample_customer = 0;
+    
+    customerData.value.employees.forEach((employee) => {
+        if (employee.type === 'current_driver') {
+            sample_driver += 1;
+        } else if (employee.type === 'contact_person') {
+            sample_customer += 1;
+        }
+    });
+    console.log(sample_driver);
+    if (sample_driver == 1) {
+        primaryValue.value = true;
+    } 
+    else if(sample_customer == 1){
+        primaryValue.value = true;
+    }
+    console.log(primaryValue.value);
+
+}
 
 function moreEmployee() {
     employees.value.push({
@@ -2729,7 +2753,9 @@ const removeEmployee3 = (index) => {
     responseData.value.message[1].contact_person.splice(index, 1);
 };
 const removeEmployee1 = (index) => {
-    employees.value.splice(index, 1);
+    if (sample22.value != 0){
+        employees.value.splice(index, 1);
+    }
 };
 
 

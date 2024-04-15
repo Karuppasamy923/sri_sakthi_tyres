@@ -367,12 +367,15 @@ def job_card(data):
 	bills = [bill[0] for bill in data.bill]
 	print(bills, "bills")
 	billing_items = []
+	total_amount = 0
 	for items in bills:
 		items = frappe._dict(items)
+		total_amount += int(items.cost)
 		billing_items.append({"item_code": items.itemCode, "warehouse": items.sourceWarehouse, "quantity" : items.requiredQuantity, "amount" :items.cost, "rate": items.rate})
 	print(doc.as_dict(), "as_dict")
 	doc.extend("billing_details", billing_items)
 
+	doc.total_amount = total_amount
 	doc.save(ignore_permissions=True)  # Save customer document
 	print(doc.as_dict(), "as_dict")
 	return {
@@ -426,7 +429,6 @@ def lead(**args):
 	for items_deatils in data.get("items"):
 		items_deatils = frappe._dict(items_deatils)
 		doc.append("custom_lead_items", {"brand": items_deatils.brand, "size": items_deatils.variants, "quantity" : items_deatils.quantity})
-	doc.save(ignore_permissions=True)  # Save customer document
 	return {
 		"status": 200,
 		"message": "Lead Created Successfully"
@@ -535,21 +537,31 @@ def stock_details():
         }
 	
 @frappe.whitelist(allow_guest=True)
-def get_jobcard_details():
-	jobcards = frappe.get_all("Tyre Job Card", fields=["name", "time_in", "vehicle_no", "customer", "mobile_no"])
-	details_list = []
-	for jobcard in jobcards:
-		details = {
-			"id": jobcard.name,
-			"time_in": jobcard.time_in,
-			"vehicle_no": jobcard.vehicle_no,
-			"customer": jobcard.customer,
-			"mobile_no": jobcard.mobile_no,
-		}
-		details_list.append(details)
-	return details_list
+def get_jobcard_details(data):  
+  if data:
+    jobcard_details = frappe.get_all("Tyre Job Card",{'mobile_no':data},{"time_in","name","vehicle_no","customer","mobile_no"})
+    if jobcard_details:
+      return jobcard_details
+    else:
+      return {
+        "status": 400,
+        "message": "No Job Card Found"
+      }
+  else:
+    job_card_details = frappe.get_all("Tyre Job Card", fields={"time_in","name","vehicle_no","customer","mobile_no"})
+    return job_card_details
 
 @frappe.whitelist(allow_guest=True)
 def get_enquiry_details():
     enquiries = frappe.get_all("Lead", fields={"name", "lead_name","mobile_no"})
     return enquiries
+
+@frappe.whitelist()
+def get_billing_details(name):
+	doc = frappe.get_doc("Tyre Job Card", name)
+	return {"billing_details":doc.billing_details, "total_amount": doc.total_amount}
+
+
+def calculate_total_amount(self, method):
+	for row in self.custom_lead_items:
+		pass
