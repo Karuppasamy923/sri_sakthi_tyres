@@ -367,12 +367,15 @@ def job_card(data):
 	bills = [bill[0] for bill in data.bill]
 	print(bills, "bills")
 	billing_items = []
+	total_amount = 0
 	for items in bills:
 		items = frappe._dict(items)
+		total_amount += int(items.cost)
 		billing_items.append({"item_code": items.itemCode, "warehouse": items.sourceWarehouse, "quantity" : items.requiredQuantity, "amount" :items.cost, "rate": items.rate})
 	print(doc.as_dict(), "as_dict")
 	doc.extend("billing_details", billing_items)
 
+	doc.total_amount = total_amount
 	doc.save(ignore_permissions=True)  # Save customer document
 	print(doc.as_dict(), "as_dict")
 	return {
@@ -382,7 +385,7 @@ def job_card(data):
 
 @frappe.whitelist(allow_guest=True)
 def lead(**args):
-	print(args, type(args))
+	# print(args, type(args))
 	data = frappe._dict(args)
 	lead_user_details = {
 		"first_name": data.current_owner,
@@ -429,7 +432,9 @@ def lead(**args):
 	doc.save(ignore_permissions=True)  # Save customer document
 	return {
 		"status": 200,
-		"message": "Lead Created Successfully"
+		"message": "Lead Created Successfully",
+		"lead_item": doc.custom_lead_items,
+		"total_amount": doc.custom_total_amount,
 	}
 
 
@@ -535,19 +540,19 @@ def stock_details():
 		}
 	
 @frappe.whitelist(allow_guest=True)
-def get_jobcard_details():
-	jobcards = frappe.get_all("Tyre Job Card", fields=["name", "time_in", "vehicle_no", "customer", "mobile_no"])
-	details_list = []
-	for jobcard in jobcards:
-		details = {
-			"id": jobcard.name,
-			"time_in": jobcard.time_in,
-			"vehicle_no": jobcard.vehicle_no,
-			"customer": jobcard.customer,
-			"mobile_no": jobcard.mobile_no,
-		}
-		details_list.append(details)
-	return details_list
+def get_jobcard_details(data):  
+  if data:
+    jobcard_details = frappe.get_all("Tyre Job Card",{'mobile_no':data},{"time_in","name","vehicle_no","customer","mobile_no"})
+    if jobcard_details:
+      return jobcard_details
+    else:
+      return {
+        "status": 400,
+        "message": "No Job Card Found"
+      }
+  else:
+    job_card_details = frappe.get_all("Tyre Job Card", fields={"time_in","name","vehicle_no","customer","mobile_no"})
+    return job_card_details
 
 @frappe.whitelist(allow_guest=True)
 def get_enquiry_details():
