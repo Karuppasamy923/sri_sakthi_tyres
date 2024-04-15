@@ -2240,7 +2240,7 @@ const updateEmployeeType = (employee) => {
     return employee.parentfield
 }
 
-let primaryValue = ref(false)
+let primaryValue = reactive(ref(false))
 const sample22 = reactive(ref(0))
 const employees = ref([{
     driver_name: '',
@@ -2249,12 +2249,12 @@ const employees = ref([{
     whatsappChecked1: 0,
     callChecked1: 0,
     smsChecked1: 0,
-    primary: primaryValue,
+    primary: reactive(primaryValue),
 }]);
-
 const setPrimary = () => {
     let sample_driver = 0;
     let sample_customer = 0;
+    console.log(employees)
     
     customerData.value.employees.forEach((employee) => {
         if (employee.type === 'current_driver') {
@@ -2264,7 +2264,7 @@ const setPrimary = () => {
         }
     });
     console.log(sample_driver);
-    if (sample_driver == 1) {
+    if (sample_driver > 0) {
         primaryValue.value = true;
     } 
     else if(sample_customer == 1){
