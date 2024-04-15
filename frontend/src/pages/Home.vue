@@ -727,7 +727,7 @@
                                             class="bg-gray-300 rounded-sm">&nbsp;&nbsp;<label>SMS</label>
                                     </span>
                                     <div v-if="!handle">
-                                        <div v-for="(employee, index) in employees" :key="index" class="mt-2"><div v-show="False">{{sample22 = index}}</div>
+                                        <div v-for="(employee, index) in employees" :key="index" class="mt-2"><div v-show="false">{{sample22 = index}}</div>
                                             <hr class="dark-hr m-4">
                                             <button
                                                 class="bg-blue-500 w-[100px] text-white font-bold  text-base p-4 rounded-lg mb-1 float-right"
@@ -2249,7 +2249,7 @@ const employees = ref([{
     whatsappChecked1: 0,
     callChecked1: 0,
     smsChecked1: 0,
-    primary: reactive(primaryValue),
+    primary: ref(primaryValue),
 }]);
 const setPrimary = () => {
     let sample_driver = 0;
@@ -2265,13 +2265,22 @@ const setPrimary = () => {
     });
     console.log(sample_driver);
     if (sample_driver > 0) {
-        primaryValue.value = true;
+        if(sample_driver == 1){
+            primaryValue.value = true;
+        }
+        else{
+            primaryValue.value = false;
+        }
     } 
-    else if(sample_customer == 1){
-        primaryValue.value = true;
+    else if(sample_customer > 0){
+        if(sample_customer == 1){
+            primaryValue.value = true;
+        }
+        else{
+            primaryValue.value = false;
+        }
     }
-    console.log(primaryValue.value);
-
+    console.log(primaryValue.value);    
 }
 
 function moreEmployee() {
