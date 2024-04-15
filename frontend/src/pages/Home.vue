@@ -1800,7 +1800,9 @@ const getItemCode = (brand, size, type, pattern, index) => {
         .then(response => {
             console.log(response.data.message[0]);
             tyres.value[index].item = response.data.message[0]
+            tyres.value[index].rate = response.data.message[1]
         });
+    
 }
 //==========================================================>>> Main Page <<<================================================================================//
 const hasResponse = ref(true);
@@ -3040,6 +3042,7 @@ const tyres = ref([{
     size: '',
     ttTl: '',
     item: '',
+    rate:'',
     mandatory: false,
     status: false
 }]);
@@ -3065,6 +3068,7 @@ const addTyreReplacement = () => {
             size: '',
             ttTl: '',
             item: '',
+            rate:'',
             status: false
         })
         setValue.index++;
@@ -3141,7 +3145,7 @@ function addValue(data, replace) {
                     const newData = {
                         itemCode: item.item,
                         sourceWarehouse: '',
-                        rate: '',
+                        rate: item.rate,
                         requiredQuantity: 1, // Set initial quantity to 1
                         cost: ''
                     };
