@@ -530,9 +530,9 @@ def stock_details():
 		return items_grouped_by_brand
 	else:
 		return {
-            "status": 400,
-            "message": "No Item Found"
-        }
+			"status": 400,
+			"message": "No Item Found"
+		}
 	
 @frappe.whitelist(allow_guest=True)
 def get_jobcard_details():
@@ -551,5 +551,69 @@ def get_jobcard_details():
 
 @frappe.whitelist(allow_guest=True)
 def get_enquiry_details():
-    enquiries = frappe.get_all("Lead", fields={"name", "lead_name","mobile_no"})
-    return enquiries
+	enquiries = frappe.get_all("Lead", fields={"name", "lead_name","mobile_no"})
+	return enquiries
+
+
+
+
+def calculate_total_amount(self, method):
+	if self.doctype == "Lead":
+		for row in self.custom_lead_items:
+			item_code = get_item(frappe._dict({
+												"brand": row.brand,
+												"size": row.size,
+												"pattern": row.pattern,
+												"tyre_type": row.tyre_type
+										}))
+
+			self.custom_lead_items[row.idx - 1].rate = 0
+			self.custom_lead_items[row.idx - 1].amount = 0
+			total_amount = 0
+			if item_code:
+				price_list = get_item_rate(item_code)
+				self.custom_lead_items[row.idx].item_code = item_code
+				self.custom_lead_items[row.idx].rate = price_list[0].selling_rate
+				self.custom_lead_items[row.idx - 1].amount = row.quantity * price_list[0].selling_rate
+				total_amount += row.quantity * price_list[0].selling_rate
+
+
+			self.custom_total_amount = total_amount
+
+	if self.doctype == "Tyre Job Card":
+		for row in self.billing_details:
+			self.billing_details[row.idx - 1].rate = 0
+			self.billing_details[row.idx - 1].amount = 0
+			total_amount = 0
+			if row.item_code:
+				price_list = get_item_rate(row.item_code)
+				self.billing_details[row.idx].rate = price_list[0].selling_rate
+				self.billing_details[row.idx - 1].amount = row.quantity * price_list[0].selling_rate
+				total_amount += row.quantity * price_list[0].selling_rate
+
+
+			self.total_amount = total_amount
+					
+			
+
+
+@frappe.whitelist()
+def get_item(args):
+	if isinstance(args, str):
+		args = frappe._dict(json.loads(args))
+	return frappe.db.get_value("Brand Details",{"parent": args.brand, "size": args.size, "tyer_type": args.tyre_type, "pattern": args.pattern}, "item_code")
+
+
+@frappe.whitelist()
+def get_item_rate(item_code):
+	from erpnext.stock.report.item_price_stock.item_price_stock import get_item_price_qty_data
+	price_list = get_item_price_qty_data({"item_code": item_code})
+	if price_list:
+		return price_list[0].selling_rate
+	
+	return 0
+
+
+@frappe.whitelist()
+def get_warehouse():
+	return frappe.get_all("Warehouse",{"is_group":0}, pluck="name")
