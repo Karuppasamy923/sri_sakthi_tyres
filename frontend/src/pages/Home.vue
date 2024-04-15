@@ -276,7 +276,7 @@
                                                 <label>Driver Name&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">
                                                     {{ responseData &&
-                responseData.message && responseData.message[2][0]?.full_name || 
+                responseData.message && responseData.message[2][0]?.full_name ||
                 'No data' }}
                                                 </label>
                                                 <br>
@@ -394,12 +394,24 @@
                             </Card>
                         </div>
                         <div v-else>
-                            <div>
-                                <button @click="getJobCard" v-if="hide == 'false'"
-                                    class="bg-blue-500 w-[100px] text-white font-bold  p-2 rounded-lg ml-3">Job
-                                    Card</button>
-                                <button @click="hide = 'false'" v-if="hide != 'false'"
-                                    class="bg-blue-500 w-[100px] text-white font-bold  p-2 rounded-lg ml-8 mb-4">Back</button>
+                            <div class="flex">
+                                <div class="mr-8">
+                                    <button @click="getJobCard" v-if="hide == 'false' && hideEnq == 'false'"
+                                        class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Job
+                                        Card</button>
+                                    <button @click="hide = 'false'" v-if="hide != 'false'"
+                                        class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Back</button>
+                                </div>
+                                <div>
+                                    <button @click="getEnquiry" v-if="hideEnq == 'false' && hide == 'false'"
+                                        class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Enquiry</button>
+                                    <button @click="hideEnq = 'false'" v-if="hideEnq != 'false'"
+                                        class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Back</button>
+                                </div>
+                                <div>
+                                    <Input placeholder="search ..." v-if="hideEnq != 'false'" class="mt-9 mb-2 ml-[5.3rem] p-4"/>
+                                    <Input placeholder="search ..." v-if="hide != 'false'" class="mt-9 mb-2 ml-[5.3rem] p-4"/>
+                                </div>
                             </div>
                             <div>
                                 <div class="relative overflow-x-auto flex justify-center" v-if="hide != 'false'">
@@ -449,13 +461,51 @@
                                     </table>
                                 </div>
                             </div>
-                            <div class="flex justify-center" v-if="hide == 'false'">
+                            <div>
+                                <div class="relative overflow-x-auto flex justify-center" v-if="hideEnq != 'false'">
+                                    <div>
+                                        <table
+                                            class="w-[75rem] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                            <thead
+                                                class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                                <tr>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        ID
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Name
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Mobile Number
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="bg-white border-b  dark:border-gray-700 dark:text-black"
+                                                    v-for="enquiry in enquiryDetails" :key="enquiry">
+                                                    <th scope="row"
+                                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
+                                                        {{ enquiry.name }}
+                                                    </th>
+                                                    <td class="px-6 py-4">
+                                                        {{ enquiry.lead_name }}
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        {{ enquiry.mobile_no }}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex justify-center" v-if="hide == 'false' && hideEnq == 'false'">
                                 <div class="flex justify-center mt-9">
                                     <img src="https://img.freepik.com/free-vector/hand-drawn-no-data-concept_52683-127823.jpg?w=996&t=st=1712321166~exp=1712321766~hmac=ae2f4e19eb0e1185d52ac8a07c158e9dc5afa741284e9526a8e8a0165573735b"
                                         alt="No data" class="w-[25%]" @click="showMessage(`Nothing to Show ! 😄`)">
                                 </div>
                             </div>
-                            <div class="flex justify-center m-5" v-if="hide == 'false'">
+                            <div class="flex justify-center m-5" v-if="hide == 'false' && hideEnq == 'false'">
                                 <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
                                     @click="addVehicle">
                                     Add Vehicle
@@ -651,29 +701,38 @@
                                             placeholder="Enter Vehicle Number">
                                     </p>
                                     <p class="m-2">Customer Name <span class="text-red-500 font-bold">*</span><br>
-                                        <input type="text" v-model="leadDetails.lead_name" v-if="boolDetails.state == 1" :readonly="boolDetails.state == 1"
+                                        <input type="text" v-model="leadDetails.lead_name" v-if="boolDetails.state == 1"
+                                            :readonly="boolDetails.state == 1"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Customer Name">
-                                        <input type="text" v-model="customerData.current_owner" v-if="boolDetails.state == 0"
+                                        <input type="text" v-model="customerData.current_owner"
+                                            v-if="boolDetails.state == 0"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Name">
                                     </p>
                                     <p class="m-2">Customer Mobile No <span class="text-red-500 font-bold">*</span><br>
-                                        <input type="tel" v-model="leadDetails.mobile_no" v-if="boolDetails.state == 1" :readonly="boolDetails.state == 1"
+                                        <input type="tel" v-model="leadDetails.mobile_no" v-if="boolDetails.state == 1"
+                                            :readonly="boolDetails.state == 1"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Customer Mobile No.">
-                                        <input type="tel" v-model="customerData.owner_mobile_no" v-if="boolDetails.state == 0"
+                                        <input type="tel" v-model="customerData.owner_mobile_no"
+                                            v-if="boolDetails.state == 0"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Mobile No.">
                                     </p>
-                                    <input type="checkbox" v-model="customerData.whatsappChecked" :checked="leadDetails.custom_whatsapp == '1'" :disabled="boolDetails.state == 1"
+                                    <input type="checkbox" v-model="customerData.whatsappChecked"
+                                        :checked="leadDetails.custom_whatsapp == '1'" :disabled="boolDetails.state == 1"
                                         class="bg-gray-300 rounded-sm">&nbsp;&nbsp; <label>WhatsApp</label>
                                     <span class="ml-5">
-                                        <input type="checkbox" v-model="customerData.callChecked" :checked="leadDetails.custom_whatsapp == '1'" :disabled="boolDetails.state == 1"
+                                        <input type="checkbox" v-model="customerData.callChecked"
+                                            :checked="leadDetails.custom_whatsapp == '1'"
+                                            :disabled="boolDetails.state == 1"
                                             class="bg-gray-300 rounded-sm">&nbsp;&nbsp;<label>call</label>
                                     </span>
                                     <span class="ml-5">
-                                        <input type="checkbox" v-model="customerData.smsChecked" :checked="leadDetails.custom_whatsapp == '1'" :disabled="boolDetails.state == 1"
+                                        <input type="checkbox" v-model="customerData.smsChecked"
+                                            :checked="leadDetails.custom_whatsapp == '1'"
+                                            :disabled="boolDetails.state == 1"
                                             class="bg-gray-300 rounded-sm">&nbsp;&nbsp;<label>SMS</label>
                                     </span>
                                     <div v-if="!handle">
@@ -795,7 +854,8 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr v-for="(item,index) in leadDetails.custom_lead_items" :key="index">
+                                                    <tr v-for="(item, index) in leadDetails.custom_lead_items"
+                                                        :key="index">
                                                         <td>{{ item.brand }}</td>
                                                         <td>{{ item.size }}</td>
                                                         <td>{{ item.quantity }}</td>
@@ -807,56 +867,82 @@
                                         <hr class="dark-hr">
                                         <div class="grid grid-cols-3 mt-5">
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.alignment" :checked = "leadDetails.custom_alignment == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Alignment</label>
+                                                <input type="checkbox" v-model="serviceDetails.alignment"
+                                                    :checked="leadDetails.custom_alignment == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Alignment</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.rotation" :checked = "leadDetails.custom_rotation == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Rotation</label>
+                                                <input type="checkbox" v-model="serviceDetails.rotation"
+                                                    :checked="leadDetails.custom_rotation == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Rotation</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.oil_change" :checked = "leadDetails.custom_oil_change == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Oil Change</label>
+                                                <input type="checkbox" v-model="serviceDetails.oil_change"
+                                                    :checked="leadDetails.custom_oil_change == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Oil Change</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.balancing" :checked = "leadDetails.custom_balancing == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Balancing</label>
+                                                <input type="checkbox" v-model="serviceDetails.balancing"
+                                                    :checked="leadDetails.custom_balancing == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Balancing</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.inflation" :checked = "leadDetails.custom_inflation == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Inflation</label>
+                                                <input type="checkbox" v-model="serviceDetails.inflation"
+                                                    :checked="leadDetails.custom_inflation == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Inflation</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.puncture" :checked = "leadDetails.custom_puncture == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Puncture</label>
+                                                <input type="checkbox" v-model="serviceDetails.puncture"
+                                                    :checked="leadDetails.custom_puncture == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Puncture</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.tyre_edge" :checked = "leadDetails.custom_tyre_edge == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Tyre Edge</label>
+                                                <input type="checkbox" v-model="serviceDetails.tyre_edge"
+                                                    :checked="leadDetails.custom_tyre_edge == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Tyre Edge</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.tyre_patch" :checked = "leadDetails.custom_tyre_edge == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Tyre Patch</label>
+                                                <input type="checkbox" v-model="serviceDetails.tyre_patch"
+                                                    :checked="leadDetails.custom_tyre_edge == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Tyre Patch</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.mushroom_patch" :checked = "leadDetails.custom_mushroom_patch == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Mushroom Patch</label>
+                                                <input type="checkbox" v-model="serviceDetails.mushroom_patch"
+                                                    :checked="leadDetails.custom_mushroom_patch == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Mushroom Patch</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.ac_service" :checked = "leadDetails.custom_ac_service == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>AC Service</label>
+                                                <input type="checkbox" v-model="serviceDetails.ac_service"
+                                                    :checked="leadDetails.custom_ac_service == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>AC Service</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.battery" :checked = "leadDetails.custom_battery == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Battery</label>
+                                                <input type="checkbox" v-model="serviceDetails.battery"
+                                                    :checked="leadDetails.custom_battery == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Battery</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.wiper" :checked = "leadDetails.custom_wiper == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Wiper</label>
+                                                <input type="checkbox" v-model="serviceDetails.wiper"
+                                                    :checked="leadDetails.custom_wiper == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Wiper</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.car_wash" :checked = "leadDetails.custom_car_wash == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Car Wash</label>
+                                                <input type="checkbox" v-model="serviceDetails.car_wash"
+                                                    :checked="leadDetails.custom_car_wash == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Car Wash</label>
                                             </div>
                                         </div>
                                         <div>
@@ -1875,6 +1961,19 @@ const getJobCard = async () => {
     }
 }
 
+const hideEnq = ref('false');
+const enquiryDetails = ref([]);
+const getEnquiry = async () => {
+    hideEnq.value = true;
+    try {
+        const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_enquiry_details`, { headers: headers });
+        enquiryDetails.value = response.data.message;
+        console.log(response.data.message);
+    } catch (e) {
+        console.error("Error:", e);
+    }
+}
+
 const currentPage = ref('details');
 // const currentstep = ref(0);
 const maxStep = 4;
@@ -1889,7 +1988,7 @@ function previousPage() {
 
 const showWarning = ref(false)
 const close = () => {
-    if(showWarning.value){
+    if (showWarning.value) {
         showWarning.value = false;
         showNewCustomer.value = true;
     }
@@ -2442,7 +2541,7 @@ const addCustomerModifiedData = async () => {
 
     console.log('modify checking', modifiedData);
     try {
-        const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_customer_details`,{data:JSON.stringify(modifiedData)},{headers:headers});
+        const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_customer_details`, { data: JSON.stringify(modifiedData) }, { headers: headers });
         check.value = true;
         console.log(response);
         returnSearch(name)
@@ -2490,10 +2589,10 @@ const serviceDetails = ref({
 
 const handleCustomer = async () => {
 
-    if (boolDetails.state == 1){
-    alert("Unable to edit")
-    return
-}
+    if (boolDetails.state == 1) {
+        alert("Unable to edit")
+        return
+    }
 
     showNewCustomer.value = false;
     showConfirmation.value = true;
@@ -2527,19 +2626,20 @@ const boolDetails = reactive({
 });
 
 const handleSearch = async () => {
-    try{
-    const response = await axios.get(`${BaseURL}/api/method/tyre.api.lead_details`, {
-        params: {
-            data: searchMobile.value
-        },
-        headers: headers
-    });
-    leadDetails.value = response.data.message;
-    boolDetails.state = 1;
-    console.log('lead details', leadDetails.value);
-}catch (e) {
-    console.log(e)
-}
+    try {
+        const response = await axios.get(`${BaseURL}/api/method/tyre.api.lead_details`, {
+            params: {
+                data: searchMobile.value
+            },
+            headers: headers
+        });
+        leadDetails.value = response.data.message;
+
+        boolDetails.state = 1;
+        console.log('lead details', leadDetails.value);
+    } catch (e) {
+        console.log(e)
+    }
 
 }
 
@@ -2584,7 +2684,7 @@ const returnSearch = async (search) => {
     try {
         if (data.license_plate.trim() !== "") {
             console.log("**&**")
-            const response = await axios.post(`${BaseURL}/api/method/tyre.api.get_details`,{license_plate:JSON.stringify(data.license_plate)},{headers:headers});
+            const response = await axios.post(`${BaseURL}/api/method/tyre.api.get_details`, { license_plate: JSON.stringify(data.license_plate) }, { headers: headers });
             check.value = true;
             console.log('returnSearch data', response);
             if (response.data.message === "") {

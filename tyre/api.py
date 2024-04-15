@@ -548,3 +548,8 @@ def get_jobcard_details():
 		}
 		details_list.append(details)
 	return details_list
+
+@frappe.whitelist(allow_guest=True)
+def get_enquiry_details():
+    enquiries = frappe.get_all("Lead", fields={"name", "lead_name","mobile_no"})
+    return enquiries
