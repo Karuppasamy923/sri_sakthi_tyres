@@ -2753,12 +2753,26 @@ const returnSearch = async (search) => {
 const removeCustomerData = () => {
     Object.keys(customerData.value).forEach(key => {
         customerData.value[key] = '';
-    });
+    }); 
     employees.value = [{ name: '', type: '' }];
 }
 
 const removeEmployee2 = (index) => {
-    responseData.value.message[1].current_driver.splice(index, 1);
+    const data = {
+        "current_driver":responseData.value.message[1].current_driver[index].current_driver,
+        "parentfield":responseData.value.message[1].current_driver[index].parentfield,
+        "mobile_no":responseData.value.message[1].current_driver[index].mobile_no,
+        "name":responseData.value.message[1].current_driver[index].parent
+    }
+    console.log(data);
+    // try{
+
+    //     await axios.post(`${BaseURL}/api/method/tyre.api.delete_modifide_customes`,{data:data},{headers:headers});
+    // }
+    // catch(error){
+    //     console.log(error);
+    // }
+    // responseData.value.message[1].current_driver.splice(index, 1);
 };
 const removeEmployee3 = (index) => {
     responseData.value.message[1].contact_person.splice(index, 1);

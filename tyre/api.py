@@ -590,7 +590,18 @@ def calculate_total_amount(self, method):
 
 
 			self.total_amount = total_amount
-					
+
+@frappe.whitelist(allow_guest=True)
+def delete_modifide_customes(data):
+	data = frappe._dict(data)
+	if data.parentfield == "current_driver":
+		doc_details = frappe.db.get_value("Current Driver",{"mobile_no":data.mobile_no},["name","parent"],as_dict=True)	
+		if doc_details and doc_details.get('name') and doc_details.get('parent'):
+			p_doc = frappe.get_doc("Customer Details",doc_details.get('parent'))
+			for row in p_doc.current_driver:
+				if row.name == doc_details.get('name'):
+					p_doc.remove(row)
+			p_doc.save()
 			
 
 
