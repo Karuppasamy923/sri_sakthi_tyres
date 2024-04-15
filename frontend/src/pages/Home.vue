@@ -499,7 +499,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex justify-center" v-if="hide == 'false'">
+                            <div class="flex justify-center" v-if="hide == 'false' && hideEnq == 'false'">
                                 <div class="flex justify-center mt-9">
                                     <img src="https://img.freepik.com/free-vector/hand-drawn-no-data-concept_52683-127823.jpg?w=996&t=st=1712321166~exp=1712321766~hmac=ae2f4e19eb0e1185d52ac8a07c158e9dc5afa741284e9526a8e8a0165573735b"
                                         alt="No data" class="w-[25%]" @click="showMessage(`Nothing to Show ! 😄`)">
@@ -727,7 +727,7 @@
                                             class="bg-gray-300 rounded-sm">&nbsp;&nbsp;<label>SMS</label>
                                     </span>
                                     <div v-if="!handle">
-                                        <div v-for="(employee, index) in employees" :key="index" class="mt-2">
+                                        <div v-for="(employee, index) in employees" :key="index" class="mt-2"><div v-show="false">{{sample22 = index}}</div>
                                             <hr class="dark-hr m-4">
                                             <button
                                                 class="bg-blue-500 w-[100px] text-white font-bold  text-base p-4 rounded-lg mb-1 float-right"
@@ -740,7 +740,7 @@
                                             </p>
                                             <p class="m-2">Employee Type <span
                                                     class="text-red-500 font-bold">*</span><br>
-                                                <select v-model="employee.type"
+                                                <select v-model="employee.type" @click="setPrimary"
                                                     class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
                                                     <option value="" selected disabled>Please select..</option>
                                                     <option value="current_driver">Driver</option>
@@ -836,7 +836,7 @@
                                             </table>
                                         </div>
                                         <div v-if="leadDetails">
-                                            <table class="table-auto">
+                                            <table class="table-auto" v-if="leadDetails.custom_lead_items">
                                                 <thead>
                                                     <tr>
                                                         <th class="pr-12">Brand</th>
@@ -1800,7 +1800,9 @@ const getItemCode = (brand, size, type, pattern, index) => {
         .then(response => {
             console.log(response.data.message[0]);
             tyres.value[index].item = response.data.message[0]
+            tyres.value[index].rate = response.data.message[1]
         });
+    
 }
 //==========================================================>>> Main Page <<<================================================================================//
 const hasResponse = ref(true);
@@ -2240,6 +2242,8 @@ const updateEmployeeType = (employee) => {
     return employee.parentfield
 }
 
+let primaryValue = reactive(ref(false))
+const sample22 = reactive(ref(0))
 const employees = ref([{
     driver_name: '',
     type: '',
@@ -2247,8 +2251,39 @@ const employees = ref([{
     whatsappChecked1: 0,
     callChecked1: 0,
     smsChecked1: 0,
-    primary: 0
+    primary: ref(primaryValue),
 }]);
+const setPrimary = () => {
+    let sample_driver = 0;
+    let sample_customer = 0;
+    console.log(employees)
+    
+    customerData.value.employees.forEach((employee) => {
+        if (employee.type === 'current_driver') {
+            sample_driver += 1;
+        } else if (employee.type === 'contact_person') {
+            sample_customer += 1;
+        }
+    });
+    console.log(sample_driver);
+    if (sample_driver > 0) {
+        if(sample_driver == 1){
+            primaryValue.value = true;
+        }
+        else{
+            primaryValue.value = false;
+        }
+    } 
+    else if(sample_customer > 0){
+        if(sample_customer == 1){
+            primaryValue.value = true;
+        }
+        else{
+            primaryValue.value = false;
+        }
+    }
+    console.log(primaryValue.value);    
+}
 
 function moreEmployee() {
     employees.value.push({
@@ -2718,18 +2753,34 @@ const returnSearch = async (search) => {
 const removeCustomerData = () => {
     Object.keys(customerData.value).forEach(key => {
         customerData.value[key] = '';
-    });
+    }); 
     employees.value = [{ name: '', type: '' }];
 }
 
 const removeEmployee2 = (index) => {
-    responseData.value.message[1].current_driver.splice(index, 1);
+    const data = {
+        "current_driver":responseData.value.message[1].current_driver[index].current_driver,
+        "parentfield":responseData.value.message[1].current_driver[index].parentfield,
+        "mobile_no":responseData.value.message[1].current_driver[index].mobile_no,
+        "name":responseData.value.message[1].current_driver[index].parent
+    }
+    console.log(data);
+    if(data){
+        axios.post(`${BaseURL}/api/method/tyre.api.delete_modifide_customes`,{data:data},{headers:headers});
+        responseData.value.message[1].current_driver.splice(index, 1);
+    }else{
+            console.log(error);
+    }
+    // catch(error){
+    // }
 };
 const removeEmployee3 = (index) => {
     responseData.value.message[1].contact_person.splice(index, 1);
 };
 const removeEmployee1 = (index) => {
-    employees.value.splice(index, 1);
+    if (sample22.value != 0){
+        employees.value.splice(index, 1);
+    }
 };
 
 
@@ -3005,6 +3056,7 @@ const tyres = ref([{
     size: '',
     ttTl: '',
     item: '',
+    rate:'',
     mandatory: false,
     status: false
 }]);
@@ -3030,6 +3082,7 @@ const addTyreReplacement = () => {
             size: '',
             ttTl: '',
             item: '',
+            rate:'',
             status: false
         })
         setValue.index++;
@@ -3061,33 +3114,40 @@ function addValue(data, replace) {
 
                 // Check if tableData.value[billIndex] is an array
                 if (Array.isArray(tableData.value)) {
-                    console.log(tableData.value)
-                    tableData.value.forEach((rowData, index) => {
+                    console.log(tableData.value);
+                    name:for (let index = 0; index < tableData.value.length; index++) {
+                        const rowData = tableData.value[index];
                         console.log(rowData);
-                        console.log("*****")
-                        rowData.forEach(items => {
+                        console.log("*****");
+                        for (let i = 0; i < rowData.length; i++) {
+                            const items = rowData[i];
                             console.log(items);
                             console.log(items.itemCode);
                             console.log(item.item);
                             if (items.itemCode === item.item) {
-
                                 existingItemIndex = index;
                                 console.log(existingItemIndex);
+                                break name;
                             }
-                        });
-                    });
+                        }
+                    }
                     // Find the index of the item with the same itemCode, if it exists
                     // existingItemIndex = tableData.value[billIndex].findIndex(existingItem => existingItem.itemCode === item.item);
                 }
 
+                console.log(tableData.value);
                 console.log(existingItemIndex);
+                console.log(item.status)
+                console.log(billIndex)
 
-                if (existingItemIndex !== -1 && !item.status) {
+                if (existingItemIndex > -1 && !item.status) {
                     // Increase the quantity of the existing item
                     console.log(tableData.value[existingItemIndex][0].requiredQuantity);
                     tableData.value[existingItemIndex][0].requiredQuantity++;
+                    console.log(tableData.value[existingItemIndex][0].requiredQuantity)
                     console.log(tableData.value[existingItemIndex][0].requiredQuantity);
-                    item.status = true;
+                    // Remove the existing item from the array
+                    tableData.value.splice(existingItemIndex, 1);
                 } else {
                     // If tableData.value[billIndex] is not an array, initialize it
                     if (!Array.isArray(tableData.value[billIndex])) {
@@ -3099,15 +3159,18 @@ function addValue(data, replace) {
                     const newData = {
                         itemCode: item.item,
                         sourceWarehouse: '',
-                        rate: '',
+                        rate: item.rate,
                         requiredQuantity: 1, // Set initial quantity to 1
                         cost: ''
                     };
 
                     // Push the new object into the array at the specified billIndex
                     tableData.value[billIndex].push(newData);
-                    item.status = true;
                 }
+
+                // Mark the item as processed
+                item.status = true;
+
 
                 calculateTotals();
                 billIndex++;
