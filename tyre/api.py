@@ -444,7 +444,7 @@ def lead_details(data):
 			"message": "Lead Not Found"
 		}
 	
-	
+
 @frappe.whitelist(allow_guest=True)
 def get_brand():
 	return frappe.get_all("Brand", pluck="name")
@@ -503,9 +503,9 @@ def get_ItemCode(brand, size, tyer_type,pattern):
 		return list(unique_code)
 	else :
 		return {
-            "status": 400,
-            "message": "No Item Code Found"
-        }
+			"status": 400,
+			"message": "No Item Code Found"
+		}
 
 # function to create job card
 @frappe.whitelist(allow_guest=True)
@@ -533,3 +533,23 @@ def stock_details():
             "status": 400,
             "message": "No Item Found"
         }
+	
+@frappe.whitelist(allow_guest=True)
+def get_jobcard_details():
+	jobcards = frappe.get_all("Tyre Job Card", fields=["name", "time_in", "vehicle_no", "customer", "mobile_no"])
+	details_list = []
+	for jobcard in jobcards:
+		details = {
+			"id": jobcard.name,
+			"time_in": jobcard.time_in,
+			"vehicle_no": jobcard.vehicle_no,
+			"customer": jobcard.customer,
+			"mobile_no": jobcard.mobile_no,
+		}
+		details_list.append(details)
+	return details_list
+
+@frappe.whitelist(allow_guest=True)
+def get_enquiry_details():
+    enquiries = frappe.get_all("Lead", fields={"name", "lead_name","mobile_no"})
+    return enquiries
