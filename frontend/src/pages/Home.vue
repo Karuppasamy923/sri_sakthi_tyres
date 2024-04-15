@@ -2765,14 +2765,14 @@ const removeEmployee2 = (index) => {
         "name":responseData.value.message[1].current_driver[index].parent
     }
     console.log(data);
-    // try{
-
-    //     await axios.post(`${BaseURL}/api/method/tyre.api.delete_modifide_customes`,{data:data},{headers:headers});
-    // }
+    if(data){
+        axios.post(`${BaseURL}/api/method/tyre.api.delete_modifide_customes`,{data:data},{headers:headers});
+        responseData.value.message[1].current_driver.splice(index, 1);
+    }else{
+            console.log(error);
+    }
     // catch(error){
-    //     console.log(error);
     // }
-    // responseData.value.message[1].current_driver.splice(index, 1);
 };
 const removeEmployee3 = (index) => {
     responseData.value.message[1].contact_person.splice(index, 1);
