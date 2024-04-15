@@ -122,13 +122,14 @@ app_license = "mit"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+	"Lead": {
+		"validate": "tyre.api.calculate_total_amount",
+	},
+	"Tyre Job Card": {
+		"validate": "tyre.api.calculate_total_amount",
+	}
+}
 
 # Scheduled Tasks
 # ---------------
@@ -237,19 +238,19 @@ app_list = ['get_details','store_vehicle_details','job_card', 'stock_details','g
 from tyre.api import get_details, store_vehicle_details, job_card, stock_details,get_brand,get_size,get_pattern,get_type,get_ItemCode,get_jobcard_details
 
 api_routes = {
-    "GET": {
-        "/api/method/tyre.api.store_vehicle_details": store_vehicle_details,
-        "/api/method/tyre.api.stock_details":stock_details,
-        "/api/method/tyre.api.get_brand":get_brand,
-        "/api/method/tyre.api.get_jobcard_details":get_jobcard_details,
-        
-    },
-    "POST": {
-        "/api/method/tyre/api/get_details": get_details,
-        "/api/method/tyre.api.job_card": job_card,
-        "/api/method/tyre.api.get_size":get_size,
-        "/api/method/tyre.api.get_pattern":get_pattern,
-        "/api/method/tyre.api.get_type":get_type,
-        "/api/method/tyre.api.get_ItemCode":get_ItemCode,
-    }
+	"GET": {
+		"/api/method/tyre.api.store_vehicle_details": store_vehicle_details,
+		"/api/method/tyre.api.stock_details":stock_details,
+		"/api/method/tyre.api.get_brand":get_brand,
+		"/api/method/tyre.api.get_jobcard_details":get_jobcard_details,
+		
+	},
+	"POST": {
+		"/api/method/tyre/api/get_details": get_details,
+		"/api/method/tyre.api.job_card": job_card,
+		"/api/method/tyre.api.get_size":get_size,
+		"/api/method/tyre.api.get_pattern":get_pattern,
+		"/api/method/tyre.api.get_type":get_type,
+		"/api/method/tyre.api.get_ItemCode":get_ItemCode,
+	}
 }
