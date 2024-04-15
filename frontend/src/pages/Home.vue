@@ -394,12 +394,24 @@
                             </Card>
                         </div>
                         <div v-else>
-                            <div>
-                                <button @click="getJobCard" v-if="hide == 'false'"
-                                    class="bg-blue-500 w-[100px] text-white font-bold  p-2 rounded-lg ml-3">Job
-                                    Card</button>
-                                <button @click="hide = 'false'" v-if="hide != 'false'"
-                                    class="bg-blue-500 w-[100px] text-white font-bold  p-2 rounded-lg ml-8 mb-4">Back</button>
+                            <div class="flex">
+                                <div class="mr-8">
+                                    <button @click="getJobCard" v-if="hide == 'false' && hideEnq == 'false'"
+                                        class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Job
+                                        Card</button>
+                                    <button @click="hide = 'false'" v-if="hide != 'false'"
+                                        class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Back</button>
+                                </div>
+                                <div>
+                                    <button @click="getEnquiry" v-if="hideEnq == 'false' && hide == 'false'"
+                                        class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Enquiry</button>
+                                    <button @click="hideEnq = 'false'" v-if="hideEnq != 'false'"
+                                        class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Back</button>
+                                </div>
+                                <div>
+                                    <Input placeholder="search ..." v-if="hideEnq != 'false'" class="mt-9 mb-2 ml-[5.3rem] p-4"/>
+                                    <Input placeholder="search ..." v-if="hide != 'false'" class="mt-9 mb-2 ml-[5.3rem] p-4"/>
+                                </div>
                             </div>
                             <div>
                                 <div class="relative overflow-x-auto flex justify-center" v-if="hide != 'false'">
@@ -447,6 +459,44 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="relative overflow-x-auto flex justify-center" v-if="hideEnq != 'false'">
+                                    <div>
+                                        <table
+                                            class="w-[75rem] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                            <thead
+                                                class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                                <tr>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        ID
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Name
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Mobile Number
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="bg-white border-b  dark:border-gray-700 dark:text-black"
+                                                    v-for="enquiry in enquiryDetails" :key="enquiry">
+                                                    <th scope="row"
+                                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
+                                                        {{ enquiry.name }}
+                                                    </th>
+                                                    <td class="px-6 py-4">
+                                                        {{ enquiry.lead_name }}
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        {{ enquiry.mobile_no }}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                             <div class="flex justify-center" v-if="hide == 'false'">
@@ -1872,6 +1922,19 @@ const getJobCard = async () => {
     }
     catch (error) {
         console.error("Error:", error);
+    }
+}
+
+const hideEnq = ref('false');
+const enquiryDetails = ref([]);
+const getEnquiry = async () => {
+    hideEnq.value = true;
+    try {
+        const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_enquiry_details`, { headers: headers });
+        enquiryDetails.value = response.data.message;
+        console.log(response.data.message);
+    } catch (e) {
+        console.error("Error:", e);
     }
 }
 
