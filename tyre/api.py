@@ -370,8 +370,8 @@ def job_card(data):
 	total_amount = 0
 	for items in bills:
 		items = frappe._dict(items)
-		total_amount += float	(items.cost)
-		billing_items.append({"item_code": items.itemCode, "warehouse": items.sourceWarehouse, "quantity" : items.requiredQuantity, "amount" : float(items.cost), "rate": float(items.rate)})
+		total_amount += float(items.cost)
+		billing_items.append({"item_code": items.itemCode, "warehouse": items.sourceWarehouse, "quantity" : items.requiredQuantity, "amount" : items.cost, "rate": items.rate})
 	print(doc.as_dict(), "as_dict")
 	doc.extend("billing_details", billing_items)
 
@@ -613,6 +613,7 @@ def get_warehouse():
 
 def calculate_total_amount(self, method):
 	if self.doctype == "Lead":
+		total_amount = 0
 		for row in self.custom_lead_items:
 			item_code = get_item(frappe._dict({
 												"brand": row.brand,
@@ -623,33 +624,35 @@ def calculate_total_amount(self, method):
 
 			self.custom_lead_items[row.idx - 1].rate = 0
 			self.custom_lead_items[row.idx - 1].amount = 0
-			total_amount = 0
 			if item_code:
 				price_list = get_item_rate(item_code)
+				# print(price_list)
 				self.custom_lead_items[row.idx - 1].item_code = item_code
-				self.custom_lead_items[row.idx - 1].rate = price_list[0].selling_rate
-				self.custom_lead_items[row.idx - 1].amount = row.quantity * price_list[0].selling_rate
-				total_amount += row.quantity * price_list[0].selling_rate
+				self.custom_lead_items[row.idx - 1].rate = float(price_list)
+				self.custom_lead_items[row.idx - 1].amount = int(row.quantity) * float(price_list)
+				total_amount += self.custom_lead_items[row.idx - 1].amount
 
 
 			self.custom_total_amount = total_amount
 
 	if self.doctype == "Tyre Job Card":
+		total_amount = 0
 		for row in self.billing_details:
 			self.billing_details[row.idx - 1].rate = 0
 			self.billing_details[row.idx - 1].amount = 0
-			total_amount = 0
 			if row.item_code:
 				price_list = get_item_rate(row.item_code)
-				self.billing_details[row.idx].rate = price_list[0].selling_rate
-				self.billing_details[row.idx - 1].amount = row.quantity * price_list[0].selling_rate
-				total_amount += row.quantity * price_list[0].selling_rate
+				print(price_list)
+				self.billing_details[row.idx - 1].rate = price_list
+				self.billing_details[row.idx - 1].amount = row.quantity * price_list
+				total_amount += row.quantity * price_list
 
 
 			self.total_amount = total_amount
 
 @frappe.whitelist(allow_guest=True)
 def delete_modified_customers(data):
+    
 	data = frappe._dict(data)
 	if data.parentfield == "current_driver":
 		doc_details = frappe.db.get_value("Current Driver", {"mobile_no": data.mobile_no}, ["name", "parent"], as_dict=True)
