@@ -371,7 +371,7 @@ def job_card(data):
 	for items in bills:
 		items = frappe._dict(items)
 		total_amount += int(items.cost)
-		billing_items.append({"item_code": items.itemCode, "warehouse": items.sourceWarehouse, "quantity" : items.requiredQuantity, "amount" :items.cost, "rate": items.rate})
+		billing_items.append({"item_code": items.itemCode, "warehouse": items.sourceWarehouse, "quantity" : items.requiredQuantity, "amount" : float(items.cost), "rate": float(items.rate)})
 	print(doc.as_dict(), "as_dict")
 	doc.extend("billing_details", billing_items)
 
@@ -533,18 +533,19 @@ def stock_details():
 	
 @frappe.whitelist(allow_guest=True)
 def get_jobcard_details(data=None):  
-  if data:
-    jobcard_details = frappe.get_all("Tyre Job Card",{'mobile_no':data},["time_in","name","vehicle_no","customer","mobile_no"])
-    if jobcard_details:
-      return jobcard_details
+    if data:
+        jobcard_details = frappe.get_all("Tyre Job Card", {'mobile_no': data}, ["time_in", "name", "vehicle_no", "customer", "mobile_no"])
+        if jobcard_details:
+            return jobcard_details
+        else:
+            return {
+                "status": 400,
+                "message": "No Job Card Found"
+            }
     else:
-      return {
-        "status": 400,
-        "message": "No Job Card Found"
-      }
-  else:
-    job_card_details = frappe.get_all("Tyre Job Card", fields=["time_in","name","vehicle_no","customer","mobile_no"])
-    return job_card_details
+        job_card_details = frappe.get_all("Tyre Job Card", fields=["time_in", "name", "vehicle_no", "customer", "mobile_no"])
+        return job_card_details
+
 
 @frappe.whitelist(allow_guest=True)
 def get_enquiry_details():
@@ -592,16 +593,29 @@ def calculate_total_amount(self, method):
 			self.total_amount = total_amount
 
 @frappe.whitelist(allow_guest=True)
-def delete_modifide_customes(data):
+def delete_modified_customers(data):
 	data = frappe._dict(data)
 	if data.parentfield == "current_driver":
-		doc_details = frappe.db.get_value("Current Driver",{"mobile_no":data.mobile_no},["name","parent"],as_dict=True)	
+		doc_details = frappe.db.get_value("Current Driver", {"mobile_no": data.mobile_no}, ["name", "parent"], as_dict=True)
 		if doc_details and doc_details.get('name') and doc_details.get('parent'):
-			p_doc = frappe.get_doc("Customer Details",doc_details.get('parent'))
+			p_doc = frappe.get_doc("Customer Details", doc_details.get('parent'))
 			for row in p_doc.current_driver:
 				if row.name == doc_details.get('name'):
 					p_doc.remove(row)
 			p_doc.save()
+	elif data.parentfield == "contact_person":
+		doc_details = frappe.db.get_value("Contact Person", {"contact_person_mobile": data.contact_person_mobile}, ["name", "parent"], as_dict=True)
+		if doc_details and doc_details.get('name') and doc_details.get('parent'):
+			p_doc = frappe.get_doc("Customer Details", doc_details.get('parent'))  # Changed to "Contact" from "Contact Person"
+			for row in p_doc.contact_person:  # Changed to "contact_person" from "current_driver"
+				if row.name == doc_details.get('name'):
+					p_doc.remove(row)
+			p_doc.save()
+	else:
+		return {
+			"status": 400,
+			"message": "No Job Card Found"
+	  	}
 			
 
 
@@ -625,4 +639,12 @@ def get_item_rate(item_code):
 
 @frappe.whitelist()
 def get_warehouse():
-	return frappe.get_all("Warehouse",{"is_group":0}, pluck="name")
+	return frappe.get_all("Warehouse",{"is_group":0}, pluck="warehouse_name")
+
+@frappe.whitelist()
+def get_vehicleBrand():
+    return frappe.get_all("Vehicle Brand",fields={"name"})
+
+@frappe.whitelist()
+def get_vehicleModel(model):
+    return frappe.get_all("Vehicle Models", {"parent":model},"model")

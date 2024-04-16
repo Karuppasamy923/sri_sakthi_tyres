@@ -233,9 +233,9 @@ website_route_rules = [{'from_route': '/frontend/<path:app_path>', 'to_route': '
 
 whitelist = ["GET", "POST"]
 
-app_list = ['get_details','store_vehicle_details','job_card', 'stock_details','get_brand','get_size','get_pattern','get_type','get_ItemCode','get_jobcard_details','delete_modifide_customes']
+app_list = ['get_details','store_vehicle_details','job_card', 'stock_details','get_brand','get_size','get_pattern','get_type','get_ItemCode','get_jobcard_details','delete_modified_customers','get_warehouse','get_vehicleBrand']
 
-from tyre.api import get_details, store_vehicle_details, job_card, stock_details,get_brand,get_size,get_pattern,get_type,get_ItemCode,get_jobcard_details,delete_modifide_customes
+from tyre.api import get_details, store_vehicle_details, job_card, stock_details,get_brand,get_size,get_pattern,get_type,get_ItemCode,get_jobcard_details,delete_modified_customers,get_warehouse,get_vehicleBrand
 
 api_routes = {
 	"GET": {
@@ -243,6 +243,8 @@ api_routes = {
 		"/api/method/tyre.api.stock_details":stock_details,
 		"/api/method/tyre.api.get_brand":get_brand,
 		"/api/method/tyre.api.get_jobcard_details":get_jobcard_details,
+		"/api/method/tyre.api.get_warehouse":get_warehouse,
+		"/api/method/tyre.api.get_vehicleBrand":get_vehicleBrand
 		
 	},
 	"POST": {
@@ -252,6 +254,6 @@ api_routes = {
 		"/api/method/tyre.api.get_pattern":get_pattern,
 		"/api/method/tyre.api.get_type":get_type,
 		"/api/method/tyre.api.get_ItemCode":get_ItemCode,
-        "/api/method/tyre.api.delete_modifide_customes":delete_modifide_customes,
+        "/api/method/tyre.api.delete_modified_customers":delete_modified_customers,
 	}
 }
