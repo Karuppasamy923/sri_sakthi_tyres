@@ -290,7 +290,7 @@ def lead_details(data):
 # function to create job card
 @frappe.whitelist(allow_guest=True)
 def job_card(data):
-	print(data, type(data))
+	# print(data, type(data))
 	data = frappe._dict(json.loads(data))
 	# print(data.checkup)
 	five_point_checkup = {}
@@ -337,6 +337,7 @@ def job_card(data):
 						 		join `tabCustomer Details` as cud on cud.license_plate = vd.name 
 						 		join `tabContact Person` as cp on cp.parent = vd.name WHERE vd.license_plate = %s AND cd.primary = 1 AND cp.custom_primary = 1""", vehicle_number,as_dict = True)[0]
 	val = frappe._dict(data.service)
+	print(user_details)
 	# print(val.alignment['lastAlignment'])
 	
 	air,nitrogen = False,False
@@ -577,11 +578,6 @@ def get_jobcard_details(searchJobCard):
 		return job_card_details 
 
 
-@frappe.whitelist(allow_guest=True)
-def get_enquiry_details():
-    enquiries = frappe.get_all("Lead", fields={"name", "lead_name","mobile_no"})
-    return enquiries
-
 @frappe.whitelist(allow_guest = True)
 def delete_vehicle(data):
     print("delete vehicle number",data)
@@ -599,7 +595,7 @@ def delete_vehicle(data):
             return "deleted"
         return "deleted"
     
-    
+@frappe.whitelist(allow_guest=True)
 def get_enquiry_details(data):
 	if data:
 		doc = frappe.get_all("Lead", {"mobile_no": data},{"name","lead_name","mobile_no"})

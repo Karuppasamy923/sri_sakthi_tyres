@@ -2343,7 +2343,8 @@ function nextPageAndHighlight() {
 
         switch (currentstep.value) {
             case 1:
-                jobCard["user"] = searchQuery.value;
+                console.log(responseData.value.message[0].name)
+                jobCard["user"] = responseData.value.message[0].name;
                 console.log(jobCard)
                 console.log("****1****")
                 break;
@@ -2547,7 +2548,7 @@ const confirmSave = async () => {
     try {
         const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_vehicle_details`, { data: JSON.stringify(data) }, { headers: headers });
         console.log('vehicle add after response', response);
-        if (responseData.value && responseData.value.message) {
+        if (response) {
             enable.value = true;
             check.value = true;
             hasResponse.value = false;
@@ -2748,7 +2749,7 @@ const handlePrimaryCheckboxModify = (clickedEmployee) => {
 };
 
 const addCustomerData = async () => {
-    const name = customerData.value.name.trim();
+    const name = responseData.value.message[0].name.trim();
     console.log(name)
     const existingData = await returnSearch(name);
     console.log('filtering process', existingData.message[1].current_owner);
@@ -2788,7 +2789,7 @@ const addCustomerData = async () => {
         const data = {
             current_owner: customerData.value.current_owner,
             owner_mobile_no: customerData.value.owner_mobile_no,
-            name: customerData.value.name,
+            name: name,
             whatsappChecked: customerData.value.whatsappChecked,
             callChecked: customerData.value.callChecked,
             smsChecked: customerData.value.smsChecked,
@@ -3640,7 +3641,7 @@ function addValue(data, replace) {
                 // Check if tableData.value[billIndex] is an array
                 if (Array.isArray(tableData.value)) {
                     console.log(tableData.value);
-                    name: for (let index = 0; index < tableData.value.length; index++) {
+                    name:for (let index = 0; index < tableData.value.length; index++) {
                         const rowData = tableData.value[index];
                         console.log(rowData);
                         console.log("*****");
@@ -3650,12 +3651,27 @@ function addValue(data, replace) {
                             console.log(items.itemCode);
                             console.log(item.item);
                             if (items.itemCode === item.item) {
+                                console.log(items.requiredQuantity)
+                                items.requiredQuantity++;
                                 existingItemIndex = index;
                                 console.log(existingItemIndex);
                                 break name;
                             }
                         }
                     }
+                    // Loop through the tableData to find the item with the matching itemCode
+                    for (let index = 0; index < tableData.length; index++) {
+                        const rowData = tableData[index];
+                        for (let i = 0; i < rowData.length; i++) {
+                            const item = rowData[i];
+                            if (item.itemCode === itemCodeToUpdate) { // Assuming itemCodeToUpdate is the code of the item you want to update
+                                // Update the requiredQuantity of the item
+                                item.requiredQuantity = newRequiredQuantity;
+                                break; // Exit the loop once the item is found and updated
+                            }
+                        }
+                    }
+
                     // Find the index of the item with the same itemCode, if it exists
                     // existingItemIndex = tableData.value[billIndex].findIndex(existingItem => existingItem.itemCode === item.item);
                 }
@@ -3668,7 +3684,10 @@ function addValue(data, replace) {
                 if (existingItemIndex > -1 && !item.status) {
                     // Increase the quantity of the existing item
                     console.log(tableData.value[existingItemIndex][0].requiredQuantity);
-                    tableData.value[existingItemIndex][0].requiredQuantity++;
+                    const rq = tableData.value[existingItemIndex][0].requiredQuantity++
+                    console.log(rq.value)
+                    tableData.value[existingItemIndex][0] = {"requiredQuantity" : rq.value};
+                    console.log(tableData.value);
                     console.log(tableData.value[existingItemIndex][0].requiredQuantity)
                     console.log(tableData.value[existingItemIndex][0].requiredQuantity);
                     // Remove the existing item from the array
@@ -3723,7 +3742,6 @@ function addValue(data, replace) {
                         const newData = {
                             itemCode: key,
                             sourceWarehouse: '',
-                            rate:'',
                             requiredQuantity: 1,
                             cost: ''
                         };
