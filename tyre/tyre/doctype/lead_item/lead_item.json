@@ -11,7 +11,9 @@
   "quantity",
   "pattern",
   "tyre_type",
-  "item_code"
+  "item_code",
+  "rate",
+  "amount"
  ],
  "fields": [
   {
@@ -30,33 +32,46 @@
   },
   {
    "fieldname": "quantity",
-   "fieldtype": "Currency",
+   "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Quantity"
   },
   {
    "fieldname": "pattern",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Pattern",
    "options": "Pattern"
   },
   {
    "fieldname": "tyre_type",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Tyre Type",
    "options": "TT\nTL"
   },
   {
    "fieldname": "item_code",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Item Code",
    "options": "Item"
+  },
+  {
+   "fieldname": "rate",
+   "fieldtype": "Currency",
+   "label": "Rate"
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Amount"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-04-15 16:32:49.166192",
+ "modified": "2024-04-16 13:31:03.520058",
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "Lead Item",

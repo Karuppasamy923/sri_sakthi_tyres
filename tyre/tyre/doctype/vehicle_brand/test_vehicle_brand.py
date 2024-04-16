@@ -5,5 +5,5 @@
 from frappe.tests.utils import FrappeTestCase
 
 
-class TestVehicleModel(FrappeTestCase):
+class TestVehicleBrand(FrappeTestCase):
 	pass

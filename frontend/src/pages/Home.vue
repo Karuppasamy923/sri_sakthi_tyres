@@ -113,6 +113,128 @@
                                 </div>
                             </div>
                         </div>
+                        <div v-if="billPopup == 'true'"
+                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                            <a href="#"
+                                class="block max-w-[70rem] p-10 pt-5 bg-white border border-gray-200 rounded-lg shadow">
+                                <div class="grid grid-cols-2">
+                                    <div>
+                                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-black">
+                                            Price Details</h5>
+                                    </div>
+                                    <div class="flex justify-end">
+                                        <button @click="billPopup = 'false'">
+                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                fill="none" viewBox="0 0 14 14">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2"
+                                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="relative overflow-x-auto">
+                                    <table
+                                        class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                        <thead
+                                            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Brand
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Size
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Quantity
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Type
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Pattern
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                                                v-for="(item, index) in items" :key="index">
+                                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                                    scope="row">{{ item.brand }}</td>
+                                                <td class="px-6 py-4">{{ item.size }}</td>
+                                                <td class="px-6 py-4">{{ item.quantity }}</td>
+                                                <td class="px-6 py-4">{{ item.quantity }}</td>
+                                                <td class="px-6 py-4">{{ item.type }}</td>
+                                                <td class="px-6 py-4">{{ item.pattern }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </a>
+                        </div>
+                        <div v-if="jobCardPopup == 'true'"
+                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                            <a href="#"
+                                class="block max-w-[70rem] p-10 pt-5 bg-white border border-gray-200 rounded-lg shadow">
+                                <div class="grid grid-cols-2">
+                                    <div>
+                                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-black">
+                                            Price Details</h5>
+                                    </div>
+                                    <div class="flex justify-end">
+                                        <button @click="jobCardPopup = 'false'">
+                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                fill="none" viewBox="0 0 14 14">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2"
+                                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="relative overflow-x-auto">
+                                    <table
+                                        class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                        <thead
+                                            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Brand
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Size
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Quantity
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Type
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Pattern
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                                                v-for="(item, index) in items" :key="index">
+                                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                                    scope="row">{{ item.brand }}</td>
+                                                <td class="px-6 py-4">{{ item.size }}</td>
+                                                <td class="px-6 py-4">{{ item.quantity }}</td>
+                                                <td class="px-6 py-4">{{ item.quantity }}</td>
+                                                <td class="px-6 py-4">{{ item.type }}</td>
+                                                <td class="px-6 py-4">{{ item.pattern }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </a>
+                        </div>
+
+                    
+
+
                         <div v-if="showWarning"
                             class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
                             <div class="bg-white rounded-lg p-8 shadow-xl">
@@ -403,9 +525,7 @@
                                 <button class="bg-red-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3" @click="deleteVehicle">Delete</button>
                             </div>
                         </div>
-
-                        <div v-if="hasResponse && initial">
-
+                        <div v-else>
                             <div class="flex">
                                 <div class="mr-8">
                                     <button @click="getJobCard" v-if="hide == 'false' && hideEnq == 'false'"
@@ -421,12 +541,10 @@
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Back</button>
                                 </div>
                                 <div>
-
-                                    <Input placeholder="search ..." v-if="hideEnq != 'false'"
-                                        class="mt-9 mb-2 ml-[5.3rem] p-4" />
-                                    <Input placeholder="search ..." v-if="hide != 'false'"
-                                        class="mt-9 mb-2 ml-[5.3rem] p-4" />
-
+                                    <Input type="number" placeholder="search ..." v-if="hideEnq != 'false'"
+                                        v-model="searchEnquiry" @input="getEnquiry" class="mt-9 mb-2 -ml-14.5 p-4" />
+                                    <Input placeholder="Vehicle Search ..." v-if="hide != 'false'"
+                                        v-model="searchJobCard" @input="getJobCard" class="mt-9 mb-2 -ml-14.5 p-4" />
                                 </div>
                             </div>
                             <div>
@@ -453,12 +571,13 @@
                                                 </th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr class="bg-white border-b  dark:border-gray-700 dark:text-black"
+                                        <tbody style="max-height: 2rem; overflow-y: auto;">
+                                            <tr class="bg-white border-b dark:border-gray-700 dark:text-black"
                                                 v-for="jobcard in jobCardDetails" :key="jobcard">
                                                 <th scope="row"
                                                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
-                                                    {{ jobcard.id }}
+                                                    <a href="#" @click="fetchJobCard(jobcard.name)">{{ jobcard.name
+                                                        }}</a>
                                                 </th>
                                                 <td class="px-6 py-4">
                                                     {{ jobcard.time_in }}
@@ -515,9 +634,7 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="flex justify-center" v-if="hide == 'false' && hideEnq == 'false'">
-
                                 <div class="flex justify-center mt-9">
                                     <img src="https://img.freepik.com/free-vector/hand-drawn-no-data-concept_52683-127823.jpg?w=996&t=st=1712321166~exp=1712321766~hmac=ae2f4e19eb0e1185d52ac8a07c158e9dc5afa741284e9526a8e8a0165573735b"
                                         alt="No data" class="w-[25%]" @click="showMessage(`Nothing to Show ! 😄`)">
@@ -557,14 +674,23 @@
                                             v-model="vehicleData.name" placeholder="Enter Vehicle Number">
                                     </p>
                                     <p class="m-2">Vehicle Brand <span class="text-red-500 font-bold">*</span><br>
-                                        <input type="text"
-                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                            v-model="vehicleData.vehicle_brand" placeholder="Enter Vehicle Brand">
+                                        <select class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            v-model="vehicleData.vehicle_brand" @change="get_Vmodel(vehicleData.vehicle_brand)"
+                                            style="overflow-y: auto;">
+                                            <!-- Loop through vBrand and create an option for each brand -->
+                                            <option value="" disabled selected>Select brand...</option>
+                                            <option v-for="brand in vBrand" :key="brand">{{ brand.name }}</option>
+                                        </select>
+  
                                     </p>
                                     <p class="m-2">Vehicle Model <span class="text-red-500 font-bold">*</span><br>
-                                        <input type="text"
-                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                            v-model="vehicleData.vehicle_model" placeholder="Enter Vehicle Model">
+                                            <select class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            v-model="vehicleData.vehicle_model"
+                                            style="overflow-y: auto;">
+                                            <!-- Loop through vBrand and create an option for each brand -->
+                                            <option value="" disabled selected>Select model...</option>
+                                            <option v-for="model in vModel" :key="model">{{ model.model }}</option>
+                                        </select>
                                     </p>
 
                                     <p class="m-2">Chassis No <span class="text-red-500 font-bold">*</span><br>
@@ -576,9 +702,11 @@
                                     <p class="m-2">Fuel Type <span class="text-red-500 font-bold">*</span><br>
                                         <select v-model="vehicleData.fuel_type"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
+                                            <option value="" disabled selected>Select fuel type...</option>
                                             <option value="Petrol">Petrol</option>
                                             <option value="Diesel">Diesel</option>
-                                            <option value="EV">Electical Vehicle</option>
+                                            <option value="EV">EV</option>
+                                            <option value="hybrid ">Hybrid</option>
                                         </select>
                                     </p>
                                     <p class="m-2">Odometer Value <span class="text-red-500 font-bold">*</span><br>
@@ -693,9 +821,7 @@
                                     </svg>
                                 </button>
                                 <div class="p-8 mt-[110px]">
-
-                                    <div class="pb-4 grid grid-cols-2 ml-24" v-if="hasResponse">
-
+                                    <div class="pb-4 grid grid-cols-2 ml-24" v-if="handle">
                                         <input type="tel" v-model="searchMobile"
                                             class="w-[19rem] h-[3rem] mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Customer Mobile No.">
@@ -708,34 +834,28 @@
                                         <div>
                                             <h2 class="text-2xl font-semibold mb-4">Customer Details</h2>
                                         </div>
-                                        <span class="ml-[9rem]" v-if="afterResponse || handle">
+                                        <span class="ml-[9rem]">
                                             <input type="checkbox" v-model="handle" @click="handleEnquiry"
                                                 class="bg-gray-300 rounded-sm pb-4">&nbsp;&nbsp;<label>Enquiry</label>
                                         </span>
                                     </div>
                                     <hr class="dark-hr">
-                                    <p class="m-2" v-if="!handle && !hasResponse">Vehicle Number <span
+                                    <p class="m-2" v-if="!handle">Vehicle Number <span
                                             class="text-red-500 font-bold">*</span><br>
-                                        <input type="text" v-model="responseData.message[0].name"
+                                        <input type="text" v-model="customerData.name"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Vehicle Number">
                                     </p>
                                     <p class="m-2">Customer Name <span class="text-red-500 font-bold">*</span><br>
-
-                                        <input type="text" v-model="leadDetails.lead_name" v-if="boolDetails.state == 1"
-                                            :readonly="boolDetails.state == 1"
-                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                            placeholder="Enter Name">
-                                        <input type="text" v-model="customerData.current_owner"
-                                            v-if="boolDetails.state == 0"
-
+                                        <input type="text" v-model="leadDetails.lead_name" v-if="boolDetails.state == 1" :readonly="boolDetails.state == 1" 
+                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black" 
+                                            placeholder="Enter Customer Name">
+                                        <input type="text" v-model="customerData.current_owner" v-if="boolDetails.state == 0"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Name">
                                     </p>
                                     <p class="m-2">Customer Mobile No <span class="text-red-500 font-bold">*</span><br>
-
-                                        <input type="tel" v-model="leadDetails.mobile_no" v-if="boolDetails.state == 1"
-                                            :readonly="boolDetails.state == 1"
+                                        <input type="tel" v-model="leadDetails.mobile_no" v-if="boolDetails.state == 1" :readonly="boolDetails.state == 1"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Mobile No.">
                                         <input type="tel" v-model="customerData.owner_mobile_no"
@@ -743,24 +863,18 @@
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Mobile No.">
                                     </p>
-                                    <input type="checkbox" v-model="customerData.whatsappChecked"
-                                        :checked="leadDetails.custom_whatsapp == '1'" :disabled="boolDetails.state == 1"
+                                    <input type="checkbox" v-model="customerData.whatsappChecked" :checked="leadDetails.custom_whatsapp == '1'" :disabled="boolDetails.state == 1"
                                         class="bg-gray-300 rounded-sm">&nbsp;&nbsp; <label>WhatsApp</label>
                                     <span class="ml-5">
-                                        <input type="checkbox" v-model="customerData.callChecked"
-                                            :checked="leadDetails.custom_whatsapp == '1'"
-                                            :disabled="boolDetails.state == 1"
+                                        <input type="checkbox" v-model="customerData.callChecked" :checked="leadDetails.custom_whatsapp == '1'" :disabled="boolDetails.state == 1"
                                             class="bg-gray-300 rounded-sm">&nbsp;&nbsp;<label>call</label>
                                     </span>
                                     <span class="ml-5">
-                                        <input type="checkbox" v-model="customerData.smsChecked"
-                                            :checked="leadDetails.custom_whatsapp == '1'"
-                                            :disabled="boolDetails.state == 1"
+                                        <input type="checkbox" v-model="customerData.smsChecked" :checked="leadDetails.custom_whatsapp == '1'" :disabled="boolDetails.state == 1"
                                             class="bg-gray-300 rounded-sm">&nbsp;&nbsp;<label>SMS</label>
                                     </span>
-                                    <div v-if="!handle && !hasResponse">
-                                        <div v-for="(employee, index) in employees" :key="index" class="mt-2">
-
+                                    <div v-if="!handle">
+                                        <div v-for="(employee, index) in employees" :key="index" class="mt-2"><div v-show="false">{{sample22 = index}}</div>
                                             <hr class="dark-hr m-4">
                                             <button
                                                 class="bg-blue-500 w-[100px] text-white font-bold  text-base p-4 rounded-lg mb-1 float-right"
@@ -773,7 +887,7 @@
                                             </p>
                                             <p class="m-2">Employee Type <span
                                                     class="text-red-500 font-bold">*</span><br>
-                                                <select v-model="employee.type" @click="setPrimary"
+                                                <select v-model="employee.type" @click="setPrimary(index)"
                                                     class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
                                                     <option value="" selected disabled>Please select..</option>
                                                     <option value="current_driver">Driver</option>
@@ -816,10 +930,10 @@
                                                 @click="removeCustomerData">Clear</button>
                                         </div>
                                     </div>
-                                    <div v-if="hasResponse">
+                                    <div v-else>
                                         <label class="font-semibold">Tyre</label>
                                         <hr class="dark-hr">
-                                        <div class="grid grid-cols-4 gap-10" v-if="boolDetails.state == 0">
+                                        <div class="grid grid-cols-4 gap-x-10" v-if="boolDetails.state == 0">
                                             <div class="flex flex-col ml-1">
                                                 <label class="mt-2">Brand</label>
                                                 <select
@@ -833,7 +947,8 @@
                                                 <label class="mt-2">Variants</label>
                                                 <select
                                                     class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
-                                                    v-model="selectedVariant">
+                                                    v-model="selectedVariant"
+                                                    @change="getType(selectedBrand, selectedVariant, index)">
                                                     <option v-for="(variant, index) in rs" :key="index">{{ variant.size
                                                         }}</option>
                                                 </select>
@@ -842,12 +957,31 @@
                                                 <label class="mt-2">Quantity</label>
                                                 <input
                                                     class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
-                                                    type="text" v-model="quantity">
+                                                    type="number" v-model="quantity">
                                             </div>
                                             <div class="flex flex-col ml-1">
                                                 <!-- <label class="mt-2">Add</label> -->
-                                                <Button class="w-[4rem] mt-10" type="text"
-                                                    @click="addItem">Add</Button>
+                                                <Button class="w-[4rem] mt-10" @click="addItem">Add</Button>
+                                            </div>
+                                            <div class="flex flex-col ml-1">
+                                                <label class="mt-2">Type</label>
+                                                <select
+                                                    class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
+                                                    v-model="type"
+                                                    @change="getPattern(selectedBrand, selectedVariant, type, index)">
+                                                    <option v-for="(type, index) in types[index]" :key="index">{{ type
+                                                        }}</option>
+                                                </select>
+                                            </div>
+                                            <div class="flex flex-col ml-1">
+                                                <label class="mt-2">Pattern</label>
+                                                <select
+                                                    class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
+                                                    v-model="pattern">
+                                                    <option v-for="(pattern, index) in patterns[index]" :key="index">{{
+                pattern
+            }}</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div v-if="tableDetails">
@@ -855,8 +989,10 @@
                                                 <thead>
                                                     <tr>
                                                         <th class="pr-12">Brand</th>
-                                                        <th class="pr-12">Variants</th>
-                                                        <th>Quantity</th>
+                                                        <th class="pr-12">Size</th>
+                                                        <th class="pr-12">Quantity</th>
+                                                        <th class="pr-12">Type</th>
+                                                        <th>Pattern</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -864,28 +1000,31 @@
                                                         <td>{{ item.brand }}</td>
                                                         <td>{{ item.variants }}</td>
                                                         <td>{{ item.quantity }}</td>
+                                                        <td>{{ item.type }}</td>
+                                                        <td>{{ item.pattern }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <div v-if="leadDetails">
-
-                                            <table class="table-auto" v-if="leadDetails.custom_lead_items">
-
+                                        <div v-if="leadDetails && !tableDetails">
+                                            <table class="table-auto">
                                                 <thead>
                                                     <tr>
                                                         <th class="pr-12">Brand</th>
-                                                        <th class="pr-12">Variants</th>
-                                                        <th>Quantity</th>
+                                                        <th class="pr-12">Size</th>
+                                                        <th class="pr-12">Quantity</th>
+                                                        <th class="pr-12">Type</th>
+                                                        <th>Pattern</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-
                                                     <tr v-for="(item,index) in leadDetails.custom_lead_items" :key="index">
-
                                                         <td>{{ item.brand }}</td>
                                                         <td>{{ item.size }}</td>
                                                         <td>{{ item.quantity }}</td>
+                                                        <td>{{ item.quantity }}</td>
+                                                        <td>{{ item.type }}</td>
+                                                        <td>{{ item.pattern }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -894,84 +1033,56 @@
                                         <hr class="dark-hr">
                                         <div class="grid grid-cols-3 mt-5">
                                             <div>
-
-                                                <input type="checkbox" v-model="serviceDetails.alignment"
-                                                    :checked="leadDetails.custom_alignment == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label>Alignment</label>
+                                                <input type="checkbox" v-model="serviceDetails.alignment" :checked = "leadDetails.custom_alignment == '1'" :disabled="boolDetails.state == 1"
+                                                    class="bg-gray-300 rounded-sm"> <label>Alignment</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.rotation"
-                                                    :checked="leadDetails.custom_rotation == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label>Rotation</label>
+                                                <input type="checkbox" v-model="serviceDetails.rotation" :checked = "leadDetails.custom_rotation == '1'" :disabled="boolDetails.state == 1"
+                                                    class="bg-gray-300 rounded-sm"> <label>Rotation</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.oil_change"
-                                                    :checked="leadDetails.custom_oil_change == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label>Oil Change</label>
+                                                <input type="checkbox" v-model="serviceDetails.oil_change" :checked = "leadDetails.custom_oil_change == '1'" :disabled="boolDetails.state == 1"
+                                                    class="bg-gray-300 rounded-sm"> <label>Oil Change</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.balancing"
-                                                    :checked="leadDetails.custom_balancing == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label>Balancing</label>
+                                                <input type="checkbox" v-model="serviceDetails.balancing" :checked = "leadDetails.custom_balancing == '1'" :disabled="boolDetails.state == 1"
+                                                    class="bg-gray-300 rounded-sm"> <label>Balancing</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.inflation"
-                                                    :checked="leadDetails.custom_inflation == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label>Inflation</label>
+                                                <input type="checkbox" v-model="serviceDetails.inflation" :checked = "leadDetails.custom_inflation == '1'" :disabled="boolDetails.state == 1"
+                                                    class="bg-gray-300 rounded-sm"> <label>Inflation</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.puncture"
-                                                    :checked="leadDetails.custom_puncture == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label>Puncture</label>
+                                                <input type="checkbox" v-model="serviceDetails.puncture" :checked = "leadDetails.custom_puncture == '1'" :disabled="boolDetails.state == 1"
+                                                    class="bg-gray-300 rounded-sm"> <label>Puncture</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.tyre_edge"
-                                                    :checked="leadDetails.custom_tyre_edge == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label>Tyre Edge</label>
+                                                <input type="checkbox" v-model="serviceDetails.tyre_edge" :checked = "leadDetails.custom_tyre_edge == '1'" :disabled="boolDetails.state == 1"
+                                                    class="bg-gray-300 rounded-sm"> <label>Tyre Edge</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.tyre_patch"
-                                                    :checked="leadDetails.custom_tyre_edge == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label>Tyre Patch</label>
+                                                <input type="checkbox" v-model="serviceDetails.tyre_patch" :checked = "leadDetails.custom_tyre_edge == '1'" :disabled="boolDetails.state == 1"
+                                                    class="bg-gray-300 rounded-sm"> <label>Tyre Patch</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.mushroom_patch"
-                                                    :checked="leadDetails.custom_mushroom_patch == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label>Mushroom Patch</label>
+                                                <input type="checkbox" v-model="serviceDetails.mushroom_patch" :checked = "leadDetails.custom_mushroom_patch == '1'" :disabled="boolDetails.state == 1"
+                                                    class="bg-gray-300 rounded-sm"> <label>Mushroom Patch</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.ac_service"
-                                                    :checked="leadDetails.custom_ac_service == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label>AC Service</label>
+                                                <input type="checkbox" v-model="serviceDetails.ac_service" :checked = "leadDetails.custom_ac_service == '1'" :disabled="boolDetails.state == 1"
+                                                    class="bg-gray-300 rounded-sm"> <label>AC Service</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.battery"
-                                                    :checked="leadDetails.custom_battery == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label>Battery</label>
+                                                <input type="checkbox" v-model="serviceDetails.battery" :checked = "leadDetails.custom_battery == '1'" :disabled="boolDetails.state == 1"
+                                                    class="bg-gray-300 rounded-sm"> <label>Battery</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.wiper"
-                                                    :checked="leadDetails.custom_wiper == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label>Wiper</label>
+                                                <input type="checkbox" v-model="serviceDetails.wiper" :checked = "leadDetails.custom_wiper == '1'" :disabled="boolDetails.state == 1"
+                                                    class="bg-gray-300 rounded-sm"> <label>Wiper</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.car_wash"
-                                                    :checked="leadDetails.custom_car_wash == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label>Car Wash</label>
-
+                                                <input type="checkbox" v-model="serviceDetails.car_wash" :checked = "leadDetails.custom_car_wash == '1'" :disabled="boolDetails.state == 1"
+                                                    class="bg-gray-300 rounded-sm"> <label>Car Wash</label>
                                             </div>
                                         </div>
                                         <div>
@@ -1125,13 +1236,11 @@
                                     </div>
                                     <div class="mt-5">
                                         <button
-
-                                            class="bg-blue-500 w-[40%] h-[3.2rem] text-white font-bold 0 text-base p-5 rounded-lg ml-3"
+                                            class="bg-blue-500 w-[100px] text-white font-bold 0 text-base p-5 rounded-lg ml-3"
                                             @click="modifiedMoreEmployee('current_driver')">Add Driver</button>
 
                                         <button
-                                            class="bg-blue-500 w-[50%] h-[3.2rem]  text-white font-bold 0 text-base p-5 rounded-lg ml-3"
-
+                                            class="bg-blue-500 w-[100px]  text-white font-bold 0 text-base p-4 rounded-lg ml-3"
                                             @click="modifiedMoreEmployee('contact_person')">Add Con.Person</button>
                                     </div>
                                     <div class="m-3 mt-[40px] flex flex-row space-x-[70px]">
@@ -1160,13 +1269,12 @@
                         <div class="flex">
                             <div class="grid grid-cols-4 w-[90%] gap-4">
                                 <div class="flex flex-col space-y-1 ml-4">
-
-                                    <label class="mt-2" :for="'tyre' + index">Tyre</label>
-                                    <select class="w-[100%] h-[3.5rem] rounded-sm" v-model="tyreData.tyre"
-
+                                    <label class="mt-2" :for="'tyre' + index">Tyre<span
+                                            class="text-red-500 font-bold">*</span></label>
+                                    <select class="w-[100%] h-[100%] rounded-sm" v-model="tyreData.tyre"
                                         :id="'type' + index" style="border: 1px solid black;"
                                         @change="updateTyreData(index)">
-                                        <option value="">Please select...</option>
+                                        <option value="" selected disabled hidden>Please select...</option>
                                         <option value="Front Left">Front Left</option>
                                         <option value="Front Right">Front Right</option>
                                         <option value="Rear Left">Rear Left</option>
@@ -1179,21 +1287,18 @@
                                     <input v-model="tyreData.depth"
                                         class="w-[100%] h-[100%] rounded-sm border-solid border border-black"
                                         type="text" :id="'RTD' + index" @change="updateTyreData(index)">
-                                        <span v-if="tyreData.mandatory && !tyreData.depth.trim()" class="text-red-500 font-bold">Please fill the required field</span>
                                 </div>
                                 <div class="flex flex-col space-y-1">
                                     <label class="mt-2" :for="'TP' + index">Tyre Pressure (psi)</label>
                                     <input v-model="tyreData.pressure"
                                         class="w-[100%] h-[100%] rounded-sm border-solid border border-black"
                                         type="text" :id="'TP' + index" @change="updateTyreData(index)">
-                                        <span v-if="tyreData.mandatory && !tyreData.pressure.trim()" class="text-red-500 font-bold">Please fill the required field</span>
                                 </div>
                                 <div class="flex flex-col space-y-1">
                                     <label class="mt-2" :for="'COM' + index">Comment</label>
                                     <input v-model="tyreData.comment"
                                         class="w-[100%] h-[100%] rounded-sm border-solid border border-black"
                                         type="text" :id="'COM' + index" @change="updateTyreData(index)">
-                                        <span v-if="tyreData.mandatory && !tyreData.comment.trim()" class="text-red-500 font-bold">Please fill the required field</span>
                                 </div>
                             </div>
                             <div class="ml-9">
@@ -1514,12 +1619,13 @@
                     <hr class="mt-2 " :style="{ borderWidth: '2px', borderColor: 'gray' }">
                     <div class="pb-5 ">
                         <div v-for="(tyre, index) in tyres" :key="index"
-                        class="grid grid-cols-10 gap-[11rem] mt-7 pb-5 ml-2 border-b border-gray-900 p-2 bg-gray-200 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg">
+                            class="grid grid-cols-10 gap-[11rem] mt-7 pb-5 ml-2 border-b border-gray-900 p-2 bg-gray-200 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg">
                             <div class="ml-5 w-[16rem]">
-                                <label class="pt-2" :for="'type' + index">Tyre Position</label><br>
+                                <label class="pt-2" :for="'type' + index">Tyre Position<span
+                                        class="text-red-500 font-bold">*</span></label><br>
                                 <select class="w-[15rem] h-[52px] rounded-sm border-solid border border-black"
                                     v-model="tyre.type" :id="'type' + index">
-                                    <option value="">Please select...</option>
+                                    <option value="" selected disabled hidden>Please select...</option>
                                     <option value="Front Left">Front Left</option>
                                     <option value="Front Right">Front Right</option>
                                     <option value="Rear Left">Rear Left</option>
@@ -1527,7 +1633,7 @@
                                     <option value="Spare Tyre">Spare Tyre</option>
                                 </select>
                                 <div class="mt-[20px]">
-                                    <label :for="'loadIndex' + index">Load Index <span v-if="tyre.mandatory && !tyre.loadIndex.trim()" class="text-red-500 font-bold">*</span> </label><br>
+                                    <label :for="'loadIndex' + index">Load Index</label><br>
                                     <input class="w-[15rem] h-[52px] rounded-sm border-solid border border-black"
                                         :id="'loadIndex' + index" type="text" v-model="tyre.loadIndex"
                                         @change="saveData(index)">
@@ -1542,7 +1648,7 @@
                                     </select>
                                 </div>
                                 <div class="mt-[20px] w-[16rem]">
-                                    <label :for="'speedRating' + index">Speed Rating<span v-if="tyre.mandatory && !tyre.loadIndex.trim()" class="text-red-500 font-bold">*</span></label>
+                                    <label :for="'speedRating' + index">Speed Rating</label>
                                     <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                         :id="'speedRating' + index" type="text" v-model="tyre.speedRating"
                                         @change="saveData(index)">
@@ -1550,7 +1656,7 @@
                             </div>
                             <div class="ml-[200px]">
                                 <div>
-                                    <label :for="'size' + index">Size<span v-if="tyre.mandatory && !tyre.loadIndex.trim()" class="text-red-500 font-bold">*</span></label>
+                                    <label :for="'size' + index">Size</label>
                                     <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                         v-model="tyre.size" @change="getOther(tyre.brand, tyre.size, index)">
                                         <option v-for="(size, index) in sizes[index]" :key="index">{{ size.size }}
@@ -1558,23 +1664,23 @@
                                     </select>
                                 </div>
                                 <div class="mt-[20px]">
-                                    <label :for="'pattern' + index">Pattern<span v-if="tyre.mandatory && !tyre.loadIndex.trim()" class="text-red-500 font-bold">*</span></label>
+                                    <label :for="'pattern' + index">Pattern</label>
                                     <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                    v-model="tyre.pattern"
-                                    @change="getItemCode(tyre.brand, tyre.size, tyre.ttTl, tyre.pattern, index)">
-                                    <option v-for="(pattern, index) in patterns[index]" :key="index">{{ pattern }}
-                                    </option>
-                                </select>
+                                        v-model="tyre.pattern"
+                                        @change="getItemCode(tyre.brand, tyre.size, tyre.ttTl, tyre.pattern, index)">
+                                        <option v-for="(pattern, index) in patterns[index]" :key="index">{{ pattern }}
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="ml-[300px]">
-                            <div>
-                                <label :for="'ttTl' + index">TT/TL<span v-if="tyre.mandatory && !tyre.loadIndex.trim()" class="text-red-500 font-bold">*</span></label>
-                                <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                v-model="tyre.ttTl"
-                                @change="getPattern(tyre.brand, tyre.size, tyre.ttTl, index)">
-                                <option v-for="(type, index) in types[index]" :key="index">{{ type }}</option>
-                            </select>
+                            <div class="ml-[300px]">
+                                <div>
+                                    <label :for="'ttTl' + index">TT/TL</label>
+                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
+                                        v-model="tyre.ttTl"
+                                        @change="getPattern(tyre.brand, tyre.size, tyre.ttTl, index)">
+                                        <option v-for="(type, index) in types[index]" :key="index">{{ type }}</option>
+                                    </select>
                                 </div>
                                 <!-- <div class="mt-[20px]">
                                     <label :for="'item' + index">Item</label>
@@ -1633,16 +1739,25 @@
                                             class="w-[10rem] rounded-sm border-solid border border-black">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="text" v-model="data[billIndex].sourceWarehouse"
-                                            class="w-[10rem] rounded-sm border-solid border border-black">
+                                        <div style="max-height: 200px; overflow-y: auto;">
+                                            <select v-model="data[billIndex].sourceWarehouse"
+                                                    class="w-[10rem] rounded-sm border-solid border border-black">
+                                                <option value="">Select Warehouse</option>
+                                                <!-- Loop through warehouseList and create an option for each warehouse -->
+                                                <option v-for="warehouse in Warehouse" :key="warehouse" :value="warehouse">
+                                                    {{ warehouse }}
+                                                </option>
+                                            </select>
+                                        </div>
                                     </td>
+                                    
                                     <td class="border border-gray-800 px-4 py-2">
                                         <input type="number" v-model="data[billIndex].requiredQuantity"
                                             @input="calculateTotals"
                                             class="w-[10rem] rounded-sm border-solid border border-black">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="float" v-model="data[billIndex].rate" @input="calculateTotals"
+                                        <input type="float" v-model="data[billIndex].rate" @input="calculateTotals" readonly
                                             class="w-[10rem] h-[2.6rem] pl-[0.7rem] rounded-sm border-solid border border-black text-justify">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
@@ -1684,7 +1799,7 @@
                                     @input="calculateDiscountRate"
                                     class="w-[338px] h-[52px] rounded-sm border-solid border border-black"></label>
                             <label class="ml-auto pr-5">Total Amount:
-                                <input type="text" readonly
+                                <input type="text" :value="finalAmount.toFixed(2)" readonly
                                     class="w-[338px] h-[52px] rounded-sm border-solid border border-black cursor-not-allowed">
                             </label>
                         </div>
@@ -1697,9 +1812,7 @@
                         class="bg-blue-500 w-[45%] text-white font-bold  text-base p-4 rounded-lg"
                         @click="previousPage">Previous
                     </button>
-
-                    <button v-if="currentstep != 4 && initialNext"
-
+                    <button v-if="currentstep != 4 && responseData && responseData.message && enable"
                         class="bg-blue-500 w-[45%] text-white font-bold  text-base p-4 rounded-lg"
                         @click="nextPageAndHighlight">Next
                     </button>
@@ -1715,16 +1828,16 @@
                                 <li type="disc" :class="{ 'active': currentPage === 'details' }"
                                     @click="setCurrentPage('details', 0)">Details</li>
                                 <li type="disc" :class="{ 'active': currentPage === '5 Points Checkup' }"
-                                    @click="setCurrentPage('5 Points Checkup', 1)" :disabled="initialNext">5 Points
+                                    @click="setCurrentPage('5 Points Checkup', 1)" :disabled="!hasResponse">5 Points
                                     Checkup</li>
                                 <li type="disc" :class="{ 'active': currentPage === 'Required Services' }"
-                                    @click="setCurrentPage('Required Services', 2)" :disabled="initialNext">Required
+                                    @click="setCurrentPage('Required Services', 2)" :disabled="!hasResponse">Required
                                     Services</li>
                                 <li type="disc" :class="{ 'active': currentPage === 'Tyre Replacement Details' }"
-                                    @click="setCurrentPage('Tyre Replacement Details', 3)" :disabled="initialNext">Tyre
+                                    @click="setCurrentPage('Tyre Replacement Details', 3)" :disabled="!hasResponse">Tyre
                                     Replacement Details</li>
                                 <li type="disc" :class="{ 'active': currentPage === 'Billing Details' }"
-                                    @click="setCurrentPage('Billing Details', 4)" :disabled="initialNext">Billing
+                                    @click="setCurrentPage('Billing Details', 4)" :disabled="!hasResponse">Billing
                                     Details</li>
                             </ul>
                         </div>
@@ -1768,11 +1881,13 @@ const tableDetails = ref(false);
 const addItem = () => {
     tableDetails.value = true;
     console.log(selectedBrand.value)
-    if (selectedBrand.value && selectedVariant.value && quantity.value) {
+    if (selectedBrand.value && selectedVariant.value && quantity.value && type.value && pattern.value) {
         items.value.push({
             brand: selectedBrand.value,
             variants: selectedVariant.value,
-            quantity: quantity.value
+            quantity: quantity.value,
+            type: type.value,
+            pattern: pattern.value
         });
     }
 };
@@ -1818,6 +1933,9 @@ const rs = ref([])
 const sizes = ref([])
 const patterns = ref([])
 const types = ref([])
+const Warehouse =ref([])
+const vBrand = ref([])
+const vModel = ref([])
 const BaseURL = window.location.origin
 
 onMounted(() => {
@@ -1826,6 +1944,32 @@ onMounted(() => {
             brand.value = response.data.message;
         })
 });
+
+onMounted(()=>{
+    axios.get(`${BaseURL}/api/method/tyre.api.get_warehouse`,{headers: headers})
+    .then(response =>{
+        Warehouse.value= response.data.message
+        console.log(Warehouse.value)
+    })
+})
+
+onMounted(()=>{
+    axios.get(`${BaseURL}/api/method/tyre.api.get_vehicleBrand`,{headers:headers})
+    .then(response => {
+        vBrand.value=response.data.message
+        console.log(vBrand.value)
+    })
+})
+
+
+const get_Vmodel = (data)=>{
+    axios.post(`${BaseURL}/api/method/tyre.api.get_vehicleModel`, { model: data }, { headers: headers })
+        .then(response => {
+            console.log(response.data.message)
+            vModel.value=response.data.message
+            console.log(vModel.value)
+        })
+}
 
 const getSize = (data, index) => {
     axios.post(`${BaseURL}/api/method/tyre.api.get_size`, { brand: data }, { headers: headers })
@@ -1890,8 +2034,6 @@ const getItemCode = (brand, size, type, pattern, index) => {
     
 }
 //==========================================================>>> Main Page <<<================================================================================//
-const initial = ref(true);
-const initialNext = ref(false);
 const hasResponse = ref(true);
 const noData = ref(false);
 const successData = ref(false);
@@ -2024,12 +2166,13 @@ const search = async () => {
     }
 };
 
+const searchJobCard = ref('')
 const hide = ref('false');
-const jobCardDetails = ref([]);
+const jobCardDetails = reactive(ref([]));
 const getJobCard = async () => {
     hide.value = true;
     try {
-        const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_jobcard_details`, { headers: headers });
+        const response = await axios.post(`${BaseURL}/api/method/tyre.api.get_jobcard_details`, { searchJobCard: searchJobCard.value }, { headers: headers });
         jobCardDetails.value = response.data.message;
         console.log(jobCardDetails.value);
     }
@@ -2038,18 +2181,51 @@ const getJobCard = async () => {
     }
 }
 
+const searchEnquiry = ref('');
 const hideEnq = ref('false');
-const enquiryDetails = ref([]);
+const enquiryDetails = reactive(ref([]));
 const getEnquiry = async () => {
     hideEnq.value = true;
     try {
-        const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_enquiry_details`, { headers: headers });
+        const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_enquiry_details`, {
+            params: {
+                data: searchEnquiry.value
+            },
+            headers: headers
+        });
         enquiryDetails.value = response.data.message;
         console.log(response.data.message);
     } catch (e) {
         console.error("Error:", e);
     }
 }
+
+const jobCardPopup = ref('false');
+const jobCardData = ref([]);
+const fetchJobCard = async (id) => {
+    try {
+        const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_billing_details`, {
+            params: {
+                name: id
+            },
+            headers: headers
+        });
+        jobCardPopup.value = 'true'
+        jobCardData.value = response.data.message;
+        console.log(jobCardData.value);
+    }
+    catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+watch(searchJobCard, () => {
+    getJobCard();
+});
+
+watch(searchEnquiry, () => {
+    getEnquiry();
+});
 
 const currentPage = ref('details');
 // const currentstep = ref(0);
@@ -2082,7 +2258,7 @@ const closed = () => {
         showNewVehicle.value = true
         console.log('vehicle page');
     }
-    else if (notVehicleAlert.value || notCustomerAlert.value || notEmployeeAlert.value || notEmpDetailAlert.value || noVehicleNumber.value ) {
+    else if (notVehicleAlert.value || notCustomerAlert.value || notEmployeeAlert.value || notEmpDetailAlert.value || noVehicleNumber.value) {
         notVehicleAlert.value = false;
         notCustomerAlert.value = false;
         notEmployeeAlert.value = false;
@@ -2091,18 +2267,6 @@ const closed = () => {
         showNewCustomer.value = true;
         console.log('customer page');
     }
-
-    else if (noValidVehicleNumber.value || noCustomerValidVehicleNumber.value) {
-        if(noCustomerValidVehicleNumber.value){
-            noCustomerValidVehicleNumber.value = false;
-            showNewCustomer.value = true;
-        }
-        else{
-            noValidVehicleNumber.value = false;
-            showNewVehicle.value = true
-        }
-    }
-
 }
 
 function nextPageAndHighlight() {
@@ -2110,6 +2274,9 @@ function nextPageAndHighlight() {
         currentstep.value++;
         currentPage.value = getPageName(currentstep.value);
         console.log(searchQuery.value + "******")
+        // if (currentstep.value == 3) {
+        //     checkup(requireService)
+        // }
 
         switch (currentstep.value) {
             case 1:
@@ -2166,6 +2333,15 @@ function nextPageAndHighlight() {
                 }
                 console.log(jobCard)
                 console.log("****4****")
+                for (let i = 0; i < tyres.value.length; i++) {
+                    const tyre = tyres.value[i];
+                    if (!tyre.type) {
+                        showWarning.value = true
+                        alert("Please fill required fields!");
+                        currentstep.value = 3;
+                        return;
+                    }
+                }
                 addValue(tyres.value, replace)
                 break;
             case 5:
@@ -2193,7 +2369,7 @@ function getPageName(step) {
 }
 
 const setCurrentPage = (page, step) => {
-    if (initialNext.value) {
+    if (!hasResponse.value) {
         currentPage.value = page;
         currentstep.value = step;
     }
@@ -2290,12 +2466,6 @@ const addVehicleData = async () => {
         // alert("Vehicle already Exist!");
         return;
     }
-
-    else if (isVehicleExist && isVehicleExist == 'Enter a Valid vehicle number') {
-        showAlerts.value = true;
-        noValidVehicleNumber.value = true;
-    }
-
     else {
         showConfirmation.value = true;
         newVehicleSave.value = true;
@@ -2393,36 +2563,34 @@ const employees = ref([{
     primary: ref(primaryValue),
 }]);
 const setPrimary = () => {
-    let sample_driver = 0;
-    let sample_customer = 0;
-    console.log(employees)
-    
-    customerData.value.employees.forEach((employee) => {
-        if (employee.type === 'current_driver') {
-            sample_driver += 1;
-        } else if (employee.type === 'contact_person') {
-            sample_customer += 1;
+    let firstDriverIndex = -1;
+    let firstContactPersonIndex = -1;
+
+    // Find the index of the first driver and contact person
+    customerData.value.employees.forEach((employee, index) => {
+        if (employee.type === 'current_driver' && firstDriverIndex === -1) {
+            firstDriverIndex = index;
+        } else if (employee.type === 'contact_person' && firstContactPersonIndex === -1) {
+            firstContactPersonIndex = index;
         }
     });
-    console.log(sample_driver);
-    if (sample_driver > 0) {
-        if(sample_driver == 1){
-            primaryValue.value = true;
-        }
-        else{
-            primaryValue.value = false;
-        }
-    } 
-    else if(sample_customer > 0){
-        if(sample_customer == 1){
-            primaryValue.value = true;
-        }
-        else{
-            primaryValue.value = false;
-        }
+
+    // Check the checkbox for the first driver and contact person
+    if (firstDriverIndex !== -1) {
+        customerData.value.employees[firstDriverIndex].primary = true;
+        console.log(`Primary checkbox set for the first driver at index ${firstDriverIndex}`);
+    } else {
+        console.log(`No driver found.`);
     }
-    console.log(primaryValue.value);    
-}
+
+    if (firstContactPersonIndex !== -1) {
+        customerData.value.employees[firstContactPersonIndex].primary = true;
+        console.log(`Primary checkbox set for the first contact person at index ${firstContactPersonIndex}`);
+    } else {
+        console.log(`No contact person found.`);
+    }
+};
+
 
 function moreEmployee() {
     employees.value.push({
@@ -2451,14 +2619,28 @@ const modifiedMoreEmployee = async (type) => {
             console.log("cbdsicbewcbdcnwdocn:", newEmployee.whatsapp);
             newEmployee.call = responseData.value.message[1].current_driver[lastDriverIndex]?.call;
             newEmployee.sms = responseData.value.message[1].current_driver[lastDriverIndex]?.sms;
-            responseData.value.message[1].current_driver.push(newEmployee);
+            if(newEmployee.whatsapp || newEmployee.call || newEmployee.sms){
+                newEmployee.whatsapp=0;
+                newEmployee.call=0;
+                newEmployee.sms=0;
+                responseData.value.message[1].current_driver.push(newEmployee);
+            }else{
+                responseData.value.message[1].current_driver.push(newEmployee);
+            }
         } else if (type === 'contact_person') {
             const lastContactIndex = responseData.value.message[1].contact_person.length - 1;
             newEmployee.custom_whatsapp = responseData.value.message[1].contact_person[lastContactIndex]?.custom_whatsapp;
             console.log(newEmployee.custom_whatsapp)
             newEmployee.custom_call = responseData.value.message[1].contact_person[lastContactIndex]?.custom_call;
             newEmployee.custom_sms = responseData.value.message[1].contact_person[lastContactIndex]?.custom_sms;
-            responseData.value.message[1].contact_person.push(newEmployee);
+            if(newEmployee.custom_whatsapp || newEmployee.custom_call || newEmployee.custom_sms){
+                newEmployee.custom_whatsapp = 0;
+                newEmployee.custom_call = 0;
+                newEmployee.custom_sms = 0;
+                responseData.value.message[1].contact_person.push(newEmployee);
+            }else{
+                responseData.value.message[1].contact_person.push(newEmployee);
+            }
         } else {
             console.error('Invalid employee type:', type);
             return;
@@ -2512,9 +2694,7 @@ const handlePrimaryCheckboxModify = (clickedEmployee) => {
 };
 
 const addCustomerData = async () => {
-
-    const name = responseData.value.message[0].name.trim();
-
+    const name = customerData.value.name.trim();
     console.log(name)
     const existingData = await returnSearch(name);
     console.log('filtering process', existingData.message[1].current_owner);
@@ -2554,7 +2734,7 @@ const addCustomerData = async () => {
         const data = {
             current_owner: customerData.value.current_owner,
             owner_mobile_no: customerData.value.owner_mobile_no,
-            name: name,
+            name: customerData.value.name,
             whatsappChecked: customerData.value.whatsappChecked,
             callChecked: customerData.value.callChecked,
             smsChecked: customerData.value.smsChecked,
@@ -2686,9 +2866,7 @@ const addCustomerModifiedData = async () => {
 
     console.log('modify checking', modifiedData);
     try {
-
         const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_customer_details`,{data:JSON.stringify(modifiedData)},{headers:headers});
-
         check.value = true;
         console.log(response);
         returnSearch(name)
@@ -2716,6 +2894,8 @@ const handle = ref(false);
 const selectedVariant = ref(null);
 const selectedBrand = ref(null);
 const quantity = ref('');
+const type = ref('');
+const pattern = ref('');
 const serviceDetails = ref({
     alignment: 0,
     oil_change: 0,
@@ -2759,15 +2939,15 @@ const handleCustomer = async () => {
     }
 }
 
+const popItems = ref([]);
+const billPopup = ref('false');
 const confirmCustomerSave = async () => {
     showConfirmation.value = false;
     newCustomerSave.value = false;
-
-    if (boolDetails.state == 1) {
-        alert("Unable to edit")
-        return
-    }
-
+if (boolDetails.state == 1){
+    alert("Unable to edit")
+    return
+}
     const customerDetails = {
         current_owner: customerData.value.current_owner,
         owner_mobile_no: customerData.value.owner_mobile_no,
@@ -2778,12 +2958,26 @@ const confirmCustomerSave = async () => {
         services: serviceDetails.value
     }
     try {
-            const json_data = { data: JSON.stringify(customerDetails) };
-            console.log('checking customer details', json_data);
-            const response = await axios.post(`${BaseURL}/api/method/tyre.api.lead`, { data: JSON.stringify(data) }, { headers: headers })
-            showAlerts.value = true;
+        const response = await axios.post(`${BaseURL}/api/method/tyre.api.lead`, customerDetails, { headers: headers })
+        showAlerts.value = true;
             successData.value = true;
             console.log('response from customer details', response.data);
+        popItems.value = response.data.message;
+
+        customerData.value.current_owner = '';
+        customerData.value.owner_mobile_no = '';
+        customerData.value.whatsappChecked = false;
+        customerData.value.callChecked = false;
+        customerData.value.smsChecked = false;
+        items.value = [];
+        serviceDetails.value = [];
+        selectedBrand.value = '';
+        selectedVariant.value = '';
+        quantity.value = '';
+        type.value = '';
+        pattern.value = '';
+        billPopup.value = 'true';
+
     } catch (error) {
         console.log("Temporary customer details page:", error)
     }
@@ -2831,29 +3025,20 @@ const selectedBrandVariants = computed(() => {
         }
     }
 });
-const afterResponse = ref(false);
+
 const handleEnquiry = async () => {
-    if(!handle.value){
-        hasResponse.value = true;
-        try {
-            const response = await axios.get(`${BaseURL}/api/method/tyre.api.stock_details`);
-            console.log('response data for customer details', response.data);
-            responseTyreData.value = response.data;
-            console.log(responseTyreData.value);
-            for (let tyre of responseTyreData.value.message) {
-                console.log(tyre.name);
-            }
-        } catch (error) {
-            console.log('Error fetching tyre data:', error);
+    try {
+        const response = await axios.get("http://192.168.1.39:8002/api/method/tyre.api.stock_details");
+        console.log('response data for customer details', response.data);
+        responseTyreData.value = response.data;
+        console.log(responseTyreData.value);
+        for (let tyre of responseTyreData.value.message) {
+            console.log(tyre.name);
         }
-    }
-    else{
-        handle.value = false
-        hasResponse.value = false;
-        console.log("Else block")
+    } catch (error) {
+        console.error('Error fetching tyre data:', error);
     }
 };
-onMounted(handleEnquiry)
 
 const clearVehicleData = () => {
     Object.keys(vehicleData.value).forEach(key => {
@@ -2869,13 +3054,64 @@ const returnSearch = async (search) => {
     try {
         if (data.license_plate.trim() !== "") {
             console.log("**&**")
-
-            const response = await axios.post(`${BaseURL}/api/method/tyre.api.get_details`, { license_plate: JSON.stringify(data.license_plate) }, { headers: headers });
-
+            const response = await axios.post(`${BaseURL}/api/method/tyre.api.get_details`,{license_plate:JSON.stringify(data.license_plate)},{headers:headers});
             check.value = true;
             console.log('returnSearch data', response);
             if (response.data.message === "") {
-               
+                // responseData.value = {
+                //     message: [{
+                //         name: '',
+                //         vehicle_brand: '',
+                //         vehicle_model: '',
+                //         chassis_no: '',
+                //         fuel_type: '',
+                //         last_odometer_reading: '',
+                //         tyre_change: '',
+                //         alignment: ''
+                //     },
+                //     {
+                //         current_owner: '',
+                //         owner_mobile_no: '',
+                //         call: '',
+                //         whatsapp: '',
+                //         sms: '',
+                //         current_driver: [{
+                //             current_driver: '',
+                //             name: '',
+                //             mobile_no: '',
+                //             call: '',
+                //             whatsapp: '',
+                //             sms: ''
+
+                //         }],
+                //         contact_person: [{
+                //             contact_person_name: '',
+                //             contact_person_mobile: '',
+                //             custom_call: '',
+                //             custom_whatsapp: '',
+                //             custom_sms: ''
+                //         }]
+                //     },
+                //     {
+                //         current_driver: [{
+                //             current_driver: '',
+                //             name: '',
+                //             mobile_no: '',
+                //             call: '',
+                //             whatsapp: '',
+                //             sms: ''
+
+                //         }],
+                //         contact_person: [{
+                //             contact_person_name: '',
+                //             contact_person_mobile: '',
+                //             custom_call: '',
+                //             custom_whatsapp: '',
+                //             custom_sms: ''
+                //         }]
+                //     }
+                //     ]
+                // };
                 console.log(response.data);
                 hasResponse.value = true;
                 initial.value = true;
@@ -2896,8 +3132,6 @@ const returnSearch = async (search) => {
             }
             else {
                 console.log('cutomer details checking now', responseData.value);
-                initial.value = false
-                initialNext.value = true
                 return dataAssignment(response)
             }
         } else {
@@ -2926,21 +3160,34 @@ const removeEmployee2 = (index) => {
         "name":responseData.value.message[1].current_driver[index].parent
     }
     console.log(data);
-    // try{
-
-    //     await axios.post(`${BaseURL}/api/method/tyre.api.delete_modifide_customes`,{data:data},{headers:headers});
-    // }
+    if(data){
+        axios.post(`${BaseURL}/api/method/tyre.api.delete_modified_customers`,{data:data},{headers:headers});
+        responseData.value.message[1].current_driver.splice(index, 1);
+    }else{
+            console.log(error);
+    }
     // catch(error){
-    //     console.log(error);
     // }
-    // responseData.value.message[1].current_driver.splice(index, 1);
 };
 const removeEmployee3 = (index) => {
-    responseData.value.message[1].contact_person.splice(index, 1);
+    const data = {
+        "contact_person_name":responseData.value.message[1].contact_person[index].contact_person_name,
+        "parentfield":responseData.value.message[1].contact_person[index].parentfield,
+        "contact_person_mobile":responseData.value.message[1].contact_person[index].contact_person_mobile,
+        "name":responseData.value.message[1].contact_person[index].parent
+    }
+    console.log(data);
+    if(data){
+        axios.post(`${BaseURL}/api/method/tyre.api.delete_modified_customers`,{data:data},{headers:headers});
+        responseData.value.message[1].contact_person.splice(index, 1);
+    }else{
+            console.log(error);
+    }
 };
 const removeEmployee1 = (index) => {
     if (sample22.value != 0){
         employees.value.splice(index, 1);
+        setPrimary();
     }
 };
 
@@ -3492,20 +3739,16 @@ const removeRow = (index) => {
     calculateTotals();
 };
 const showConfirm = ref(false)
-const dataFinalSubmission = () => {
-    showConfirm.value = true;
-    console.log("showConfirm", showConfirm.value);
-}
-const confirmDataSave = () => {
-    showConfirm.value = false;
+const dataFinalSubmission = computed(() => {
     console.log("Final submission process going on....");
     jobCard["bill"] = tableData.value
     console.log(jobCard)
     checkup(jobCard)
-}
+})
 const cancelSaved = () => {
     showConfirm.value = false;
 }
+
 </script>
 
 <style scoped>
