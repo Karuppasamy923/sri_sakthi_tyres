@@ -501,17 +501,9 @@ def get_pattern(brand, size, tyer_type):
 
 @frappe.whitelist(allow_guest=True)
 def get_ItemCode(brand, size, tyer_type,pattern):
-	results = frappe.get_all("Brand Details", filters={"parent": brand, "size": size, "tyer_type": tyer_type, "pattern":pattern}, fields=["item_code"])
-	print(results)
-	unique_code = set(result.get("item_code") for result in results)
-	if unique_code :
-		return list(unique_code)
-	else :
-		return {
-			"status": 400,
-			"message": "No Item Code Found"
-		}
-
+	item_code = frappe.get_all("Brand Details", filters={"parent": brand, "size": size, "tyer_type": tyer_type, "pattern":pattern}, pluck="item_code")[0]
+	return [item_code, get_item_rate(item_code)]
+	
 # function to create job card
 @frappe.whitelist(allow_guest=True)
 def stock_details():
@@ -540,9 +532,9 @@ def stock_details():
 		}
 	
 @frappe.whitelist(allow_guest=True)
-def get_jobcard_details(data):  
+def get_jobcard_details(data=None):  
   if data:
-    jobcard_details = frappe.get_all("Tyre Job Card",{'mobile_no':data},{"time_in","name","vehicle_no","customer","mobile_no"})
+    jobcard_details = frappe.get_all("Tyre Job Card",{'mobile_no':data},["time_in","name","vehicle_no","customer","mobile_no"])
     if jobcard_details:
       return jobcard_details
     else:
@@ -551,7 +543,7 @@ def get_jobcard_details(data):
         "message": "No Job Card Found"
       }
   else:
-    job_card_details = frappe.get_all("Tyre Job Card", fields={"time_in","name","vehicle_no","customer","mobile_no"})
+    job_card_details = frappe.get_all("Tyre Job Card", fields=["time_in","name","vehicle_no","customer","mobile_no"])
     return job_card_details
 
 @frappe.whitelist(allow_guest=True)
@@ -625,7 +617,8 @@ def get_item_rate(item_code):
 	from erpnext.stock.report.item_price_stock.item_price_stock import get_item_price_qty_data
 	price_list = get_item_price_qty_data({"item_code": item_code})
 	if price_list:
-		return price_list[0].selling_rate
+		print(price_list)
+		return price_list[0]["selling_rate"]
 	
 	return 0
 

@@ -499,7 +499,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex justify-center" v-if="hide == 'false'">
+                            <div class="flex justify-center" v-if="hide == 'false' && hideEnq == 'false'">
                                 <div class="flex justify-center mt-9">
                                     <img src="https://img.freepik.com/free-vector/hand-drawn-no-data-concept_52683-127823.jpg?w=996&t=st=1712321166~exp=1712321766~hmac=ae2f4e19eb0e1185d52ac8a07c158e9dc5afa741284e9526a8e8a0165573735b"
                                         alt="No data" class="w-[25%]" @click="showMessage(`Nothing to Show ! 😄`)">
@@ -836,7 +836,7 @@
                                             </table>
                                         </div>
                                         <div v-if="leadDetails">
-                                            <table class="table-auto">
+                                            <table class="table-auto" v-if="leadDetails.custom_lead_items">
                                                 <thead>
                                                     <tr>
                                                         <th class="pr-12">Brand</th>
@@ -1800,7 +1800,9 @@ const getItemCode = (brand, size, type, pattern, index) => {
         .then(response => {
             console.log(response.data.message[0]);
             tyres.value[index].item = response.data.message[0]
+            tyres.value[index].rate = response.data.message[1]
         });
+    
 }
 //==========================================================>>> Main Page <<<================================================================================//
 const hasResponse = ref(true);
@@ -2763,14 +2765,14 @@ const removeEmployee2 = (index) => {
         "name":responseData.value.message[1].current_driver[index].parent
     }
     console.log(data);
-    // try{
-
-    //     await axios.post(`${BaseURL}/api/method/tyre.api.delete_modifide_customes`,{data:data},{headers:headers});
-    // }
+    if(data){
+        axios.post(`${BaseURL}/api/method/tyre.api.delete_modifide_customes`,{data:data},{headers:headers});
+        responseData.value.message[1].current_driver.splice(index, 1);
+    }else{
+            console.log(error);
+    }
     // catch(error){
-    //     console.log(error);
     // }
-    // responseData.value.message[1].current_driver.splice(index, 1);
 };
 const removeEmployee3 = (index) => {
     responseData.value.message[1].contact_person.splice(index, 1);
@@ -3054,6 +3056,7 @@ const tyres = ref([{
     size: '',
     ttTl: '',
     item: '',
+    rate:'',
     mandatory: false,
     status: false
 }]);
@@ -3079,6 +3082,7 @@ const addTyreReplacement = () => {
             size: '',
             ttTl: '',
             item: '',
+            rate:'',
             status: false
         })
         setValue.index++;
@@ -3110,33 +3114,40 @@ function addValue(data, replace) {
 
                 // Check if tableData.value[billIndex] is an array
                 if (Array.isArray(tableData.value)) {
-                    console.log(tableData.value)
-                    tableData.value.forEach((rowData, index) => {
+                    console.log(tableData.value);
+                    name:for (let index = 0; index < tableData.value.length; index++) {
+                        const rowData = tableData.value[index];
                         console.log(rowData);
-                        console.log("*****")
-                        rowData.forEach(items => {
+                        console.log("*****");
+                        for (let i = 0; i < rowData.length; i++) {
+                            const items = rowData[i];
                             console.log(items);
                             console.log(items.itemCode);
                             console.log(item.item);
                             if (items.itemCode === item.item) {
-
                                 existingItemIndex = index;
                                 console.log(existingItemIndex);
+                                break name;
                             }
-                        });
-                    });
+                        }
+                    }
                     // Find the index of the item with the same itemCode, if it exists
                     // existingItemIndex = tableData.value[billIndex].findIndex(existingItem => existingItem.itemCode === item.item);
                 }
 
+                console.log(tableData.value);
                 console.log(existingItemIndex);
+                console.log(item.status)
+                console.log(billIndex)
 
-                if (existingItemIndex !== -1 && !item.status) {
+                if (existingItemIndex > -1 && !item.status) {
                     // Increase the quantity of the existing item
                     console.log(tableData.value[existingItemIndex][0].requiredQuantity);
                     tableData.value[existingItemIndex][0].requiredQuantity++;
+                    console.log(tableData.value[existingItemIndex][0].requiredQuantity)
                     console.log(tableData.value[existingItemIndex][0].requiredQuantity);
-                    item.status = true;
+                    // Remove the existing item from the array
+                    tableData.value.splice(existingItemIndex, 1);
                 } else {
                     // If tableData.value[billIndex] is not an array, initialize it
                     if (!Array.isArray(tableData.value[billIndex])) {
@@ -3148,15 +3159,18 @@ function addValue(data, replace) {
                     const newData = {
                         itemCode: item.item,
                         sourceWarehouse: '',
-                        rate: '',
+                        rate: item.rate,
                         requiredQuantity: 1, // Set initial quantity to 1
                         cost: ''
                     };
 
                     // Push the new object into the array at the specified billIndex
                     tableData.value[billIndex].push(newData);
-                    item.status = true;
                 }
+
+                // Mark the item as processed
+                item.status = true;
+
 
                 calculateTotals();
                 billIndex++;
