@@ -122,13 +122,14 @@ app_license = "mit"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+	"Lead": {
+		"validate": "tyre.api.calculate_total_amount",
+	},
+	"Tyre Job Card": {
+		"validate": "tyre.api.calculate_total_amount",
+	}
+}
 
 # Scheduled Tasks
 # ---------------
@@ -232,7 +233,7 @@ website_route_rules = [{'from_route': '/frontend/<path:app_path>', 'to_route': '
 
 whitelist = ["GET", "POST"]
 
-app_list = ['get_details','store_vehicle_details','job_card', 'stock_details','get_brand','get_size','get_pattern','get_type','get_ItemCode']
+app_list = ['get_details','store_vehicle_details','job_card', 'stock_details','get_brand','get_size','get_pattern','get_type','get_ItemCode',]
 
 from tyre.api import get_details, store_vehicle_details, job_card, stock_details,get_brand,get_size,get_pattern,get_type,get_ItemCode
 

@@ -113,6 +113,124 @@
                                 </div>
                             </div>
                         </div>
+                        <div v-if="billPopup == 'true'"
+                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                            <a href="#"
+                                class="block max-w-[70rem] p-10 pt-5 bg-white border border-gray-200 rounded-lg shadow">
+                                <div class="grid grid-cols-2">
+                                    <div>
+                                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-black">
+                                            Price Details</h5>
+                                    </div>
+                                    <div class="flex justify-end">
+                                        <button @click="billPopup = 'false'">
+                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                fill="none" viewBox="0 0 14 14">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2"
+                                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="relative overflow-x-auto">
+                                    <table
+                                        class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                        <thead
+                                            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Brand
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Size
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Quantity
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Type
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Pattern
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                                                v-for="(item, index) in items" :key="index">
+                                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                                    scope="row">{{ item.brand }}</td>
+                                                <td class="px-6 py-4">{{ item.size }}</td>
+                                                <td class="px-6 py-4">{{ item.quantity }}</td>
+                                                <td class="px-6 py-4">{{ item.quantity }}</td>
+                                                <td class="px-6 py-4">{{ item.type }}</td>
+                                                <td class="px-6 py-4">{{ item.pattern }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </a>
+                        </div>
+                        <div v-if="jobCardPopup == 'true'"
+                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                            <a href="#"
+                                class="block max-w-[70rem] p-10 pt-5 bg-white border border-gray-200 rounded-lg shadow">
+                                <div class="grid grid-cols-2">
+                                    <div>
+                                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-black">
+                                            Price Details</h5>
+                                    </div>
+                                    <div class="flex justify-end">
+                                        <button @click="jobCardPopup = 'false'">
+                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                fill="none" viewBox="0 0 14 14">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2"
+                                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="relative overflow-x-auto">
+                                    <table
+                                        class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                        <thead
+                                            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Brand
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Size
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Quantity
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Type
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Pattern
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                                                v-for="(item, index) in items" :key="index">
+                                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                                    scope="row">{{ item.brand }}</td>
+                                                <td class="px-6 py-4">{{ item.size }}</td>
+                                                <td class="px-6 py-4">{{ item.quantity }}</td>
+                                                <td class="px-6 py-4">{{ item.quantity }}</td>
+                                                <td class="px-6 py-4">{{ item.type }}</td>
+                                                <td class="px-6 py-4">{{ item.pattern }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </a>
+                        </div>
 
                         <div v-if="showConfirm && confirm"
                             class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
@@ -409,8 +527,10 @@
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Back</button>
                                 </div>
                                 <div>
-                                    <Input placeholder="search ..." v-if="hideEnq != 'false'" class="mt-9 mb-2 ml-[5.3rem] p-4"/>
-                                    <Input placeholder="search ..." v-if="hide != 'false'" class="mt-9 mb-2 ml-[5.3rem] p-4"/>
+                                    <Input type="number" placeholder="search ..." v-if="hideEnq != 'false'"
+                                        v-model="searchEnquiry" @input="getEnquiry" class="mt-9 mb-2 -ml-14.5 p-4" />
+                                    <Input placeholder="Vehicle Search ..." v-if="hide != 'false'"
+                                        v-model="searchJobCard" @input="getJobCard" class="mt-9 mb-2 -ml-14.5 p-4" />
                                 </div>
                             </div>
                             <div>
@@ -437,12 +557,13 @@
                                                 </th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr class="bg-white border-b  dark:border-gray-700 dark:text-black"
+                                        <tbody style="max-height: 2rem; overflow-y: auto;">
+                                            <tr class="bg-white border-b dark:border-gray-700 dark:text-black"
                                                 v-for="jobcard in jobCardDetails" :key="jobcard">
                                                 <th scope="row"
                                                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
-                                                    {{ jobcard.id }}
+                                                    <a href="#" @click="fetchJobCard(jobcard.name)">{{ jobcard.name
+                                                        }}</a>
                                                 </th>
                                                 <td class="px-6 py-4">
                                                     {{ jobcard.time_in }}
@@ -795,7 +916,7 @@
                                     <div v-else>
                                         <label class="font-semibold">Tyre</label>
                                         <hr class="dark-hr">
-                                        <div class="grid grid-cols-4 gap-10" v-if="boolDetails.state == 0">
+                                        <div class="grid grid-cols-4 gap-x-10" v-if="boolDetails.state == 0">
                                             <div class="flex flex-col ml-1">
                                                 <label class="mt-2">Brand</label>
                                                 <select
@@ -809,7 +930,8 @@
                                                 <label class="mt-2">Variants</label>
                                                 <select
                                                     class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
-                                                    v-model="selectedVariant">
+                                                    v-model="selectedVariant"
+                                                    @change="getType(selectedBrand, selectedVariant, index)">
                                                     <option v-for="(variant, index) in rs" :key="index">{{ variant.size
                                                         }}</option>
                                                 </select>
@@ -818,12 +940,31 @@
                                                 <label class="mt-2">Quantity</label>
                                                 <input
                                                     class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
-                                                    type="text" v-model="quantity">
+                                                    type="number" v-model="quantity">
                                             </div>
                                             <div class="flex flex-col ml-1">
                                                 <!-- <label class="mt-2">Add</label> -->
-                                                <Button class="w-[4rem] mt-10" type="text" v-model="price"
-                                                    @click="addItem">Add</Button>
+                                                <Button class="w-[4rem] mt-10" @click="addItem">Add</Button>
+                                            </div>
+                                            <div class="flex flex-col ml-1">
+                                                <label class="mt-2">Type</label>
+                                                <select
+                                                    class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
+                                                    v-model="type"
+                                                    @change="getPattern(selectedBrand, selectedVariant, type, index)">
+                                                    <option v-for="(type, index) in types[index]" :key="index">{{ type
+                                                        }}</option>
+                                                </select>
+                                            </div>
+                                            <div class="flex flex-col ml-1">
+                                                <label class="mt-2">Pattern</label>
+                                                <select
+                                                    class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
+                                                    v-model="pattern">
+                                                    <option v-for="(pattern, index) in patterns[index]" :key="index">{{
+                pattern
+            }}</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div v-if="tableDetails">
@@ -831,8 +972,10 @@
                                                 <thead>
                                                     <tr>
                                                         <th class="pr-12">Brand</th>
-                                                        <th class="pr-12">Variants</th>
-                                                        <th>Quantity</th>
+                                                        <th class="pr-12">Size</th>
+                                                        <th class="pr-12">Quantity</th>
+                                                        <th class="pr-12">Type</th>
+                                                        <th>Pattern</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -840,17 +983,21 @@
                                                         <td>{{ item.brand }}</td>
                                                         <td>{{ item.variants }}</td>
                                                         <td>{{ item.quantity }}</td>
+                                                        <td>{{ item.type }}</td>
+                                                        <td>{{ item.pattern }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <div v-if="leadDetails">
+                                        <div v-if="leadDetails && !tableDetails">
                                             <table class="table-auto">
                                                 <thead>
                                                     <tr>
                                                         <th class="pr-12">Brand</th>
-                                                        <th class="pr-12">Variants</th>
-                                                        <th>Quantity</th>
+                                                        <th class="pr-12">Size</th>
+                                                        <th class="pr-12">Quantity</th>
+                                                        <th class="pr-12">Type</th>
+                                                        <th>Pattern</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -859,6 +1006,9 @@
                                                         <td>{{ item.brand }}</td>
                                                         <td>{{ item.size }}</td>
                                                         <td>{{ item.quantity }}</td>
+                                                        <td>{{ item.quantity }}</td>
+                                                        <td>{{ item.type }}</td>
+                                                        <td>{{ item.pattern }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -1719,11 +1869,13 @@ const tableDetails = ref(false);
 const addItem = () => {
     tableDetails.value = true;
     console.log(selectedBrand.value)
-    if (selectedBrand.value && selectedVariant.value && quantity.value) {
+    if (selectedBrand.value && selectedVariant.value && quantity.value && type.value && pattern.value) {
         items.value.push({
             brand: selectedBrand.value,
             variants: selectedVariant.value,
-            quantity: quantity.value
+            quantity: quantity.value,
+            type: type.value,
+            pattern: pattern.value
         });
     }
 };
@@ -1947,12 +2099,13 @@ const search = async () => {
     }
 };
 
+const searchJobCard = ref('')
 const hide = ref('false');
-const jobCardDetails = ref([]);
+const jobCardDetails = reactive(ref([]));
 const getJobCard = async () => {
     hide.value = true;
     try {
-        const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_jobcard_details`, { headers: headers });
+        const response = await axios.post(`${BaseURL}/api/method/tyre.api.get_jobcard_details`, { searchJobCard: searchJobCard.value }, { headers: headers });
         jobCardDetails.value = response.data.message;
         console.log(jobCardDetails.value);
     }
@@ -1961,18 +2114,51 @@ const getJobCard = async () => {
     }
 }
 
+const searchEnquiry = ref('');
 const hideEnq = ref('false');
-const enquiryDetails = ref([]);
+const enquiryDetails = reactive(ref([]));
 const getEnquiry = async () => {
     hideEnq.value = true;
     try {
-        const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_enquiry_details`, { headers: headers });
+        const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_enquiry_details`, {
+            params: {
+                data: searchEnquiry.value
+            },
+            headers: headers
+        });
         enquiryDetails.value = response.data.message;
         console.log(response.data.message);
     } catch (e) {
         console.error("Error:", e);
     }
 }
+
+const jobCardPopup = ref('false');
+const jobCardData = ref([]);
+const fetchJobCard = async (id) => {
+    try {
+        const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_billing_details`, {
+            params: {
+                name: id
+            },
+            headers: headers
+        });
+        jobCardPopup.value = 'true'
+        jobCardData.value = response.data.message;
+        console.log(jobCardData.value);
+    }
+    catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+watch(searchJobCard, () => {
+    getJobCard();
+});
+
+watch(searchEnquiry, () => {
+    getEnquiry();
+});
 
 const currentPage = ref('details');
 // const currentstep = ref(0);
@@ -2571,6 +2757,8 @@ const handle = ref(false);
 const selectedVariant = ref(null);
 const selectedBrand = ref(null);
 const quantity = ref('');
+const type = ref('');
+const pattern = ref('');
 const serviceDetails = ref({
     alignment: 0,
     oil_change: 0,
@@ -2599,6 +2787,8 @@ const handleCustomer = async () => {
     newCustomerSave.value = true;
 }
 
+const popItems = ref([]);
+const billPopup = ref('false');
 const confirmCustomerSave = async () => {
     showConfirmation.value = false;
     newCustomerSave.value = false;
@@ -2614,6 +2804,21 @@ const confirmCustomerSave = async () => {
     }
     try {
         const response = await axios.post(`${BaseURL}/api/method/tyre.api.lead`, customerDetails, { headers: headers })
+        popItems.value = response.data.message;
+
+        customerData.value.current_owner = '';
+        customerData.value.owner_mobile_no = '';
+        customerData.value.whatsappChecked = false;
+        customerData.value.callChecked = false;
+        customerData.value.smsChecked = false;
+        items.value = [];
+        serviceDetails.value = [];
+        selectedBrand.value = '';
+        selectedVariant.value = '';
+        quantity.value = '';
+        type.value = '';
+        pattern.value = '';
+        billPopup.value = 'true';
 
     } catch (error) {
         console.log("Temporary customer details page:", error)
