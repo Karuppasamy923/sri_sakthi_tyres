@@ -1638,7 +1638,7 @@
                         class="bg-blue-500 w-[45%] text-white font-bold  text-base p-4 rounded-lg"
                         @click="nextPageAndHighlight">Next
                     </button>
-                    <button v-if="currentstep >= 4" @click="dataFinalSubmission"
+                    <button v-if="currentstep == 4" @click="dataFinalSubmission"
                         class="bg-green-700 w-[45%] text-white font-bold  text-base p-4 rounded-lg">
                         Submit
                     </button>

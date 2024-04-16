@@ -370,7 +370,7 @@ def job_card(data):
 	total_amount = 0
 	for items in bills:
 		items = frappe._dict(items)
-		total_amount += int(items.cost)
+		total_amount += float	(items.cost)
 		billing_items.append({"item_code": items.itemCode, "warehouse": items.sourceWarehouse, "quantity" : items.requiredQuantity, "amount" : float(items.cost), "rate": float(items.rate)})
 	print(doc.as_dict(), "as_dict")
 	doc.extend("billing_details", billing_items)
