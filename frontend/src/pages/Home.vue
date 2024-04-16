@@ -113,6 +113,124 @@
                                 </div>
                             </div>
                         </div>
+                        <div v-if="billPopup == 'true'"
+                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                            <a href="#"
+                                class="block max-w-[70rem] p-10 pt-5 bg-white border border-gray-200 rounded-lg shadow">
+                                <div class="grid grid-cols-2">
+                                    <div>
+                                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-black">
+                                            Price Details</h5>
+                                    </div>
+                                    <div class="flex justify-end">
+                                        <button @click="billPopup = 'false'">
+                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                fill="none" viewBox="0 0 14 14">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2"
+                                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="relative overflow-x-auto">
+                                    <table
+                                        class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                        <thead
+                                            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Brand
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Size
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Quantity
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Type
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Pattern
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                                                v-for="(item, index) in items" :key="index">
+                                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                                    scope="row">{{ item.brand }}</td>
+                                                <td class="px-6 py-4">{{ item.size }}</td>
+                                                <td class="px-6 py-4">{{ item.quantity }}</td>
+                                                <td class="px-6 py-4">{{ item.quantity }}</td>
+                                                <td class="px-6 py-4">{{ item.type }}</td>
+                                                <td class="px-6 py-4">{{ item.pattern }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </a>
+                        </div>
+                        <div v-if="jobCardPopup == 'true'"
+                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                            <a href="#"
+                                class="block max-w-[70rem] p-10 pt-5 bg-white border border-gray-200 rounded-lg shadow">
+                                <div class="grid grid-cols-2">
+                                    <div>
+                                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-black">
+                                            Price Details</h5>
+                                    </div>
+                                    <div class="flex justify-end">
+                                        <button @click="jobCardPopup = 'false'">
+                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                fill="none" viewBox="0 0 14 14">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2"
+                                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="relative overflow-x-auto">
+                                    <table
+                                        class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                        <thead
+                                            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Brand
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Size
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Quantity
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Type
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Pattern
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                                                v-for="(item, index) in items" :key="index">
+                                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                                    scope="row">{{ item.brand }}</td>
+                                                <td class="px-6 py-4">{{ item.size }}</td>
+                                                <td class="px-6 py-4">{{ item.quantity }}</td>
+                                                <td class="px-6 py-4">{{ item.quantity }}</td>
+                                                <td class="px-6 py-4">{{ item.type }}</td>
+                                                <td class="px-6 py-4">{{ item.pattern }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </a>
+                        </div>
 
                         <div v-if="showConfirm && confirm"
                             class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
@@ -409,8 +527,10 @@
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Back</button>
                                 </div>
                                 <div>
-                                    <Input placeholder="search ..." v-if="hideEnq != 'false'" class="mt-9 mb-2 ml-[5.3rem] p-4"/>
-                                    <Input placeholder="search ..." v-if="hide != 'false'" class="mt-9 mb-2 ml-[5.3rem] p-4"/>
+                                    <Input type="number" placeholder="search ..." v-if="hideEnq != 'false'"
+                                        v-model="searchEnquiry" @input="getEnquiry" class="mt-9 mb-2 -ml-14.5 p-4" />
+                                    <Input placeholder="Vehicle Search ..." v-if="hide != 'false'"
+                                        v-model="searchJobCard" @input="getJobCard" class="mt-9 mb-2 -ml-14.5 p-4" />
                                 </div>
                             </div>
                             <div>
@@ -437,12 +557,13 @@
                                                 </th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr class="bg-white border-b  dark:border-gray-700 dark:text-black"
+                                        <tbody style="max-height: 2rem; overflow-y: auto;">
+                                            <tr class="bg-white border-b dark:border-gray-700 dark:text-black"
                                                 v-for="jobcard in jobCardDetails" :key="jobcard">
                                                 <th scope="row"
                                                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
-                                                    {{ jobcard.id }}
+                                                    <a href="#" @click="fetchJobCard(jobcard.name)">{{ jobcard.name
+                                                        }}</a>
                                                 </th>
                                                 <td class="px-6 py-4">
                                                     {{ jobcard.time_in }}
@@ -539,14 +660,23 @@
                                             v-model="vehicleData.name" placeholder="Enter Vehicle Number">
                                     </p>
                                     <p class="m-2">Vehicle Brand <span class="text-red-500 font-bold">*</span><br>
-                                        <input type="text"
-                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                            v-model="vehicleData.vehicle_brand" placeholder="Enter Vehicle Brand">
+                                        <select class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            v-model="vehicleData.vehicle_brand" @change="get_Vmodel(vehicleData.vehicle_brand)"
+                                            style="overflow-y: auto;">
+                                            <!-- Loop through vBrand and create an option for each brand -->
+                                            <option value="" disabled selected>Select brand...</option>
+                                            <option v-for="brand in vBrand" :key="brand">{{ brand.name }}</option>
+                                        </select>
+  
                                     </p>
                                     <p class="m-2">Vehicle Model <span class="text-red-500 font-bold">*</span><br>
-                                        <input type="text"
-                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                            v-model="vehicleData.vehicle_model" placeholder="Enter Vehicle Model">
+                                            <select class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            v-model="vehicleData.vehicle_model"
+                                            style="overflow-y: auto;">
+                                            <!-- Loop through vBrand and create an option for each brand -->
+                                            <option value="" disabled selected>Select model...</option>
+                                            <option v-for="model in vModel" :key="model">{{ model.model }}</option>
+                                        </select>
                                     </p>
 
                                     <p class="m-2">Chassis No <span class="text-red-500 font-bold">*</span><br>
@@ -558,9 +688,11 @@
                                     <p class="m-2">Fuel Type <span class="text-red-500 font-bold">*</span><br>
                                         <select v-model="vehicleData.fuel_type"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
+                                            <option value="" disabled selected>Select fuel type...</option>
                                             <option value="Petrol">Petrol</option>
                                             <option value="Diesel">Diesel</option>
-                                            <option value="EV">Electical Vehicle</option>
+                                            <option value="EV">EV</option>
+                                            <option value="hybrid ">Hybrid</option>
                                         </select>
                                     </p>
                                     <p class="m-2">Odometer Value <span class="text-red-500 font-bold">*</span><br>
@@ -740,7 +872,7 @@
                                             </p>
                                             <p class="m-2">Employee Type <span
                                                     class="text-red-500 font-bold">*</span><br>
-                                                <select v-model="employee.type" @click="setPrimary"
+                                                <select v-model="employee.type" @click="setPrimary(index)"
                                                     class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
                                                     <option value="" selected disabled>Please select..</option>
                                                     <option value="current_driver">Driver</option>
@@ -786,7 +918,7 @@
                                     <div v-else>
                                         <label class="font-semibold">Tyre</label>
                                         <hr class="dark-hr">
-                                        <div class="grid grid-cols-4 gap-10" v-if="boolDetails.state == 0">
+                                        <div class="grid grid-cols-4 gap-x-10" v-if="boolDetails.state == 0">
                                             <div class="flex flex-col ml-1">
                                                 <label class="mt-2">Brand</label>
                                                 <select
@@ -800,7 +932,8 @@
                                                 <label class="mt-2">Variants</label>
                                                 <select
                                                     class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
-                                                    v-model="selectedVariant">
+                                                    v-model="selectedVariant"
+                                                    @change="getType(selectedBrand, selectedVariant, index)">
                                                     <option v-for="(variant, index) in rs" :key="index">{{ variant.size
                                                         }}</option>
                                                 </select>
@@ -809,12 +942,31 @@
                                                 <label class="mt-2">Quantity</label>
                                                 <input
                                                     class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
-                                                    type="text" v-model="quantity">
+                                                    type="number" v-model="quantity">
                                             </div>
                                             <div class="flex flex-col ml-1">
                                                 <!-- <label class="mt-2">Add</label> -->
-                                                <Button class="w-[4rem] mt-10" type="text"
-                                                    @click="addItem">Add</Button>
+                                                <Button class="w-[4rem] mt-10" @click="addItem">Add</Button>
+                                            </div>
+                                            <div class="flex flex-col ml-1">
+                                                <label class="mt-2">Type</label>
+                                                <select
+                                                    class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
+                                                    v-model="type"
+                                                    @change="getPattern(selectedBrand, selectedVariant, type, index)">
+                                                    <option v-for="(type, index) in types[index]" :key="index">{{ type
+                                                        }}</option>
+                                                </select>
+                                            </div>
+                                            <div class="flex flex-col ml-1">
+                                                <label class="mt-2">Pattern</label>
+                                                <select
+                                                    class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
+                                                    v-model="pattern">
+                                                    <option v-for="(pattern, index) in patterns[index]" :key="index">{{
+                pattern
+            }}</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div v-if="tableDetails">
@@ -822,8 +974,10 @@
                                                 <thead>
                                                     <tr>
                                                         <th class="pr-12">Brand</th>
-                                                        <th class="pr-12">Variants</th>
-                                                        <th>Quantity</th>
+                                                        <th class="pr-12">Size</th>
+                                                        <th class="pr-12">Quantity</th>
+                                                        <th class="pr-12">Type</th>
+                                                        <th>Pattern</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -831,17 +985,21 @@
                                                         <td>{{ item.brand }}</td>
                                                         <td>{{ item.variants }}</td>
                                                         <td>{{ item.quantity }}</td>
+                                                        <td>{{ item.type }}</td>
+                                                        <td>{{ item.pattern }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <div v-if="leadDetails">
-                                            <table class="table-auto" v-if="leadDetails.custom_lead_items">
+                                        <div v-if="leadDetails && !tableDetails">
+                                            <table class="table-auto">
                                                 <thead>
                                                     <tr>
                                                         <th class="pr-12">Brand</th>
-                                                        <th class="pr-12">Variants</th>
-                                                        <th>Quantity</th>
+                                                        <th class="pr-12">Size</th>
+                                                        <th class="pr-12">Quantity</th>
+                                                        <th class="pr-12">Type</th>
+                                                        <th>Pattern</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -849,6 +1007,9 @@
                                                         <td>{{ item.brand }}</td>
                                                         <td>{{ item.size }}</td>
                                                         <td>{{ item.quantity }}</td>
+                                                        <td>{{ item.quantity }}</td>
+                                                        <td>{{ item.type }}</td>
+                                                        <td>{{ item.pattern }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -1550,16 +1711,25 @@
                                             class="w-[10rem] rounded-sm border-solid border border-black">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="text" v-model="data[billIndex].sourceWarehouse"
-                                            class="w-[10rem] rounded-sm border-solid border border-black">
+                                        <div style="max-height: 200px; overflow-y: auto;">
+                                            <select v-model="data[billIndex].sourceWarehouse"
+                                                    class="w-[10rem] rounded-sm border-solid border border-black">
+                                                <option value="">Select Warehouse</option>
+                                                <!-- Loop through warehouseList and create an option for each warehouse -->
+                                                <option v-for="warehouse in Warehouse" :key="warehouse" :value="warehouse">
+                                                    {{ warehouse }}
+                                                </option>
+                                            </select>
+                                        </div>
                                     </td>
+                                    
                                     <td class="border border-gray-800 px-4 py-2">
                                         <input type="number" v-model="data[billIndex].requiredQuantity"
                                             @input="calculateTotals"
                                             class="w-[10rem] rounded-sm border-solid border border-black">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="float" v-model="data[billIndex].rate" @input="calculateTotals"
+                                        <input type="float" v-model="data[billIndex].rate" @input="calculateTotals" readonly
                                             class="w-[10rem] h-[2.6rem] pl-[0.7rem] rounded-sm border-solid border border-black text-justify">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
@@ -1683,11 +1853,13 @@ const tableDetails = ref(false);
 const addItem = () => {
     tableDetails.value = true;
     console.log(selectedBrand.value)
-    if (selectedBrand.value && selectedVariant.value && quantity.value) {
+    if (selectedBrand.value && selectedVariant.value && quantity.value && type.value && pattern.value) {
         items.value.push({
             brand: selectedBrand.value,
             variants: selectedVariant.value,
-            quantity: quantity.value
+            quantity: quantity.value,
+            type: type.value,
+            pattern: pattern.value
         });
     }
 };
@@ -1733,6 +1905,9 @@ const rs = ref([])
 const sizes = ref([])
 const patterns = ref([])
 const types = ref([])
+const Warehouse =ref([])
+const vBrand = ref([])
+const vModel = ref([])
 const BaseURL = window.location.origin
 
 onMounted(() => {
@@ -1741,6 +1916,32 @@ onMounted(() => {
             brand.value = response.data.message;
         })
 });
+
+onMounted(()=>{
+    axios.get(`${BaseURL}/api/method/tyre.api.get_warehouse`,{headers: headers})
+    .then(response =>{
+        Warehouse.value= response.data.message
+        console.log(Warehouse.value)
+    })
+})
+
+onMounted(()=>{
+    axios.get(`${BaseURL}/api/method/tyre.api.get_vehicleBrand`,{headers:headers})
+    .then(response => {
+        vBrand.value=response.data.message
+        console.log(vBrand.value)
+    })
+})
+
+
+const get_Vmodel = (data)=>{
+    axios.post(`${BaseURL}/api/method/tyre.api.get_vehicleModel`, { model: data }, { headers: headers })
+        .then(response => {
+            console.log(response.data.message)
+            vModel.value=response.data.message
+            console.log(vModel.value)
+        })
+}
 
 const getSize = (data, index) => {
     axios.post(`${BaseURL}/api/method/tyre.api.get_size`, { brand: data }, { headers: headers })
@@ -1913,12 +2114,13 @@ const search = async () => {
     }
 };
 
+const searchJobCard = ref('')
 const hide = ref('false');
-const jobCardDetails = ref([]);
+const jobCardDetails = reactive(ref([]));
 const getJobCard = async () => {
     hide.value = true;
     try {
-        const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_jobcard_details`, { headers: headers });
+        const response = await axios.post(`${BaseURL}/api/method/tyre.api.get_jobcard_details`, { searchJobCard: searchJobCard.value }, { headers: headers });
         jobCardDetails.value = response.data.message;
         console.log(jobCardDetails.value);
     }
@@ -1927,18 +2129,51 @@ const getJobCard = async () => {
     }
 }
 
+const searchEnquiry = ref('');
 const hideEnq = ref('false');
-const enquiryDetails = ref([]);
+const enquiryDetails = reactive(ref([]));
 const getEnquiry = async () => {
     hideEnq.value = true;
     try {
-        const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_enquiry_details`, { headers: headers });
+        const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_enquiry_details`, {
+            params: {
+                data: searchEnquiry.value
+            },
+            headers: headers
+        });
         enquiryDetails.value = response.data.message;
         console.log(response.data.message);
     } catch (e) {
         console.error("Error:", e);
     }
 }
+
+const jobCardPopup = ref('false');
+const jobCardData = ref([]);
+const fetchJobCard = async (id) => {
+    try {
+        const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_billing_details`, {
+            params: {
+                name: id
+            },
+            headers: headers
+        });
+        jobCardPopup.value = 'true'
+        jobCardData.value = response.data.message;
+        console.log(jobCardData.value);
+    }
+    catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+watch(searchJobCard, () => {
+    getJobCard();
+});
+
+watch(searchEnquiry, () => {
+    getEnquiry();
+});
 
 const currentPage = ref('details');
 // const currentstep = ref(0);
@@ -2254,36 +2489,34 @@ const employees = ref([{
     primary: ref(primaryValue),
 }]);
 const setPrimary = () => {
-    let sample_driver = 0;
-    let sample_customer = 0;
-    console.log(employees)
-    
-    customerData.value.employees.forEach((employee) => {
-        if (employee.type === 'current_driver') {
-            sample_driver += 1;
-        } else if (employee.type === 'contact_person') {
-            sample_customer += 1;
+    let firstDriverIndex = -1;
+    let firstContactPersonIndex = -1;
+
+    // Find the index of the first driver and contact person
+    customerData.value.employees.forEach((employee, index) => {
+        if (employee.type === 'current_driver' && firstDriverIndex === -1) {
+            firstDriverIndex = index;
+        } else if (employee.type === 'contact_person' && firstContactPersonIndex === -1) {
+            firstContactPersonIndex = index;
         }
     });
-    console.log(sample_driver);
-    if (sample_driver > 0) {
-        if(sample_driver == 1){
-            primaryValue.value = true;
-        }
-        else{
-            primaryValue.value = false;
-        }
-    } 
-    else if(sample_customer > 0){
-        if(sample_customer == 1){
-            primaryValue.value = true;
-        }
-        else{
-            primaryValue.value = false;
-        }
+
+    // Check the checkbox for the first driver and contact person
+    if (firstDriverIndex !== -1) {
+        customerData.value.employees[firstDriverIndex].primary = true;
+        console.log(`Primary checkbox set for the first driver at index ${firstDriverIndex}`);
+    } else {
+        console.log(`No driver found.`);
     }
-    console.log(primaryValue.value);    
-}
+
+    if (firstContactPersonIndex !== -1) {
+        customerData.value.employees[firstContactPersonIndex].primary = true;
+        console.log(`Primary checkbox set for the first contact person at index ${firstContactPersonIndex}`);
+    } else {
+        console.log(`No contact person found.`);
+    }
+};
+
 
 function moreEmployee() {
     employees.value.push({
@@ -2312,14 +2545,28 @@ const modifiedMoreEmployee = async (type) => {
             console.log("cbdsicbewcbdcnwdocn:", newEmployee.whatsapp);
             newEmployee.call = responseData.value.message[1].current_driver[lastDriverIndex]?.call;
             newEmployee.sms = responseData.value.message[1].current_driver[lastDriverIndex]?.sms;
-            responseData.value.message[1].current_driver.push(newEmployee);
+            if(newEmployee.whatsapp || newEmployee.call || newEmployee.sms){
+                newEmployee.whatsapp=0;
+                newEmployee.call=0;
+                newEmployee.sms=0;
+                responseData.value.message[1].current_driver.push(newEmployee);
+            }else{
+                responseData.value.message[1].current_driver.push(newEmployee);
+            }
         } else if (type === 'contact_person') {
             const lastContactIndex = responseData.value.message[1].contact_person.length - 1;
             newEmployee.custom_whatsapp = responseData.value.message[1].contact_person[lastContactIndex]?.custom_whatsapp;
             console.log(newEmployee.custom_whatsapp)
             newEmployee.custom_call = responseData.value.message[1].contact_person[lastContactIndex]?.custom_call;
             newEmployee.custom_sms = responseData.value.message[1].contact_person[lastContactIndex]?.custom_sms;
-            responseData.value.message[1].contact_person.push(newEmployee);
+            if(newEmployee.custom_whatsapp || newEmployee.custom_call || newEmployee.custom_sms){
+                newEmployee.custom_whatsapp = 0;
+                newEmployee.custom_call = 0;
+                newEmployee.custom_sms = 0;
+                responseData.value.message[1].contact_person.push(newEmployee);
+            }else{
+                responseData.value.message[1].contact_person.push(newEmployee);
+            }
         } else {
             console.error('Invalid employee type:', type);
             return;
@@ -2570,6 +2817,8 @@ const handle = ref(false);
 const selectedVariant = ref(null);
 const selectedBrand = ref(null);
 const quantity = ref('');
+const type = ref('');
+const pattern = ref('');
 const serviceDetails = ref({
     alignment: 0,
     oil_change: 0,
@@ -2592,6 +2841,8 @@ const handleCustomer = async () => {
     newCustomerSave.value = true;
 }
 
+const popItems = ref([]);
+const billPopup = ref('false');
 const confirmCustomerSave = async () => {
     showConfirmation.value = false;
     newCustomerSave.value = false;
@@ -2610,6 +2861,21 @@ if (boolDetails.state == 1){
     }
     try {
         const response = await axios.post(`${BaseURL}/api/method/tyre.api.lead`, customerDetails, { headers: headers })
+        popItems.value = response.data.message;
+
+        customerData.value.current_owner = '';
+        customerData.value.owner_mobile_no = '';
+        customerData.value.whatsappChecked = false;
+        customerData.value.callChecked = false;
+        customerData.value.smsChecked = false;
+        items.value = [];
+        serviceDetails.value = [];
+        selectedBrand.value = '';
+        selectedVariant.value = '';
+        quantity.value = '';
+        type.value = '';
+        pattern.value = '';
+        billPopup.value = 'true';
 
     } catch (error) {
         console.log("Temporary customer details page:", error)
@@ -2766,7 +3032,7 @@ const removeEmployee2 = (index) => {
     }
     console.log(data);
     if(data){
-        axios.post(`${BaseURL}/api/method/tyre.api.delete_modifide_customes`,{data:data},{headers:headers});
+        axios.post(`${BaseURL}/api/method/tyre.api.delete_modified_customers`,{data:data},{headers:headers});
         responseData.value.message[1].current_driver.splice(index, 1);
     }else{
             console.log(error);
@@ -2775,11 +3041,24 @@ const removeEmployee2 = (index) => {
     // }
 };
 const removeEmployee3 = (index) => {
-    responseData.value.message[1].contact_person.splice(index, 1);
+    const data = {
+        "contact_person_name":responseData.value.message[1].contact_person[index].contact_person_name,
+        "parentfield":responseData.value.message[1].contact_person[index].parentfield,
+        "contact_person_mobile":responseData.value.message[1].contact_person[index].contact_person_mobile,
+        "name":responseData.value.message[1].contact_person[index].parent
+    }
+    console.log(data);
+    if(data){
+        axios.post(`${BaseURL}/api/method/tyre.api.delete_modified_customers`,{data:data},{headers:headers});
+        responseData.value.message[1].contact_person.splice(index, 1);
+    }else{
+            console.log(error);
+    }
 };
 const removeEmployee1 = (index) => {
     if (sample22.value != 0){
         employees.value.splice(index, 1);
+        setPrimary();
     }
 };
 
