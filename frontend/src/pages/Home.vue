@@ -146,85 +146,44 @@
                                                     Size
                                                 </th>
                                                 <th scope="col" class="px-6 py-3">
-                                                    Quantity
-                                                </th>
-                                                <th scope="col" class="px-6 py-3">
                                                     Type
                                                 </th>
                                                 <th scope="col" class="px-6 py-3">
                                                     Pattern
                                                 </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                                                v-for="(item, index) in items" :key="index">
-                                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                                    scope="row">{{ item.brand }}</td>
-                                                <td class="px-6 py-4">{{ item.size }}</td>
-                                                <td class="px-6 py-4">{{ item.quantity }}</td>
-                                                <td class="px-6 py-4">{{ item.quantity }}</td>
-                                                <td class="px-6 py-4">{{ item.type }}</td>
-                                                <td class="px-6 py-4">{{ item.pattern }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </a>
-                        </div>
-                        <div v-if="jobCardPopup == 'true'"
-                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
-                            <a href="#"
-                                class="block max-w-[70rem] p-10 pt-5 bg-white border border-gray-200 rounded-lg shadow">
-                                <div class="grid grid-cols-2">
-                                    <div>
-                                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-black">
-                                            Price Details</h5>
-                                    </div>
-                                    <div class="flex justify-end">
-                                        <button @click="jobCardPopup = 'false'">
-                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                fill="none" viewBox="0 0 14 14">
-                                                <path stroke="currentColor" stroke-linecap="round"
-                                                    stroke-linejoin="round" stroke-width="2"
-                                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="relative overflow-x-auto">
-                                    <table
-                                        class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                        <thead
-                                            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                            <tr>
                                                 <th scope="col" class="px-6 py-3">
-                                                    Brand
-                                                </th>
-                                                <th scope="col" class="px-6 py-3">
-                                                    Size
+                                                    Rate
                                                 </th>
                                                 <th scope="col" class="px-6 py-3">
                                                     Quantity
                                                 </th>
                                                 <th scope="col" class="px-6 py-3">
-                                                    Type
-                                                </th>
-                                                <th scope="col" class="px-6 py-3">
-                                                    Pattern
+                                                    Amount
                                                 </th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                                                v-for="(item, index) in items" :key="index">
-                                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                                v-for="(item, index) in popItems.lead_item" :key="index">
+                                                <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                                                     scope="row">{{ item.brand }}</td>
-                                                <td class="px-6 py-4">{{ item.size }}</td>
-                                                <td class="px-6 py-4">{{ item.quantity }}</td>
-                                                <td class="px-6 py-4">{{ item.quantity }}</td>
-                                                <td class="px-6 py-4">{{ item.type }}</td>
-                                                <td class="px-6 py-4">{{ item.pattern }}</td>
+                                                <td class="px-6 py-3">{{ item.size }}</td>
+                                                <td class="px-6 py-3">{{ item.tyre_type }}</td>
+                                                <td class="px-6 py-3">{{ item.pattern }}</td>
+                                                <td class="px-6 py-3">{{ item.rate }}</td>
+                                                <td class="px-6 py-3">{{ item.quantity }}</td>
+                                                <td class="px-6 py-3">{{ item.amount }}</td>
+                                            </tr>
+                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td
+                                                    class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    Total Amount</td>
+                                                <td class="px-6 py-3">{{ popItems.total_amount }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -394,7 +353,7 @@
                                                 <label>Driver Name&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">
                                                     {{ responseData &&
-                responseData.message && responseData.message[2][0]?.full_name || 
+                responseData.message && responseData.message[2][0]?.full_name ||
                 'No data' }}
                                                 </label>
                                                 <br>
@@ -529,11 +488,12 @@
                                 <div>
                                     <Input type="number" placeholder="search ..." v-if="hideEnq != 'false'"
                                         v-model="searchEnquiry" @input="getEnquiry" class="mt-9 mb-2 -ml-14.5 p-4" />
-                                    <Input placeholder="Vehicle Search ..." v-if="hide != 'false'"
-                                        v-model="searchJobCard" @input="getJobCard" class="mt-9 mb-2 -ml-14.5 p-4" />
+                                    <Input placeholder="Vehicle Search ..."
+                                        v-if="hide != 'false' && jobCardPopup == 'false'" v-model="searchJobCard"
+                                        @input="getJobCard" class="mt-9 mb-2 -ml-14.5 p-4" />
                                 </div>
                             </div>
-                            <div>
+                            <div v-if="jobCardPopup == 'false'">
                                 <div class="relative overflow-x-auto flex justify-center" v-if="hide != 'false'">
                                     <table
                                         class="w-[75rem] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -582,6 +542,72 @@
                                     </table>
                                 </div>
                             </div>
+                            <div v-if="jobCardPopup == 'true'" class="relative overflow-x-auto flex justify-center">
+                                <a href="#"
+                                    class="block max-w-[70rem] p-10 pt-5 bg-white border border-gray-200 rounded-lg shadow">
+                                    <div class="grid grid-cols-2">
+                                        <div>
+                                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-black">
+                                                Details</h5>
+                                        </div>
+                                        <div class="flex justify-end">
+                                            <button @click="jobCardPopup = 'false'">
+                                                <svg class="w-3 h-3" aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                    <path stroke="currentColor" stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke-width="2"
+                                                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="relative overflow-x-auto">
+                                        <table
+                                            class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                            <thead
+                                                class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                                <tr>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Item Code
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Warehouse
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Quantity
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Rate
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Amount
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                                                    v-for="(item, index) in jobCardData.billing_details" :key="index">
+                                                    <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                                        scope="row">{{ item.item_code }}</td>
+                                                    <td class="px-6 py-3">{{ item.warehouse }}</td>
+                                                    <td class="px-6 py-3">{{ item.quantity }}</td>
+                                                    <td class="px-6 py-3">{{ item.rate }}</td>
+                                                    <td class="px-6 py-3">{{ item.amount }}</td>
+                                                </tr>
+                                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td
+                                                        class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Total Amount</td>
+                                                    <td class="px-6 py-3">{{ jobCardData.total_amount }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </a>
+                            </div>
                             <div>
                                 <div class="relative overflow-x-auto flex justify-center" v-if="hideEnq != 'false'">
                                     <div>
@@ -626,7 +652,7 @@
                                         alt="No data" class="w-[25%]" @click="showMessage(`Nothing to Show ! 😄`)">
                                 </div>
                             </div>
-                            <div class="flex justify-center m-5" v-if="hide == 'false'">
+                            <div class="flex justify-center m-5" v-if="hide == 'false' && hideEnq == 'false'">
                                 <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
                                     @click="addVehicle">
                                     Add Vehicle
@@ -660,19 +686,20 @@
                                             v-model="vehicleData.name" placeholder="Enter Vehicle Number">
                                     </p>
                                     <p class="m-2">Vehicle Brand <span class="text-red-500 font-bold">*</span><br>
-                                        <select class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                            v-model="vehicleData.vehicle_brand" @change="get_Vmodel(vehicleData.vehicle_brand)"
-                                            style="overflow-y: auto;">
+                                        <select
+                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            v-model="vehicleData.vehicle_brand"
+                                            @change="get_Vmodel(vehicleData.vehicle_brand)" style="overflow-y: auto;">
                                             <!-- Loop through vBrand and create an option for each brand -->
                                             <option value="" disabled selected>Select brand...</option>
                                             <option v-for="brand in vBrand" :key="brand">{{ brand.name }}</option>
                                         </select>
-  
+
                                     </p>
                                     <p class="m-2">Vehicle Model <span class="text-red-500 font-bold">*</span><br>
-                                            <select class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                            v-model="vehicleData.vehicle_model"
-                                            style="overflow-y: auto;">
+                                        <select
+                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            v-model="vehicleData.vehicle_model" style="overflow-y: auto;">
                                             <!-- Loop through vBrand and create an option for each brand -->
                                             <option value="" disabled selected>Select model...</option>
                                             <option v-for="model in vModel" :key="model">{{ model.model }}</option>
@@ -833,33 +860,43 @@
                                             placeholder="Enter Vehicle Number">
                                     </p>
                                     <p class="m-2">Customer Name <span class="text-red-500 font-bold">*</span><br>
-                                        <input type="text" v-model="leadDetails.lead_name" v-if="boolDetails.state == 1" :readonly="boolDetails.state == 1" 
-                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black" 
+                                        <input type="text" v-model="leadDetails.lead_name" v-if="boolDetails.state == 1"
+                                            :readonly="boolDetails.state == 1"
+                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Customer Name">
-                                        <input type="text" v-model="customerData.current_owner" v-if="boolDetails.state == 0"
+                                        <input type="text" v-model="customerData.current_owner"
+                                            v-if="boolDetails.state == 0"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Name">
                                     </p>
                                     <p class="m-2">Customer Mobile No <span class="text-red-500 font-bold">*</span><br>
-                                        <input type="tel" v-model="leadDetails.mobile_no" v-if="boolDetails.state == 1" :readonly="boolDetails.state == 1"
+                                        <input type="tel" v-model="leadDetails.mobile_no" v-if="boolDetails.state == 1"
+                                            :readonly="boolDetails.state == 1"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Customer Mobile No.">
-                                        <input type="tel" v-model="customerData.owner_mobile_no" v-if="boolDetails.state == 0"
+                                        <input type="tel" v-model="customerData.owner_mobile_no"
+                                            v-if="boolDetails.state == 0"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Mobile No.">
                                     </p>
-                                    <input type="checkbox" v-model="customerData.whatsappChecked" :checked="leadDetails.custom_whatsapp == '1'" :disabled="boolDetails.state == 1"
+                                    <input type="checkbox" v-model="customerData.whatsappChecked"
+                                        :checked="leadDetails.custom_whatsapp == '1'" :disabled="boolDetails.state == 1"
                                         class="bg-gray-300 rounded-sm">&nbsp;&nbsp; <label>WhatsApp</label>
                                     <span class="ml-5">
-                                        <input type="checkbox" v-model="customerData.callChecked" :checked="leadDetails.custom_whatsapp == '1'" :disabled="boolDetails.state == 1"
+                                        <input type="checkbox" v-model="customerData.callChecked"
+                                            :checked="leadDetails.custom_whatsapp == '1'"
+                                            :disabled="boolDetails.state == 1"
                                             class="bg-gray-300 rounded-sm">&nbsp;&nbsp;<label>call</label>
                                     </span>
                                     <span class="ml-5">
-                                        <input type="checkbox" v-model="customerData.smsChecked" :checked="leadDetails.custom_whatsapp == '1'" :disabled="boolDetails.state == 1"
+                                        <input type="checkbox" v-model="customerData.smsChecked"
+                                            :checked="leadDetails.custom_whatsapp == '1'"
+                                            :disabled="boolDetails.state == 1"
                                             class="bg-gray-300 rounded-sm">&nbsp;&nbsp;<label>SMS</label>
                                     </span>
                                     <div v-if="!handle">
-                                        <div v-for="(employee, index) in employees" :key="index" class="mt-2"><div v-show="false">{{sample22 = index}}</div>
+                                        <div v-for="(employee, index) in employees" :key="index" class="mt-2">
+                                            <div v-show="false">{{ sample22 = index }}</div>
                                             <hr class="dark-hr m-4">
                                             <button
                                                 class="bg-blue-500 w-[100px] text-white font-bold  text-base p-4 rounded-lg mb-1 float-right"
@@ -1003,7 +1040,8 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr v-for="(item,index) in leadDetails.custom_lead_items" :key="index">
+                                                    <tr v-for="(item, index) in leadDetails.custom_lead_items"
+                                                        :key="index">
                                                         <td>{{ item.brand }}</td>
                                                         <td>{{ item.size }}</td>
                                                         <td>{{ item.quantity }}</td>
@@ -1018,56 +1056,82 @@
                                         <hr class="dark-hr">
                                         <div class="grid grid-cols-3 mt-5">
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.alignment" :checked = "leadDetails.custom_alignment == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Alignment</label>
+                                                <input type="checkbox" v-model="serviceDetails.alignment"
+                                                    :checked="leadDetails.custom_alignment == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Alignment</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.rotation" :checked = "leadDetails.custom_rotation == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Rotation</label>
+                                                <input type="checkbox" v-model="serviceDetails.rotation"
+                                                    :checked="leadDetails.custom_rotation == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Rotation</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.oil_change" :checked = "leadDetails.custom_oil_change == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Oil Change</label>
+                                                <input type="checkbox" v-model="serviceDetails.oil_change"
+                                                    :checked="leadDetails.custom_oil_change == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Oil Change</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.balancing" :checked = "leadDetails.custom_balancing == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Balancing</label>
+                                                <input type="checkbox" v-model="serviceDetails.balancing"
+                                                    :checked="leadDetails.custom_balancing == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Balancing</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.inflation" :checked = "leadDetails.custom_inflation == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Inflation</label>
+                                                <input type="checkbox" v-model="serviceDetails.inflation"
+                                                    :checked="leadDetails.custom_inflation == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Inflation</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.puncture" :checked = "leadDetails.custom_puncture == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Puncture</label>
+                                                <input type="checkbox" v-model="serviceDetails.puncture"
+                                                    :checked="leadDetails.custom_puncture == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Puncture</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.tyre_edge" :checked = "leadDetails.custom_tyre_edge == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Tyre Edge</label>
+                                                <input type="checkbox" v-model="serviceDetails.tyre_edge"
+                                                    :checked="leadDetails.custom_tyre_edge == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Tyre Edge</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.tyre_patch" :checked = "leadDetails.custom_tyre_edge == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Tyre Patch</label>
+                                                <input type="checkbox" v-model="serviceDetails.tyre_patch"
+                                                    :checked="leadDetails.custom_tyre_edge == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Tyre Patch</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.mushroom_patch" :checked = "leadDetails.custom_mushroom_patch == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Mushroom Patch</label>
+                                                <input type="checkbox" v-model="serviceDetails.mushroom_patch"
+                                                    :checked="leadDetails.custom_mushroom_patch == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Mushroom Patch</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.ac_service" :checked = "leadDetails.custom_ac_service == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>AC Service</label>
+                                                <input type="checkbox" v-model="serviceDetails.ac_service"
+                                                    :checked="leadDetails.custom_ac_service == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>AC Service</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.battery" :checked = "leadDetails.custom_battery == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Battery</label>
+                                                <input type="checkbox" v-model="serviceDetails.battery"
+                                                    :checked="leadDetails.custom_battery == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Battery</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.wiper" :checked = "leadDetails.custom_wiper == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Wiper</label>
+                                                <input type="checkbox" v-model="serviceDetails.wiper"
+                                                    :checked="leadDetails.custom_wiper == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Wiper</label>
                                             </div>
                                             <div>
-                                                <input type="checkbox" v-model="serviceDetails.car_wash" :checked = "leadDetails.custom_car_wash == '1'" :disabled="boolDetails.state == 1"
-                                                    class="bg-gray-300 rounded-sm"> <label>Car Wash</label>
+                                                <input type="checkbox" v-model="serviceDetails.car_wash"
+                                                    :checked="leadDetails.custom_car_wash == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
+                                                <label>Car Wash</label>
                                             </div>
                                         </div>
                                         <div>
@@ -1713,23 +1777,25 @@
                                     <td class="border border-gray-800 px-4 py-2">
                                         <div style="max-height: 200px; overflow-y: auto;">
                                             <select v-model="data[billIndex].sourceWarehouse"
-                                                    class="w-[10rem] rounded-sm border-solid border border-black">
+                                                class="w-[10rem] rounded-sm border-solid border border-black">
                                                 <option value="">Select Warehouse</option>
                                                 <!-- Loop through warehouseList and create an option for each warehouse -->
-                                                <option v-for="warehouse in Warehouse" :key="warehouse" :value="warehouse">
+                                                <option v-for="warehouse in Warehouse" :key="warehouse"
+                                                    :value="warehouse">
                                                     {{ warehouse }}
                                                 </option>
                                             </select>
                                         </div>
                                     </td>
-                                    
+
                                     <td class="border border-gray-800 px-4 py-2">
                                         <input type="number" v-model="data[billIndex].requiredQuantity"
                                             @input="calculateTotals"
                                             class="w-[10rem] rounded-sm border-solid border border-black">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="float" v-model="data[billIndex].rate" @input="calculateTotals" readonly
+                                        <input type="float" v-model="data[billIndex].rate" @input="calculateTotals"
+                                            readonly
                                             class="w-[10rem] h-[2.6rem] pl-[0.7rem] rounded-sm border-solid border border-black text-justify">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
@@ -1839,7 +1905,7 @@ const data = reactive({
 const headers = {
     'Content-Type': 'application/json',
 
-    'Authorization': 'token 7fa0cf7915ad42d :2a784f5c29d213b'
+    'Authorization': 'token b89ae1f0409875e :af8a0b78d948ebf'
 
 }
 
@@ -1905,7 +1971,7 @@ const rs = ref([])
 const sizes = ref([])
 const patterns = ref([])
 const types = ref([])
-const Warehouse =ref([])
+const Warehouse = ref([])
 const vBrand = ref([])
 const vModel = ref([])
 const BaseURL = window.location.origin
@@ -1917,28 +1983,28 @@ onMounted(() => {
         })
 });
 
-onMounted(()=>{
-    axios.get(`${BaseURL}/api/method/tyre.api.get_warehouse`,{headers: headers})
-    .then(response =>{
-        Warehouse.value= response.data.message
-        console.log(Warehouse.value)
-    })
+onMounted(() => {
+    axios.get(`${BaseURL}/api/method/tyre.api.get_warehouse`, { headers: headers })
+        .then(response => {
+            Warehouse.value = response.data.message
+            console.log(Warehouse.value)
+        })
 })
 
-onMounted(()=>{
-    axios.get(`${BaseURL}/api/method/tyre.api.get_vehicleBrand`,{headers:headers})
-    .then(response => {
-        vBrand.value=response.data.message
-        console.log(vBrand.value)
-    })
+onMounted(() => {
+    axios.get(`${BaseURL}/api/method/tyre.api.get_vehicleBrand`, { headers: headers })
+        .then(response => {
+            vBrand.value = response.data.message
+            console.log(vBrand.value)
+        })
 })
 
 
-const get_Vmodel = (data)=>{
+const get_Vmodel = (data) => {
     axios.post(`${BaseURL}/api/method/tyre.api.get_vehicleModel`, { model: data }, { headers: headers })
         .then(response => {
             console.log(response.data.message)
-            vModel.value=response.data.message
+            vModel.value = response.data.message
             console.log(vModel.value)
         })
 }
@@ -2003,7 +2069,7 @@ const getItemCode = (brand, size, type, pattern, index) => {
             tyres.value[index].item = response.data.message[0]
             tyres.value[index].rate = response.data.message[1]
         });
-    
+
 }
 //==========================================================>>> Main Page <<<================================================================================//
 const hasResponse = ref(true);
@@ -2189,7 +2255,7 @@ function previousPage() {
 
 const showWarning = ref(false)
 const close = () => {
-    if(showWarning.value){
+    if (showWarning.value) {
         showWarning.value = false;
         showNewCustomer.value = true;
     }
@@ -2545,12 +2611,12 @@ const modifiedMoreEmployee = async (type) => {
             console.log("cbdsicbewcbdcnwdocn:", newEmployee.whatsapp);
             newEmployee.call = responseData.value.message[1].current_driver[lastDriverIndex]?.call;
             newEmployee.sms = responseData.value.message[1].current_driver[lastDriverIndex]?.sms;
-            if(newEmployee.whatsapp || newEmployee.call || newEmployee.sms){
-                newEmployee.whatsapp=0;
-                newEmployee.call=0;
-                newEmployee.sms=0;
+            if (newEmployee.whatsapp || newEmployee.call || newEmployee.sms) {
+                newEmployee.whatsapp = 0;
+                newEmployee.call = 0;
+                newEmployee.sms = 0;
                 responseData.value.message[1].current_driver.push(newEmployee);
-            }else{
+            } else {
                 responseData.value.message[1].current_driver.push(newEmployee);
             }
         } else if (type === 'contact_person') {
@@ -2559,12 +2625,12 @@ const modifiedMoreEmployee = async (type) => {
             console.log(newEmployee.custom_whatsapp)
             newEmployee.custom_call = responseData.value.message[1].contact_person[lastContactIndex]?.custom_call;
             newEmployee.custom_sms = responseData.value.message[1].contact_person[lastContactIndex]?.custom_sms;
-            if(newEmployee.custom_whatsapp || newEmployee.custom_call || newEmployee.custom_sms){
+            if (newEmployee.custom_whatsapp || newEmployee.custom_call || newEmployee.custom_sms) {
                 newEmployee.custom_whatsapp = 0;
                 newEmployee.custom_call = 0;
                 newEmployee.custom_sms = 0;
                 responseData.value.message[1].contact_person.push(newEmployee);
-            }else{
+            } else {
                 responseData.value.message[1].contact_person.push(newEmployee);
             }
         } else {
@@ -2787,7 +2853,7 @@ const addCustomerModifiedData = async () => {
 
     console.log('modify checking', modifiedData);
     try {
-        const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_customer_details`,{data:JSON.stringify(modifiedData)},{headers:headers});
+        const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_customer_details`, { data: JSON.stringify(modifiedData) }, { headers: headers });
         check.value = true;
         console.log(response);
         returnSearch(name)
@@ -2846,10 +2912,10 @@ const billPopup = ref('false');
 const confirmCustomerSave = async () => {
     showConfirmation.value = false;
     newCustomerSave.value = false;
-if (boolDetails.state == 1){
-    alert("Unable to edit")
-    return
-}
+    if (boolDetails.state == 1) {
+        alert("Unable to edit")
+        return
+    }
     const customerDetails = {
         current_owner: customerData.value.current_owner,
         owner_mobile_no: customerData.value.owner_mobile_no,
@@ -2862,6 +2928,7 @@ if (boolDetails.state == 1){
     try {
         const response = await axios.post(`${BaseURL}/api/method/tyre.api.lead`, customerDetails, { headers: headers })
         popItems.value = response.data.message;
+        console.log(popItems.value);
 
         customerData.value.current_owner = '';
         customerData.value.owner_mobile_no = '';
@@ -2941,7 +3008,7 @@ const returnSearch = async (search) => {
     try {
         if (data.license_plate.trim() !== "") {
             console.log("**&**")
-            const response = await axios.post(`${BaseURL}/api/method/tyre.api.get_details`,{license_plate:JSON.stringify(data.license_plate)},{headers:headers});
+            const response = await axios.post(`${BaseURL}/api/method/tyre.api.get_details`, { license_plate: JSON.stringify(data.license_plate) }, { headers: headers });
             check.value = true;
             console.log('returnSearch data', response);
             if (response.data.message === "") {
@@ -3019,44 +3086,44 @@ const returnSearch = async (search) => {
 const removeCustomerData = () => {
     Object.keys(customerData.value).forEach(key => {
         customerData.value[key] = '';
-    }); 
+    });
     employees.value = [{ name: '', type: '' }];
 }
 
 const removeEmployee2 = (index) => {
     const data = {
-        "current_driver":responseData.value.message[1].current_driver[index].current_driver,
-        "parentfield":responseData.value.message[1].current_driver[index].parentfield,
-        "mobile_no":responseData.value.message[1].current_driver[index].mobile_no,
-        "name":responseData.value.message[1].current_driver[index].parent
+        "current_driver": responseData.value.message[1].current_driver[index].current_driver,
+        "parentfield": responseData.value.message[1].current_driver[index].parentfield,
+        "mobile_no": responseData.value.message[1].current_driver[index].mobile_no,
+        "name": responseData.value.message[1].current_driver[index].parent
     }
     console.log(data);
-    if(data){
-        axios.post(`${BaseURL}/api/method/tyre.api.delete_modified_customers`,{data:data},{headers:headers});
+    if (data) {
+        axios.post(`${BaseURL}/api/method/tyre.api.delete_modified_customers`, { data: data }, { headers: headers });
         responseData.value.message[1].current_driver.splice(index, 1);
-    }else{
-            console.log(error);
+    } else {
+        console.log(error);
     }
     // catch(error){
     // }
 };
 const removeEmployee3 = (index) => {
     const data = {
-        "contact_person_name":responseData.value.message[1].contact_person[index].contact_person_name,
-        "parentfield":responseData.value.message[1].contact_person[index].parentfield,
-        "contact_person_mobile":responseData.value.message[1].contact_person[index].contact_person_mobile,
-        "name":responseData.value.message[1].contact_person[index].parent
+        "contact_person_name": responseData.value.message[1].contact_person[index].contact_person_name,
+        "parentfield": responseData.value.message[1].contact_person[index].parentfield,
+        "contact_person_mobile": responseData.value.message[1].contact_person[index].contact_person_mobile,
+        "name": responseData.value.message[1].contact_person[index].parent
     }
     console.log(data);
-    if(data){
-        axios.post(`${BaseURL}/api/method/tyre.api.delete_modified_customers`,{data:data},{headers:headers});
+    if (data) {
+        axios.post(`${BaseURL}/api/method/tyre.api.delete_modified_customers`, { data: data }, { headers: headers });
         responseData.value.message[1].contact_person.splice(index, 1);
-    }else{
-            console.log(error);
+    } else {
+        console.log(error);
     }
 };
 const removeEmployee1 = (index) => {
-    if (sample22.value != 0){
+    if (sample22.value != 0) {
         employees.value.splice(index, 1);
         setPrimary();
     }
@@ -3335,7 +3402,7 @@ const tyres = ref([{
     size: '',
     ttTl: '',
     item: '',
-    rate:'',
+    rate: '',
     mandatory: false,
     status: false
 }]);
@@ -3361,7 +3428,7 @@ const addTyreReplacement = () => {
             size: '',
             ttTl: '',
             item: '',
-            rate:'',
+            rate: '',
             status: false
         })
         setValue.index++;
@@ -3394,7 +3461,7 @@ function addValue(data, replace) {
                 // Check if tableData.value[billIndex] is an array
                 if (Array.isArray(tableData.value)) {
                     console.log(tableData.value);
-                    name:for (let index = 0; index < tableData.value.length; index++) {
+                    name: for (let index = 0; index < tableData.value.length; index++) {
                         const rowData = tableData.value[index];
                         console.log(rowData);
                         console.log("*****");
