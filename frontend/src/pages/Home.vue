@@ -2173,6 +2173,8 @@ const dataAssignment = (response) => {
 }
 const check = ref(false)
 const wrongSearchValue = ref(false);
+const enable = ref(false)
+
 const search = async () => {
     const data = {
         "license_plate": searchQuery.value
@@ -2223,7 +2225,6 @@ const search = async () => {
                 hasResponse.value = false;
                 initial.value = false;
                 afterResponse.value = true;
-                initial.value = false
                 initialNext.value = true
                 searchQuery.value = ''
                 console.log("Response:", response.data);
@@ -2537,7 +2538,6 @@ const addVehicleData = async () => {
     }
 };
 
-const enable = ref(false);
 const confirmSave = async () => {
     console.log('confirm page');
     showConfirmation.value = false;
