@@ -126,9 +126,11 @@
                         class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
                         <div class="bg-white rounded-lg p-8 shadow-xl">
                             <p class="mb-4" v-if="vehicleNumber">Please fill the required fields</p>
+                            <p class="mb-4" v-if="searchValue">Please fill the search value!</p>
+                            <p class="mb-4 text-red-500" v-if="wrongSearchValue">Enter valid Vehicle Number!</p>
                             <p class="mb-4" v-if="vehicleExist">Vehicle already exists</p>
-                            <p class="mb-4" v-if="successData">Details added successfully</p>
-                            <p class="mb-4" v-if="modifyAlert">Successfully modified vehicle data</p>
+                            <p class="mb-4 text-green-500" v-if="successData">Details added successfully</p>
+                            <p class="mb-4 text-green-500" v-if="modifyAlert">Successfully modified vehicle data</p>
                             <p class="mb-4" v-if="notVehicleAlert">Vehicle not exists</p>
                             <p class="mb-4" v-if="noVehicleNumber">Enter vehicle number</p>
                             <p class="mb-4" v-if="noValidVehicleNumber">Enter valid vehicle number</p>
@@ -136,12 +138,28 @@
                             <p class="mb-4" v-if="notCustomerAlert">Please fill the Customer details</p>
                             <p class="mb-4" v-if="notEmployeeAlert">Please add atleast one Employee</p>
                             <p class="mb-4" v-if="notEmpDetailAlert">Please fill required Employee details</p>
+                            <p class="mb-4 text-green-500" v-if="deleteConfirmation">Vehicle details deleted successfully!</p>
+                            <p class="mb-4 text-red-500 font-bold" v-if="cannotSave">! It's a search details. Can't save..</p>
+                            <p class="mb-4 text-red-500 font-bold" v-if="customerExist">! Customer already added to this vehicle..</p>
                             <div class="flex justify-center">
                                 <button @click="closed"
                                     v-if="vehicleNumber || vehicleExist || notCustomerAlert || notEmployeeAlert || notEmpDetailAlert || notVehicleAlert || noVehicleNumber || noValidVehicleNumber || noCustomerValidVehicleNumber"
                                     class="bg-red-500 text-white font-semibold px-4 py-2 rounded mr-2">Ok</button>
-                                <button @click="close" v-if="successData || modifyAlert"
+                                <button @click="close" v-if="successData || modifyAlert || searchValue"
                                     class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Ok</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="showDeleteConfirmation"
+                        class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                        <div class="bg-white rounded-lg p-8 shadow-xl">
+                            <h2 class="text-xl font-semibold mb-4">Confirm Delete</h2>
+                            <p class="mb-4">Are you sure want to delete the details?</p>
+                            <div class="flex justify-center">
+                                <button @click="confirmDelete(responseData && responseData.message && responseData.message[0]?.name)"
+                                    class="bg-red-500 text-white font-semibold px-4 py-2 rounded mr-2">Delete</button>
+                            <button @click="cancelDelete"
+                                    class="bg-gray-500 text-white font-semibold px-4 py-2 rounded">Cancel</button>
                             </div>
                         </div>
                     </div>
@@ -377,6 +395,9 @@
                                     </div>
                                 </div>
                             </Card>
+                            <div class="mt-3">
+                                <button class="bg-red-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3" @click="deleteVehicle">Delete</button>
+                            </div>
                         </div>
                         <div v-if="hasResponse && initial">
                             <div class="flex">
@@ -569,7 +590,7 @@
                                     </p>
                                     <div class="m-3 mt-4 flex flex-row space-x-[70px]">
                                         <button class="bg-green-500 w-[100px] text-white font-bold 0 p-2 rounded"
-                                            @click="addVehicleData">Add</button>
+                                            @click="addVehicleData" @keyup.enter="addVehicleData">Add</button>
                                         <button class="bg-red-500 w-[100px] text-white font-bold ml-3 p-2 rounded"
                                             @click="clearVehicleData">Clear</button>
                                     </div>
@@ -692,7 +713,7 @@
                                         <input type="text" v-model="leadDetails.lead_name" v-if="boolDetails.state == 1"
                                             :readonly="boolDetails.state == 1"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                            placeholder="Enter Customer Name">
+                                            placeholder="Enter Name">
                                         <input type="text" v-model="customerData.current_owner"
                                             v-if="boolDetails.state == 0"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
@@ -702,7 +723,7 @@
                                         <input type="tel" v-model="leadDetails.mobile_no" v-if="boolDetails.state == 1"
                                             :readonly="boolDetails.state == 1"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                            placeholder="Enter Customer Mobile No.">
+                                            placeholder="Enter Mobile No.">
                                         <input type="tel" v-model="customerData.owner_mobile_no"
                                             v-if="boolDetails.state == 0"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
@@ -958,14 +979,14 @@
                                     <h2 class="text-2xl font-semibold mb-4">Customer Details</h2>
                                     <hr class="dark-hr">
                                     <p class="m-2">Vehicle Number <br>
-                                        <input type="text" v-if="check" v-model="responseData.message[1].name"
+                                        <input type="text" v-if="check" v-model="responseData.message[1].name" disabled
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                            placeholder="Enter your Vehicle Number">
+                                            placeholder="Enter Vehicle Number">
                                     </p>
                                     <p class="m-2">Owner Name <br>
                                         <input type="text" v-if="check" v-model="responseData.message[1].current_owner"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                            placeholder="Enter your Owner Name">
+                                            placeholder="Enter Owner Name">
                                     </p>
                                     <p class="m-2">Owner Mobile No <br>
                                         <input type="tel" v-if="check" v-model="responseData.message[1].owner_mobile_no"
@@ -1489,7 +1510,7 @@
                             </div>
                             <div class="ml-[100px]">
                                 <div>
-                                    <label :for="'brand' + index">Brand <span v-if="tyre.mandatory && !tyre.loadIndex.trim()" class="text-red-500 font-bold">*</span></label>
+                                    <label :for="'brand' + index">Brand<span v-if="tyre.mandatory && !tyre.brand.trim()" class="text-red-500 font-bold">*</span></label>
                                     <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                         v-model="tyre.brand" @change="getSize(tyre.brand, index)">
                                         <option v-for="(tyre, index) in brand" :key="index">{{ tyre }}</option>
@@ -1554,11 +1575,11 @@
                     class="fixed inset-1 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
                     <div class="bg-white rounded-lg p-8 shadow-xl">
                         <h2 class="text-xl font-semibold mb-4">Confirm Save</h2>
-                        <p class="mb-4">Are you sure you want to save the details?</p>
-                        <div class="flex justify-end">
+                        <p class="mb-4">Are you sure want to save the details?</p>
+                        <div class="flex justify-center">
                             <button @click="confirmDataSave"
                                 class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
-                            <button @click="cancelSave"
+                            <button @click="cancelSaved"
                                 class="bg-red-500 text-white font-semibold px-4 py-2 rounded">Cancel</button>
                         </div>
                     </div>
@@ -1841,8 +1862,9 @@ const getItemCode = (brand, size, type, pattern, index) => {
 const initial = ref(true);
 const initialNext = ref(false);
 const hasResponse = ref(true);
-const noData = ref(false)
-const successData = ref(false)
+const noData = ref(false);
+const successData = ref(false);
+const searchValue = ref(false);
 const showMessage = (message) => {
     alert(message);
 };
@@ -1928,6 +1950,7 @@ const search = async () => {
                 hasResponse.value = true;
                 initial.value = true;
                 initialNext.value = false
+                searchQuery.value = ''
                 setTimeout(() => {
                     noData.value = false;
                 }, 2000);
@@ -1944,6 +1967,7 @@ const search = async () => {
                 }, 2000);
                 hasResponse.value = true;
                 initial.value = true;
+                searchQuery.value = ''
             }
             else {
                 check.value = true;
@@ -1953,11 +1977,13 @@ const search = async () => {
                 afterResponse.value = true;
                 initial.value = false
                 initialNext.value = true
+                searchQuery.value = ''
                 console.log("Response:", response.data);
                 return dataAssignment(response)
             }
         } else {
-            alert("Please enter search value !");
+            showAlerts.value = true;
+            searchValue.value = true;
             console.log("Please enter search value");
         }
     } catch (error) {
@@ -2012,7 +2038,8 @@ const close = () => {
     }
     showAlerts.value = false;
     modifyAlert.value = false;
-    successData.value = false
+    successData.value = false;
+    searchValue.value = false;
 }
 const closed = () => {
     showAlerts.value = false;
@@ -2064,12 +2091,12 @@ function nextPageAndHighlight() {
                         console.log('hi')
                         if(tyre.comment == '' || tyre.depth == '' || tyre.pressure == ''){
                             tyre.mandatory = true;
-                            setTimeout(() => {
-                                tyre.mandatory = false
-                            }, 2000);
                             currentstep.value = 1;
                             return;
                         }
+                    }
+                    else{
+                        tyre.mandatory = false
                     }
                 }
                 console.log(jobCard)
@@ -2090,12 +2117,12 @@ function nextPageAndHighlight() {
                         console.log('hi')
                         if(tyre.loadIndex == '' || tyre.brand == '' || tyre.speedRating == '' || tyre.size == ''|| tyre.pattern == ''|| tyre.ttTl == ''){
                             tyre.mandatory = true;
-                            setTimeout(() => {
-                                tyre.mandatory = false
-                            }, 2000);
                             currentstep.value = 3;
                             return;
                         }
+                    }
+                    else{
+                        tyre.mandatory = false
                     }
                 }
                 console.log(jobCard)
@@ -2187,6 +2214,9 @@ const notEmpDetailAlert = ref(false)
 const noVehicleNumber = ref(false)
 const noValidVehicleNumber = ref(false)
 const noCustomerValidVehicleNumber = ref(false)
+const cannotSave = ref(false)
+const customerExist = ref(false)
+const showDeleteConfirmation = ref(false)
 
 const addVehicleData = async () => {
     const fieldNames = Object.keys(vehicleData.value);
@@ -2206,17 +2236,10 @@ const addVehicleData = async () => {
         showNewVehicle.value = false
         showAlerts.value = true
         vehicleNumber.value = true
-        // alert("Enter the vehicle number & required fields!");
         return;
     }
 
     console.log('vehicle number:', data.name);
-    // const vehicleValidate = await spacing(searchData);
-    // if (!vehicleValidate) {
-    //     alert("Please enter valid data");
-    //     return;
-    // }
-
     const isVehicleExist = await returnSearch(searchData);
     const checkingVehicleExist = isVehicleExist && isVehicleExist.message && isVehicleExist.message.length > 0 ? isVehicleExist.message == "Enter a Valid vehicle number" ? 'no data' : isVehicleExist.message[0].name : 'empty'
     console.log('is vehicle exist:', checkingVehicleExist);
@@ -2305,8 +2328,6 @@ const addModifiedData = async () => {
         showModifyVehicle.value = false;
         showAlerts.value = true;
         modifyAlert.value = true;
-        // alert("Successfully Modified Vehicle Data!")
-        // showModifyVehicle.value = false;
     } catch (error) {
         console.error(error);
     }
@@ -2483,7 +2504,6 @@ const addCustomerData = async () => {
                 dataAssignment(response)
                 showAlerts.value = true;
                 successData.value = true;
-                // alert("Successfully added customer data!")
                 removeCustomerData()
                 console.log("Customer data in responseData.value:", responseData.value.message[1].owner_mobile_no);
                 console.log("Customer data in responseData.value:", responseData.value.message[1].current_owner);
@@ -2511,7 +2531,15 @@ const addCustomerData = async () => {
         }
     }
     else {
-        alert("Customer already added to this vehicle!")
+        showNewCustomer.value = false;
+        showAlerts.value = true
+        customerExist.value = true
+        setTimeout(() => {
+            showAlerts.value = false
+            customerExist.value = false
+            showNewCustomer.value = true;
+            
+        }, 1000);
     }
 };
 
@@ -2550,7 +2578,6 @@ const addCustomerModifiedData = async () => {
             });
         }
         else {
-            alert("Enter Driver name!")
             return
         }
         i += 1;
@@ -2573,7 +2600,6 @@ const addCustomerModifiedData = async () => {
             });
         }
         else {
-            alert("Enter Contact Person name!")
             return
         }
         i += 1;
@@ -2589,8 +2615,6 @@ const addCustomerModifiedData = async () => {
         showModifyCustomer.value = false;
         showAlerts.value = true;
         modifyAlert.value = true;
-        // alert("Successfully Modified customer data!")
-
     } catch (error) {
         console.error("Error while processing request:", error.message);
     }
@@ -2629,9 +2653,30 @@ const serviceDetails = ref({
 })
 
 const handleCustomer = async () => {
-    showNewCustomer.value = false;
-    showConfirmation.value = true;
-    newCustomerSave.value = true;
+    if(!searchMobile.value){
+        showNewCustomer.value = false;
+        if (customerData.value.current_owner && customerData.value.owner_mobile_no) {
+            showConfirmation.value = true;
+            newCustomerSave.value = true;
+        }
+        else {
+            showWarning.value = true;
+            setTimeout(() => {
+                showWarning.value = false;
+                showNewCustomer.value = true;
+            }, 1000);
+        }
+    }
+    else{
+        showNewCustomer.value = false
+        showAlerts.value = true;
+        cannotSave.value = true;
+        setTimeout(() => {
+            showAlerts.value = false;
+            cannotSave.value = false;
+            showNewCustomer.value = true
+        }, 1000);
+    }
 }
 
 const confirmCustomerSave = async () => {
@@ -2651,17 +2696,12 @@ const confirmCustomerSave = async () => {
         services: serviceDetails.value
     }
     try {
-        if (customerDetails.current_owner && customerDetails.owner_mobile_no) {
             const json_data = { data: JSON.stringify(customerDetails) };
             console.log('checking customer details', json_data);
             const response = await axios.post(`${BaseURL}/api/method/tyre.api.lead`, { data: JSON.stringify(data) }, { headers: headers })
             showAlerts.value = true;
             successData.value = true;
             console.log('response from customer details', response.data);
-        }
-        else {
-            showWarning.value = true;
-        }
     } catch (error) {
         console.log("Temporary customer details page:", error)
     }
@@ -2673,16 +2713,28 @@ const boolDetails = reactive({
 });
 
 const handleSearch = async () => {
-    const response = await axios.get(`${BaseURL}/api/method/tyre.api.lead_details`, {
-        params: {
-            data: searchMobile.value
-        },
-        headers: headers
-    });
-    leadDetails.value = response.data.message;
-    boolDetails.state = 1;
-
-    console.log('lead details', leadDetails.value);
+    if(searchMobile.value){
+        const response = await axios.get(`${BaseURL}/api/method/tyre.api.lead_details`, {
+            params: {
+                data: searchMobile.value
+            },
+            headers: headers
+        });
+        leadDetails.value = response.data.message;
+        boolDetails.state = 1;
+    
+        console.log('lead details', leadDetails.value);
+    }
+    else{
+        showNewCustomer.value = false;
+        showAlerts.value = true;
+        searchValue.value = true;
+        setTimeout(() => {
+            showAlerts.value = false;
+            searchValue.value = false;
+            showNewCustomer.value = true;
+        }, 1000);
+    }
 }
 
 
@@ -2740,62 +2792,11 @@ const returnSearch = async (search) => {
             console.log('returnSearch data', response);
             if (response.data.message === "") {
                 console.log(response.data);
+                hasResponse.value = true;
+                initial.value = true;
+                check.value = false;
+                initialNext.value = false;
                 return
-                // responseData.value = {
-                //     message: [{
-                //         name: '',
-                //         vehicle_brand: '',
-                //         vehicle_model: '',
-                //         chassis_no: '',
-                //         fuel_type: '',
-                //         last_odometer_reading: '',
-                //         tyre_change: '',
-                //         alignment: ''
-                //     },
-                //     {
-                //         current_owner: '',
-                //         owner_mobile_no: '',
-                //         call: '',
-                //         whatsapp: '',
-                //         sms: '',
-                //         current_driver: [{
-                //             current_driver: '',
-                //             name: '',
-                //             mobile_no: '',
-                //             call: '',
-                //             whatsapp: '',
-                //             sms: ''
-
-                //         }],
-                //         contact_person: [{
-                //             contact_person_name: '',
-                //             contact_person_mobile: '',
-                //             custom_call: '',
-                //             custom_whatsapp: '',
-                //             custom_sms: ''
-                //         }]
-                //     },
-                //     {
-                //         current_driver: [{
-                //             current_driver: '',
-                //             name: '',
-                //             mobile_no: '',
-                //             call: '',
-                //             whatsapp: '',
-                //             sms: ''
-
-                //         }],
-                //         contact_person: [{
-                //             contact_person_name: '',
-                //             contact_person_mobile: '',
-                //             custom_call: '',
-                //             custom_whatsapp: '',
-                //             custom_sms: ''
-                //         }]
-                //     }
-                //     ]
-                // };
-                // return responseData.value;
             } else if (response.data.message === "Enter a Valid vehicle number") {
                 if(showNewVehicle.value){
                     showNewVehicle.value = false;
@@ -2841,6 +2842,38 @@ const removeEmployee3 = (index) => {
 const removeEmployee1 = (index) => {
     employees.value.splice(index, 1);
 };
+
+const deleteVehicle = () => {
+    showDeleteConfirmation.value = true;
+}
+const deleteConfirmation = ref(false);
+const confirmDelete = async (vehicle) =>{
+    const data = {
+        name:vehicle
+    };
+    console.log("Vehicle delete",data)
+    showDeleteConfirmation.value = false;
+    try {
+        const response = await axios.post(`${BaseURL}/api/method/tyre.api.delete_vehicle`, { data: JSON.stringify(data) }, { headers: headers })
+        console.log("delete response",response)
+        if(response.data.message == "deleted"){
+            showAlerts.value = true;
+            deleteConfirmation.value = true;
+            setTimeout(() => {
+                showAlerts.value = false;
+                deleteConfirmation.value = false;
+            }, 2000);
+            // alert("vehicle deleted successfully!")
+            returnSearch(vehicle)
+        }
+    } catch (error) {
+        console.log("Vehicle delete error:",error)
+    }
+}
+const cancelDelete = () => {
+    showDeleteConfirmation.value = false;
+    console.log("hi cancel")
+}
 
 
 //==========================================================>>> 5 point checkup <<<==========================================================================//
@@ -3356,6 +3389,9 @@ const confirmDataSave = () => {
     jobCard["bill"] = tableData.value
     console.log(jobCard)
     checkup(jobCard)
+}
+const cancelSaved = () => {
+    showConfirm.value = false;
 }
 </script>
 
