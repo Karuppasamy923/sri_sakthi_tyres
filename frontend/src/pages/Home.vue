@@ -3658,10 +3658,11 @@ const deleteTyreReplacement = (index) => {
     //   tyres.value.splice(index, 1)
 }
 
-let step = ref(0)
+let step = ref(0);
+
 function addValue(data, replace) {
     // Check if data is an array
-    console.log(data)
+    console.log(data);
     if (Array.isArray(data)) {
         console.log(replace.target);
         // Data is a list (array)
@@ -3670,71 +3671,37 @@ function addValue(data, replace) {
                 console.log(item);
                 console.log(item.item);
 
-                // Initialize existingItemIndex to -1
                 let existingItemIndex = -1;
 
                 // Check if tableData.value[billIndex] is an array
                 if (Array.isArray(tableData.value)) {
-                    console.log(tableData.value);
-                    name:for (let index = 0; index < tableData.value.length; index++) {
+                    for (let index = 0; index < tableData.value.length; index++) {
                         const rowData = tableData.value[index];
-                        console.log(rowData);
-                        console.log("*****");
                         for (let i = 0; i < rowData.length; i++) {
                             const items = rowData[i];
-                            console.log(items);
-                            console.log(items.itemCode);
-                            console.log(item.item);
                             if (items.itemCode === item.item) {
-                                console.log(items.requiredQuantity)
+                                // Item already exists, update quantity and mark as processed
+								console.log(items.requiredQuantity)
                                 items.requiredQuantity++;
+								console.log(items.requiredQuantity)
+                                item.status = true;
                                 existingItemIndex = index;
-                                console.log(existingItemIndex);
-                                break name;
+                                break;
                             }
                         }
-                    }
-                    // Loop through the tableData to find the item with the matching itemCode
-                    for (let index = 0; index < tableData.length; index++) {
-                        const rowData = tableData[index];
-                        for (let i = 0; i < rowData.length; i++) {
-                            const item = rowData[i];
-                            if (item.itemCode === itemCodeToUpdate) { // Assuming itemCodeToUpdate is the code of the item you want to update
-                                // Update the requiredQuantity of the item
-                                item.requiredQuantity = newRequiredQuantity;
-                                break; // Exit the loop once the item is found and updated
-                            }
+                        if (existingItemIndex > -1) {
+                            break;
                         }
                     }
-
-                    // Find the index of the item with the same itemCode, if it exists
-                    // existingItemIndex = tableData.value[billIndex].findIndex(existingItem => existingItem.itemCode === item.item);
                 }
 
-                console.log(tableData.value);
-                console.log(existingItemIndex);
-                console.log(item.status)
-                console.log(billIndex)
-
-                if (existingItemIndex > -1 && !item.status) {
-                    // Increase the quantity of the existing item
-                    console.log(tableData.value[existingItemIndex][0].requiredQuantity);
-                    const rq = tableData.value[existingItemIndex][0].requiredQuantity++
-                    console.log(rq.value)
-                    tableData.value[existingItemIndex][0] = {"requiredQuantity" : rq.value};
-                    console.log(tableData.value);
-                    console.log(tableData.value[existingItemIndex][0].requiredQuantity)
-                    console.log(tableData.value[existingItemIndex][0].requiredQuantity);
-                    // Remove the existing item from the array
-                    tableData.value.splice(existingItemIndex, 1);
-                } else {
-                    // If tableData.value[billIndex] is not an array, initialize it
+                if (existingItemIndex === -1 && !item.status) {
+                    // If item is not found and not already processed, add it to tableData
                     if (!Array.isArray(tableData.value[billIndex])) {
                         tableData.value[billIndex] = [];
                     }
 
                     // Create a new object for the item
-                    console.log(item.item)
                     const newData = {
                         itemCode: item.item,
                         sourceWarehouse: '',
@@ -3745,21 +3712,23 @@ function addValue(data, replace) {
 
                     // Push the new object into the array at the specified billIndex
                     tableData.value[billIndex].push(newData);
+
+                    // Mark the item as processed
+                    item.status = true;
                 }
-
-                // Mark the item as processed
-                item.status = true;
-
 
                 calculateTotals();
                 billIndex++;
             });
         }
+
+        // If the current step is 3, empty the tableData
+        if (step === 3) {
+            tableData.value = [];
+        }
+
         replace.target = true;
     }
-
-
-
     else if (typeof data === 'object') {
         for (const key in data) {
             if (Object.hasOwnProperty.call(data, key)) {
