@@ -1957,7 +1957,7 @@ onMounted(()=>{
     axios.get(`${BaseURL}/api/method/tyre.api.get_vehicleBrand`,{headers:headers})
     .then(response => {
         vBrand.value=response.data.message
-        console.log(vBrand.value)
+        console.log("String",vBrand.value)
     })
 })
 
@@ -2105,6 +2105,11 @@ const dataAssignment = (response) => {
     return responseData.value;
 }
 const check = ref(false)
+const initial = ref(false)
+const enable = ref(false)
+const initialNext = ref(false)
+const afterResponse = ref(false)
+
 const search = async () => {
     const data = {
         "license_plate": searchQuery.value
@@ -2150,7 +2155,6 @@ const search = async () => {
                 hasResponse.value = false;
                 initial.value = false;
                 afterResponse.value = true;
-                initial.value = false
                 initialNext.value = true
                 searchQuery.value = ''
                 console.log("Response:", response.data);
@@ -2458,13 +2462,16 @@ const addVehicleData = async () => {
 
     console.log('vehicle number:', data.name);
     const isVehicleExist = await returnSearch(searchData);
-    console.log('isvehicle exist :', isVehicleExist.message[0].name);
-    if (isVehicleExist.message[0].name) {
-        showNewVehicle.value = false
-        showAlerts.value = true
-        vehicleExist.value = true
-        // alert("Vehicle already Exist!");
-        return;
+    // console.log('isvehicle exist :', isVehicleExist.message[0].name);
+    // console.log("SAMPLE CHECKING",isVehicleExist.message)
+    if (isVehicleExist){
+        if(isVehicleExist.message){
+            showNewVehicle.value = false
+            showAlerts.value = true
+            vehicleExist.value = true
+            // alert("Vehicle already Exist!");
+            return;
+        }
     }
     else {
         showConfirmation.value = true;
@@ -2473,7 +2480,6 @@ const addVehicleData = async () => {
     }
 };
 
-const enable = ref(false);
 const confirmSave = async () => {
     console.log('confirm page');
     showConfirmation.value = false;
