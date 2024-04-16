@@ -428,7 +428,7 @@ def lead(**args):
 	# print(data.keys(), data["items"])
 	for items_deatils in data.get("items"):
 		items_deatils = frappe._dict(items_deatils)
-		doc.append("custom_lead_items", {"brand": items_deatils.brand, "size": items_deatils.variants, "quantity" : items_deatils.quantity})
+		doc.append("custom_lead_items", {"brand": items_deatils.brand, "size": items_deatils.variants, "quantity" : items_deatils.quantity,"pattern": items_deatils.pattern,"tyre_type": items_deatils.type})
 	doc.save(ignore_permissions=True)  # Save customer document
 	return {
 		"status": 200,
@@ -500,6 +500,34 @@ def get_pattern(brand, size, tyer_type):
 		}
 
 @frappe.whitelist(allow_guest=True)
+def create_service_items():
+	List = ['Alignment','Rotation', 'Oil Change', 'Balancing', 'Inflation','Puncture','Tyre Edge', 'Tyre Patch','Mushroom Patch','Ac Service','Battery', 'Wiper','Car Wash']
+	if frappe.db.exists("Brand",{ "name" : "Service"}):
+		for row in List:
+			if not frappe.db.exists("Item",{"item_name":row}):
+				frappe.get_doc({
+					"doctype": "Item",
+                    "item_name": row,
+                    "brand": "Service",
+					"item_group":"Services",
+					"stock_uom":"Nos",
+					"item_code":row,
+				}).insert(ignore_permissions=True)
+	else:
+		doc = frappe.get_doc(doctype = "Brand", brand = "Service")
+		doc.insert(ignore_permissions=True)
+		for row in List:
+			if not frappe.db.exists("Item",{"item_name":row}):
+				frappe.get_doc({
+					"doctype": "Item",
+                    "item_name": row,
+                    "brand": "Service",
+					"item_group":"Services",
+					"stock_uom":"Nos",
+					"item_code":row,
+				}).insert(ignore_permissions=True)
+
+@frappe.whitelist(allow_guest=True)
 def get_ItemCode(brand, size, tyer_type,pattern):
 	item_code = frappe.get_all("Brand Details", filters={"parent": brand, "size": size, "tyer_type": tyer_type, "pattern":pattern}, pluck="item_code")[0]
 	return [item_code, get_item_rate(item_code)]
@@ -563,14 +591,14 @@ def calculate_total_amount(self, method):
 												"pattern": row.pattern,
 												"tyre_type": row.tyre_type
 										}))
-
+			
 			self.custom_lead_items[row.idx - 1].rate = 0
 			self.custom_lead_items[row.idx - 1].amount = 0
 			total_amount = 0
 			if item_code:
 				price_list = get_item_rate(item_code)
-				self.custom_lead_items[row.idx].item_code = item_code
-				self.custom_lead_items[row.idx].rate = price_list[0].selling_rate
+				self.custom_lead_items[row.idx - 1].item_code = item_code
+				self.custom_lead_items[row.idx - 1].rate = price_list[0].selling_rate
 				self.custom_lead_items[row.idx - 1].amount = row.quantity * price_list[0].selling_rate
 				total_amount += row.quantity * price_list[0].selling_rate
 
