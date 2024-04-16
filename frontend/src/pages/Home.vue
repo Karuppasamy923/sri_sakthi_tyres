@@ -92,35 +92,38 @@
             <!-- main page -->
             <div v-if="currentstep == 0 && Auth">
                 <div class="pt-24">
-                    <div v-if="noData">
-                        <div class="flex justify-center">
-                            <span class="font-medium text-red-500">No data found!</span>
-                        </div>
-                    </div>
-                    <div v-if="showConfirmation"
-                        class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
-                        <div class="bg-white rounded-lg p-8 shadow-xl">
-                            <h2 class="text-xl font-semibold mb-4">Confirm Save</h2>
-                            <p class="mb-4">Are you sure you want to save the details?</p>
+                    <div v-if="currentstep == 0">
+                        <div v-if="noData">
                             <div class="flex justify-center">
-                                <button @click="confirmSave" v-if="newVehicleSave"
-                                    class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
-                                <button @click="confirmCustomerSave" v-if="newCustomerSave"
-                                    class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
-                                <button @click="cancelSave"
-                                    class="bg-red-500 text-white font-semibold px-4 py-2 rounded">Cancel</button>
+                                <span class="font-medium text-red-500">No data found!</span>
                             </div>
                         </div>
-                    </div>
-                    <div v-if="showWarning"
-                        class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
-                        <div class="bg-white rounded-lg p-8 shadow-xl">
-                            <p class="mb-4">Please fill the required fields</p>
-                            <div class="flex justify-center">
-                                <button @click="close"
-                                    class="bg-red-500 text-white font-semibold px-4 py-2 rounded mr-2">Ok</button>
+                        <div v-if="showConfirmation"
+                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                            <div class="bg-white rounded-lg p-8 shadow-xl">
+                                <h2 class="text-xl font-semibold mb-4">Confirm Save</h2>
+                                <p class="mb-4">Are you sure you want to save the details?</p>
+                                <div class="flex justify-center">
+                                    <button @click="confirmSave" v-if="newVehicleSave"
+                                        class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
+                                    <button @click="confirmCustomerSave" v-if="newCustomerSave"
+                                        class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
+                                    <button @click="cancelSave"
+                                        class="bg-red-500 text-white font-semibold px-4 py-2 rounded">Cancel</button>
+                                </div>
                             </div>
                         </div>
+                        <div v-if="showWarning"
+                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                            <div class="bg-white rounded-lg p-8 shadow-xl">
+                                <p class="mb-4">Please fill the required fields</p>
+                                <div class="flex justify-center">
+                                    <button @click="close"
+                                        class="bg-red-500 text-white font-semibold px-4 py-2 rounded mr-2">Ok</button>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                     <div v-if="showAlerts"
                         class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
@@ -147,6 +150,7 @@
                                     class="bg-red-500 text-white font-semibold px-4 py-2 rounded mr-2">Ok</button>
                                 <button @click="close" v-if="successData || modifyAlert || searchValue"
                                     class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Ok</button>
+
                             </div>
                         </div>
                     </div>
@@ -181,28 +185,28 @@
                                                 <label>Vehicle Number&emsp;&nbsp;:&nbsp;</label>
                                                 <label>
                                                     {{ responseData && responseData.message &&
-                                                        responseData.message[0]?.name || 'No data' }}
+                responseData.message[0]?.name || 'No data' }}
                                                 </label>
                                             </div>
                                             <div class="mt-2">
                                                 <label>Vehicle Brand&emsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3"> {{
-                                                    responseData && responseData.message &&
-                                                    responseData.message[0]?.vehicle_brand || 'No data' }}</label>
+                responseData && responseData.message &&
+                responseData.message[0]?.vehicle_brand || 'No data' }}</label>
                                             </div>
                                             <div class="mt-2">
                                                 <label>Fuel
                                                     Type&nbsp;&nbsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3"> {{ responseData && responseData.message &&
-                                                    responseData.message[0]?.fuel_type
-                                                    || 'No data'
+                responseData.message[0]?.fuel_type
+                || 'No data'
                                                     }}</label>
                                             </div>
                                             <div class="mt-2">
                                                 <label>Tyre Change(kms)&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">{{ responseData && responseData.message &&
-                                                    responseData.message[0]?.tyre_change
-                                                    || 'No data'
+                responseData.message[0]?.tyre_change
+                || 'No data'
                                                     }}</label>
                                             </div>
                                         </div>
@@ -211,26 +215,26 @@
                                                 <label>Vehicle Model&nbsp;&nbsp;: </label>
                                                 <label class="mt-3">
                                                     {{ responseData && responseData.message &&
-                                                        responseData.message[0]?.vehicle_model || 'No data' }}</label>
+                responseData.message[0]?.vehicle_model || 'No data' }}</label>
                                             </div>
                                             <div class="mt-2">
                                                 <label>Chassis No&nbsp;&nbsp;:&nbsp; </label>
                                                 <label class="mt-3">{{ responseData && responseData.message &&
-                                                    responseData.message[0]?.chassis_no
-                                                    || 'No data' }}</label>
+                responseData.message[0]?.chassis_no
+                || 'No data' }}</label>
                                             </div>
                                             <div class="mt-2">
                                                 <label>Odometer Value&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">
                                                     {{ responseData && responseData.message &&
-                                                        responseData.message[0]?.last_odometer_reading
-                                                        || 'No data' }}</label>
+                responseData.message[0]?.last_odometer_reading
+                || 'No data' }}</label>
                                             </div>
                                             <div class="mt-2">
                                                 <label>Alignment (kms)&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3"> {{ responseData && responseData.message &&
-                                                    responseData.message[0]?.alignment
-                                                    || 'No data'
+                responseData.message[0]?.alignment
+                || 'No data'
                                                     }}</label>
                                             </div>
                                         </div>
@@ -255,7 +259,7 @@
                                                 <label>Customer Name&nbsp;&nbsp;:&nbsp; </label>
                                                 <label class="mt-3">
                                                     {{ responseData && responseData.message &&
-                                                        responseData.message[1]?.current_owner || 'No data' }}
+                responseData.message[1]?.current_owner || 'No data' }}
                                                 </label>
                                                 <br>
                                                 <input type="checkbox"
@@ -279,8 +283,8 @@
                                                 <label>Driver Name&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">
                                                     {{ responseData &&
-                                                        responseData.message && responseData.message[2][0]?.full_name ||
-                                                        'No data' }}
+                responseData.message && responseData.message[2][0]?.full_name || 
+                'No data' }}
                                                 </label>
                                                 <br>
                                                 <input type="checkbox"
@@ -305,7 +309,7 @@
                                                 <label>Contact Person&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">
                                                     {{ responseData && responseData.message &&
-                                                        responseData.message[2][1]?.contact_person_name || 'No data' }}
+                responseData.message[2][1]?.contact_person_name || 'No data' }}
                                                 </label>
                                                 <br>
                                                 <input type="checkbox"
@@ -330,7 +334,7 @@
                                                 <label>Customer Mobile&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">
                                                     {{ responseData && responseData.message &&
-                                                        responseData.message[1]?.owner_mobile_no || 'No data' }}
+                responseData.message[1]?.owner_mobile_no || 'No data' }}
                                                 </label>
                                                 <br>
                                                 <span class="ml-5">
@@ -348,8 +352,8 @@
                                                 <label>Driver Mobile&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">
                                                     {{ responseData && responseData.message &&
-                                                        responseData.message[2][0]?.cell_number
-                                                        || 'No data' }}
+                responseData.message[2][0]?.cell_number
+                || 'No data' }}
                                                 </label>
                                                 <br>
                                                 <span class="ml-5">
@@ -368,8 +372,8 @@
                                                 <label>Contact Person&nbsp;&nbsp;:&nbsp; </label>
                                                 <label class="mt-3">
                                                     {{ responseData && responseData.message &&
-                                                        responseData.message[2][1]?.contact_person_mobile
-                                                        || 'No data' }}
+                responseData.message[2][1]?.contact_person_mobile
+                || 'No data' }}
                                                 </label>
                                                 <br>
                                                 <span class="ml-5">
@@ -399,7 +403,9 @@
                                 <button class="bg-red-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3" @click="deleteVehicle">Delete</button>
                             </div>
                         </div>
+
                         <div v-if="hasResponse && initial">
+
                             <div class="flex">
                                 <div class="mr-8">
                                     <button @click="getJobCard" v-if="hide == 'false' && hideEnq == 'false'"
@@ -415,10 +421,12 @@
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Back</button>
                                 </div>
                                 <div>
+
                                     <Input placeholder="search ..." v-if="hideEnq != 'false'"
                                         class="mt-9 mb-2 ml-[5.3rem] p-4" />
                                     <Input placeholder="search ..." v-if="hide != 'false'"
                                         class="mt-9 mb-2 ml-[5.3rem] p-4" />
+
                                 </div>
                             </div>
                             <div>
@@ -507,7 +515,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex justify-center" v-if="hide == 'false'">
+
+                            <div class="flex justify-center" v-if="hide == 'false' && hideEnq == 'false'">
+
                                 <div class="flex justify-center mt-9">
                                     <img src="https://img.freepik.com/free-vector/hand-drawn-no-data-concept_52683-127823.jpg?w=996&t=st=1712321166~exp=1712321766~hmac=ae2f4e19eb0e1185d52ac8a07c158e9dc5afa741284e9526a8e8a0165573735b"
                                         alt="No data" class="w-[25%]" @click="showMessage(`Nothing to Show ! 😄`)">
@@ -566,7 +576,6 @@
                                     <p class="m-2">Fuel Type <span class="text-red-500 font-bold">*</span><br>
                                         <select v-model="vehicleData.fuel_type"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
-                                            <option value="" selected disabled hidden>Please select...</option>
                                             <option value="Petrol">Petrol</option>
                                             <option value="Diesel">Diesel</option>
                                             <option value="EV">Electical Vehicle</option>
@@ -684,7 +693,9 @@
                                     </svg>
                                 </button>
                                 <div class="p-8 mt-[110px]">
+
                                     <div class="pb-4 grid grid-cols-2 ml-24" v-if="hasResponse">
+
                                         <input type="tel" v-model="searchMobile"
                                             class="w-[19rem] h-[3rem] mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Customer Mobile No.">
@@ -710,16 +721,19 @@
                                             placeholder="Enter Vehicle Number">
                                     </p>
                                     <p class="m-2">Customer Name <span class="text-red-500 font-bold">*</span><br>
+
                                         <input type="text" v-model="leadDetails.lead_name" v-if="boolDetails.state == 1"
                                             :readonly="boolDetails.state == 1"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Name">
                                         <input type="text" v-model="customerData.current_owner"
                                             v-if="boolDetails.state == 0"
+
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Name">
                                     </p>
                                     <p class="m-2">Customer Mobile No <span class="text-red-500 font-bold">*</span><br>
+
                                         <input type="tel" v-model="leadDetails.mobile_no" v-if="boolDetails.state == 1"
                                             :readonly="boolDetails.state == 1"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
@@ -746,6 +760,7 @@
                                     </span>
                                     <div v-if="!handle && !hasResponse">
                                         <div v-for="(employee, index) in employees" :key="index" class="mt-2">
+
                                             <hr class="dark-hr m-4">
                                             <button
                                                 class="bg-blue-500 w-[100px] text-white font-bold  text-base p-4 rounded-lg mb-1 float-right"
@@ -758,7 +773,7 @@
                                             </p>
                                             <p class="m-2">Employee Type <span
                                                     class="text-red-500 font-bold">*</span><br>
-                                                <select v-model="employee.type"
+                                                <select v-model="employee.type" @click="setPrimary"
                                                     class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
                                                     <option value="" selected disabled>Please select..</option>
                                                     <option value="current_driver">Driver</option>
@@ -831,7 +846,8 @@
                                             </div>
                                             <div class="flex flex-col ml-1">
                                                 <!-- <label class="mt-2">Add</label> -->
-                                                <Button class="w-[4rem] mt-10" type="text" @click="addItem">Add</Button>
+                                                <Button class="w-[4rem] mt-10" type="text"
+                                                    @click="addItem">Add</Button>
                                             </div>
                                         </div>
                                         <div v-if="tableDetails">
@@ -853,7 +869,9 @@
                                             </table>
                                         </div>
                                         <div v-if="leadDetails">
-                                            <table class="table-auto">
+
+                                            <table class="table-auto" v-if="leadDetails.custom_lead_items">
+
                                                 <thead>
                                                     <tr>
                                                         <th class="pr-12">Brand</th>
@@ -862,8 +880,9 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr v-for="(item, index) in leadDetails.custom_lead_items"
-                                                        :key="index">
+
+                                                    <tr v-for="(item,index) in leadDetails.custom_lead_items" :key="index">
+
                                                         <td>{{ item.brand }}</td>
                                                         <td>{{ item.size }}</td>
                                                         <td>{{ item.quantity }}</td>
@@ -875,6 +894,7 @@
                                         <hr class="dark-hr">
                                         <div class="grid grid-cols-3 mt-5">
                                             <div>
+
                                                 <input type="checkbox" v-model="serviceDetails.alignment"
                                                     :checked="leadDetails.custom_alignment == '1'"
                                                     :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
@@ -951,6 +971,7 @@
                                                     :checked="leadDetails.custom_car_wash == '1'"
                                                     :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
                                                 <label>Car Wash</label>
+
                                             </div>
                                         </div>
                                         <div>
@@ -1104,11 +1125,13 @@
                                     </div>
                                     <div class="mt-5">
                                         <button
+
                                             class="bg-blue-500 w-[40%] h-[3.2rem] text-white font-bold 0 text-base p-5 rounded-lg ml-3"
                                             @click="modifiedMoreEmployee('current_driver')">Add Driver</button>
 
                                         <button
                                             class="bg-blue-500 w-[50%] h-[3.2rem]  text-white font-bold 0 text-base p-5 rounded-lg ml-3"
+
                                             @click="modifiedMoreEmployee('contact_person')">Add Con.Person</button>
                                     </div>
                                     <div class="m-3 mt-[40px] flex flex-row space-x-[70px]">
@@ -1137,8 +1160,10 @@
                         <div class="flex">
                             <div class="grid grid-cols-4 w-[90%] gap-4">
                                 <div class="flex flex-col space-y-1 ml-4">
+
                                     <label class="mt-2" :for="'tyre' + index">Tyre</label>
                                     <select class="w-[100%] h-[3.5rem] rounded-sm" v-model="tyreData.tyre"
+
                                         :id="'type' + index" style="border: 1px solid black;"
                                         @change="updateTyreData(index)">
                                         <option value="">Please select...</option>
@@ -1152,21 +1177,21 @@
                                 <div class="flex flex-col space-y-1">
                                     <label class="mt-2" :for="'RTD' + index">Remaining Tread Depth</label>
                                     <input v-model="tyreData.depth"
-                                        class="w-[100%] h-[3.5rem] rounded-sm border-solid border border-black"
+                                        class="w-[100%] h-[100%] rounded-sm border-solid border border-black"
                                         type="text" :id="'RTD' + index" @change="updateTyreData(index)">
                                         <span v-if="tyreData.mandatory && !tyreData.depth.trim()" class="text-red-500 font-bold">Please fill the required field</span>
                                 </div>
                                 <div class="flex flex-col space-y-1">
                                     <label class="mt-2" :for="'TP' + index">Tyre Pressure (psi)</label>
                                     <input v-model="tyreData.pressure"
-                                        class="w-[100%] h-[3.5rem] rounded-sm border-solid border border-black"
+                                        class="w-[100%] h-[100%] rounded-sm border-solid border border-black"
                                         type="text" :id="'TP' + index" @change="updateTyreData(index)">
                                         <span v-if="tyreData.mandatory && !tyreData.pressure.trim()" class="text-red-500 font-bold">Please fill the required field</span>
                                 </div>
                                 <div class="flex flex-col space-y-1">
                                     <label class="mt-2" :for="'COM' + index">Comment</label>
                                     <input v-model="tyreData.comment"
-                                        class="w-[100%] h-[3.5rem] rounded-sm border-solid border border-black"
+                                        class="w-[100%] h-[100%] rounded-sm border-solid border border-black"
                                         type="text" :id="'COM' + index" @change="updateTyreData(index)">
                                         <span v-if="tyreData.mandatory && !tyreData.comment.trim()" class="text-red-500 font-bold">Please fill the required field</span>
                                 </div>
@@ -1672,7 +1697,9 @@
                         class="bg-blue-500 w-[45%] text-white font-bold  text-base p-4 rounded-lg"
                         @click="previousPage">Previous
                     </button>
+
                     <button v-if="currentstep != 4 && initialNext"
+
                         class="bg-blue-500 w-[45%] text-white font-bold  text-base p-4 rounded-lg"
                         @click="nextPageAndHighlight">Next
                     </button>
@@ -1726,7 +1753,9 @@ const data = reactive({
 
 const headers = {
     'Content-Type': 'application/json',
+
     'Authorization': 'token 7fa0cf7915ad42d :2a784f5c29d213b'
+
 }
 
 const pin1 = ref('');
@@ -1856,7 +1885,9 @@ const getItemCode = (brand, size, type, pattern, index) => {
         .then(response => {
             console.log(response.data.message[0]);
             tyres.value[index].item = response.data.message[0]
+            tyres.value[index].rate = response.data.message[1]
         });
+    
 }
 //==========================================================>>> Main Page <<<================================================================================//
 const initial = ref(true);
@@ -1957,6 +1988,7 @@ const search = async () => {
                 // The entire UI will show no data if searchdata has no value.
                 return dataAssignment(response)
             }
+
             else if (response.data.message == '') {
                 check.value = false;
                 enable.value = false;
@@ -1969,6 +2001,7 @@ const search = async () => {
                 initial.value = true;
                 searchQuery.value = ''
             }
+
             else {
                 check.value = true;
                 enable.value = true;
@@ -2032,7 +2065,7 @@ function previousPage() {
 
 const showWarning = ref(false)
 const close = () => {
-    if (showWarning.value) {
+    if(showWarning.value){
         showWarning.value = false;
         showNewCustomer.value = true;
     }
@@ -2058,6 +2091,7 @@ const closed = () => {
         showNewCustomer.value = true;
         console.log('customer page');
     }
+
     else if (noValidVehicleNumber.value || noCustomerValidVehicleNumber.value) {
         if(noCustomerValidVehicleNumber.value){
             noCustomerValidVehicleNumber.value = false;
@@ -2068,6 +2102,7 @@ const closed = () => {
             showNewVehicle.value = true
         }
     }
+
 }
 
 function nextPageAndHighlight() {
@@ -2087,6 +2122,7 @@ function nextPageAndHighlight() {
                 for (let i = 0; i < tyreDatas.value.length; i++) {
                     const tyre = tyreDatas.value[i];
                     console.log('tyre name', tyre.tyre);
+
                     if (tyre.tyre) {
                         console.log('hi')
                         if(tyre.comment == '' || tyre.depth == '' || tyre.pressure == ''){
@@ -2094,6 +2130,7 @@ function nextPageAndHighlight() {
                             currentstep.value = 1;
                             return;
                         }
+
                     }
                     else{
                         tyre.mandatory = false
@@ -2112,6 +2149,7 @@ function nextPageAndHighlight() {
                 jobCard["replace"] = tyres.value
                 for (let i = 0; i < tyres.value.length; i++) {
                     const tyre = tyres.value[i];
+
                     console.log('tyre name', tyre.type);
                     if (tyre.type) {
                         console.log('hi')
@@ -2120,6 +2158,7 @@ function nextPageAndHighlight() {
                             currentstep.value = 3;
                             return;
                         }
+
                     }
                     else{
                         tyre.mandatory = false
@@ -2212,11 +2251,13 @@ const notCustomerAlert = ref(false)
 const notEmployeeAlert = ref(false)
 const notEmpDetailAlert = ref(false)
 const noVehicleNumber = ref(false)
+
 const noValidVehicleNumber = ref(false)
 const noCustomerValidVehicleNumber = ref(false)
 const cannotSave = ref(false)
 const customerExist = ref(false)
 const showDeleteConfirmation = ref(false)
+
 
 const addVehicleData = async () => {
     const fieldNames = Object.keys(vehicleData.value);
@@ -2241,18 +2282,20 @@ const addVehicleData = async () => {
 
     console.log('vehicle number:', data.name);
     const isVehicleExist = await returnSearch(searchData);
-    const checkingVehicleExist = isVehicleExist && isVehicleExist.message && isVehicleExist.message.length > 0 ? isVehicleExist.message == "Enter a Valid vehicle number" ? 'no data' : isVehicleExist.message[0].name : 'empty'
-    console.log('is vehicle exist:', checkingVehicleExist);
-    if (checkingVehicleExist && checkingVehicleExist !== 'empty') {
+    console.log('isvehicle exist :', isVehicleExist.message[0].name);
+    if (isVehicleExist.message[0].name) {
         showNewVehicle.value = false
         showAlerts.value = true
         vehicleExist.value = true
+        // alert("Vehicle already Exist!");
         return;
     }
+
     else if (isVehicleExist && isVehicleExist == 'Enter a Valid vehicle number') {
         showAlerts.value = true;
         noValidVehicleNumber.value = true;
     }
+
     else {
         showConfirmation.value = true;
         newVehicleSave.value = true;
@@ -2280,7 +2323,7 @@ const confirmSave = async () => {
     try {
         const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_vehicle_details`, { data: JSON.stringify(data) }, { headers: headers });
         console.log('vehicle add after response', response);
-        if (response) {
+        if (responseData.value && responseData.value.message) {
             enable.value = true;
             check.value = true;
             hasResponse.value = false;
@@ -2295,7 +2338,7 @@ const confirmSave = async () => {
             returnSearch(searchData);
         } else {
             check.value = false;
-            console.log("responseData.value or responseData.value.message is undefined");
+            console.error("responseData.value or responseData.value.message is undefined");
         }
     } catch (error) {
         console.error(error);
@@ -2338,6 +2381,8 @@ const updateEmployeeType = (employee) => {
     return employee.parentfield
 }
 
+let primaryValue = reactive(ref(false))
+const sample22 = reactive(ref(0))
 const employees = ref([{
     driver_name: '',
     type: '',
@@ -2345,8 +2390,39 @@ const employees = ref([{
     whatsappChecked1: 0,
     callChecked1: 0,
     smsChecked1: 0,
-    primary: 0
+    primary: ref(primaryValue),
 }]);
+const setPrimary = () => {
+    let sample_driver = 0;
+    let sample_customer = 0;
+    console.log(employees)
+    
+    customerData.value.employees.forEach((employee) => {
+        if (employee.type === 'current_driver') {
+            sample_driver += 1;
+        } else if (employee.type === 'contact_person') {
+            sample_customer += 1;
+        }
+    });
+    console.log(sample_driver);
+    if (sample_driver > 0) {
+        if(sample_driver == 1){
+            primaryValue.value = true;
+        }
+        else{
+            primaryValue.value = false;
+        }
+    } 
+    else if(sample_customer > 0){
+        if(sample_customer == 1){
+            primaryValue.value = true;
+        }
+        else{
+            primaryValue.value = false;
+        }
+    }
+    console.log(primaryValue.value);    
+}
 
 function moreEmployee() {
     employees.value.push({
@@ -2436,7 +2512,9 @@ const handlePrimaryCheckboxModify = (clickedEmployee) => {
 };
 
 const addCustomerData = async () => {
+
     const name = responseData.value.message[0].name.trim();
+
     console.log(name)
     const existingData = await returnSearch(name);
     console.log('filtering process', existingData.message[1].current_owner);
@@ -2608,7 +2686,9 @@ const addCustomerModifiedData = async () => {
 
     console.log('modify checking', modifiedData);
     try {
-        const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_customer_details`, { data: JSON.stringify(modifiedData) }, { headers: headers });
+
+        const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_customer_details`,{data:JSON.stringify(modifiedData)},{headers:headers});
+
         check.value = true;
         console.log(response);
         returnSearch(name)
@@ -2682,10 +2762,12 @@ const handleCustomer = async () => {
 const confirmCustomerSave = async () => {
     showConfirmation.value = false;
     newCustomerSave.value = false;
+
     if (boolDetails.state == 1) {
         alert("Unable to edit")
         return
     }
+
     const customerDetails = {
         current_owner: customerData.value.current_owner,
         owner_mobile_no: customerData.value.owner_mobile_no,
@@ -2787,10 +2869,13 @@ const returnSearch = async (search) => {
     try {
         if (data.license_plate.trim() !== "") {
             console.log("**&**")
+
             const response = await axios.post(`${BaseURL}/api/method/tyre.api.get_details`, { license_plate: JSON.stringify(data.license_plate) }, { headers: headers });
+
             check.value = true;
             console.log('returnSearch data', response);
             if (response.data.message === "") {
+               
                 console.log(response.data);
                 hasResponse.value = true;
                 initial.value = true;
@@ -2829,18 +2914,34 @@ const returnSearch = async (search) => {
 const removeCustomerData = () => {
     Object.keys(customerData.value).forEach(key => {
         customerData.value[key] = '';
-    });
+    }); 
     employees.value = [{ name: '', type: '' }];
 }
 
 const removeEmployee2 = (index) => {
-    responseData.value.message[1].current_driver.splice(index, 1);
+    const data = {
+        "current_driver":responseData.value.message[1].current_driver[index].current_driver,
+        "parentfield":responseData.value.message[1].current_driver[index].parentfield,
+        "mobile_no":responseData.value.message[1].current_driver[index].mobile_no,
+        "name":responseData.value.message[1].current_driver[index].parent
+    }
+    console.log(data);
+    // try{
+
+    //     await axios.post(`${BaseURL}/api/method/tyre.api.delete_modifide_customes`,{data:data},{headers:headers});
+    // }
+    // catch(error){
+    //     console.log(error);
+    // }
+    // responseData.value.message[1].current_driver.splice(index, 1);
 };
 const removeEmployee3 = (index) => {
     responseData.value.message[1].contact_person.splice(index, 1);
 };
 const removeEmployee1 = (index) => {
-    employees.value.splice(index, 1);
+    if (sample22.value != 0){
+        employees.value.splice(index, 1);
+    }
 };
 
 const deleteVehicle = () => {
@@ -3148,6 +3249,7 @@ const tyres = ref([{
     size: '',
     ttTl: '',
     item: '',
+    rate:'',
     mandatory: false,
     status: false
 }]);
@@ -3173,6 +3275,7 @@ const addTyreReplacement = () => {
             size: '',
             ttTl: '',
             item: '',
+            rate:'',
             status: false
         })
         setValue.index++;
@@ -3204,33 +3307,40 @@ function addValue(data, replace) {
 
                 // Check if tableData.value[billIndex] is an array
                 if (Array.isArray(tableData.value)) {
-                    console.log(tableData.value)
-                    tableData.value.forEach((rowData, index) => {
+                    console.log(tableData.value);
+                    name:for (let index = 0; index < tableData.value.length; index++) {
+                        const rowData = tableData.value[index];
                         console.log(rowData);
-                        console.log("*****")
-                        rowData.forEach(items => {
+                        console.log("*****");
+                        for (let i = 0; i < rowData.length; i++) {
+                            const items = rowData[i];
                             console.log(items);
                             console.log(items.itemCode);
                             console.log(item.item);
                             if (items.itemCode === item.item) {
-
                                 existingItemIndex = index;
                                 console.log(existingItemIndex);
+                                break name;
                             }
-                        });
-                    });
+                        }
+                    }
                     // Find the index of the item with the same itemCode, if it exists
                     // existingItemIndex = tableData.value[billIndex].findIndex(existingItem => existingItem.itemCode === item.item);
                 }
 
+                console.log(tableData.value);
                 console.log(existingItemIndex);
+                console.log(item.status)
+                console.log(billIndex)
 
-                if (existingItemIndex !== -1 && !item.status) {
+                if (existingItemIndex > -1 && !item.status) {
                     // Increase the quantity of the existing item
                     console.log(tableData.value[existingItemIndex][0].requiredQuantity);
                     tableData.value[existingItemIndex][0].requiredQuantity++;
+                    console.log(tableData.value[existingItemIndex][0].requiredQuantity)
                     console.log(tableData.value[existingItemIndex][0].requiredQuantity);
-                    item.status = true;
+                    // Remove the existing item from the array
+                    tableData.value.splice(existingItemIndex, 1);
                 } else {
                     // If tableData.value[billIndex] is not an array, initialize it
                     if (!Array.isArray(tableData.value[billIndex])) {
@@ -3242,15 +3352,18 @@ function addValue(data, replace) {
                     const newData = {
                         itemCode: item.item,
                         sourceWarehouse: '',
-                        rate: '',
+                        rate: item.rate,
                         requiredQuantity: 1, // Set initial quantity to 1
                         cost: ''
                     };
 
                     // Push the new object into the array at the specified billIndex
                     tableData.value[billIndex].push(newData);
-                    item.status = true;
                 }
+
+                // Mark the item as processed
+                item.status = true;
+
 
                 calculateTotals();
                 billIndex++;
