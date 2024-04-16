@@ -67,6 +67,7 @@ app_license = "mit"
 # Installation
 # ------------
 
+after_migrate = "tyre.api.create_service_items"
 # before_install = "tyre.install.before_install"
 # after_install = "tyre.install.after_install"
 
