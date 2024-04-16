@@ -3190,7 +3190,7 @@ const requireService = ref({
     puncture: false,
     tyre_edge: false,
     tyre_patch: false,
-    mashroom_patch: false,
+    mushroom_patch: false,
 })
 function checkup(data) {
     console.log("******")
@@ -3311,11 +3311,30 @@ function handelCheck(data) {
         case 'mushroom_patch':
             show.mushroom_path_checkbox = !show.mushroom_path_checkbox;
             if (show.mushroom_path_checkbox == true) {
-                requireService.value.mashroom_patch = true;
+                requireService.value.mushroom_patch = true;
             } else {
-                requireService.value.mashroom_patch = false;
+                requireService.value.mushroom_patch = false;
             }
             break;
+    }
+}
+
+async function getrate(data) {
+    let rate =0
+    try {
+        console.log(data, headers); // Assuming headers is defined elsewhere
+        const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_item_rate`, {
+            params: { item_code: data },
+            headers: headers // Assuming headers is defined elsewhere
+        }).then((response) =>{
+            console.log(response.data.message);
+            rate=response.data.message
+            console.log(rate,"*****")
+        })
+        return rate;
+    } catch (error) {
+        console.error("Error:", error);
+        throw error; // Rethrow the error to be caught by the caller
     }
 }
 
@@ -3473,13 +3492,20 @@ function addValue(data, replace) {
                         });
                     });
                     if (!itemExists) {
+                        
                         const newData = {
                             itemCode: key,
                             sourceWarehouse: '',
-                            rate: '',
+                            rate:'',
                             requiredQuantity: 1,
                             cost: ''
                         };
+                        getrate(key).then(rate => {
+                            newData.rate = rate
+                            console.log(newData.rate)
+                        }).catch(error => {
+                            console.error("Error:", error);
+                        });
                         if (!Array.isArray(tableData.value[billIndex])) {
                             tableData.value[billIndex] = [];
                         }
