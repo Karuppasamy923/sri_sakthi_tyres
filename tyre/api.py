@@ -499,7 +499,6 @@ def get_pattern(brand, size, tyer_type):
 			"message": "No Pattern Found"
 		}
 
-@frappe.whitelist(allow_guest=True)
 def create_service_items():
 	List = ['Alignment','Rotation', 'Oil Change', 'Balancing', 'Inflation','Puncture','Tyre Edge', 'Tyre Patch','Mushroom Patch','Ac Service','Battery', 'Wiper','Car Wash']
 	if frappe.db.exists("Brand",{ "name" : "Service"}):
