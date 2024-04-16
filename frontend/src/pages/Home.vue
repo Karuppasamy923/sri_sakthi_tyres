@@ -146,85 +146,44 @@
                                                     Size
                                                 </th>
                                                 <th scope="col" class="px-6 py-3">
-                                                    Quantity
-                                                </th>
-                                                <th scope="col" class="px-6 py-3">
                                                     Type
                                                 </th>
                                                 <th scope="col" class="px-6 py-3">
                                                     Pattern
                                                 </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                                                v-for="(item, index) in items" :key="index">
-                                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                                    scope="row">{{ item.brand }}</td>
-                                                <td class="px-6 py-4">{{ item.size }}</td>
-                                                <td class="px-6 py-4">{{ item.quantity }}</td>
-                                                <td class="px-6 py-4">{{ item.quantity }}</td>
-                                                <td class="px-6 py-4">{{ item.type }}</td>
-                                                <td class="px-6 py-4">{{ item.pattern }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </a>
-                        </div>
-                        <div v-if="jobCardPopup == 'true'"
-                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
-                            <a href="#"
-                                class="block max-w-[70rem] p-10 pt-5 bg-white border border-gray-200 rounded-lg shadow">
-                                <div class="grid grid-cols-2">
-                                    <div>
-                                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-black">
-                                            Price Details</h5>
-                                    </div>
-                                    <div class="flex justify-end">
-                                        <button @click="jobCardPopup = 'false'">
-                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                fill="none" viewBox="0 0 14 14">
-                                                <path stroke="currentColor" stroke-linecap="round"
-                                                    stroke-linejoin="round" stroke-width="2"
-                                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="relative overflow-x-auto">
-                                    <table
-                                        class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                        <thead
-                                            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                            <tr>
                                                 <th scope="col" class="px-6 py-3">
-                                                    Brand
-                                                </th>
-                                                <th scope="col" class="px-6 py-3">
-                                                    Size
+                                                    Rate
                                                 </th>
                                                 <th scope="col" class="px-6 py-3">
                                                     Quantity
                                                 </th>
                                                 <th scope="col" class="px-6 py-3">
-                                                    Type
-                                                </th>
-                                                <th scope="col" class="px-6 py-3">
-                                                    Pattern
+                                                    Amount
                                                 </th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                                                v-for="(item, index) in items" :key="index">
-                                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                                v-for="(item, index) in popItems.lead_item" :key="index">
+                                                <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                                                     scope="row">{{ item.brand }}</td>
-                                                <td class="px-6 py-4">{{ item.size }}</td>
-                                                <td class="px-6 py-4">{{ item.quantity }}</td>
-                                                <td class="px-6 py-4">{{ item.quantity }}</td>
-                                                <td class="px-6 py-4">{{ item.type }}</td>
-                                                <td class="px-6 py-4">{{ item.pattern }}</td>
+                                                <td class="px-6 py-3">{{ item.size }}</td>
+                                                <td class="px-6 py-3">{{ item.tyre_type }}</td>
+                                                <td class="px-6 py-3">{{ item.pattern }}</td>
+                                                <td class="px-6 py-3">{{ item.rate }}</td>
+                                                <td class="px-6 py-3">{{ item.quantity }}</td>
+                                                <td class="px-6 py-3">{{ item.amount }}</td>
+                                            </tr>
+                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td
+                                                    class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    Total Amount</td>
+                                                <td class="px-6 py-3">{{ popItems.total_amount }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -409,8 +368,10 @@
                                                 <label>Driver Name&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">
                                                     {{ responseData &&
+
                                                         responseData.message && responseData.message[2][0]?.full_name ||
                                                     'No data' }}
+
                                                 </label>
                                                 <br>
                                                 <input type="checkbox"
@@ -548,11 +509,12 @@
                                 <div>
                                     <Input type="number" placeholder="search ..." v-if="hideEnq != 'false'"
                                         v-model="searchEnquiry" @input="getEnquiry" class="mt-9 mb-2 -ml-14.5 p-4" />
-                                    <Input placeholder="Vehicle Search ..." v-if="hide != 'false'"
-                                        v-model="searchJobCard" @input="getJobCard" class="mt-9 mb-2 -ml-14.5 p-4" />
+                                    <Input placeholder="Vehicle Search ..."
+                                        v-if="hide != 'false' && jobCardPopup == 'false'" v-model="searchJobCard"
+                                        @input="getJobCard" class="mt-9 mb-2 -ml-14.5 p-4" />
                                 </div>
                             </div>
-                            <div>
+                            <div v-if="jobCardPopup == 'false'">
                                 <div class="relative overflow-x-auto flex justify-center" v-if="hide != 'false'">
                                     <table
                                         class="w-[75rem] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -601,6 +563,72 @@
                                     </table>
                                 </div>
                             </div>
+                            <div v-if="jobCardPopup == 'true'" class="relative overflow-x-auto flex justify-center">
+                                <a href="#"
+                                    class="block max-w-[70rem] p-10 pt-5 bg-white border border-gray-200 rounded-lg shadow">
+                                    <div class="grid grid-cols-2">
+                                        <div>
+                                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-black">
+                                                Details</h5>
+                                        </div>
+                                        <div class="flex justify-end">
+                                            <button @click="jobCardPopup = 'false'">
+                                                <svg class="w-3 h-3" aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                    <path stroke="currentColor" stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke-width="2"
+                                                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="relative overflow-x-auto">
+                                        <table
+                                            class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                            <thead
+                                                class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                                <tr>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Item Code
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Warehouse
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Quantity
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Rate
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Amount
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                                                    v-for="(item, index) in jobCardData.billing_details" :key="index">
+                                                    <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                                        scope="row">{{ item.item_code }}</td>
+                                                    <td class="px-6 py-3">{{ item.warehouse }}</td>
+                                                    <td class="px-6 py-3">{{ item.quantity }}</td>
+                                                    <td class="px-6 py-3">{{ item.rate }}</td>
+                                                    <td class="px-6 py-3">{{ item.amount }}</td>
+                                                </tr>
+                                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td
+                                                        class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Total Amount</td>
+                                                    <td class="px-6 py-3">{{ jobCardData.total_amount }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </a>
+                            </div>
                             <div>
                                 <div class="relative overflow-x-auto flex justify-center" v-if="hideEnq != 'false'">
                                     <div>
@@ -645,7 +673,7 @@
                                         alt="No data" class="w-[25%]" @click="showMessage(`Nothing to Show ! 😄`)">
                                 </div>
                             </div>
-                            <div class="flex justify-center m-5" v-if="hide == 'false'">
+                            <div class="flex justify-center m-5" v-if="hide == 'false' && hideEnq == 'false'">
                                 <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
                                     @click="addVehicle">
                                     Add Vehicle
@@ -856,7 +884,9 @@
                                         <input type="text" v-model="leadDetails.lead_name" v-if="boolDetails.state == 1"
                                             :readonly="boolDetails.state == 1"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+
                                             placeholder="Enter Name">
+
                                         <input type="text" v-model="customerData.current_owner"
                                             v-if="boolDetails.state == 0"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
@@ -866,7 +896,9 @@
                                         <input type="tel" v-model="leadDetails.mobile_no" v-if="boolDetails.state == 1"
                                             :readonly="boolDetails.state == 1"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+
                                             placeholder="Enter Mobile No.">
+
                                         <input type="tel" v-model="customerData.owner_mobile_no"
                                             v-if="boolDetails.state == 0"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
@@ -887,7 +919,9 @@
                                             :disabled="boolDetails.state == 1"
                                             class="bg-gray-300 rounded-sm">&nbsp;&nbsp;<label>SMS</label>
                                     </span>
+
                                     <div v-if="!handle && !hasResponse">
+
                                         <div v-for="(employee, index) in employees" :key="index" class="mt-2">
                                             <div v-show="false">{{ sample22 = index }}</div>
                                             <hr class="dark-hr m-4">
@@ -1922,7 +1956,7 @@ const data = reactive({
 const headers = {
     'Content-Type': 'application/json',
 
-    'Authorization': 'token 7fa0cf7915ad42d :2a784f5c29d213b'
+    'Authorization': 'token b89ae1f0409875e :af8a0b78d948ebf'
 
 }
 
@@ -3017,6 +3051,7 @@ const confirmCustomerSave = async () => {
         successData.value = true;
         console.log('response from customer details', response.data);
         popItems.value = response.data.message;
+        console.log(popItems.value);
 
         customerData.value.current_owner = '';
         customerData.value.owner_mobile_no = '';
