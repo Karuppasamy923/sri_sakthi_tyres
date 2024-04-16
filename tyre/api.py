@@ -578,6 +578,28 @@ def get_jobcard_details(searchJobCard):
 
 
 @frappe.whitelist(allow_guest=True)
+def get_enquiry_details():
+    enquiries = frappe.get_all("Lead", fields={"name", "lead_name","mobile_no"})
+    return enquiries
+
+@frappe.whitelist(allow_guest = True)
+def delete_vehicle(data):
+    print("delete vehicle number",data)
+    data = json.loads(data)
+    license_plate = data.get('name').upper().replace(' ', '')
+    print("license plate",license_plate)
+    if frappe.db.exists("Vehicle Details", {"name": license_plate}):
+        vehicle_details = frappe.get_doc("Vehicle Details", {"name": license_plate})
+        print("vehicle details",vehicle_details)
+        frappe.delete_doc("Vehicle Details", license_plate, force=True)
+        if frappe.db.exists("Customer Details", {"name": license_plate}):
+            customer_details = frappe.get_doc("Customer Details", {"name": license_plate})
+            print("customer details",customer_details)
+            frappe.delete_doc("Customer Details", license_plate, force=True)
+            return "deleted"
+        return "deleted"
+    
+    
 def get_enquiry_details(data):
 	if data:
 		doc = frappe.get_all("Lead", {"mobile_no": data},{"name","lead_name","mobile_no"})
