@@ -577,11 +577,6 @@ def get_jobcard_details(searchJobCard):
         return job_card_details 
 
 
-@frappe.whitelist(allow_guest=True)
-def get_enquiry_details():
-    enquiries = frappe.get_all("Lead", fields={"name", "lead_name","mobile_no"})
-    return enquiries
-
 @frappe.whitelist(allow_guest = True)
 def delete_vehicle(data):
     print("delete vehicle number",data)
@@ -599,7 +594,7 @@ def delete_vehicle(data):
             return "deleted"
         return "deleted"
     
-    
+@frappe.whitelist(allow_guest=True)   
 def get_enquiry_details(data):
 	if data:
 		doc = frappe.get_all("Lead", {"mobile_no": data},{"name","lead_name","mobile_no"})

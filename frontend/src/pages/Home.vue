@@ -113,6 +113,12 @@
                                 </div>
                             </div>
                         </div>
+                        <div v-if="noMessage"
+                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                            <div class="bg-white rounded-lg p-8 shadow-xl">
+                                <h2 class="text-xl font-semibold mb-4">Nothing to Show ! 😄</h2>
+                            </div>
+                        </div>
                         <div v-if="billPopup == 'true'"
                             class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
                             <a href="#"
@@ -350,7 +356,7 @@
                                                     || 'No data' }}</label>
                                             </div>
                                             <div class="mt-2">
-                                                <label>Odometer Value&nbsp;&nbsp;:&nbsp;</label>
+                                                <label>Odometer reading&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">
                                                     {{ responseData && responseData.message &&
                                                         responseData.message[0]?.last_odometer_reading
@@ -642,7 +648,7 @@
                             <div class="flex justify-center" v-if="hide == 'false' && hideEnq == 'false'">
                                 <div class="flex justify-center mt-9">
                                     <img src="https://img.freepik.com/free-vector/hand-drawn-no-data-concept_52683-127823.jpg?w=996&t=st=1712321166~exp=1712321766~hmac=ae2f4e19eb0e1185d52ac8a07c158e9dc5afa741284e9526a8e8a0165573735b"
-                                        alt="No data" class="w-[25%]" @click="showMessage(`Nothing to Show ! 😄`)">
+                                        alt="No data" class="w-[25%]" @click="showMessage">
                                 </div>
                             </div>
                             <div class="flex justify-center m-5" v-if="hide == 'false'">
@@ -715,11 +721,11 @@
                                             <option value="hybrid ">Hybrid</option>
                                         </select>
                                     </p>
-                                    <p class="m-2">Odometer Value <span class="text-red-500 font-bold">*</span><br>
+                                    <p class="m-2">Odometer reading (kms) <span class="text-red-500 font-bold">*</span><br>
                                         <input type="number"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="vehicleData.last_odometer_reading"
-                                            placeholder="Enter Odometer Value">
+                                            placeholder="Enter Odometer reading">
                                     </p>
                                     <p class="m-2">Tyre Change (kms) <span class="text-red-500 font-bold">*</span><br>
                                         <input type="number"
@@ -787,11 +793,11 @@
                                             <option value="EV">Electical Vehicle</option>
                                         </select>
                                     </p>
-                                    <p class="m-2">Odometer Value <br>
+                                    <p class="m-2">Odometer reading <br>
                                         <input type="number" v-if="check"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="responseData.message[0].last_odometer_reading"
-                                            placeholder="Enter Odometer Value">
+                                            placeholder="Enter Odometer reading">
                                     </p>
                                     <p class="m-2">Tyre Change (kms) <br>
                                         <input type="number" v-if="check"
@@ -2095,8 +2101,12 @@ const hasResponse = ref(true);
 const noData = ref(false);
 const successData = ref(false);
 const searchValue = ref(false);
-const showMessage = (message) => {
-    alert(message);
+const noMessage = ref(false);
+const showMessage = () => {
+    noMessage.value = true;
+    setTimeout(() => {
+        noMessage.value = false;
+    }, 1000);
 };
 
 const isEditMode = ref(false)
@@ -2336,14 +2346,14 @@ function nextPageAndHighlight() {
     if (currentstep.value < maxStep) {
         currentstep.value++;
         currentPage.value = getPageName(currentstep.value);
-        console.log(searchQuery.value + "******")
+        console.log(responseData.value.message[0].name + "******")
         // if (currentstep.value == 3) {
         //     checkup(requireService)
         // }
 
         switch (currentstep.value) {
             case 1:
-                jobCard["user"] = searchQuery.value;
+                jobCard["user"] = responseData.value.message[0].name;
                 console.log(jobCard)
                 console.log("****1****")
                 break;
@@ -2748,7 +2758,7 @@ const handlePrimaryCheckboxModify = (clickedEmployee) => {
 };
 
 const addCustomerData = async () => {
-    const name = customerData.value.name.trim();
+    const name = responseData.value.message[0].name.trim();
     console.log(name)
     const existingData = await returnSearch(name);
     console.log('filtering process', existingData.message[1].current_owner);
@@ -2788,7 +2798,7 @@ const addCustomerData = async () => {
         const data = {
             current_owner: customerData.value.current_owner,
             owner_mobile_no: customerData.value.owner_mobile_no,
-            name: customerData.value.name,
+            name: name,
             whatsappChecked: customerData.value.whatsappChecked,
             callChecked: customerData.value.callChecked,
             smsChecked: customerData.value.smsChecked,
@@ -2811,7 +2821,7 @@ const addCustomerData = async () => {
             const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_customer_details`, { data: JSON.stringify(data) }, { headers: headers })
             check.value = true;
             console.log(response);
-            if (responseData.value && responseData.value.message) {
+            if (response) {
                 showNewCustomer.value = false;
                 dataAssignment(response)
                 showAlerts.value = true;
