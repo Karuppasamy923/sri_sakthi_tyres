@@ -273,13 +273,15 @@
                                     <button @click="getJobCard" v-if="hide == 'false' && hideEnq == 'false'"
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Job
                                         Card</button>
-                                    <button @click="hide = 'false', check = 'true', initialNext = 'true'" v-if="hide != 'false'"
+                                    <button @click="hide = 'false', check = 'true', initialNext = 'true'"
+                                        v-if="hide != 'false'"
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Back</button>
                                 </div>
                                 <div>
                                     <button @click="getEnquiry" v-if="hideEnq == 'false' && hide == 'false'"
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Enquiry</button>
-                                    <button @click="hideEnq = 'false', check = 'true', initialNext = 'true'" v-if="hideEnq != 'false'"
+                                    <button @click="hideEnq = 'false', check = 'true', initialNext = 'true'"
+                                        v-if="hideEnq != 'false'"
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Back</button>
                                 </div>
                                 <div>
@@ -444,12 +446,12 @@
                                 </div>
                             </div>
                             <div v-if="hasResponse && initial">
-                            <div class="flex justify-center" v-if="hide == 'false' && hideEnq == 'false'">
-                                <div class="flex justify-center mt-9">
-                                    <img src="https://img.freepik.com/free-vector/hand-drawn-no-data-concept_52683-127823.jpg?w=996&t=st=1712321166~exp=1712321766~hmac=ae2f4e19eb0e1185d52ac8a07c158e9dc5afa741284e9526a8e8a0165573735b"
-                                        alt="No data" class="w-[25%]" @click="showMessage">
+                                <div class="flex justify-center" v-if="hide == 'false' && hideEnq == 'false'">
+                                    <div class="flex justify-center mt-9">
+                                        <img src="https://img.freepik.com/free-vector/hand-drawn-no-data-concept_52683-127823.jpg?w=996&t=st=1712321166~exp=1712321766~hmac=ae2f4e19eb0e1185d52ac8a07c158e9dc5afa741284e9526a8e8a0165573735b"
+                                            alt="No data" class="w-[25%]" @click="showMessage">
+                                    </div>
                                 </div>
-                            </div>
                                 <div class="flex justify-center m-5" v-if="hide == 'false' && hideEnq == 'false'">
                                     <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
                                         @click="addVehicle">
@@ -459,7 +461,7 @@
                                         @click="addCustomer" id="customerId">
                                         Add Customer
                                     </button>
-    
+
                                 </div>
                             </div>
                         </div>
@@ -1037,7 +1039,7 @@
                                                     v-model="pattern">
                                                     <option v-for="(pattern, index) in patterns[index]" :key="index">{{
                                                         pattern
-                                                    }}</option>
+                                                        }}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -1170,9 +1172,12 @@
                                             </div>
                                         </div>
                                         <div>
-                                            <button
+                                            <button v-if="!mobileSearch"
                                                 class="bg-green-500 w-[100%]  text-white font-bold 0 text-base p-4 rounded-lg m-3"
                                                 @click="handleCustomer">Save</button>
+                                            <button v-if="mobileSearch"
+                                                class="bg-gray-500 w-[100%]  text-white font-bold 0 text-base p-4 rounded-lg m-3"
+                                                @click="okCustomer">Ok</button>
                                         </div>
                                     </div>
                                 </div>
@@ -1427,7 +1432,8 @@
                                 <label for="PUN">Puncture</label>
                             </div>
                             <div class="flex flex-row items-center space-x-3">
-                                <button class="bg-gray-600 text-white rounded-lg p-1 font-bold" @click="clearData(index)">Clear</button>
+                                <button class="bg-gray-600 text-white rounded-lg p-1 font-bold"
+                                    @click="clearData(index)">Clear</button>
                             </div>
                         </div>
                     </div>
@@ -1783,8 +1789,9 @@
                                     </select>
                                 </div>
                                 <div class="mt-[50px]">
-                                    <button class="bg-gray-600 text-white rounded-lg p-1 font-bold" @click="clearTyreData(index)">Clear</button>
-                                </div>    
+                                    <button class="bg-gray-600 text-white rounded-lg p-1 font-bold"
+                                        @click="clearTyreData(index)">Clear</button>
+                                </div>
                             </div>
                             <div class="ml-[400px] mt-5">
                                 <FeatherIcon name="trash-2" class="mt-0 ml-2 w-6 h-6 cursor-pointer text-red-500"
@@ -3100,7 +3107,7 @@ const searchMobile = ref('')
 const boolDetails = reactive({
     state: 0,
 });
-
+const mobileSearch = ref(false);
 const handleSearch = async () => {
     if (searchMobile.value) {
         const response = await axios.get(`${BaseURL}/api/method/tyre.api.lead_details`, {
@@ -3111,6 +3118,7 @@ const handleSearch = async () => {
         });
         leadDetails.value = response.data.message;
         boolDetails.state = 1;
+        mobileSearch.value = true;
 
         console.log('lead details', leadDetails.value);
     }
@@ -3124,6 +3132,13 @@ const handleSearch = async () => {
             showNewCustomer.value = true;
         }, 1000);
     }
+}
+const okCustomer = () => {
+    console.log("hi")
+    leadDetails.value = '';
+    boolDetails.state = 0;
+    mobileSearch.value = false;
+    searchMobile.value = ''
 }
 
 
@@ -3641,17 +3656,17 @@ const deleteTyreReplacement = (index) => {
 const clearTyreData = (index) => {
     console.log("hi");
     const tyre = tyres.value[index]
-        tyre.type = '';
-        tyre.loadIndex = '';
-        tyre.brand = '';
-        tyre.speedRating = '';
-        tyre.pattern = '';
-        tyre.size = '';
-        tyre.ttTl = '';
-        tyre.rate = '';
-        tyre.item = '';
-        tyre.mandatory = false;
-        tyre.status = false;
+    tyre.type = '';
+    tyre.loadIndex = '';
+    tyre.brand = '';
+    tyre.speedRating = '';
+    tyre.pattern = '';
+    tyre.size = '';
+    tyre.ttTl = '';
+    tyre.rate = '';
+    tyre.item = '';
+    tyre.mandatory = false;
+    tyre.status = false;
 };
 let step = ref(0);
 
@@ -3860,9 +3875,9 @@ const confirmDataSave = () => {
     console.log(jobCard)
     checkup(jobCard)
     finalSuccess.value = true;
-    console.log('finalsuccess',finalSuccess.value);
+    console.log('finalsuccess', finalSuccess.value);
     setTimeout(() => {
-        console.log('finalsuccess',finalSuccess.value);
+        console.log('finalsuccess', finalSuccess.value);
         finalSuccess.value = false;
         currentstep.value = 0;
         check.value = false;
