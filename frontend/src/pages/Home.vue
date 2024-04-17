@@ -106,11 +106,15 @@
                                 <div class="flex justify-center">
                                     <button @click="confirmSave" v-if="newVehicleSave"
                                         class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
-                                    <button @click="confirmCustomerSave" v-if="newCustomerSave"
-                                        class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
                                     <button @click="cancelSave"
                                         class="bg-red-500 text-white font-semibold px-4 py-2 rounded">Cancel</button>
                                 </div>
+                            </div>
+                        </div>
+                        <div v-if="noMessage"
+                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                            <div class="bg-white rounded-lg p-8 shadow-xl">
+                                <h2 class="text-xl font-semibold mb-4">Nothing to Show ! 😄</h2>
                             </div>
                         </div>
                         <div v-if="billPopup == 'true'"
@@ -122,16 +126,6 @@
                                         <h5 class="mb-2 text-2xl font-bold tracking-tight text-black">
                                             Price Details</h5>
                                     </div>
-                                    <div class="flex justify-end">
-                                        <button @click="billPopup = 'false'">
-                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                fill="none" viewBox="0 0 14 14">
-                                                <path stroke="currentColor" stroke-linecap="round"
-                                                    stroke-linejoin="round" stroke-width="2"
-                                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                            </svg>
-                                        </button>
-                                    </div>
                                 </div>
                                 <div class="relative overflow-x-auto">
                                     <table
@@ -140,7 +134,7 @@
                                             class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                             <tr>
                                                 <th scope="col" class="px-6 py-3">
-                                                    Brand
+                                                    Items
                                                 </th>
                                                 <th scope="col" class="px-6 py-3">
                                                     Size
@@ -166,7 +160,7 @@
                                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                                                 v-for="(item, index) in popItems.lead_item" :key="index">
                                                 <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                                    scope="row">{{ item.brand }}</td>
+                                                    scope="row">{{ item.item_code }}</td>
                                                 <td class="px-6 py-3">{{ item.size }}</td>
                                                 <td class="px-6 py-3">{{ item.tyre_type }}</td>
                                                 <td class="px-6 py-3">{{ item.pattern }}</td>
@@ -188,6 +182,12 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                <div class="grid grid-cols-2 gap-10">
+                                <Button class="flex justify-end mt-3" :variant="'solid'"  theme="green" size="sm" @click="enquiryClear"
+                                >OK</Button>
+                                <Button class="flex justify-end mt-3" :variant="'solid'"  theme="red" size="sm" @click="deleteEnquiry"
+                                >Cancel</Button>
+                            </div>
                             </a>
                         </div>
 
@@ -205,313 +205,87 @@
                             </div>
                         </div>
 
-                    <!-- </div> -->
-                    <div v-if="showAlerts"
-                        class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
-                        <div class="bg-white rounded-lg p-8 shadow-xl">
-                            <p class="mb-4" v-if="vehicleNumber">Please fill the required fields!</p>
-                            <p class="mb-4" v-if="searchValue">Please fill the search value!</p>
-                            <p class="mb-4 text-red-500" v-if="wrongSearchValue">Enter valid Vehicle Number!</p>
-                            <p class="mb-4" v-if="vehicleExist">Vehicle already exists!</p>
-                            <p class="mb-4 text-green-500" v-if="successData">Details added successfully!</p>
-                            <p class="mb-4 text-green-500" v-if="modifyAlert">Successfully modified vehicle data!</p>
-                            <p class="mb-4" v-if="notVehicleAlert">Vehicle not exists!</p>
-                            <p class="mb-4" v-if="noVehicleNumber">Enter vehicle number!</p>
-                            <p class="mb-4" v-if="noValidVehicleNumber">Enter valid vehicle number!</p>
-                            <p class="mb-4" v-if="noCustomerValidVehicleNumber">Enter valid vehicle number!</p>
-                            <p class="mb-4" v-if="notCustomerAlert">Please fill the Customer details!</p>
-                            <p class="mb-4" v-if="notEmployeeAlert">Please add atleast one Employee!</p>
-                            <p class="mb-4" v-if="notEmpDetailAlert">Please fill required Employee details!</p>
-                            <p class="mb-4 text-green-500" v-if="deleteConfirmation">Vehicle details deleted
-                                successfully!</p>
-                            <p class="mb-4 text-red-500 font-bold" v-if="cannotSave">! It's a search details. Can't
-                                save..</p>
-                            <p class="mb-4 text-red-500 font-bold" v-if="customerExist">! Customer already added to this
-                                vehicle..</p>
-                            <div class="flex justify-center">
-                                <button @click="closed"
-                                    v-if="vehicleNumber || vehicleExist || notCustomerAlert || notEmployeeAlert || notEmpDetailAlert || notVehicleAlert || noVehicleNumber || noValidVehicleNumber || noCustomerValidVehicleNumber"
-                                    class="bg-red-500 text-white font-semibold px-4 py-2 rounded mr-2">Ok</button>
-                                <button @click="close" v-if="successData || modifyAlert || searchValue"
-                                    class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Ok</button>
+                        <!-- </div> -->
+                        <div v-if="showAlerts"
+                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                            <div class="bg-white rounded-lg p-8 shadow-xl">
+                                <p class="mb-4" v-if="vehicleNumber">Please fill the required fields!</p>
+                                <p class="mb-4" v-if="searchValue">Please fill the search value!</p>
+                                <p class="mb-4 text-red-500" v-if="wrongSearchValue">Enter valid Vehicle Number!</p>
+                                <p class="mb-4" v-if="vehicleExist">Vehicle already exists!</p>
+                                <p class="mb-4 text-green-500" v-if="successData">Details added successfully!</p>
+                                <p class="mb-4 text-green-500" v-if="modifyAlert">Successfully modified vehicle data!
+                                </p>
+                                <p class="mb-4" v-if="notVehicleAlert">Vehicle not exists!</p>
+                                <p class="mb-4" v-if="noVehicleNumber">Enter vehicle number!</p>
+                                <p class="mb-4" v-if="noValidVehicleNumber">Enter valid vehicle number!</p>
+                                <p class="mb-4" v-if="noCustomerValidVehicleNumber">Enter valid vehicle number!</p>
+                                <p class="mb-4" v-if="notCustomerAlert">Please fill the Customer details!</p>
+                                <p class="mb-4" v-if="notEmployeeAlert">Please add atleast one Employee!</p>
+                                <p class="mb-4" v-if="notEmpDetailAlert">Please fill required Employee details!</p>
+                                <p class="mb-4 text-green-500" v-if="deleteConfirmation">Vehicle details deleted
+                                    successfully!</p>
+                                <p class="mb-4 text-red-500 font-bold" v-if="cannotSave">! It's a search details. Can't
+                                    save..</p>
+                                <p class="mb-4 text-red-500 font-bold" v-if="customerExist">! Customer already added to
+                                    this
+                                    vehicle..</p>
+                                <div class="flex justify-center">
+                                    <button @click="closed"
+                                        v-if="vehicleNumber || vehicleExist || notCustomerAlert || notEmployeeAlert || notEmpDetailAlert || notVehicleAlert || noVehicleNumber || noValidVehicleNumber || noCustomerValidVehicleNumber"
+                                        class="bg-red-500 text-white font-semibold px-4 py-2 rounded mr-2">Ok</button>
+                                    <button @click="close" v-if="successData || modifyAlert || searchValue"
+                                        class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Ok</button>
 
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div v-if="showDeleteConfirmation"
-                        class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
-                        <div class="bg-white rounded-lg p-8 shadow-xl">
-                            <h2 class="text-xl font-semibold mb-4">Confirm Delete</h2>
-                            <p class="mb-4">Are you sure want to delete the details?</p>
-                            <div class="flex justify-center">
-                                <button
-                                    @click="confirmDelete(responseData && responseData.message && responseData.message[0]?.name)"
-                                    class="bg-red-500 text-white font-semibold px-4 py-2 rounded mr-2">Delete</button>
-                                <button @click="cancelDelete"
-                                    class="bg-gray-500 text-white font-semibold px-4 py-2 rounded">Cancel</button>
+                        <div v-if="showDeleteConfirmation"
+                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                            <div class="bg-white rounded-lg p-8 shadow-xl">
+                                <h2 class="text-xl font-semibold mb-4">Confirm Delete</h2>
+                                <p class="mb-4">Are you sure want to delete the details?</p>
+                                <div class="flex justify-center">
+                                    <button
+                                        @click="confirmDelete(responseData && responseData.message && responseData.message[0]?.name)"
+                                        class="bg-red-500 text-white font-semibold px-4 py-2 rounded mr-2">Delete</button>
+                                    <button @click="cancelDelete"
+                                        class="bg-gray-500 text-white font-semibold px-4 py-2 rounded">Cancel</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- <div v-if="currentstep == 0"> -->
+                        <!-- <div v-if="currentstep == 0"> -->
                         <div class="flex justify-center m-5">
                             <input type="text" class="w-[338px] h-[52px] rounded-sm border-solid border border-black"
                                 v-model="searchQuery" @keyup.enter="search" placeholder="Enter Vehicle Number">
                             <button class="bg-blue-500 w-[150px] text-white font-bold text-base p-4 rounded-lg ml-3"
                                 @click="search">Search</button>
                         </div>
-                        <div class="grid grid-cols-2 gap-3" v-if="responseData && responseData.message && check">
-                            <Card class="bg-gray-200">
-                                <div>
-                                    <h4 class="text-[20px] font-bold">Vehicle Details</h4>
-                                    <hr class="dark-hr">
-                                    <div class="grid grid-cols-2">
-                                        <div>
-                                            <div class="mt-2">
-                                                <label>Vehicle Number&emsp;&nbsp;:&nbsp;</label>
-                                                <label>
-                                                    {{ responseData && responseData.message &&
-                                                    responseData.message[0]?.name || 'No data' }}
-                                                </label>
-                                            </div>
-                                            <div class="mt-2">
-                                                <label>Vehicle Brand&emsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;</label>
-                                                <label class="mt-3"> {{
-                                                    responseData && responseData.message &&
-                                                    responseData.message[0]?.vehicle_brand || 'No data' }}</label>
-                                            </div>
-                                            <div class="mt-2">
-                                                <label>Fuel
-                                                    Type&nbsp;&nbsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;:&nbsp;</label>
-                                                <label class="mt-3"> {{ responseData && responseData.message &&
-                                                    responseData.message[0]?.fuel_type
-                                                    || 'No data'
-                                                    }}</label>
-                                            </div>
-                                            <div class="mt-2">
-                                                <label>Tyre Change(kms)&nbsp;:&nbsp;</label>
-                                                <label class="mt-3">{{ responseData && responseData.message &&
-                                                    responseData.message[0]?.tyre_change
-                                                    || 'No data'
-                                                    }}</label>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="mt-2">
-                                                <label>Vehicle Model&nbsp;&nbsp;: </label>
-                                                <label class="mt-3">
-                                                    {{ responseData && responseData.message &&
-                                                        responseData.message[0]?.vehicle_model || 'No data' }}</label>
-                                            </div>
-                                            <div class="mt-2">
-                                                <label>Chassis No&nbsp;&nbsp;:&nbsp; </label>
-                                                <label class="mt-3">{{ responseData && responseData.message &&
-                                                    responseData.message[0]?.chassis_no
-                                                    || 'No data' }}</label>
-                                            </div>
-                                            <div class="mt-2">
-                                                <label>Odometer Value&nbsp;&nbsp;:&nbsp;</label>
-                                                <label class="mt-3">
-                                                    {{ responseData && responseData.message &&
-                                                        responseData.message[0]?.last_odometer_reading
-                                                    || 'No data' }}</label>
-                                            </div>
-                                            <div class="mt-2">
-                                                <label>Alignment (kms)&nbsp;&nbsp;:&nbsp;</label>
-                                                <label class="mt-3"> {{ responseData && responseData.message &&
-                                                    responseData.message[0]?.alignment
-                                                    || 'No data'
-                                                    }}</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mt-[70px] flex flex-row space-x-9">
-                                        <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
-                                            @click="addVehicle">
-                                            Add Vehicle
-                                        </button>
-                                        <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
-                                            @click="modifyVehicle">Modify</button>
-                                    </div>
-                                </div>
-                            </Card>
-                            <Card class="bg-gray-200">
-                                <div>
-                                    <h4 class="text-[20px] font-bold">Customer Details</h4>
-                                    <hr class="dark-hr">
-                                    <div class="grid grid-cols-2 pl-1">
-                                        <div>
-                                            <div class="mt-2">
-                                                <label>Customer Name&nbsp;&nbsp;:&nbsp; </label>
-                                                <label class="mt-3">
-                                                    {{ responseData && responseData.message &&
-                                                        responseData.message[1]?.current_owner || 'No data' }}
-                                                </label>
-                                                <br>
-                                                <input type="checkbox"
-                                                    :checked="responseData && responseData.message && responseData.message[1].whatsapp === 1"
-                                                    :disabled="!isEditMode"
-                                                    @change="responseData && responseData.message && (responseData.message[1].whatsapp = $event.target.checked ? 1 : 0)"
-                                                    class="bg-gray-300 rounded-sm">
-                                                &nbsp;&nbsp;<label>WhatsApp</label>
-                                                <span class="ml-5">
-                                                    <input type="checkbox"
-                                                        :checked="responseData && responseData.message && responseData.message[1].call === 1"
-                                                        :disabled="!isEditMode"
-                                                        @change="responseData && responseData.message && (responseData.message[1].call = $event.target.checked ? 1 : 0)"
-                                                        class="bg-gray-300 rounded-sm">
-                                                    &nbsp;&nbsp;<label>Call</label>
-                                                </span>
-                                            </div>
-                                            <!-- <div v-for="(employee, index) in responseData.message[1]?.current_driver"
-                                                :key="index"> -->
-                                            <div class="mt-2">
-                                                <label>Driver Name&nbsp;&nbsp;:&nbsp;</label>
-                                                <label class="mt-3">
-                                                    {{ responseData &&
-
-                                                        responseData.message && responseData.message[2][0]?.full_name ||
-                                                    'No data' }}
-
-                                                </label>
-                                                <br>
-                                                <input type="checkbox"
-                                                    :checked="responseData && responseData.message && responseData.message[2] && responseData.message[2][0]?.custom_whatsapp_check === 1"
-                                                    :disabled="!isEditMode"
-                                                    @change="responseData && responseData.message && (responseData.message[2][0].custom_whatsapp_check = $event.target.checked ? 1 : 0)"
-                                                    class="bg-gray-300 rounded-sm">
-                                                &nbsp;&nbsp;<label>WhatsApp</label>
-                                                <span class="ml-5">
-                                                    <input type="checkbox"
-                                                        :checked="responseData && responseData.message && responseData.message[2] && responseData.message[2][0]?.custom_call_check === 1"
-                                                        :disabled="!isEditMode"
-                                                        @change="responseData && responseData.message && (responseData.message[2][0].custom_call_check = $event.target.checked ? 1 : 0)"
-                                                        class="bg-gray-300 rounded-sm">
-                                                    &nbsp;&nbsp;<label>Call</label>
-                                                </span>
-                                            </div>
-                                            <!-- </div> -->
-                                            <!-- <div v-for="(contact, index) in responseData.message[1]?.contact_person"
-                                                :key="index"> -->
-                                            <div class="mt-2">
-                                                <label>Contact Person&nbsp;&nbsp;:&nbsp;</label>
-                                                <label class="mt-3">
-                                                    {{ responseData && responseData.message &&
-                                                        responseData.message[2][1]?.contact_person_name || 'No data' }}
-                                                </label>
-                                                <br>
-                                                <input type="checkbox"
-                                                    :checked="responseData && responseData.message && responseData.message[2] && responseData.message[2][1]?.whatsapp === 1"
-                                                    :disabled="!isEditMode"
-                                                    @change="responseData && responseData.message && (responseData.message[2][1].whatsapp = $event.target.checked ? 1 : 0)"
-                                                    class="bg-gray-300 rounded-sm">
-                                                &nbsp;&nbsp;<label>WhatsApp</label>
-                                                <span class="ml-5">
-                                                    <input type="checkbox"
-                                                        :checked="responseData && responseData.message && responseData.message[2] && responseData.message[2][1]?.call === 1"
-                                                        :disabled="!isEditMode"
-                                                        @change="responseData && responseData.message && (responseData.message[2][1].call = $event.target.checked ? 1 : 0)"
-                                                        class="bg-gray-300 rounded-sm">
-                                                    &nbsp;&nbsp;<label>Call</label>
-                                                </span>
-                                            </div>
-                                            <!-- </div> -->
-                                        </div>
-                                        <div>
-                                            <div class="mt-2">
-                                                <label>Customer Mobile&nbsp;&nbsp;:&nbsp;</label>
-                                                <label class="mt-3">
-                                                    {{ responseData && responseData.message &&
-                                                        responseData.message[1]?.owner_mobile_no || 'No data' }}
-                                                </label>
-                                                <br>
-                                                <span class="ml-5">
-                                                    <input type="checkbox"
-                                                        :checked="responseData && responseData.message && responseData.message[1].sms === 1"
-                                                        :disabled="!isEditMode"
-                                                        @change="responseData && responseData.message && (responseData.message[1].sms = $event.target.checked ? 1 : 0)"
-                                                        class="bg-gray-300 rounded-sm">
-                                                    &nbsp;&nbsp;<label>SMS</label>
-                                                </span>
-                                            </div>
-                                            <!-- <div v-for="(employee, index) in responseData.message[1]?.current_driver"
-                                                :key="index"> -->
-                                            <div class="mt-2">
-                                                <label>Driver Mobile&nbsp;&nbsp;:&nbsp;</label>
-                                                <label class="mt-3">
-                                                    {{ responseData && responseData.message &&
-                                                        responseData.message[2][0]?.cell_number
-                                                    || 'No data' }}
-                                                </label>
-                                                <br>
-                                                <span class="ml-5">
-                                                    <input type="checkbox"
-                                                        :checked="responseData && responseData.message && responseData.message[2] && responseData.message[2][0]?.custom_sms_check === 1"
-                                                        :disabled="!isEditMode"
-                                                        @change="responseData && responseData.message && (responseData.message[2][0].custom_sms_check = $event.target.checked ? 1 : 0)"
-                                                        class="bg-gray-300 rounded-sm">
-                                                    &nbsp;&nbsp;<label>SMS</label>
-                                                </span>
-                                            </div>
-                                            <!-- </div> -->
-                                            <!-- <div v-for="(contact, index) in responseData.message[1]?.contact_person"
-                                                :key="index"> -->
-                                            <div class="mt-2">
-                                                <label>Contact Person&nbsp;&nbsp;:&nbsp; </label>
-                                                <label class="mt-3">
-                                                    {{ responseData && responseData.message &&
-                                                        responseData.message[2][1]?.contact_person_mobile
-                                                    || 'No data' }}
-                                                </label>
-                                                <br>
-                                                <span class="ml-5">
-                                                    <input type="checkbox"
-                                                        :checked="responseData && responseData.message && responseData.message[2] && responseData.message[2][1]?.sms === 1"
-                                                        :disabled="!isEditMode"
-                                                        @change="responseData && responseData.message && (responseData.message[2][1].sms = $event.target.checked ? 1 : 0)"
-                                                        class="bg-gray-300 rounded-sm">
-                                                    &nbsp;&nbsp;<label>SMS</label>
-                                                </span>
-                                            </div>
-                                            <!-- </div> -->
-
-                                        </div>
-                                    </div>
-                                    <div class="float-right mt-[20px] flex flex-row space-x-9">
-                                        <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
-                                            @click="addCustomer" id="customerId">
-                                            Add Customer
-                                        </button>
-                                        <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
-                                            @click="modifyCustomer">Modify</button>
-                                    </div>
-                                </div>
-                            </Card>
-                            <div class="mt-3">
-                                <button class="bg-red-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
-                                    @click="deleteVehicle">Delete</button>
-                            </div>
-                        </div>
-                        <div v-if="hasResponse && initial">
+                        <div v-if="(hasResponse && initial) || checked">
                             <div class="flex">
                                 <div class="mr-8">
                                     <button @click="getJobCard" v-if="hide == 'false' && hideEnq == 'false'"
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Job
                                         Card</button>
-                                    <button @click="hide = 'false'" v-if="hide != 'false'"
+                                    <button @click="hide = 'false', check = 'false',initial='true', responseData = ''"
+                                        v-if="hide != 'false'"
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Back</button>
                                 </div>
                                 <div>
                                     <button @click="getEnquiry" v-if="hideEnq == 'false' && hide == 'false'"
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Enquiry</button>
-                                    <button @click="hideEnq = 'false'" v-if="hideEnq != 'false'"
+                                    <button @click="hideEnq = 'false', check = 'false',initial='true', responseData = ''"
+                                        v-if="hideEnq != 'false'"
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Back</button>
                                 </div>
                                 <div>
-                                    <Input type="number" placeholder="search ..." v-if="hideEnq != 'false'"
-                                        v-model="searchEnquiry" @input="getEnquiry" class="mt-9 mb-2 -ml-14.5 p-4" />
-                                    <Input placeholder="Vehicle Search ..."
+                                    <input type="number" placeholder="search ..." v-if="hideEnq != 'false'" 
+                                        v-model="searchEnquiry" class="mt-20 mb-5 ml-[-6.2rem] p-4 w-[200px] h-[40px] rounded-sm border-solid border border-black" />
+                                        <!-- <button v-if="hideEnq != 'false'" @click="getEnquiry" class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Search</button> -->
+                                    <input placeholder="Vehicle Search ..."
                                         v-if="hide != 'false' && jobCardPopup == 'false'" v-model="searchJobCard"
-                                        @input="getJobCard" class="mt-9 mb-2 -ml-14.5 p-4" />
+                                        class="mt-20 mb-5 ml-[-6.2rem] p-4 w-[200px] h-[40px] rounded-sm border-solid border border-black" />
+                                        <!-- <button v-if="hide != 'false' && jobCardPopup == 'false'" @click="getJobCard" class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Search</button> -->
                                 </div>
                             </div>
                             <div v-if="jobCardPopup == 'false'">
@@ -667,25 +441,258 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex justify-center" v-if="hide == 'false' && hideEnq == 'false'">
-                                <div class="flex justify-center mt-9">
-                                    <img src="https://img.freepik.com/free-vector/hand-drawn-no-data-concept_52683-127823.jpg?w=996&t=st=1712321166~exp=1712321766~hmac=ae2f4e19eb0e1185d52ac8a07c158e9dc5afa741284e9526a8e8a0165573735b"
-                                        alt="No data" class="w-[25%]" @click="showMessage(`Nothing to Show ! 😄`)">
+                            <div v-if="hasResponse && initial">
+                                <div class="flex justify-center" v-if="hide == 'false' && hideEnq == 'false'">
+                                    <div class="flex justify-center mt-9">
+                                        <img src="https://img.freepik.com/free-vector/hand-drawn-no-data-concept_52683-127823.jpg?w=996&t=st=1712321166~exp=1712321766~hmac=ae2f4e19eb0e1185d52ac8a07c158e9dc5afa741284e9526a8e8a0165573735b"
+                                            alt="No data" class="w-[25%]" @click="showMessage">
+                                    </div>
+                                </div>
+                                <div class="flex justify-center m-5" v-if="hide == 'false' && hideEnq == 'false'">
+                                    <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
+                                        @click="addVehicle">
+                                        Add Vehicle
+                                    </button>
+                                    <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
+                                        @click="addCustomer" id="customerId">
+                                        Add Customer
+                                    </button>
+
                                 </div>
                             </div>
-                            <div class="flex justify-center m-5" v-if="hide == 'false' && hideEnq == 'false'">
-                                <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
-                                    @click="addVehicle">
-                                    Add Vehicle
-                                </button>
-                                <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
-                                    @click="addCustomer" id="customerId">
-                                    Add Customer
-                                </button>
+                        </div>                        
+                        <div class="grid grid-cols-2 gap-3" v-if="responseData && responseData.message && check">
+                            <Card class="bg-gray-200">
+                                <div>
+                                    <h4 class="text-[20px] font-bold">Vehicle Details</h4>
+                                    <hr class="dark-hr">
+                                    <div class="grid grid-cols-2">
+                                        <div>
+                                            <div class="mt-2">
+                                                <label>Vehicle Number&emsp;&nbsp;:&nbsp;</label>
+                                                <label>
+                                                    {{ responseData && responseData.message &&
+                                                        responseData.message[0]?.name || 'No data' }}
+                                                </label>
+                                            </div>
+                                            <div class="mt-2">
+                                                <label>Vehicle Brand&emsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;</label>
+                                                <label class="mt-3"> {{
+                                                    responseData && responseData.message &&
+                                                    responseData.message[0]?.vehicle_brand || 'No data' }}</label>
+                                            </div>
+                                            <div class="mt-2">
+                                                <label>Fuel
+                                                    Type&nbsp;&nbsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;:&nbsp;</label>
+                                                <label class="mt-3"> {{ responseData && responseData.message &&
+                                                    responseData.message[0]?.fuel_type
+                                                    || 'No data'
+                                                    }}</label>
+                                            </div>
+                                            <div class="mt-2">
+                                                <label>Tyre Change(kms)&nbsp;:&nbsp;</label>
+                                                <label class="mt-3">{{ responseData && responseData.message &&
+                                                    responseData.message[0]?.tyre_change
+                                                    || 'No data'
+                                                    }}</label>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="mt-2">
+                                                <label>Vehicle Model&nbsp;&nbsp;: </label>
+                                                <label class="mt-3">
+                                                    {{ responseData && responseData.message &&
+                                                        responseData.message[0]?.vehicle_model || 'No data' }}</label>
+                                            </div>
+                                            <div class="mt-2">
+                                                <label>Chassis No&nbsp;&nbsp;:&nbsp; </label>
+                                                <label class="mt-3">{{ responseData && responseData.message &&
+                                                    responseData.message[0]?.chassis_no
+                                                    || 'No data' }}</label>
+                                            </div>
+                                            <div class="mt-2">
+                                                <label>Odometer reading&nbsp;&nbsp;:&nbsp;</label>
+                                                <label class="mt-3">
+                                                    {{ responseData && responseData.message &&
+                                                        responseData.message[0]?.last_odometer_reading
+                                                        || 'No data' }}</label>
+                                            </div>
+                                            <div class="mt-2">
+                                                <label>Alignment (kms)&nbsp;&nbsp;:&nbsp;</label>
+                                                <label class="mt-3"> {{ responseData && responseData.message &&
+                                                    responseData.message[0]?.alignment
+                                                    || 'No data'
+                                                    }}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-[70px] flex flex-row space-x-9">
+                                        <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
+                                            @click="addVehicle">
+                                            Add Vehicle
+                                        </button>
+                                        <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
+                                            @click="modifyVehicle">Modify</button>
+                                    </div>
+                                </div>
+                            </Card>
+                            <Card class="bg-gray-200">
+                                <div>
+                                    <h4 class="text-[20px] font-bold">Customer Details</h4>
+                                    <hr class="dark-hr">
+                                    <div class="grid grid-cols-2 pl-1">
+                                        <div>
+                                            <div class="mt-2">
+                                                <label>Customer Name&nbsp;&nbsp;:&nbsp; </label>
+                                                <label class="mt-3">
+                                                    {{ responseData && responseData.message &&
+                                                        responseData.message[1]?.current_owner || 'No data' }}
+                                                </label>
+                                                <br>
+                                                <input type="checkbox"
+                                                    :checked="responseData && responseData.message && responseData.message[1].whatsapp === 1"
+                                                    :disabled="!isEditMode"
+                                                    @change="responseData && responseData.message && (responseData.message[1].whatsapp = $event.target.checked ? 1 : 0)"
+                                                    class="bg-gray-300 rounded-sm">
+                                                &nbsp;&nbsp;<label>WhatsApp</label>
+                                                <span class="ml-5">
+                                                    <input type="checkbox"
+                                                        :checked="responseData && responseData.message && responseData.message[1].call === 1"
+                                                        :disabled="!isEditMode"
+                                                        @change="responseData && responseData.message && (responseData.message[1].call = $event.target.checked ? 1 : 0)"
+                                                        class="bg-gray-300 rounded-sm">
+                                                    &nbsp;&nbsp;<label>Call</label>
+                                                </span>
+                                            </div>
+                                            <!-- <div v-for="(employee, index) in responseData.message[1]?.current_driver"
+                                                :key="index"> -->
+                                            <div class="mt-2">
+                                                <label>Driver Name&nbsp;&nbsp;:&nbsp;</label>
+                                                <label class="mt-3">
+                                                    {{ responseData &&
 
+                                                        responseData.message && responseData.message[2][0]?.full_name ||
+                                                        'No data' }}
+
+                                                </label>
+                                                <br>
+                                                <input type="checkbox"
+                                                    :checked="responseData && responseData.message && responseData.message[2] && responseData.message[2][0]?.custom_whatsapp_check === 1"
+                                                    :disabled="!isEditMode"
+                                                    @change="responseData && responseData.message && (responseData.message[2][0].custom_whatsapp_check = $event.target.checked ? 1 : 0)"
+                                                    class="bg-gray-300 rounded-sm">
+                                                &nbsp;&nbsp;<label>WhatsApp</label>
+                                                <span class="ml-5">
+                                                    <input type="checkbox"
+                                                        :checked="responseData && responseData.message && responseData.message[2] && responseData.message[2][0]?.custom_call_check === 1"
+                                                        :disabled="!isEditMode"
+                                                        @change="responseData && responseData.message && (responseData.message[2][0].custom_call_check = $event.target.checked ? 1 : 0)"
+                                                        class="bg-gray-300 rounded-sm">
+                                                    &nbsp;&nbsp;<label>Call</label>
+                                                </span>
+                                            </div>
+                                            <!-- </div> -->
+                                            <!-- <div v-for="(contact, index) in responseData.message[1]?.contact_person"
+                                                :key="index"> -->
+                                            <div class="mt-2">
+                                                <label>Contact Person&nbsp;&nbsp;:&nbsp;</label>
+                                                <label class="mt-3">
+                                                    {{ responseData && responseData.message &&
+                                                        responseData.message[2][1]?.contact_person_name || 'No data' }}
+                                                </label>
+                                                <br>
+                                                <input type="checkbox"
+                                                    :checked="responseData && responseData.message && responseData.message[2] && responseData.message[2][1]?.whatsapp === 1"
+                                                    :disabled="!isEditMode"
+                                                    @change="responseData && responseData.message && (responseData.message[2][1].whatsapp = $event.target.checked ? 1 : 0)"
+                                                    class="bg-gray-300 rounded-sm">
+                                                &nbsp;&nbsp;<label>WhatsApp</label>
+                                                <span class="ml-5">
+                                                    <input type="checkbox"
+                                                        :checked="responseData && responseData.message && responseData.message[2] && responseData.message[2][1]?.call === 1"
+                                                        :disabled="!isEditMode"
+                                                        @change="responseData && responseData.message && (responseData.message[2][1].call = $event.target.checked ? 1 : 0)"
+                                                        class="bg-gray-300 rounded-sm">
+                                                    &nbsp;&nbsp;<label>Call</label>
+                                                </span>
+                                            </div>
+                                            <!-- </div> -->
+                                        </div>
+                                        <div>
+                                            <div class="mt-2">
+                                                <label>Customer Mobile&nbsp;&nbsp;:&nbsp;</label>
+                                                <label class="mt-3">
+                                                    {{ responseData && responseData.message &&
+                                                        responseData.message[1]?.owner_mobile_no || 'No data' }}
+                                                </label>
+                                                <br>
+                                                <span class="ml-5">
+                                                    <input type="checkbox"
+                                                        :checked="responseData && responseData.message && responseData.message[1].sms === 1"
+                                                        :disabled="!isEditMode"
+                                                        @change="responseData && responseData.message && (responseData.message[1].sms = $event.target.checked ? 1 : 0)"
+                                                        class="bg-gray-300 rounded-sm">
+                                                    &nbsp;&nbsp;<label>SMS</label>
+                                                </span>
+                                            </div>
+                                            <!-- <div v-for="(employee, index) in responseData.message[1]?.current_driver"
+                                                :key="index"> -->
+                                            <div class="mt-2">
+                                                <label>Driver Mobile&nbsp;&nbsp;:&nbsp;</label>
+                                                <label class="mt-3">
+                                                    {{ responseData && responseData.message &&
+                                                        responseData.message[2][0]?.cell_number
+                                                        || 'No data' }}
+                                                </label>
+                                                <br>
+                                                <span class="ml-5">
+                                                    <input type="checkbox"
+                                                        :checked="responseData && responseData.message && responseData.message[2] && responseData.message[2][0]?.custom_sms_check === 1"
+                                                        :disabled="!isEditMode"
+                                                        @change="responseData && responseData.message && (responseData.message[2][0].custom_sms_check = $event.target.checked ? 1 : 0)"
+                                                        class="bg-gray-300 rounded-sm">
+                                                    &nbsp;&nbsp;<label>SMS</label>
+                                                </span>
+                                            </div>
+                                            <!-- </div> -->
+                                            <!-- <div v-for="(contact, index) in responseData.message[1]?.contact_person"
+                                                :key="index"> -->
+                                            <div class="mt-2">
+                                                <label>Contact Person&nbsp;&nbsp;:&nbsp; </label>
+                                                <label class="mt-3">
+                                                    {{ responseData && responseData.message &&
+                                                        responseData.message[2][1]?.contact_person_mobile
+                                                        || 'No data' }}
+                                                </label>
+                                                <br>
+                                                <span class="ml-5">
+                                                    <input type="checkbox"
+                                                        :checked="responseData && responseData.message && responseData.message[2] && responseData.message[2][1]?.sms === 1"
+                                                        :disabled="!isEditMode"
+                                                        @change="responseData && responseData.message && (responseData.message[2][1].sms = $event.target.checked ? 1 : 0)"
+                                                        class="bg-gray-300 rounded-sm">
+                                                    &nbsp;&nbsp;<label>SMS</label>
+                                                </span>
+                                            </div>
+                                            <!-- </div> -->
+
+                                        </div>
+                                    </div>
+                                    <div class="float-right mt-[20px] flex flex-row space-x-9">
+                                        <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
+                                            @click="addCustomer" id="customerId">
+                                            Add Customer
+                                        </button>
+                                        <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
+                                            @click="modifyCustomer">Modify</button>
+                                    </div>
+                                </div>
+                            </Card>
+                            <div class="mt-3">
+                                <button class="bg-red-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
+                                    @click="deleteVehicle">Delete</button>
                             </div>
                         </div>
-
                         <div v-if="showNewVehicle"
                             class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-end items-center pb-10">
                             <div class="fixed inset-0" @click="addVehicle"></div>
@@ -743,11 +750,12 @@
                                             <option value="hybrid ">Hybrid</option>
                                         </select>
                                     </p>
-                                    <p class="m-2">Odometer Value <span class="text-red-500 font-bold">*</span><br>
+                                    <p class="m-2">Odometer reading (kms) <span
+                                            class="text-red-500 font-bold">*</span><br>
                                         <input type="number"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="vehicleData.last_odometer_reading"
-                                            placeholder="Enter Odometer Value">
+                                            placeholder="Enter Odometer reading">
                                     </p>
                                     <p class="m-2">Tyre Change (kms) <span class="text-red-500 font-bold">*</span><br>
                                         <input type="number"
@@ -815,11 +823,11 @@
                                             <option value="EV">Electical Vehicle</option>
                                         </select>
                                     </p>
-                                    <p class="m-2">Odometer Value <br>
+                                    <p class="m-2">Odometer reading <br>
                                         <input type="number" v-if="check"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="responseData.message[0].last_odometer_reading"
-                                            placeholder="Enter Odometer Value">
+                                            placeholder="Enter Odometer reading">
                                     </p>
                                     <p class="m-2">Tyre Change (kms) <br>
                                         <input type="number" v-if="check"
@@ -876,7 +884,7 @@
                                     <hr class="dark-hr">
                                     <p class="m-2" v-if="!handle && !hasResponse">Vehicle Number <span
                                             class="text-red-500 font-bold">*</span><br>
-                                        <input type="text"  v-model="responseData.message[0].name"
+                                        <input type="text" v-model="responseData.message[0].name"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Vehicle Number">
                                     </p>
@@ -884,7 +892,6 @@
                                         <input type="text" v-model="leadDetails.lead_name" v-if="boolDetails.state == 1"
                                             :readonly="boolDetails.state == 1"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-
                                             placeholder="Enter Name">
 
                                         <input type="text" v-model="customerData.current_owner"
@@ -896,7 +903,6 @@
                                         <input type="tel" v-model="leadDetails.mobile_no" v-if="boolDetails.state == 1"
                                             :readonly="boolDetails.state == 1"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-
                                             placeholder="Enter Mobile No.">
 
                                         <input type="tel" v-model="customerData.owner_mobile_no"
@@ -1162,9 +1168,12 @@
                                             </div>
                                         </div>
                                         <div>
-                                            <button
+                                            <button v-if="!mobileSearch"
                                                 class="bg-green-500 w-[100%]  text-white font-bold 0 text-base p-4 rounded-lg m-3"
                                                 @click="handleCustomer">Save</button>
+                                            <button v-if="mobileSearch"
+                                                class="bg-gray-500 w-[100%]  text-white font-bold 0 text-base p-4 rounded-lg m-3"
+                                                @click="okCustomer">Ok</button>
                                         </div>
                                     </div>
                                 </div>
@@ -1345,12 +1354,11 @@
                         <div class="flex">
                             <div class="grid grid-cols-4 w-[90%] gap-4">
                                 <div class="flex flex-col space-y-1 ml-4">
-                                    <label class="mt-2" :for="'tyre' + index">Tyre<span
-                                            class="text-red-500 font-bold">*</span></label>
+                                    <label class="mt-2" :for="'tyre' + index">Tyre</label>
                                     <select class="w-[100%] h-[3.5rem] rounded-sm" v-model="tyreData.tyre"
                                         :id="'type' + index" style="border: 1px solid black;"
                                         @change="updateTyreData(index)">
-                                        <option value="" selected>Please select...</option>
+                                        <option value="" selected disabled hidden>Please select...</option>
                                         <option value="Front Left">Front Left</option>
                                         <option value="Front Right">Front Right</option>
                                         <option value="Rear Left">Rear Left</option>
@@ -1363,7 +1371,7 @@
                                     <input v-model="tyreData.depth"
                                         class="w-[100%] h-[3.5rem] rounded-sm border-solid border border-black"
                                         type="text" :id="'RTD' + index" @change="updateTyreData(index)">
-                                        <span v-if="tyreData.mandatory && !tyreData.depth.trim()"
+                                    <span v-if="tyreData.mandatory && !tyreData.depth.trim()"
                                         class="text-red-500 font-bold">Please fill this required field</span>
                                 </div>
                                 <div class="flex flex-col space-y-1">
@@ -1371,7 +1379,7 @@
                                     <input v-model="tyreData.pressure"
                                         class="w-[100%] h-[3.5rem] rounded-sm border-solid border border-black"
                                         type="text" :id="'TP' + index" @change="updateTyreData(index)">
-                                        <span v-if="tyreData.mandatory && !tyreData.pressure.trim()"
+                                    <span v-if="tyreData.mandatory && !tyreData.pressure.trim()"
                                         class="text-red-500 font-bold">Please fill this required field</span>
                                 </div>
                                 <div class="flex flex-col space-y-1">
@@ -1379,7 +1387,7 @@
                                     <input v-model="tyreData.comment"
                                         class="w-[100%] h-[3.5rem] rounded-sm border-solid border border-black"
                                         type="text" :id="'COM' + index" @change="updateTyreData(index)">
-                                        <span v-if="tyreData.mandatory && !tyreData.comment.trim()"
+                                    <span v-if="tyreData.mandatory && !tyreData.comment.trim()"
                                         class="text-red-500 font-bold">Please fill this required field</span>
                                 </div>
                             </div>
@@ -1388,7 +1396,7 @@
                                     @click="deleteTyre(index)" />
                             </div>
                         </div>
-                        <div class="flex flex-row space-x-20">
+                        <div class="flex flex-row space-x-15">
                             <div class="flex flex-row items-center space-x-3 ml-4">
                                 <input v-model="tyreData.wear" class="rounded-sm border border-black bg-gray-200"
                                     type="checkbox" id="IW">
@@ -1418,6 +1426,10 @@
                                 <input v-model="tyreData.puncture" class="rounded-sm border border-black bg-gray-200"
                                     type="checkbox" id="PUN">
                                 <label for="PUN">Puncture</label>
+                            </div>
+                            <div class="flex flex-row items-center space-x-3">
+                                <button class="bg-gray-600 text-white rounded-lg p-1 font-bold"
+                                    @click="clearData(index)">Clear</button>
                             </div>
                         </div>
                     </div>
@@ -1706,7 +1718,7 @@
                                 <label class="pt-2" :for="'type' + index">Tyre Position</label><br>
                                 <select class="w-[15rem] h-[52px] rounded-sm border-solid border border-black"
                                     v-model="tyre.type" :id="'type' + index">
-                                    <option value="" selected>Please select...</option>
+                                    <option value="" selected disabled hidden>Please select...</option>
                                     <option value="Front Left">Front Left</option>
                                     <option value="Front Right">Front Right</option>
                                     <option value="Rear Left">Rear Left</option>
@@ -1714,8 +1726,9 @@
                                     <option value="Spare Tyre">Spare Tyre</option>
                                 </select>
                                 <div class="mt-[20px]">
-                                    <label :for="'loadIndex' + index">Load Index<span v-if="tyre.mandatory && !tyre.loadIndex.trim()"
-                                        class="text-red-500 font-bold">*</span></label><br>
+                                    <label :for="'loadIndex' + index">Load Index<span
+                                            v-if="tyre.mandatory && !tyre.loadIndex.trim()"
+                                            class="text-red-500 font-bold">*</span></label><br>
                                     <input class="w-[15rem] h-[52px] rounded-sm border-solid border border-black"
                                         :id="'loadIndex' + index" type="text" v-model="tyre.loadIndex"
                                         @change="saveData(index)">
@@ -1731,8 +1744,9 @@
                                     </select>
                                 </div>
                                 <div class="mt-[20px] w-[16rem]">
-                                    <label :for="'speedRating' + index">Speed Rating<span v-if="tyre.mandatory && !tyre.speedRating.trim()"
-                                        class="text-red-500 font-bold">*</span></label>
+                                    <label :for="'speedRating' + index">Speed Rating<span
+                                            v-if="tyre.mandatory && !tyre.speedRating.trim()"
+                                            class="text-red-500 font-bold">*</span></label>
                                     <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                         :id="'speedRating' + index" type="text" v-model="tyre.speedRating"
                                         @change="saveData(index)">
@@ -1741,7 +1755,7 @@
                             <div class="ml-[200px]">
                                 <div>
                                     <label :for="'size' + index">Size<span v-if="tyre.mandatory && !tyre.size.trim()"
-                                        class="text-red-500 font-bold">*</span></label>
+                                            class="text-red-500 font-bold">*</span></label>
                                     <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                         v-model="tyre.size" @change="getOther(tyre.brand, tyre.size, index)">
                                         <option v-for="(size, index) in sizes[index]" :key="index">{{ size.size }}
@@ -1749,8 +1763,9 @@
                                     </select>
                                 </div>
                                 <div class="mt-[20px]">
-                                    <label :for="'pattern' + index">Pattern<span v-if="tyre.mandatory && !tyre.pattern.trim()"
-                                        class="text-red-500 font-bold">*</span></label>
+                                    <label :for="'pattern' + index">Pattern<span
+                                            v-if="tyre.mandatory && !tyre.pattern.trim()"
+                                            class="text-red-500 font-bold">*</span></label>
                                     <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                         v-model="tyre.pattern"
                                         @change="getItemCode(tyre.brand, tyre.size, tyre.ttTl, tyre.pattern, index)">
@@ -1762,21 +1777,20 @@
                             <div class="ml-[300px]">
                                 <div>
                                     <label :for="'ttTl' + index">TT/TL<span v-if="tyre.mandatory && !tyre.ttTl.trim()"
-                                        class="text-red-500 font-bold">*</span></label>
+                                            class="text-red-500 font-bold">*</span></label>
                                     <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
                                         v-model="tyre.ttTl"
                                         @change="getPattern(tyre.brand, tyre.size, tyre.ttTl, index)">
                                         <option v-for="(type, index) in types[index]" :key="index">{{ type }}</option>
                                     </select>
                                 </div>
-                                <!-- <div class="mt-[20px]">
-                                    <label :for="'item' + index">Item</label>
-                                    <input class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                        :id="'item' + index" type="text" v-model="tyre.item" @change="saveData(index)">
-                                </div> -->
+                                <div class="mt-[50px]">
+                                    <button class="bg-gray-600 text-white rounded-lg p-1 font-bold"
+                                        @click="clearTyreData(index)">Clear</button>
+                                </div>
                             </div>
-                            <div class="ml-[400px]">
-                                <FeatherIcon name="x" class="mt-0 ml-2 w-6 h-6 cursor-pointer text-red-500"
+                            <div class="ml-[400px] mt-5">
+                                <FeatherIcon name="trash-2" class="mt-0 ml-2 w-6 h-6 cursor-pointer text-red-500"
                                     @click="deleteTyreReplacement(index)" />
                             </div>
                         </div>
@@ -1800,6 +1814,12 @@
                             <button @click="cancelSaved"
                                 class="bg-red-500 text-white font-semibold px-4 py-2 rounded">Cancel</button>
                         </div>
+                    </div>
+                </div>
+                <div v-if="finalSuccess"
+                    class="fixed inset-1 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                    <div class="bg-white rounded-lg p-8 shadow-xl">
+                        <h2 class="text-xl font-semibold mb-4 text-green-600">Data added Successfully!</h2>
                     </div>
                 </div>
                 <div class="pt-24 p-12">
@@ -2129,8 +2149,12 @@ const hasResponse = ref(true);
 const noData = ref(false);
 const successData = ref(false);
 const searchValue = ref(false);
-const showMessage = (message) => {
-    alert(message);
+const noMessage = ref(false);
+const showMessage = () => {
+    noMessage.value = true;
+    setTimeout(() => {
+        noMessage.value = false;
+    }, 1000);
 };
 
 const isEditMode = ref(false)
@@ -2196,7 +2220,10 @@ const dataAssignment = (response) => {
     return responseData.value;
 }
 const check = ref(false)
+const checked = ref(false)
 const wrongSearchValue = ref(false);
+const enable = ref(false)
+
 const search = async () => {
     const data = {
         "license_plate": searchQuery.value
@@ -2243,11 +2270,11 @@ const search = async () => {
 
             else {
                 check.value = true;
+                checked.value = true;
                 enable.value = true;
                 hasResponse.value = false;
                 initial.value = false;
                 afterResponse.value = true;
-                initial.value = false
                 initialNext.value = true
                 searchQuery.value = ''
                 console.log("Response:", response.data);
@@ -2268,6 +2295,8 @@ const hide = ref('false');
 const jobCardDetails = reactive(ref([]));
 const getJobCard = async () => {
     hide.value = true;
+    check.value = false;
+    initialNext.value = false;
     try {
         const response = await axios.post(`${BaseURL}/api/method/tyre.api.get_jobcard_details`, { searchJobCard: searchJobCard.value }, { headers: headers });
         jobCardDetails.value = response.data.message;
@@ -2283,6 +2312,8 @@ const hideEnq = ref('false');
 const enquiryDetails = reactive(ref([]));
 const getEnquiry = async () => {
     hideEnq.value = true;
+    check.value = false;
+    initialNext.value = false;
     try {
         const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_enquiry_details`, {
             params: {
@@ -2370,11 +2401,7 @@ function nextPageAndHighlight() {
     if (currentstep.value < maxStep) {
         currentstep.value++;
         currentPage.value = getPageName(currentstep.value);
-        console.log(searchQuery.value + "******")
-        // if (currentstep.value == 3) {
-        //     checkup(requireService)
-        // }
-
+        console.log(responseData.value.message[0].name + "******")
         switch (currentstep.value) {
             case 1:
                 console.log(responseData.value.message[0].name)
@@ -2562,7 +2589,6 @@ const addVehicleData = async () => {
     }
 };
 
-const enable = ref(false);
 const confirmSave = async () => {
     console.log('confirm page');
     showConfirmation.value = false;
@@ -2846,7 +2872,7 @@ const addCustomerData = async () => {
             const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_customer_details`, { data: JSON.stringify(data) }, { headers: headers })
             check.value = true;
             console.log(response);
-            if (responseData.value && responseData.value.message) {
+            if (response) {
                 showNewCustomer.value = false;
                 dataAssignment(response)
                 showAlerts.value = true;
@@ -3002,59 +3028,53 @@ const serviceDetails = ref({
 })
 
 const handleCustomer = async () => {
-    if (!searchMobile.value) {
-        showNewCustomer.value = false;
-        if (customerData.value.current_owner && customerData.value.owner_mobile_no) {
-            showConfirmation.value = true;
-            newCustomerSave.value = true;
+    showNewCustomer.value = false;
+        const customerDetails = {
+            current_owner: customerData.value.current_owner,
+            owner_mobile_no: customerData.value.owner_mobile_no,
+            whatsapp: customerData.value.whatsappChecked,
+            call: customerData.value.callChecked,
+            sms: customerData.value.smsChecked,
+            items: items.value,
+            services: serviceDetails.value
         }
-        else {
-            showWarning.value = true;
-            setTimeout(() => {
-                showWarning.value = false;
-                showNewCustomer.value = true;
-            }, 1000);
-        }
-    }
-    else {
-        showNewCustomer.value = false
-        showAlerts.value = true;
-        cannotSave.value = true;
-        setTimeout(() => {
-            showAlerts.value = false;
-            cannotSave.value = false;
-            showNewCustomer.value = true
-        }, 1000);
-    }
-}
-
-const popItems = ref([]);
-const billPopup = ref('false');
-const confirmCustomerSave = async () => {
-    showConfirmation.value = false;
-    newCustomerSave.value = false;
-    if (boolDetails.state == 1) {
-        alert("Unable to edit")
-        return
-    }
-    const customerDetails = {
-        current_owner: customerData.value.current_owner,
-        owner_mobile_no: customerData.value.owner_mobile_no,
-        whatsapp: customerData.value.whatsappChecked,
-        call: customerData.value.callChecked,
-        sms: customerData.value.smsChecked,
-        items: items.value,
-        services: serviceDetails.value
-    }
     try {
         const response = await axios.post(`${BaseURL}/api/method/tyre.api.lead`, customerDetails, { headers: headers })
-        showAlerts.value = true;
-        successData.value = true;
+        // showAlerts.value = true;
+        // successData.value = true;
         console.log('response from customer details', response.data);
         popItems.value = response.data.message;
         console.log(popItems.value);
 
-        customerData.value.current_owner = '';
+        billPopup.value = 'true';
+
+    } catch (error) {
+        console.log("Temporary customer details page:", error)
+    }
+            return
+        }
+const popItems = ref([]);
+const billPopup = ref('false');
+// const confirmCustomerSave = async () => {
+//     showConfirmation.value = false;
+//     newCustomerSave.value = false;
+// }
+
+// const searchMobile = ref('')
+// const boolDetails = reactive({
+//     state: 0,
+// });
+
+const deleteEnquiry = async () => {
+    await axios.post(`${BaseURL}/api/method/tyre.api.delete_lead`,{data : popItems.value.name}, {  headers: headers })
+    billPopup.value = 'false';
+    showNewCustomer.value = true;
+    hasResponse.value = true;
+}
+
+const enquiryClear = async () =>{
+    billPopup.value = 'false';
+    customerData.value.current_owner = '';
         customerData.value.owner_mobile_no = '';
         customerData.value.whatsappChecked = false;
         customerData.value.callChecked = false;
@@ -3066,18 +3086,13 @@ const confirmCustomerSave = async () => {
         quantity.value = '';
         type.value = '';
         pattern.value = '';
-        billPopup.value = 'true';
-
-    } catch (error) {
-        console.log("Temporary customer details page:", error)
-    }
 }
 
 const searchMobile = ref('')
 const boolDetails = reactive({
     state: 0,
 });
-
+const mobileSearch = ref(false);
 const handleSearch = async () => {
     if (searchMobile.value) {
         const response = await axios.get(`${BaseURL}/api/method/tyre.api.lead_details`, {
@@ -3088,6 +3103,7 @@ const handleSearch = async () => {
         });
         leadDetails.value = response.data.message;
         boolDetails.state = 1;
+        mobileSearch.value = true;
 
         console.log('lead details', leadDetails.value);
     }
@@ -3101,6 +3117,13 @@ const handleSearch = async () => {
             showNewCustomer.value = true;
         }, 1000);
     }
+}
+const okCustomer = () => {
+    console.log("hi")
+    leadDetails.value = '';
+    boolDetails.state = 0;
+    mobileSearch.value = false;
+    searchMobile.value = ''
 }
 
 
@@ -3117,7 +3140,7 @@ const selectedBrandVariants = computed(() => {
 });
 const afterResponse = ref(false);
 const handleEnquiry = async () => {
-    if(!handle.value){
+    if (!handle.value) {
         hasResponse.value = true;
         try {
             const response = await axios.get(`${BaseURL}/api/method/tyre.api.stock_details`);
@@ -3131,7 +3154,7 @@ const handleEnquiry = async () => {
             console.log('Error fetching tyre data:', error);
         }
     }
-    else{
+    else {
         handle.value = false
         hasResponse.value = false;
         console.log("Else block")
@@ -3157,61 +3180,6 @@ const returnSearch = async (search) => {
             check.value = true;
             console.log('returnSearch data', response);
             if (response.data.message === "") {
-                // responseData.value = {
-                //     message: [{
-                //         name: '',
-                //         vehicle_brand: '',
-                //         vehicle_model: '',
-                //         chassis_no: '',
-                //         fuel_type: '',
-                //         last_odometer_reading: '',
-                //         tyre_change: '',
-                //         alignment: ''
-                //     },
-                //     {
-                //         current_owner: '',
-                //         owner_mobile_no: '',
-                //         call: '',
-                //         whatsapp: '',
-                //         sms: '',
-                //         current_driver: [{
-                //             current_driver: '',
-                //             name: '',
-                //             mobile_no: '',
-                //             call: '',
-                //             whatsapp: '',
-                //             sms: ''
-
-                //         }],
-                //         contact_person: [{
-                //             contact_person_name: '',
-                //             contact_person_mobile: '',
-                //             custom_call: '',
-                //             custom_whatsapp: '',
-                //             custom_sms: ''
-                //         }]
-                //     },
-                //     {
-                //         current_driver: [{
-                //             current_driver: '',
-                //             name: '',
-                //             mobile_no: '',
-                //             call: '',
-                //             whatsapp: '',
-                //             sms: ''
-
-                //         }],
-                //         contact_person: [{
-                //             contact_person_name: '',
-                //             contact_person_mobile: '',
-                //             custom_call: '',
-                //             custom_whatsapp: '',
-                //             custom_sms: ''
-                //         }]
-                //     }
-                //     ]
-                // };
-                
                 console.log(response.data);
                 hasResponse.value = true;
                 initial.value = true;
@@ -3268,8 +3236,6 @@ const removeEmployee2 = (index) => {
     } else {
         console.log(error);
     }
-    // catch(error){
-    // }
 };
 const removeEmployee3 = (index) => {
     const data = {
@@ -3313,7 +3279,6 @@ const confirmDelete = async (vehicle) => {
                 showAlerts.value = false;
                 deleteConfirmation.value = false;
             }, 2000);
-            // alert("vehicle deleted successfully!")
             returnSearch(vehicle)
         }
     } catch (error) {
@@ -3328,7 +3293,7 @@ const cancelDelete = () => {
 
 //==========================================================>>> 5 point checkup <<<==========================================================================//
 
-const tyreDatas = ref([{ tyre: '', depth: '', pressure: '', comment: '', wear: false, cut: false, mark: false, damage: false, bulge: false, puncture: false }]);
+const tyreDatas = ref([{ tyre: '', depth: '', pressure: '', comment: '', wear: false, cut: false, mark: false, damage: false, bulge: false, puncture: false, mandatory:false }]);
 
 const sampleValue = reactive({
     index: ref(1),
@@ -3358,6 +3323,23 @@ const deleteTyre = (index) => {
     //   tyreDatas.value.splice(index, 1);
     //   console.log(tyreDatas.value);
 };
+
+const clearData = (index) => {
+    console.log("hi");
+    const tyre = tyreDatas.value[index];
+    tyre.tyre = '';
+    tyre.depth = '';
+    tyre.pressure = '';
+    tyre.comment = '';
+    tyre.wear = false;
+    tyre.cut = false;
+    tyre.mark = false;
+    tyre.damage = false;
+    tyre.bulge = false;
+    tyre.puncture = false;
+    tyre.mandatory = false;
+};
+
 //========================================================>>> Required Services <<<============================================================================//
 
 let selectedCheckbox = null;
@@ -3583,16 +3565,16 @@ function handelCheck(data) {
 }
 
 async function getrate(data) {
-    let rate =0
+    let rate = 0
     try {
         console.log(data, headers); // Assuming headers is defined elsewhere
         const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_item_rate`, {
             params: { item_code: data },
             headers: headers // Assuming headers is defined elsewhere
-        }).then((response) =>{
+        }).then((response) => {
             console.log(response.data.message);
-            rate=response.data.message
-            console.log(rate,"*****")
+            rate = response.data.message
+            console.log(rate, "*****")
         })
         return rate;
     } catch (error) {
@@ -3657,7 +3639,21 @@ const deleteTyreReplacement = (index) => {
     }
     //   tyres.value.splice(index, 1)
 }
-
+const clearTyreData = (index) => {
+    console.log("hi");
+    const tyre = tyres.value[index]
+    tyre.type = '';
+    tyre.loadIndex = '';
+    tyre.brand = '';
+    tyre.speedRating = '';
+    tyre.pattern = '';
+    tyre.size = '';
+    tyre.ttTl = '';
+    tyre.rate = '';
+    tyre.item = '';
+    tyre.mandatory = false;
+    tyre.status = false;
+};
 let step = ref(0);
 
 function addValue(data, replace) {
@@ -3682,10 +3678,14 @@ function addValue(data, replace) {
                             if (items.itemCode === item.item) {
                                 // Item already exists, update quantity and mark as processed
 								console.log(items.requiredQuantity)
-                                items.requiredQuantity++;
-								console.log(items.requiredQuantity)
-                                item.status = true;
+                                console.log(item.status)
                                 existingItemIndex = index;
+                                if(existingItemIndex !== undefined && item.status === false){
+                                    items.requiredQuantity++;
+                                    console.log(items.requiredQuantity)
+                                    item.status = true;
+                                    console.log(billIndex)
+                                }
                                 break;
                             }
                         }
@@ -3715,10 +3715,10 @@ function addValue(data, replace) {
 
                     // Mark the item as processed
                     item.status = true;
+                    billIndex++;
                 }
 
                 calculateTotals();
-                billIndex++;
             });
         }
 
@@ -3742,7 +3742,7 @@ function addValue(data, replace) {
                         });
                     });
                     if (!itemExists) {
-                        
+
                         const newData = {
                             itemCode: key,
                             sourceWarehouse: '',
@@ -3857,12 +3857,24 @@ const dataFinalSubmission = () => {
     showConfirm.value = true;
     console.log("showConfirm", showConfirm.value);
 }
+const finalSuccess = ref(false);
 const confirmDataSave = () => {
     showConfirm.value = false;
     console.log("Final submission process going on....");
     jobCard["bill"] = tableData.value
     console.log(jobCard)
     checkup(jobCard)
+    finalSuccess.value = true;
+    console.log('finalsuccess', finalSuccess.value);
+    setTimeout(() => {
+        console.log('finalsuccess', finalSuccess.value);
+        finalSuccess.value = false;
+        currentstep.value = 0;
+        check.value = false;
+        initialNext.value = false;
+        hasResponse.value = true;
+        initial.value = true;
+    }, 1000);
 }
 const cancelSaved = () => {
     showConfirm.value = false;
