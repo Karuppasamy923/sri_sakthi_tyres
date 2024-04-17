@@ -106,8 +106,6 @@
                                 <div class="flex justify-center">
                                     <button @click="confirmSave" v-if="newVehicleSave"
                                         class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
-                                    <button @click="confirmCustomerSave" v-if="newCustomerSave"
-                                        class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
                                     <button @click="cancelSave"
                                         class="bg-red-500 text-white font-semibold px-4 py-2 rounded">Cancel</button>
                                 </div>
@@ -122,16 +120,6 @@
                                         <h5 class="mb-2 text-2xl font-bold tracking-tight text-black">
                                             Price Details</h5>
                                     </div>
-                                    <div class="flex justify-end">
-                                        <button @click="billPopup = 'false'">
-                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                fill="none" viewBox="0 0 14 14">
-                                                <path stroke="currentColor" stroke-linecap="round"
-                                                    stroke-linejoin="round" stroke-width="2"
-                                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                            </svg>
-                                        </button>
-                                    </div>
                                 </div>
                                 <div class="relative overflow-x-auto">
                                     <table
@@ -140,7 +128,7 @@
                                             class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                             <tr>
                                                 <th scope="col" class="px-6 py-3">
-                                                    Brand
+                                                    Items
                                                 </th>
                                                 <th scope="col" class="px-6 py-3">
                                                     Size
@@ -166,7 +154,7 @@
                                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                                                 v-for="(item, index) in popItems.lead_item" :key="index">
                                                 <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                                    scope="row">{{ item.brand }}</td>
+                                                    scope="row">{{ item.item_code }}</td>
                                                 <td class="px-6 py-3">{{ item.size }}</td>
                                                 <td class="px-6 py-3">{{ item.tyre_type }}</td>
                                                 <td class="px-6 py-3">{{ item.pattern }}</td>
@@ -188,6 +176,12 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                <div class="grid grid-cols-2 gap-10">
+                                <Button class="flex justify-end mt-3" :variant="'solid'"  theme="green" size="sm" @click="enquiryClear"
+                                >OK</Button>
+                                <Button class="flex justify-end mt-3" :variant="'solid'"  theme="red" size="sm" @click="deleteEnquiry"
+                                >Cancel</Button>
+                            </div>
                             </a>
                         </div>
 
@@ -259,7 +253,7 @@
                             <button class="bg-blue-500 w-[150px] text-white font-bold text-base p-4 rounded-lg ml-3"
                                 @click="search">Search</button>
                         </div>
-                        <div class="grid grid-cols-2 gap-3" v-if="responseData && responseData.message && check">
+                        <div class="grid grid-cols-2 gap-3" v-if="responseData && responseData.message && check ">
                             <Card class="bg-gray-200">
                                 <div>
                                     <h4 class="text-[20px] font-bold">Vehicle Details</h4>
@@ -495,8 +489,7 @@
                             <div class="flex">
                                 <div class="mr-8">
                                     <button @click="getJobCard" v-if="hide == 'false' && hideEnq == 'false'"
-                                        class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Job
-                                        Card</button>
+                                        class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Job Card</button>
                                     <button @click="hide = 'false'" v-if="hide != 'false'"
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Back</button>
                                 </div>
@@ -507,11 +500,13 @@
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Back</button>
                                 </div>
                                 <div>
-                                    <Input type="number" placeholder="search ..." v-if="hideEnq != 'false'"
-                                        v-model="searchEnquiry" @input="getEnquiry" class="mt-9 mb-2 -ml-14.5 p-4" />
-                                    <Input placeholder="Vehicle Search ..."
+                                    <input type="number" placeholder="search ..." v-if="hideEnq != 'false'" 
+                                        v-model="searchEnquiry" class="mt-20 mb-5 ml-[-6.2rem] p-4 w-[200px] h-[40px] rounded-sm border-solid border border-black" />
+                                        <!-- <button v-if="hideEnq != 'false'" @click="getEnquiry" class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Search</button> -->
+                                    <input placeholder="Vehicle Search ..."
                                         v-if="hide != 'false' && jobCardPopup == 'false'" v-model="searchJobCard"
-                                        @input="getJobCard" class="mt-9 mb-2 -ml-14.5 p-4" />
+                                        class="mt-20 mb-5 ml-[-6.2rem] p-4 w-[200px] h-[40px] rounded-sm border-solid border border-black" />
+                                        <!-- <button v-if="hide != 'false' && jobCardPopup == 'false'" @click="getJobCard" class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Search</button> -->
                                 </div>
                             </div>
                             <div v-if="jobCardPopup == 'false'">
@@ -3002,59 +2997,53 @@ const serviceDetails = ref({
 })
 
 const handleCustomer = async () => {
-    if (!searchMobile.value) {
-        showNewCustomer.value = false;
-        if (customerData.value.current_owner && customerData.value.owner_mobile_no) {
-            showConfirmation.value = true;
-            newCustomerSave.value = true;
+    showNewCustomer.value = false;
+        const customerDetails = {
+            current_owner: customerData.value.current_owner,
+            owner_mobile_no: customerData.value.owner_mobile_no,
+            whatsapp: customerData.value.whatsappChecked,
+            call: customerData.value.callChecked,
+            sms: customerData.value.smsChecked,
+            items: items.value,
+            services: serviceDetails.value
         }
-        else {
-            showWarning.value = true;
-            setTimeout(() => {
-                showWarning.value = false;
-                showNewCustomer.value = true;
-            }, 1000);
-        }
-    }
-    else {
-        showNewCustomer.value = false
-        showAlerts.value = true;
-        cannotSave.value = true;
-        setTimeout(() => {
-            showAlerts.value = false;
-            cannotSave.value = false;
-            showNewCustomer.value = true
-        }, 1000);
-    }
-}
-
-const popItems = ref([]);
-const billPopup = ref('false');
-const confirmCustomerSave = async () => {
-    showConfirmation.value = false;
-    newCustomerSave.value = false;
-    if (boolDetails.state == 1) {
-        alert("Unable to edit")
-        return
-    }
-    const customerDetails = {
-        current_owner: customerData.value.current_owner,
-        owner_mobile_no: customerData.value.owner_mobile_no,
-        whatsapp: customerData.value.whatsappChecked,
-        call: customerData.value.callChecked,
-        sms: customerData.value.smsChecked,
-        items: items.value,
-        services: serviceDetails.value
-    }
     try {
         const response = await axios.post(`${BaseURL}/api/method/tyre.api.lead`, customerDetails, { headers: headers })
-        showAlerts.value = true;
-        successData.value = true;
+        // showAlerts.value = true;
+        // successData.value = true;
         console.log('response from customer details', response.data);
         popItems.value = response.data.message;
         console.log(popItems.value);
 
-        customerData.value.current_owner = '';
+        billPopup.value = 'true';
+
+    } catch (error) {
+        console.log("Temporary customer details page:", error)
+    }
+            return
+        }
+const popItems = ref([]);
+const billPopup = ref('false');
+// const confirmCustomerSave = async () => {
+//     showConfirmation.value = false;
+//     newCustomerSave.value = false;
+// }
+
+const searchMobile = ref('')
+const boolDetails = reactive({
+    state: 0,
+});
+
+const deleteEnquiry = async () => {
+    await axios.post(`${BaseURL}/api/method/tyre.api.delete_lead`,{data : popItems.value.name}, {  headers: headers })
+    billPopup.value = 'false';
+    showNewCustomer.value = true;
+    hasResponse.value = true;
+}
+
+const enquiryClear = async () =>{
+    billPopup.value = 'false';
+    customerData.value.current_owner = '';
         customerData.value.owner_mobile_no = '';
         customerData.value.whatsappChecked = false;
         customerData.value.callChecked = false;
@@ -3066,17 +3055,7 @@ const confirmCustomerSave = async () => {
         quantity.value = '';
         type.value = '';
         pattern.value = '';
-        billPopup.value = 'true';
-
-    } catch (error) {
-        console.log("Temporary customer details page:", error)
-    }
 }
-
-const searchMobile = ref('')
-const boolDetails = reactive({
-    state: 0,
-});
 
 const handleSearch = async () => {
     if (searchMobile.value) {
@@ -3682,10 +3661,14 @@ function addValue(data, replace) {
                             if (items.itemCode === item.item) {
                                 // Item already exists, update quantity and mark as processed
 								console.log(items.requiredQuantity)
-                                items.requiredQuantity++;
-								console.log(items.requiredQuantity)
-                                item.status = true;
+                                console.log(item.status)
                                 existingItemIndex = index;
+                                if(existingItemIndex !== undefined && item.status === false){
+                                    items.requiredQuantity++;
+                                    console.log(items.requiredQuantity)
+                                    item.status = true;
+                                    console.log(billIndex)
+                                }
                                 break;
                             }
                         }
@@ -3715,10 +3698,10 @@ function addValue(data, replace) {
 
                     // Mark the item as processed
                     item.status = true;
+                    billIndex++;
                 }
 
                 calculateTotals();
-                billIndex++;
             });
         }
 
