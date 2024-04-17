@@ -152,85 +152,44 @@
                                                     Size
                                                 </th>
                                                 <th scope="col" class="px-6 py-3">
-                                                    Quantity
-                                                </th>
-                                                <th scope="col" class="px-6 py-3">
                                                     Type
                                                 </th>
                                                 <th scope="col" class="px-6 py-3">
                                                     Pattern
                                                 </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                                                v-for="(item, index) in items" :key="index">
-                                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                                    scope="row">{{ item.brand }}</td>
-                                                <td class="px-6 py-4">{{ item.size }}</td>
-                                                <td class="px-6 py-4">{{ item.quantity }}</td>
-                                                <td class="px-6 py-4">{{ item.quantity }}</td>
-                                                <td class="px-6 py-4">{{ item.type }}</td>
-                                                <td class="px-6 py-4">{{ item.pattern }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </a>
-                        </div>
-                        <div v-if="jobCardPopup == 'true'"
-                            class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
-                            <a href="#"
-                                class="block max-w-[70rem] p-10 pt-5 bg-white border border-gray-200 rounded-lg shadow">
-                                <div class="grid grid-cols-2">
-                                    <div>
-                                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-black">
-                                            Price Details</h5>
-                                    </div>
-                                    <div class="flex justify-end">
-                                        <button @click="jobCardPopup = 'false'">
-                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                fill="none" viewBox="0 0 14 14">
-                                                <path stroke="currentColor" stroke-linecap="round"
-                                                    stroke-linejoin="round" stroke-width="2"
-                                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="relative overflow-x-auto">
-                                    <table
-                                        class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                        <thead
-                                            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                            <tr>
                                                 <th scope="col" class="px-6 py-3">
-                                                    Brand
-                                                </th>
-                                                <th scope="col" class="px-6 py-3">
-                                                    Size
+                                                    Rate
                                                 </th>
                                                 <th scope="col" class="px-6 py-3">
                                                     Quantity
                                                 </th>
                                                 <th scope="col" class="px-6 py-3">
-                                                    Type
-                                                </th>
-                                                <th scope="col" class="px-6 py-3">
-                                                    Pattern
+                                                    Amount
                                                 </th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                                                v-for="(item, index) in items" :key="index">
-                                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                                v-for="(item, index) in popItems.lead_item" :key="index">
+                                                <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                                                     scope="row">{{ item.brand }}</td>
-                                                <td class="px-6 py-4">{{ item.size }}</td>
-                                                <td class="px-6 py-4">{{ item.quantity }}</td>
-                                                <td class="px-6 py-4">{{ item.quantity }}</td>
-                                                <td class="px-6 py-4">{{ item.type }}</td>
-                                                <td class="px-6 py-4">{{ item.pattern }}</td>
+                                                <td class="px-6 py-3">{{ item.size }}</td>
+                                                <td class="px-6 py-3">{{ item.tyre_type }}</td>
+                                                <td class="px-6 py-3">{{ item.pattern }}</td>
+                                                <td class="px-6 py-3">{{ item.rate }}</td>
+                                                <td class="px-6 py-3">{{ item.quantity }}</td>
+                                                <td class="px-6 py-3">{{ item.amount }}</td>
+                                            </tr>
+                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td
+                                                    class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    Total Amount</td>
+                                                <td class="px-6 py-3">{{ popItems.total_amount }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -415,8 +374,10 @@
                                                 <label>Driver Name&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">
                                                     {{ responseData &&
+
                                                         responseData.message && responseData.message[2][0]?.full_name ||
                                                     'No data' }}
+
                                                 </label>
                                                 <br>
                                                 <input type="checkbox"
@@ -554,11 +515,12 @@
                                 <div>
                                     <Input type="number" placeholder="search ..." v-if="hideEnq != 'false'"
                                         v-model="searchEnquiry" @input="getEnquiry" class="mt-9 mb-2 -ml-14.5 p-4" />
-                                    <Input placeholder="Vehicle Search ..." v-if="hide != 'false'"
-                                        v-model="searchJobCard" @input="getJobCard" class="mt-9 mb-2 -ml-14.5 p-4" />
+                                    <Input placeholder="Vehicle Search ..."
+                                        v-if="hide != 'false' && jobCardPopup == 'false'" v-model="searchJobCard"
+                                        @input="getJobCard" class="mt-9 mb-2 -ml-14.5 p-4" />
                                 </div>
                             </div>
-                            <div>
+                            <div v-if="jobCardPopup == 'false'">
                                 <div class="relative overflow-x-auto flex justify-center" v-if="hide != 'false'">
                                     <table
                                         class="w-[75rem] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -607,6 +569,72 @@
                                     </table>
                                 </div>
                             </div>
+                            <div v-if="jobCardPopup == 'true'" class="relative overflow-x-auto flex justify-center">
+                                <a href="#"
+                                    class="block max-w-[70rem] p-10 pt-5 bg-white border border-gray-200 rounded-lg shadow">
+                                    <div class="grid grid-cols-2">
+                                        <div>
+                                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-black">
+                                                Details</h5>
+                                        </div>
+                                        <div class="flex justify-end">
+                                            <button @click="jobCardPopup = 'false'">
+                                                <svg class="w-3 h-3" aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                    <path stroke="currentColor" stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke-width="2"
+                                                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="relative overflow-x-auto">
+                                        <table
+                                            class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                            <thead
+                                                class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                                <tr>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Item Code
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Warehouse
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Quantity
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Rate
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Amount
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                                                    v-for="(item, index) in jobCardData.billing_details" :key="index">
+                                                    <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                                        scope="row">{{ item.item_code }}</td>
+                                                    <td class="px-6 py-3">{{ item.warehouse }}</td>
+                                                    <td class="px-6 py-3">{{ item.quantity }}</td>
+                                                    <td class="px-6 py-3">{{ item.rate }}</td>
+                                                    <td class="px-6 py-3">{{ item.amount }}</td>
+                                                </tr>
+                                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td
+                                                        class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Total Amount</td>
+                                                    <td class="px-6 py-3">{{ jobCardData.total_amount }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </a>
+                            </div>
                             <div>
                                 <div class="relative overflow-x-auto flex justify-center" v-if="hideEnq != 'false'">
                                     <div>
@@ -651,7 +679,7 @@
                                         alt="No data" class="w-[25%]" @click="showMessage">
                                 </div>
                             </div>
-                            <div class="flex justify-center m-5" v-if="hide == 'false'">
+                            <div class="flex justify-center m-5" v-if="hide == 'false' && hideEnq == 'false'">
                                 <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
                                     @click="addVehicle">
                                     Add Vehicle
@@ -862,7 +890,9 @@
                                         <input type="text" v-model="leadDetails.lead_name" v-if="boolDetails.state == 1"
                                             :readonly="boolDetails.state == 1"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+
                                             placeholder="Enter Name">
+
                                         <input type="text" v-model="customerData.current_owner"
                                             v-if="boolDetails.state == 0"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
@@ -872,7 +902,9 @@
                                         <input type="tel" v-model="leadDetails.mobile_no" v-if="boolDetails.state == 1"
                                             :readonly="boolDetails.state == 1"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+
                                             placeholder="Enter Mobile No.">
+
                                         <input type="tel" v-model="customerData.owner_mobile_no"
                                             v-if="boolDetails.state == 0"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
@@ -893,7 +925,9 @@
                                             :disabled="boolDetails.state == 1"
                                             class="bg-gray-300 rounded-sm">&nbsp;&nbsp;<label>SMS</label>
                                     </span>
+
                                     <div v-if="!handle && !hasResponse">
+
                                         <div v-for="(employee, index) in employees" :key="index" class="mt-2">
                                             <div v-show="false">{{ sample22 = index }}</div>
                                             <hr class="dark-hr m-4">
@@ -1928,7 +1962,7 @@ const data = reactive({
 const headers = {
     'Content-Type': 'application/json',
 
-    'Authorization': 'token 7fa0cf7915ad42d :2a784f5c29d213b'
+    'Authorization': 'token b89ae1f0409875e :af8a0b78d948ebf'
 
 }
 
@@ -2354,6 +2388,7 @@ function nextPageAndHighlight() {
 
         switch (currentstep.value) {
             case 1:
+                console.log(responseData.value.message[0].name)
                 jobCard["user"] = responseData.value.message[0].name;
                 console.log(jobCard)
                 console.log("****1****")
@@ -2557,7 +2592,7 @@ const confirmSave = async () => {
     try {
         const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_vehicle_details`, { data: JSON.stringify(data) }, { headers: headers });
         console.log('vehicle add after response', response);
-        if (responseData.value && responseData.value.message) {
+        if (response) {
             enable.value = true;
             check.value = true;
             hasResponse.value = false;
@@ -3027,6 +3062,7 @@ const confirmCustomerSave = async () => {
         successData.value = true;
         console.log('response from customer details', response.data);
         popItems.value = response.data.message;
+        console.log(popItems.value);
 
         customerData.value.current_owner = '';
         customerData.value.owner_mobile_no = '';
@@ -3427,7 +3463,7 @@ const requireService = ref({
     puncture: false,
     tyre_edge: false,
     tyre_patch: false,
-    mashroom_patch: false,
+    mushroom_patch: false,
 })
 function checkup(data) {
     console.log("******")
@@ -3548,11 +3584,30 @@ function handelCheck(data) {
         case 'mushroom_patch':
             show.mushroom_path_checkbox = !show.mushroom_path_checkbox;
             if (show.mushroom_path_checkbox == true) {
-                requireService.value.mashroom_patch = true;
+                requireService.value.mushroom_patch = true;
             } else {
-                requireService.value.mashroom_patch = false;
+                requireService.value.mushroom_patch = false;
             }
             break;
+    }
+}
+
+async function getrate(data) {
+    let rate =0
+    try {
+        console.log(data, headers); // Assuming headers is defined elsewhere
+        const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_item_rate`, {
+            params: { item_code: data },
+            headers: headers // Assuming headers is defined elsewhere
+        }).then((response) =>{
+            console.log(response.data.message);
+            rate=response.data.message
+            console.log(rate,"*****")
+        })
+        return rate;
+    } catch (error) {
+        console.error("Error:", error);
+        throw error; // Rethrow the error to be caught by the caller
     }
 }
 
@@ -3613,10 +3668,11 @@ const deleteTyreReplacement = (index) => {
     //   tyres.value.splice(index, 1)
 }
 
-let step = ref(0)
+let step = ref(0);
+
 function addValue(data, replace) {
     // Check if data is an array
-    console.log(data)
+    console.log(data);
     if (Array.isArray(data)) {
         console.log(replace.target);
         // Data is a list (array)
@@ -3625,53 +3681,37 @@ function addValue(data, replace) {
                 console.log(item);
                 console.log(item.item);
 
-                // Initialize existingItemIndex to -1
                 let existingItemIndex = -1;
 
                 // Check if tableData.value[billIndex] is an array
                 if (Array.isArray(tableData.value)) {
-                    console.log(tableData.value);
-                    name: for (let index = 0; index < tableData.value.length; index++) {
+                    for (let index = 0; index < tableData.value.length; index++) {
                         const rowData = tableData.value[index];
-                        console.log(rowData);
-                        console.log("*****");
                         for (let i = 0; i < rowData.length; i++) {
                             const items = rowData[i];
-                            console.log(items);
-                            console.log(items.itemCode);
-                            console.log(item.item);
                             if (items.itemCode === item.item) {
+                                // Item already exists, update quantity and mark as processed
+								console.log(items.requiredQuantity)
+                                items.requiredQuantity++;
+								console.log(items.requiredQuantity)
+                                item.status = true;
                                 existingItemIndex = index;
-                                console.log(existingItemIndex);
-                                break name;
+                                break;
                             }
                         }
+                        if (existingItemIndex > -1) {
+                            break;
+                        }
                     }
-                    // Find the index of the item with the same itemCode, if it exists
-                    // existingItemIndex = tableData.value[billIndex].findIndex(existingItem => existingItem.itemCode === item.item);
                 }
 
-                console.log(tableData.value);
-                console.log(existingItemIndex);
-                console.log(item.status)
-                console.log(billIndex)
-
-                if (existingItemIndex > -1 && !item.status) {
-                    // Increase the quantity of the existing item
-                    console.log(tableData.value[existingItemIndex][0].requiredQuantity);
-                    tableData.value[existingItemIndex][0].requiredQuantity++;
-                    console.log(tableData.value[existingItemIndex][0].requiredQuantity)
-                    console.log(tableData.value[existingItemIndex][0].requiredQuantity);
-                    // Remove the existing item from the array
-                    tableData.value.splice(existingItemIndex, 1);
-                } else {
-                    // If tableData.value[billIndex] is not an array, initialize it
+                if (existingItemIndex === -1 && !item.status) {
+                    // If item is not found and not already processed, add it to tableData
                     if (!Array.isArray(tableData.value[billIndex])) {
                         tableData.value[billIndex] = [];
                     }
 
                     // Create a new object for the item
-                    console.log(item.item)
                     const newData = {
                         itemCode: item.item,
                         sourceWarehouse: '',
@@ -3682,21 +3722,23 @@ function addValue(data, replace) {
 
                     // Push the new object into the array at the specified billIndex
                     tableData.value[billIndex].push(newData);
+
+                    // Mark the item as processed
+                    item.status = true;
                 }
-
-                // Mark the item as processed
-                item.status = true;
-
 
                 calculateTotals();
                 billIndex++;
             });
         }
+
+        // If the current step is 3, empty the tableData
+        if (step === 3) {
+            tableData.value = [];
+        }
+
         replace.target = true;
     }
-
-
-
     else if (typeof data === 'object') {
         for (const key in data) {
             if (Object.hasOwnProperty.call(data, key)) {
@@ -3710,13 +3752,19 @@ function addValue(data, replace) {
                         });
                     });
                     if (!itemExists) {
+                        
                         const newData = {
                             itemCode: key,
                             sourceWarehouse: '',
-                            rate: '',
                             requiredQuantity: 1,
                             cost: ''
                         };
+                        getrate(key).then(rate => {
+                            newData.rate = rate
+                            console.log(newData.rate)
+                        }).catch(error => {
+                            console.error("Error:", error);
+                        });
                         if (!Array.isArray(tableData.value[billIndex])) {
                             tableData.value[billIndex] = [];
                         }

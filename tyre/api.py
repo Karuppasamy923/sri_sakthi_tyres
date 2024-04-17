@@ -290,7 +290,7 @@ def lead_details(data):
 # function to create job card
 @frappe.whitelist(allow_guest=True)
 def job_card(data):
-	print(data, type(data))
+	# print(data, type(data))
 	data = frappe._dict(json.loads(data))
 	# print(data.checkup)
 	five_point_checkup = {}
@@ -337,6 +337,7 @@ def job_card(data):
 						 		join `tabCustomer Details` as cud on cud.license_plate = vd.name 
 						 		join `tabContact Person` as cp on cp.parent = vd.name WHERE vd.license_plate = %s AND cd.primary = 1 AND cp.custom_primary = 1""", vehicle_number,as_dict = True)[0]
 	val = frappe._dict(data.service)
+	print(user_details)
 	# print(val.alignment['lastAlignment'])
 	
 	air,nitrogen = False,False
@@ -500,14 +501,14 @@ def get_pattern(brand, size, tyer_type):
 		}
 
 def create_service_items():
-	List = ['Alignment','Rotation', 'Oil Change', 'Balancing', 'Inflation','Puncture','Tyre Edge', 'Tyre Patch','Mushroom Patch','Ac Service','Battery', 'Wiper','Car Wash']
+	List = ['Alignment','Rotation', 'Oil_change', 'Balancing', 'Inflation','puncture','tyre_edge', 'tyre_patch','mushroom_patch','AcService','Battery', 'Wiper','CarWash']
 	if frappe.db.exists("Brand",{ "name" : "Service"}):
 		for row in List:
 			if not frappe.db.exists("Item",{"item_name":row}):
 				frappe.get_doc({
 					"doctype": "Item",
-                    "item_name": row,
-                    "brand": "Service",
+					"item_name": row,
+					"brand": "Service",
 					"item_group":"Services",
 					"stock_uom":"Nos",
 					"item_code":row,
@@ -519,8 +520,8 @@ def create_service_items():
 			if not frappe.db.exists("Item",{"item_name":row}):
 				frappe.get_doc({
 					"doctype": "Item",
-                    "item_name": row,
-                    "brand": "Service",
+					"item_name": row,
+					"brand": "Service",
 					"item_group":"Services",
 					"stock_uom":"Nos",
 					"item_code":row,
@@ -560,21 +561,21 @@ def stock_details():
 	
 @frappe.whitelist(allow_guest=True)
 def get_jobcard_details(searchJobCard):
-    if searchJobCard:
-        jobcard_details = frappe.get_all("Tyre Job Card",
-                                          filters={'vehicle_no': searchJobCard},
-                                          fields=["time_in", "name", "vehicle_no", "customer", "mobile_no"])
-        if jobcard_details:
-            return jobcard_details 
-        else:
-            return {
-                "status": 400,
-                "message": "No Job Card Found" 
-            }
-    else:
-        job_card_details = frappe.get_all("Tyre Job Card",
-                                           fields=["time_in", "name", "vehicle_no", "customer", "mobile_no"])
-        return job_card_details 
+	if searchJobCard:
+		jobcard_details = frappe.get_all("Tyre Job Card",
+										  filters={'vehicle_no': searchJobCard},
+										  fields=["time_in", "name", "vehicle_no", "customer", "mobile_no"])
+		if jobcard_details:
+			return jobcard_details 
+		else:
+			return {
+				"status": 400,
+				"message": "No Job Card Found" 
+			}
+	else:
+		job_card_details = frappe.get_all("Tyre Job Card",
+										   fields=["time_in", "name", "vehicle_no", "customer", "mobile_no"])
+		return job_card_details 
 
 
 @frappe.whitelist(allow_guest = True)
@@ -593,9 +594,8 @@ def delete_vehicle(data):
             frappe.delete_doc("Customer Details", license_plate, force=True)
             return "deleted"
         return "deleted"
-
-  
-@frappe.whitelist()
+    
+@frappe.whitelist(allow_guest=True)
 def get_enquiry_details(data):
 	if data:
 		return frappe.get_all("Lead", {"mobile_no": data},{"name","lead_name","mobile_no"})
@@ -608,12 +608,13 @@ def get_billing_details(name):
   doc = frappe.get_doc("Tyre Job Card", name)
   return {"billing_details":doc.billing_details, "total_amount": doc.total_amount}
 
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
 def get_item_rate(item_code):
+	print(item_code)
 	from erpnext.stock.report.item_price_stock.item_price_stock import get_item_price_qty_data
 	price_list = get_item_price_qty_data({"item_code": item_code})
 	if price_list:
-		return price_list[0].selling_rate
+		return price_list[0]["selling_rate"]
 	
 	return 0
 
@@ -668,7 +669,7 @@ def calculate_total_amount(self, method):
 
 @frappe.whitelist(allow_guest=True)
 def delete_modified_customers(data):
-    
+	
 	data = frappe._dict(data)
 	if data.parentfield == "current_driver":
 		doc_details = frappe.db.get_value("Current Driver", {"mobile_no": data.mobile_no}, ["name", "parent"], as_dict=True)
@@ -701,15 +702,15 @@ def get_item(args):
 	return frappe.db.get_value("Brand Details",{"parent": args.brand, "size": args.size, "tyer_type": args.tyre_type, "pattern": args.pattern}, "item_code")
 
 
-@frappe.whitelist()
-def get_item_rate(item_code):
-	from erpnext.stock.report.item_price_stock.item_price_stock import get_item_price_qty_data
-	price_list = get_item_price_qty_data({"item_code": item_code})
-	if price_list:
-		print(price_list)
-		return price_list[0]["selling_rate"]
+# @frappe.whitelist()
+# def get_item_rate(item_code):
+# 	from erpnext.stock.report.item_price_stock.item_price_stock import get_item_price_qty_data
+# 	price_list = get_item_price_qty_data({"item_code": item_code})
+# 	if price_list:
+# 		print(price_list)
+# 		return price_list[0]["selling_rate"]
 	
-	return 0
+# 	return 0
 
 
 @frappe.whitelist()
@@ -718,8 +719,8 @@ def get_warehouse():
 
 @frappe.whitelist()
 def get_vehicleBrand():
-    return frappe.get_all("Vehicle Brand","name")
+	return frappe.get_all("Vehicle Brand",fields={"name"})
 
 @frappe.whitelist()
 def get_vehicleModel(model):
-    return frappe.get_all("Vehicle Models", {"parent":model},"model")
+	return frappe.get_all("Vehicle Models", {"parent":model},"model")
