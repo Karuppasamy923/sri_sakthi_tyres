@@ -611,12 +611,10 @@ def delete_vehicle(data):
 @frappe.whitelist(allow_guest=True)
 def get_enquiry_details(data):
 	if data:
-		doc = frappe.get_all("Lead", {"mobile_no": data},{"name","lead_name","mobile_no"})
-		if doc:
-			return doc
+		return frappe.get_all("Lead", {"mobile_no": data},{"name","lead_name","mobile_no"})
 	else:
-		doc = frappe.get_all("Lead", fields={"name", "lead_name", "mobile_no"})
-		return doc
+		return frappe.get_all("Lead", fields={"name", "lead_name", "mobile_no"})
+
 
 @frappe.whitelist(allow_guest=True)
 def get_billing_details(name):

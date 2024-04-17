@@ -234,9 +234,9 @@ website_route_rules = [{'from_route': '/frontend/<path:app_path>', 'to_route': '
 
 whitelist = ["GET", "POST"]
 
-app_list = ['get_details','store_vehicle_details','job_card', 'stock_details','get_brand','get_size','get_pattern','get_type','get_ItemCode','get_jobcard_details','delete_vehicle']
+app_list = ['get_details','store_vehicle_details','job_card', 'stock_details','get_brand','get_size','get_pattern','get_type','get_ItemCode','get_jobcard_details','delete_vehicle','get_enquiry_details']
 
-from tyre.api import get_details, store_vehicle_details, job_card, stock_details,get_brand,get_size,get_pattern,get_type,get_ItemCode,get_jobcard_details,delete_vehicle
+from tyre.api import get_details, store_vehicle_details, job_card, stock_details,get_brand,get_size,get_pattern,get_type,get_ItemCode,get_jobcard_details,delete_vehicle, get_enquiry_details
 
 api_routes = {
     "GET": {
@@ -244,7 +244,7 @@ api_routes = {
         "/api/method/tyre.api.stock_details":stock_details,
         "/api/method/tyre.api.get_brand":get_brand,
         "/api/method/tyre.api.get_jobcard_details":get_jobcard_details,
-        
+        "/api/method/tyre.api.get_enquiry_details":get_enquiry_details
     },
     "POST": {
         "/api/method/tyre/api/get_details": get_details,
