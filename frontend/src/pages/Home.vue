@@ -255,7 +255,7 @@
                             </div>
                         </div>
                         <!-- <div v-if="currentstep == 0"> -->
-                        <div class="flex justify-center m-5">
+                        <div class="flex justify-center m-5" v-if="searchShow">
                             <input type="text" class="w-[338px] h-[52px] rounded-sm border-solid border border-black"
                                 v-model="searchQuery" @keyup.enter="search" placeholder="Enter Vehicle Number">
                             <button class="bg-blue-500 w-[150px] text-white font-bold text-base p-4 rounded-lg ml-3"
@@ -267,14 +267,14 @@
                                     <button @click="getJobCard" v-if="hide == 'false' && hideEnq == 'false'"
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Job
                                         Card</button>
-                                    <button @click="hide = 'false', check = 'false',initial='true', responseData = ''"
+                                    <button @click="hide = 'false', check = 'false',initial='true', responseData = '', searchShow = 'true'"
                                         v-if="hide != 'false'"
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Back</button>
                                 </div>
                                 <div>
                                     <button @click="getEnquiry" v-if="hideEnq == 'false' && hide == 'false'"
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Enquiry</button>
-                                    <button @click="hideEnq = 'false', check = 'false',initial='true', responseData = ''"
+                                    <button @click="hideEnq = 'false', check = 'false',initial='true', responseData = '', searchShow = 'true'"
                                         v-if="hideEnq != 'false'"
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Back</button>
                                 </div>
@@ -2293,10 +2293,12 @@ const search = async () => {
 const searchJobCard = ref('')
 const hide = ref('false');
 const jobCardDetails = reactive(ref([]));
+const searchShow = ref(true);
 const getJobCard = async () => {
     hide.value = true;
     check.value = false;
     initialNext.value = false;
+    searchShow.value = false;
     try {
         const response = await axios.post(`${BaseURL}/api/method/tyre.api.get_jobcard_details`, { searchJobCard: searchJobCard.value }, { headers: headers });
         jobCardDetails.value = response.data.message;
@@ -2314,6 +2316,7 @@ const getEnquiry = async () => {
     hideEnq.value = true;
     check.value = false;
     initialNext.value = false;
+    searchShow.value = false;
     try {
         const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_enquiry_details`, {
             params: {
