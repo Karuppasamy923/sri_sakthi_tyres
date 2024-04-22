@@ -341,7 +341,7 @@ def job_card(data):
 						 		join `tabCustomer Details` as cud on cud.license_plate = vd.name 
 						 		left join `tabContact Person` as cp on cp.parent = vd.name WHERE vd.license_plate = %s AND cd.primary = 1 OR cp.custom_primary = 1""", vehicle_number,as_dict = True)[0]
 	val = frappe._dict(data.service)
-	print(user_details)
+	# print(user_details)
 	# print(val.alignment['lastAlignment'])
 	
 	air,nitrogen = False,False
@@ -370,19 +370,19 @@ def job_card(data):
 	doc.update(user_details)
 	doc.update(service)
 	bills = [bill[0] for bill in data.bill]
-	print(bills, "bills")
+	# print(bills, "bills")
 	billing_items = []
 	total_amount = 0
 	for items in bills:
 		items = frappe._dict(items)
 		total_amount += float(items.cost)
 		billing_items.append({"item_code": items.itemCode, "warehouse": items.sourceWarehouse, "quantity" : items.requiredQuantity, "amount" : items.cost, "rate": items.rate})
-	print(doc.as_dict(), "as_dict")
+	# print(doc.as_dict(), "as_dict")
 	doc.extend("billing_details", billing_items)
 
 	doc.total_amount = total_amount
 	doc.save(ignore_permissions=True)  # Save customer document
-	print(doc.as_dict(), "as_dict")
+	# print(doc.as_dict(), "as_dict")
 	return {
 		"status": 200,
 		"message": "Jobcard Created Successfully"
@@ -757,3 +757,82 @@ def get_vehicleBrand():
 @frappe.whitelist()
 def get_vehicleModel(model):
 	return frappe.get_all("Vehicle Models", {"parent":model},"model")
+
+@frappe.whitelist(allow_guest=True)
+def send_quotation(data):
+    import json
+    import frappe
+    import requests
+    url = "https://graph.facebook.com/v17.0/312918851895922/messages"
+    try:
+        data = json.loads(data)
+        mobile = data.get('mobile_no')
+        license_plate = data.get('license_plate')
+        print('whatsapp integration mobile number', mobile)
+        print('whatsapp integration license_plate', license_plate)
+        doc = frappe.get_doc("Tyre Job Card", {"vehicle_no": license_plate})
+        if doc:
+            print("Tyre Job Card found:", doc.name)
+            docs = frappe.get_doc("Customer Details",{"name":license_plate})
+            print("Tyre Job Card found:", docs.current_owner)
+            headers = {
+				'Authorization':'Bearer EAAPvJMkEALEBOZCzW9ZBsXcbSM4UHAvFzebqI6Qp9zp2k62qWUZCLnvPWeGBZC057UsiZBMm2CtZCGyVAPC3Nl3XsLu0cxDoutkxVJP4MuTYX67lFqmgd0bcwIRPCQYwsIVqySKJeLOLxOG9yZAEgxw4jDHBlTXXLDcGpvE9dpHpNvYQzZB64x9ZC6pEh7YMgPaISX8EVRMK6f6JNFVVUNsoZD',
+				'Content-Type': 'application/json'
+			}
+            payload = json.dumps({
+                "messaging_product": "whatsapp",
+                "to": "91" + mobile,
+                "type": "template",
+                "template": {
+                    "name": "job_card",
+                    "language": {
+                        "code": "en"
+                    },
+                    "components":[
+						{
+							"type":"body",
+							"parameters":[
+								{
+									"type":"text",
+                        			"text": "Sudharsan"
+								},
+								{
+									"type":"text",
+                        			"text": "JCD-24-04-0039"
+								},
+								{
+									"type":"text",
+                        			"text": "2000"
+								},
+							]
+						},
+						{
+                			"type": "button",
+                			"sub_type": "quick_reply",
+                			"index": 0,
+                			"parameters": [
+                    			{
+                        			"type": "url",
+                        			"text": "view invoice",
+                        			"data": {
+                            			"type": "url",
+                            			"text": "View Invoice",
+                            			"url": "https://www.indiamart.com/sri-sakthi-tyres/"
+                        			}
+                    			}
+                			]
+            			}
+					]
+                }
+            })
+            response = requests.request("POST",url, headers=headers, data=payload)
+            print('response',response.text)
+            print("payload",payload)
+            return "success"
+        else:
+            print("Tyre Job Card not found")
+            return "Tyre Job Card not found"
+    
+    except Exception as e:
+        print("Error:", frappe.get_traceback())
+        return "Error occurred: " + str(e)
