@@ -112,6 +112,20 @@ def store_vehicle_details(data):
 
 	# doc.save(ignore_permissions=True)
 
+@frappe.whitelist(allow_guest = True)
+def exist_mobile_number(data):
+    print(data)
+    data = json.loads(data)
+    mobile = data.get('mobile')
+    print('mobile number',mobile)
+    owner = frappe.db.get_value("Customer",{"mobile_no":data.get('mobile')})
+    if owner:
+        print("mobile number exist")
+        return "mobileExist"
+    else:
+        print("mobile else block")
+    
+
 # function to store new customer details
 @frappe.whitelist(allow_guest=True)
 def store_customer_details(data):
@@ -234,7 +248,6 @@ def store_customer_details(data):
 			# doc.owner_email_id = data.get('owner_email_id')
 			else:
 				frappe.throw("already owner of exsist with given number"+data.get('owner_mobile_no'))
-
 			# New driver or contact person document
 			for driver_data in data.get('employees', []):
 				doc_type = driver_data.get('type')
