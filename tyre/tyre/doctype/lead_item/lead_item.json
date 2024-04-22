@@ -48,7 +48,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Tyre Type",
-   "options": "TT\nTL"
+   "options": "\nTT\nTL"
   },
   {
    "fieldname": "item_code",
@@ -71,7 +71,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-04-16 13:31:03.520058",
+ "modified": "2024-04-17 13:59:34.259490",
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "Lead Item",
