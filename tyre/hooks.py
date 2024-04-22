@@ -236,7 +236,7 @@ whitelist = ["GET", "POST"]
 
 app_list = ['get_details','store_vehicle_details','job_card', 'stock_details','get_brand','get_size','get_pattern','get_type','get_ItemCode','get_jobcard_details','delete_vehicle','get_enquiry_details']
 
-from tyre.api import get_details, store_vehicle_details, job_card, stock_details,get_brand,get_size,get_pattern,get_type,get_ItemCode,get_jobcard_details,delete_vehicle, get_enquiry_details, exist_mobile_number
+from tyre.api import get_details, store_vehicle_details, job_card, stock_details,get_brand,get_size,get_pattern,get_type,get_ItemCode,get_jobcard_details,delete_vehicle, get_enquiry_details, exist_mobile_number,send_quotation
 
 api_routes = {
     "GET": {
@@ -254,6 +254,7 @@ api_routes = {
         "/api/method/tyre.api.get_type":get_type,
         "/api/method/tyre.api.get_ItemCode":get_ItemCode,
         "/api/method/tyre.api.delete_vehicle":delete_vehicle,
-        "/api/method/tyre.api.exist_mobile_number":exist_mobile_number
+        "/api/method/tyre.api.exist_mobile_number":exist_mobile_number,
+        "/api/method/tyre.api.send_quotation":send_quotation
     }
 }
