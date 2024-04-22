@@ -273,14 +273,14 @@
                                     <button @click="getJobCard" v-if="hide == 'false' && hideEnq == 'false'"
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Job
                                         Card</button>
-                                    <button @click="hide = 'false', check = 'true', initialNext = 'true'"
+                                    <button @click="hide = 'false', check = 'true', initialNext = 'true', responseData = ''"
                                         v-if="hide != 'false'"
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Back</button>
                                 </div>
                                 <div>
                                     <button @click="getEnquiry" v-if="hideEnq == 'false' && hide == 'false'"
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Enquiry</button>
-                                    <button @click="hideEnq = 'false', check = 'true', initialNext = 'true'"
+                                    <button @click="hideEnq = 'false', check = 'true', initialNext = 'true',responseData = ''"
                                         v-if="hideEnq != 'false'"
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Back</button>
                                 </div>
@@ -1912,7 +1912,7 @@
                                     @input="calculateDiscountRate"
                                     class="w-[338px] h-[52px] rounded-sm border-solid border border-black"></label>
                             <label class="ml-auto pr-5">Total Amount:
-                                <input type="text" :value="finalAmount.toFixed(2)" readonly
+                                <input type="text" :value="finalAmount" readonly
                                     class="w-[338px] h-[52px] rounded-sm border-solid border border-black cursor-not-allowed">
                             </label>
                         </div>
