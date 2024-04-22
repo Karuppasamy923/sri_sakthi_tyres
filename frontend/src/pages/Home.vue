@@ -544,8 +544,6 @@
                                                     &nbsp;&nbsp;<label>Call</label>
                                                 </span>
                                             </div>
-                                            <!-- <div v-for="(employee, index) in responseData.message[1]?.current_driver"
-                                                :key="index"> -->
                                             <div class="mt-2">
                                                 <label>Driver Name&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">
@@ -571,9 +569,6 @@
                                                     &nbsp;&nbsp;<label>Call</label>
                                                 </span>
                                             </div>
-                                            <!-- </div> -->
-                                            <!-- <div v-for="(contact, index) in responseData.message[1]?.contact_person"
-                                                :key="index"> -->
                                             <div class="mt-2">
                                                 <label>Contact Person&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">
@@ -596,7 +591,6 @@
                                                     &nbsp;&nbsp;<label>Call</label>
                                                 </span>
                                             </div>
-                                            <!-- </div> -->
                                         </div>
                                         <div>
                                             <div class="mt-2">
@@ -615,8 +609,6 @@
                                                     &nbsp;&nbsp;<label>SMS</label>
                                                 </span>
                                             </div>
-                                            <!-- <div v-for="(employee, index) in responseData.message[1]?.current_driver"
-                                                :key="index"> -->
                                             <div class="mt-2">
                                                 <label>Driver Mobile&nbsp;&nbsp;:&nbsp;</label>
                                                 <label class="mt-3">
@@ -634,9 +626,6 @@
                                                     &nbsp;&nbsp;<label>SMS</label>
                                                 </span>
                                             </div>
-                                            <!-- </div> -->
-                                            <!-- <div v-for="(contact, index) in responseData.message[1]?.contact_person"
-                                                :key="index"> -->
                                             <div class="mt-2">
                                                 <label>Contact Person&nbsp;&nbsp;:&nbsp; </label>
                                                 <label class="mt-3">
@@ -654,8 +643,6 @@
                                                     &nbsp;&nbsp;<label>SMS</label>
                                                 </span>
                                             </div>
-                                            <!-- </div> -->
-
                                         </div>
                                     </div>
                                     <div class="float-right mt-[20px] flex flex-row space-x-9">
@@ -779,10 +766,6 @@
                                             placeholder="Enter your Vehicle Number">
                                     </p>
                                     <p class="m-2">Vehicle Brand <br>
-                                        <!-- <input type="text" v-if="check"
-                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                            v-model="responseData.message[0].vehicle_brand"
-                                            placeholder="Enter Vehicle Brand"> -->
                                         <select class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="responseData.message[0].vehicle_brand"
                                             @change="get_Vmodel(vehicleData.vehicle_brand)" style="overflow-y: auto;">
@@ -1003,7 +986,6 @@
                                                     type="number" v-model="quantity">
                                             </div>
                                             <div class="flex flex-col ml-1">
-                                                <!-- <label class="mt-2">Add</label> -->
                                                 <Button class="w-[4rem] mt-10" @click="addItem">Add</Button>
                                             </div>
                                             <div class="flex flex-col ml-1">
@@ -1953,7 +1935,6 @@ import { ref, reactive, watch, computed, onMounted } from 'vue';
 import { FeatherIcon } from 'frappe-ui'
 import axios from 'axios';
 
-const even = window.location.origin
 const selectImg = ref(true);
 const Auth = ref(true)
 const incorrect = ref(false);
@@ -1975,7 +1956,6 @@ const pin1 = ref('');
 const pin2 = ref('');
 const pin3 = ref('');
 const pin4 = ref('');
-
 const items = ref([])
 const tableDetails = ref(false);
 const addItem = () => {
@@ -2329,7 +2309,6 @@ watch(searchEnquiry, () => {
 });
 
 const currentPage = ref('details');
-// const currentstep = ref(0);
 const maxStep = 4;
 
 function previousPage() {
@@ -2340,33 +2319,6 @@ function previousPage() {
 }
 
 const showWarning = ref(false)
-const close = () => {
-    if (showWarning.value) {
-        showWarning.value = false;
-        showNewCustomer.value = true;
-    }
-    showAlerts.value = false;
-    modifyAlert.value = false;
-    successData.value = false;
-    searchValue.value = false;
-}
-const closed = () => {
-    showAlerts.value = false;
-    if (vehicleNumber.value || vehicleExist.value) {
-        vehicleNumber.value = false;
-        vehicleExist.value = false;
-        showNewVehicle.value = true
-    }
-    else if (notVehicleAlert.value || notCustomerAlert.value || notEmployeeAlert.value || notEmpDetailAlert.value || noVehicleNumber.value) {
-        notVehicleAlert.value = false;
-        notCustomerAlert.value = false;
-        notEmployeeAlert.value = false;
-        notEmpDetailAlert.value = false;
-        noVehicleNumber.value = false;
-        showNewCustomer.value = true;
-    }
-}
-
 function nextPageAndHighlight() {
     if (currentstep.value < maxStep) {
         currentstep.value++;
@@ -2486,7 +2438,6 @@ const vehicleData = ref({
 
 const showConfirmation = ref(false);
 const newVehicleSave = ref(false);
-const newCustomerSave = ref(false);
 const showAlerts = ref(false)
 const vehicleNumber = ref(false)
 const vehicleExist = ref(false)
@@ -2496,7 +2447,6 @@ const notCustomerAlert = ref(false)
 const notEmployeeAlert = ref(false)
 const notEmpDetailAlert = ref(false)
 const noVehicleNumber = ref(false)
-
 const noValidVehicleNumber = ref(false)
 const noCustomerValidVehicleNumber = ref(false)
 const cannotSave = ref(false)
@@ -2794,17 +2744,6 @@ const addCustomerData = async () => {
     if(mobileNumberExist){
         return
     }
-    // if (existingData) {
-    //     showAlerts.value = true;
-    //     notVehicleAlert.value = true;
-    //     showNewCustomer.value = false
-    //     setTimeout(() => {
-    //         showAlerts.value = false;
-    //         notVehicleAlert.value = false;
-    //         showNewCustomer.value = true;
-    //     }, 1000);
-    //     return
-    // }
     console.log("existing vehicle check",existingData)
     if (existingData.message[0].name && !existingData.message[1].current_owner) {
         const ownerName = customerData.value.current_owner.trim();
@@ -3268,7 +3207,6 @@ const addTyre = () => {
         tyreDatas.value.push({ tyre: '', depth: '', pressure: '', comment: '', wear: false, cut: false, mark: false, damage: false, bulge: false, puncture: false });
         sampleValue.index++;
     }
-    //   tyreDatas.value.push({ tyre: '', depth: '', pressure: '', comment: '', wear: false, cut: false, mark: false, damage: false, bulge: false, puncture: false });
 };
 
 
@@ -3588,7 +3526,6 @@ const deleteTyreReplacement = (index) => {
         tyres.value.splice(index, 1)
         setValue.index--;
     }
-    //   tyres.value.splice(index, 1)
 }
 const clearTyreData = (index) => {
     const tyre = tyres.value[index]
@@ -3738,11 +3675,7 @@ const calculateTotals = () => {
     totalQuantity.value = sumQuantity;
     totalCost.value = sumCost;
     finalAmount.value = sumCost;
-
-    // calculateDiscountRate();
 };
-
-
 const calculateDiscountRate = () => {
     if (discountRate.value == 0) {
         finalAmount.value = totalCost.value;
@@ -3756,7 +3689,6 @@ const addNewRow = (billIndex) => {
     if (!Array.isArray(tableData.value[step])) {
         tableData.value[step] = [];
     }
-
     // Push a new object into tableData[billIndex]
     tableData.value[step].push({
         itemCode: '',
@@ -3795,6 +3727,7 @@ const confirmDataSave = () => {
         responseData.value = '';
         nextButtonEnable.value = false;
         afterResponse.value = false;
+        handle.value = false
     }, 1000);
 }
 const cancelSaved = () => {
@@ -3807,8 +3740,6 @@ const cancelSaved = () => {
     height: 2px;
     background-color: #000000 !important;
 }
-
-
 .bottom-div {
     position: fixed;
     bottom: 0;
@@ -3816,15 +3747,12 @@ const cancelSaved = () => {
     width: 100%;
     background-color: #f0f0f0;
 }
-
 .active {
     font-weight: bold;
 }
-
 .person-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* Center align the items horizontally */
 }
 </style>
