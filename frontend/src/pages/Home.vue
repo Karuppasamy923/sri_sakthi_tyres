@@ -3028,12 +3028,6 @@ const handleCustomer = async () => {
             }
         try {
             const response = await axios.post(`${BaseURL}/api/method/tyre.api.lead`, customerDetails, { headers: headers })
-            // showAlerts.value = true;
-            // successData.value = true;
-            // setTimeout(() => {
-            //     showAlerts.value = false;
-            //     successData.value = false;
-            // }, 700);
             popItems.value = response.data.message;
     
             billPopup.value = 'true';
