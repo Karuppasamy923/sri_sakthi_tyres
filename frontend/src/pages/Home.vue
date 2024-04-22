@@ -3727,6 +3727,7 @@ const confirmDataSave = () => {
         responseData.value = '';
         nextButtonEnable.value = false;
         afterResponse.value = false;
+        handle.value = false
     }, 1000);
 }
 const cancelSaved = () => {
