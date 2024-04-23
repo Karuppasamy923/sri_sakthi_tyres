@@ -1021,7 +1021,7 @@
                                                     v-model="pattern">
                                                     <option v-for="(pattern, index) in patterns[index]" :key="index">{{
                                                         pattern
-                                                    }}</option>
+                                                        }}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -2176,7 +2176,7 @@ const dataAssignment = (response) => {
             }
         ]
     };
-    console.log('customer_mobile_no',responseData.value.message[1]?.owner_mobile_no)
+    console.log('customer_mobile_no', responseData.value.message[1]?.owner_mobile_no)
     return responseData.value;
 }
 const check = ref(false)
@@ -2986,6 +2986,16 @@ const handleCustomer = async () => {
             popItems.value = response.data.message;
 
             billPopup.value = 'true';
+            const data = {
+                mobile_no: customerDetails.owner_mobile_no,
+            };
+            console.log("before whatsapp integration enquiry", data.mobile_no)
+            try {
+                const response = await axios.post(`${BaseURL}/api/method/tyre.api.send_quotation`, { data: JSON.stringify(data) }, { headers: headers })
+                console.log("enquiry whatsapp integration success:", response);
+            } catch (error) {
+                console.log("enquiry whatsapp integration error:", error);
+            }
 
         } catch (error) {
             console.log("Temporary customer details page:", error)
@@ -3734,7 +3744,7 @@ const confirmDataSave = async () => {
     checkup(jobCard)
     const data = {
         mobile_no: responseData.value.message[1]?.owner_mobile_no,
-        license_plate :responseData.value.message[0]?.name
+        license_plate: responseData.value.message[0]?.name
     };
     console.log("before whatsapp integration", data.mobile_no)
     console.log("before whatsapp integration", data.license_plate)
