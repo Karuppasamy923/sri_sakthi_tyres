@@ -114,17 +114,17 @@ def store_vehicle_details(data):
 
 @frappe.whitelist(allow_guest = True)
 def exist_mobile_number(data):
-    print(data)
-    data = json.loads(data)
-    mobile = data.get('mobile')
-    print('mobile number',mobile)
-    owner = frappe.db.get_value("Customer",{"mobile_no":data.get('mobile')})
-    if owner:
-        print("mobile number exist")
-        return "mobileExist"
-    else:
-        print("mobile else block")
-    
+	print(data)
+	data = json.loads(data)
+	mobile = data.get('mobile')
+	print('mobile number',mobile)
+	owner = frappe.db.get_value("Customer",{"mobile_no":data.get('mobile')})
+	if owner:
+		print("mobile number exist")
+		return "mobileExist"
+	else:
+		print("mobile else block")
+	
 
 # function to store new customer details
 @frappe.whitelist(allow_guest=True)
@@ -474,12 +474,12 @@ def lead_details(data):
 
 @frappe.whitelist(allow_guest=True)
 def get_brand():
-  doc =  frappe.get_all("Brand", pluck="name")
-  brand = []
-  for row in doc:
-    if row != "Service":
-      brand.append(row)
-  return brand
+	doc =  frappe.get_all("Brand", pluck="name")
+	brand = []
+	for row in doc:
+		if row != "Service":
+			brand.append(row)
+	return brand
 
 @frappe.whitelist(allow_guest=True)
 def get_size(brand):
@@ -758,81 +758,130 @@ def get_vehicleBrand():
 def get_vehicleModel(model):
 	return frappe.get_all("Vehicle Models", {"parent":model},"model")
 
+from datetime import datetime
 @frappe.whitelist(allow_guest=True)
 def send_quotation(data):
-    import json
-    import frappe
-    import requests
-    url = "https://graph.facebook.com/v17.0/312918851895922/messages"
-    try:
-        data = json.loads(data)
-        mobile = data.get('mobile_no')
-        license_plate = data.get('license_plate')
-        print('whatsapp integration mobile number', mobile)
-        print('whatsapp integration license_plate', license_plate)
-        doc = frappe.get_doc("Tyre Job Card", {"vehicle_no": license_plate})
-        if doc:
-            print("Tyre Job Card found:", doc.name)
-            docs = frappe.get_doc("Customer Details",{"name":license_plate})
-            print("Tyre Job Card found:", docs.current_owner)
-            headers = {
-				'Authorization':'Bearer EAAPvJMkEALEBOZCzW9ZBsXcbSM4UHAvFzebqI6Qp9zp2k62qWUZCLnvPWeGBZC057UsiZBMm2CtZCGyVAPC3Nl3XsLu0cxDoutkxVJP4MuTYX67lFqmgd0bcwIRPCQYwsIVqySKJeLOLxOG9yZAEgxw4jDHBlTXXLDcGpvE9dpHpNvYQzZB64x9ZC6pEh7YMgPaISX8EVRMK6f6JNFVVUNsoZD',
+	import json
+	import frappe
+	import requests
+	url = "https://graph.facebook.com/v17.0/312918851895922/messages"
+	try:
+		data = json.loads(data)
+		mobile = data.get('mobile_no')
+		license_plate = data.get('license_plate')
+		print('whatsapp integration mobile number', mobile)
+		print('whatsapp integration license_plate', license_plate)
+		doc = ""
+		enquiry = ""
+		if mobile and license_plate:
+			print("if block")
+			doc = frappe.get_doc("Tyre Job Card", {"vehicle_no": license_plate})
+			print(doc)
+		elif mobile and not license_plate:
+			print("else block")
+			enquiry = frappe.get_doc("Lead",{"mobile_no":mobile})
+			print('enquiry',enquiry)
+		# print(doc.as_dict())
+		# job_card_detail = json.dumps(doc.as_dict())
+		# def convert_to_dict(obj):
+		# 	if isinstance(obj, datetime):
+		# 		return obj.strftime("%Y-%m-%d %H:%M:%S")
+		# 	elif isinstance(obj, dict):
+		# 		return {k: convert_to_dict(v) for k, v in obj.items()}
+		# 	elif isinstance(obj, list):
+		# 		return [convert_to_dict(elem) for elem in obj]
+		# 	else:
+		# 		return obj
+
+		# doc_serializable = convert_to_dict(doc.as_dict())
+		# doc_json = json.dumps(doc_serializable)
+		if doc:
+			print("Tyre Job Card found:", doc.name)
+			docs = frappe.get_doc("Customer Details",{"name":license_plate})
+			print("Tyre Job Card found:", docs.current_owner)
+			headers = {
+				'Authorization':'Bearer EAAPvJMkEALEBO7T0B1k8ZCMXZAMDyEjNKFyAxQSQcwcc0dR9w9EFolBpjrbc9AfbJG1aqmZC7TaGMafKyrYuR9lDbsRZB244xXjktcs5DdDFw03BY1y7f2C8BoneIALdVZCH0drtp82joDayN7UiL4OLVZCrH3jIyiBOSe68BDXp4ZAgLqo4ZAXEwQcE6EH5gwlkfLvRMFZCgjgM9nY78bpaZA',
 				'Content-Type': 'application/json'
 			}
-            payload = json.dumps({
-                "messaging_product": "whatsapp",
-                "to": "91" + mobile,
-                "type": "template",
-                "template": {
-                    "name": "job_card",
-                    "language": {
-                        "code": "en"
-                    },
-                    "components":[
-						{
-							"type":"body",
-							"parameters":[
-								{
-									"type":"text",
-                        			"text": "Sudharsan"
-								},
-								{
-									"type":"text",
-                        			"text": "JCD-24-04-0039"
-								},
-								{
-									"type":"text",
-                        			"text": "2000"
-								},
-							]
+			payload = json.dumps({
+					"messaging_product": "whatsapp",
+					"to": "91"+mobile,
+					"type": "template",
+					"template": {
+						"name": "job_card_detail",
+						"language": {
+							"code": "en_us"
 						},
+						"components": [
 						{
-                			"type": "button",
-                			"sub_type": "quick_reply",
-                			"index": 0,
-                			"parameters": [
-                    			{
-                        			"type": "url",
-                        			"text": "view invoice",
-                        			"data": {
-                            			"type": "url",
-                            			"text": "View Invoice",
-                            			"url": "https://www.indiamart.com/sri-sakthi-tyres/"
-                        			}
-                    			}
-                			]
-            			}
+							"type": "body",
+							"parameters": [
+								{
+									"type": "text",
+									"text": docs.current_owner
+								},
+								{
+									"type": "text",
+									"text": docs.name
+								},
+								{
+									"type": "text",
+									"text": doc.total_amount
+								}
+							]
+						}
 					]
-                }
-            })
-            response = requests.request("POST",url, headers=headers, data=payload)
-            print('response',response.text)
-            print("payload",payload)
-            return "success"
-        else:
-            print("Tyre Job Card not found")
-            return "Tyre Job Card not found"
-    
-    except Exception as e:
-        print("Error:", frappe.get_traceback())
-        return "Error occurred: " + str(e)
+				}
+			})
+			response = requests.request("POST",url, headers=headers, data=payload)
+			print('response',response.text)
+			print("payload",payload)
+			return "success"
+		else:
+			print("Tyre Job Card not found")
+
+		if enquiry:
+			print("Tyre Job Card found:", enquiry.name)
+			headers = {
+				'Authorization':'Bearer EAAPvJMkEALEBO7T0B1k8ZCMXZAMDyEjNKFyAxQSQcwcc0dR9w9EFolBpjrbc9AfbJG1aqmZC7TaGMafKyrYuR9lDbsRZB244xXjktcs5DdDFw03BY1y7f2C8BoneIALdVZCH0drtp82joDayN7UiL4OLVZCrH3jIyiBOSe68BDXp4ZAgLqo4ZAXEwQcE6EH5gwlkfLvRMFZCgjgM9nY78bpaZA',
+				'Content-Type': 'application/json'
+			}
+			payload = json.dumps({
+				"messaging_product": "whatsapp",
+					"to": "91"+mobile,
+					"type": "template",
+					"template": {
+						"name": "lead_detail",
+						"language": {
+							"code": "en_us"
+						},
+						"components": [
+						{
+							"type": "body",
+							"parameters": [
+								{
+									"type": "text",
+									"text": enquiry.name
+								},
+								{
+									"type": "text",
+									"text": enquiry.name
+								},
+								{
+									"type": "text",
+									"text": enquiry.annual_revenue
+								}
+							]
+						}
+					]
+				}
+			})
+			response = requests.request("POST",url, headers=headers, data=payload)
+			print("lead response",response.text)
+			print("lead payload",payload)
+		else:
+			print("lead details not found")
+			return "lead details not found"
+	except Exception as e:
+		print("Error:", frappe.get_traceback())
+		return "Error occurred: " + str(e)
