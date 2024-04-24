@@ -800,7 +800,7 @@ def send_quotation(data):
 			docs = frappe.get_doc("Customer Details",{"name":license_plate})
 			print("Tyre Job Card found:", docs.current_owner)
 			headers = {
-				'Authorization':'Bearer EAAPvJMkEALEBO7T0B1k8ZCMXZAMDyEjNKFyAxQSQcwcc0dR9w9EFolBpjrbc9AfbJG1aqmZC7TaGMafKyrYuR9lDbsRZB244xXjktcs5DdDFw03BY1y7f2C8BoneIALdVZCH0drtp82joDayN7UiL4OLVZCrH3jIyiBOSe68BDXp4ZAgLqo4ZAXEwQcE6EH5gwlkfLvRMFZCgjgM9nY78bpaZA',
+				'Authorization':'Bearer EAAPvJMkEALEBO6ktX1AGfUq9ebY44WjZAGG4AMFQCV8sPRr84ATfueZCZB0NnqZAabZCVRdA8cCCAWnwgUvpkXbC9f3GC2i98YO3cZBXTwgtsSto0VfOkFZAiQzmpEaY9viZAoZB8pm6yGZCSWZBWBpvQsAX3iGWZAVqfxaOCjnfAzZAkIZC68cLnFC7T9Pe2BRTACsu4eO9b5YYyOBXTKZBwChQrMZD',
 				'Content-Type': 'application/json'
 			}
 			payload = json.dumps({
@@ -808,7 +808,7 @@ def send_quotation(data):
 					"to": "91"+mobile,
 					"type": "template",
 					"template": {
-						"name": "job_card_detail",
+						"name": "job_card_quotation",
 						"language": {
 							"code": "en_us"
 						},
@@ -829,6 +829,17 @@ def send_quotation(data):
 									"text": doc.total_amount
 								}
 							]
+						},
+						{
+							"type":"button",
+							"sub_type":"url",
+							"index":0,
+							"parameters":[
+								{
+									"type":"text",
+									"text":"https://google.com"
+								}
+							]
 						}
 					]
 				}
@@ -843,7 +854,7 @@ def send_quotation(data):
 		if enquiry:
 			print("Tyre Job Card found:", enquiry.name)
 			headers = {
-				'Authorization':'Bearer EAAPvJMkEALEBO7T0B1k8ZCMXZAMDyEjNKFyAxQSQcwcc0dR9w9EFolBpjrbc9AfbJG1aqmZC7TaGMafKyrYuR9lDbsRZB244xXjktcs5DdDFw03BY1y7f2C8BoneIALdVZCH0drtp82joDayN7UiL4OLVZCrH3jIyiBOSe68BDXp4ZAgLqo4ZAXEwQcE6EH5gwlkfLvRMFZCgjgM9nY78bpaZA',
+				'Authorization':'Bearer EAAPvJMkEALEBO6ktX1AGfUq9ebY44WjZAGG4AMFQCV8sPRr84ATfueZCZB0NnqZAabZCVRdA8cCCAWnwgUvpkXbC9f3GC2i98YO3cZBXTwgtsSto0VfOkFZAiQzmpEaY9viZAoZB8pm6yGZCSWZBWBpvQsAX3iGWZAVqfxaOCjnfAzZAkIZC68cLnFC7T9Pe2BRTACsu4eO9b5YYyOBXTKZBwChQrMZD',
 				'Content-Type': 'application/json'
 			}
 			payload = json.dumps({
@@ -851,7 +862,7 @@ def send_quotation(data):
 					"to": "91"+mobile,
 					"type": "template",
 					"template": {
-						"name": "lead_detail",
+						"name": "job_card_quotation",
 						"language": {
 							"code": "en_us"
 						},
@@ -861,7 +872,7 @@ def send_quotation(data):
 							"parameters": [
 								{
 									"type": "text",
-									"text": enquiry.name
+									"text": enquiry.first_name
 								},
 								{
 									"type": "text",
@@ -870,6 +881,17 @@ def send_quotation(data):
 								{
 									"type": "text",
 									"text": enquiry.annual_revenue
+								}
+							]
+						},
+						{
+							"type":"button",
+							"sub_type":"url",
+							"index":0,
+							"parameters":[
+								{
+									"type":"text",
+									"text":"https://google.com"
 								}
 							]
 						}
