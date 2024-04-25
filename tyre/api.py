@@ -781,8 +781,8 @@ def send_quotation(data):
 			print("else block")
 			enquiry = frappe.get_doc("Lead",{"mobile_no":mobile})
 			print('enquiry',enquiry)
-		# print(doc.as_dict())
-		# job_card_detail = json.dumps(doc.as_dict())
+		job_card_detail = doc.as_dict()
+		print('..........',job_card_detail)
 		# def convert_to_dict(obj):
 		# 	if isinstance(obj, datetime):
 		# 		return obj.strftime("%Y-%m-%d %H:%M:%S")
