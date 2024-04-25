@@ -972,7 +972,7 @@
                                                 @click="removeCustomerData">Clear</button>
                                         </div>
                                     </div>
-                                    <div v-if="hasResponse">
+                                    <div v-if="enquiryPage">
                                         <label class="font-semibold">Tyre</label>
                                         <hr class="dark-hr">
                                         <div class="grid grid-cols-4 gap-x-10" v-if="boolDetails.state == 0">
@@ -1021,7 +1021,7 @@
                                                     v-model="pattern">
                                                     <option v-for="(pattern, index) in patterns[index]" :key="index">{{
                                                         pattern
-                                                        }}</option>
+                                                    }}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -2986,17 +2986,10 @@ const handleCustomer = async () => {
             popItems.value = response.data.message;
 
             billPopup.value = 'true';
-            const data = {
-                mobile_no: customerDetails.owner_mobile_no,
-            };
-            console.log("before whatsapp integration enquiry", data.mobile_no)
-            try {
-                const response = await axios.post(`${BaseURL}/api/method/tyre.api.send_quotation`, { data: JSON.stringify(data) }, { headers: headers })
-                console.log("enquiry whatsapp integration success:", response);
-            } catch (error) {
-                console.log("enquiry whatsapp integration error:", error);
+            if (responseData && responseData.messsage) {
+                console.log('........');
+                enquiryPage.value = false
             }
-
         } catch (error) {
             console.log("Temporary customer details page:", error)
         }
@@ -3017,10 +3010,20 @@ const deleteEnquiry = async () => {
     await axios.post(`${BaseURL}/api/method/tyre.api.delete_lead`, { data: popItems.value.name }, { headers: headers })
     billPopup.value = 'false';
     showNewCustomer.value = true;
-    hasResponse.value = true;
+    // hasResponse.value = true;
 }
 
 const enquiryClear = async () => {
+    const data = {
+        mobile_no: customerData.value.owner_mobile_no,
+    };
+    console.log("before whatsapp integration enquiry", data.mobile_no)
+    try {
+        const response = await axios.post(`${BaseURL}/api/method/tyre.api.send_quotation`, { data: JSON.stringify(data) }, { headers: headers })
+        console.log("enquiry whatsapp integration success:", response);
+    } catch (error) {
+        console.log("enquiry whatsapp integration error:", error);
+    }
     billPopup.value = 'false';
     customerData.value.current_owner = '';
     customerData.value.owner_mobile_no = '';
@@ -3073,9 +3076,10 @@ const okCustomer = () => {
 }
 
 const afterResponse = ref(false);
+const enquiryPage = ref(false);
 const handleEnquiry = async () => {
     if (!handle.value) {
-        hasResponse.value = true;
+        enquiryPage.value = true;
         try {
             const response = await axios.get(`${BaseURL}/api/method/tyre.api.stock_details`);
             responseTyreData.value = response.data;
@@ -3084,8 +3088,9 @@ const handleEnquiry = async () => {
         }
     }
     else {
-        handle.value = false
+        handle.value = false;
         hasResponse.value = false;
+        enquiryPage.value = false;
     }
 };
 onMounted(handleEnquiry)
