@@ -233,6 +233,7 @@
                                 <p class="mb-4 text-red-500 font-bold" v-if="customerExist">! Customer already added to
                                     this
                                     vehicle..</p>
+                                <p class="mb-4 text-red-500 font-bold" v-if="leadMobile">Lead Customer not found!</p>
                             </div>
                         </div>
                         <div v-if="showDeleteConfirmation"
@@ -1503,54 +1504,54 @@
                                         v-model="show.ac_service_checkbox" id="ac_service"
                                         @change="handleShow('ac_service')">
                                     <label class="text-[18px] pr-[7px]" for="ac_service">AC Service</label>&emsp;
-                                    <select v-if="show.Ac" class="w-[16rem] h-[3rem] rounded-sm"
+                                    <!-- <select v-if="show.Ac" class="w-[16rem] h-[3rem] rounded-sm"
                                         style="border: 1px solid black;" v-model="requireService.ac" @change="shooo">
                                         <option value="" selected disabled hidden>Please select...</option>
                                         <option value="good">Good</option>
                                         <option value="better">Better</option>
                                         <option value="not_good">Not Good</option>
-                                    </select>
+                                    </select> -->
                                 </div>
                                 <div class="flex flex-row items-center space-x-3">
                                     <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox"
                                         v-model="show.battery_service_checkbox" id="battery"
                                         @change="handleShow('battery')">
                                     <label class="text-[18px] pr-1" for="battery">Battery</label>&emsp;&emsp;&emsp;
-                                    <select v-if="show.battery" class="w-[16rem] h-[3rem] rounded-sm"
+                                    <!-- <select v-if="show.battery" class="w-[16rem] h-[3rem] rounded-sm"
                                         style="border: 1px solid black;" v-model="requireService.battery"
                                         @change="shooo">
                                         <option value="" selected disabled hidden>Please select...</option>
                                         <option value="good">Good</option>
                                         <option value="better">Better</option>
                                         <option value="not_good">Not Good</option>
-                                    </select>
+                                    </select> -->
                                 </div>
                                 <div class="flex flex-row items-center space-x-3">
                                     <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox"
                                         v-model="show.wiper_service_checkbox" id="wiper" @change="handleShow('wiper')">
                                     <label class="text-[18px] pr-[1px]"
                                         for="wiper">Wiper</label>&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;
-                                    <select v-if="show.wiper" class="w-[16rem] h-[3rem] rounded-sm"
+                                    <!-- <select v-if="show.wiper" class="w-[16rem] h-[3rem] rounded-sm"
                                         style="border: 1px solid black;" v-model="requireService.wiper" @change="shooo">
                                         <option value="" selected disabled hidden>Please select...</option>
                                         <option value="good">Good</option>
                                         <option value="better">Better</option>
                                         <option value="not_good">Not Good</option>
-                                    </select>
+                                    </select> -->
                                 </div>
                                 <div class="flex flex-row items-center space-x-3">
                                     <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox"
                                         v-model="show.car_wash_service_checkbox" id="car_wash"
                                         @change="handleShow('car_wash')">
                                     <label class="text-[18px] pr-[2px]" for="car_wash">Car Wash</label>&emsp;&emsp;
-                                    <select v-if="show.car_wash" class="w-[16rem] h-[3rem] rounded-sm"
+                                    <!-- <select v-if="show.car_wash" class="w-[16rem] h-[3rem] rounded-sm"
                                         style="border: 1px solid black;" v-model="requireService.car_wash"
                                         @change="shooo">
                                         <option value="" selected disabled hidden>Please select...</option>
                                         <option value="good">Good</option>
                                         <option value="better">Better</option>
                                         <option value="not_good">Not Good</option>
-                                    </select>
+                                    </select> -->
                                 </div>
                             </div>
                         </div>
@@ -3044,6 +3045,7 @@ const boolDetails = reactive({
     state: 0,
 });
 const mobileSearch = ref(false);
+const leadMobile = ref(false);
 const handleSearch = async () => {
     if (searchMobile.value) {
         const response = await axios.get(`${BaseURL}/api/method/tyre.api.lead_details`, {
@@ -3052,9 +3054,23 @@ const handleSearch = async () => {
             },
             headers: headers
         });
-        leadDetails.value = response.data.message;
-        boolDetails.state = 1;
-        mobileSearch.value = true;
+        console.log("lead details search",response);
+        if(response && response.data.message.message == 'Lead Not Found'){
+            showNewCustomer.value = false;
+            showAlerts.value = true;
+            leadMobile.value = true;
+            setTimeout(() => {
+                showNewCustomer.value = true;
+                showAlerts.value = false;
+                leadMobile.value = false;
+            }, 1000);
+            return;
+        }
+        else if(response && response.data.message.message){
+            leadDetails.value = response.data.message;
+            boolDetails.state = 1;
+            mobileSearch.value = true;
+        }
 
     }
     else {
