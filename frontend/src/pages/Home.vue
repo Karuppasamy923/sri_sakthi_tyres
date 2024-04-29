@@ -930,7 +930,7 @@
                                             </p>
                                             <p class="m-2">Employee Type <span
                                                     class="text-red-500 font-bold">*</span><br>
-                                                <select v-model="employee.type" @click="setPrimary(index)"
+                                                <select v-model="employee.type" @change="setPrimary(index)"
                                                     class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
                                                     <option value="" selected disabled>Please select..</option>
                                                     <option value="current_driver">Driver</option>
@@ -2235,6 +2235,7 @@ const search = async () => {
                 initialNext.value = true
                 searchQuery.value = ''
                 nextButtonEnable.value = true;
+                enquiryPage.value = false;
                 console.log("response",response.data.message)
                 return dataAssignment(response)
             }
@@ -2545,6 +2546,9 @@ const confirmSave = async () => {
             hasResponse.value = false;
             showAlerts.value = true
             successData.value = true;
+            enquiryPage.value = false;
+            afterResponse.value = true;
+            checked.value = true;
             setTimeout(() => {
                 showAlerts.value = false;
                 successData.value = false;
@@ -2988,10 +2992,10 @@ const handleCustomer = async () => {
             popItems.value = response.data.message;
 
             billPopup.value = 'true';
-            if (responseData && responseData.messsage) {
-                console.log('........');
-                enquiryPage.value = false
-            }
+            // if (responseData && responseData.messsage) {
+            //    console.log('........');
+            //    enquiryPage.value = false
+            // }
         } catch (error) {
             console.log("Temporary customer details page:", error)
         }
@@ -3093,7 +3097,7 @@ const okCustomer = () => {
 }
 
 const afterResponse = ref(false);
-const enquiryPage = ref(false);
+const enquiryPage = ref(true);
 const handleEnquiry = async () => {
     if (!handle.value) {
         enquiryPage.value = true;
@@ -3382,7 +3386,7 @@ const requireService = ref({
 })
 function checkup(data) {
     try {
-        const response = axios.post(`${BaseURL}/api/method/tyre.api.job_card`, { data: JSON.stringify(data) }, { headers: headers });
+        const response = axios.post(`${BaseURL}/api/method/tyre.api.job_card`, { data: JSON.stringify(data) }, { headers: headers })
     } catch (error) {
         console.error("error");
     }
@@ -3778,6 +3782,7 @@ const confirmDataSave = async () => {
         console.log("whatsapp integration error:", error);
     }
     finalSuccess.value = true;
+    enquiryPage.value = true;
     setTimeout(() => {
         finalSuccess.value = false;
         currentstep.value = 0;
