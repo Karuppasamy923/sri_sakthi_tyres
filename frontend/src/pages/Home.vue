@@ -2235,6 +2235,7 @@ const search = async () => {
                 initialNext.value = true
                 searchQuery.value = ''
                 nextButtonEnable.value = true;
+                console.log("response",response.data.message)
                 return dataAssignment(response)
             }
         } else {
@@ -3156,6 +3157,7 @@ const returnSearch = async (search) => {
             else {
                 initial.value = false
                 initialNext.value = true
+                console.log("response",response.data.message)
                 return dataAssignment(response)
             }
         } else {
