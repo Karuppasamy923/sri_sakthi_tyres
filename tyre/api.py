@@ -296,7 +296,7 @@ def store_customer_details(data):
 def job_card(data):
     # print(data, type(data))
     data = frappe._dict(json.loads(data))
-    # print(data.checkup)
+    print('vehicle number',data.user)
     five_point_checkup = {}
     tyre_abbr = {"Rear Left": "rl_", "Front Right": "fr_", "Front Left": "fl_", "Rear Right": "rr_","Spare Tyre": "sp1_"}
     for checkup in data.checkup:
@@ -314,7 +314,7 @@ def job_card(data):
                     abbr + "damage": checkup.damage,
                     abbr + "inflation": checkup.puncture,
             })
-    tyre_replacement = {}
+    tyre_replacement = user_details = {}
     tyre_types = {"Front Left": "fl", "Front Right": "fr", "Rear Left": "rl", "Rear Right": "rr", "Spare Tyre": "sp"}
     for replacement in data.replace:
         replacement = frappe._dict(replacement)
@@ -330,7 +330,17 @@ def job_card(data):
                     abbr + "_item": replacement.item
             })
     vehicle_number = data.user
+    print('vehicle number',vehicle_number)
     # print(vehicle_number)
+    print(""" SELECT vd.license_plate as vehicle_no, vd.vehicle_brand as vehicle_brand, vd.vehicle_model as vehicle_model_name, vd.vehicle_type, 
+                                vd.tyre_change as tyre_change_km, vd.last_odometer_reading as odo_reading_kms, vd.alignment as free_alignment_kms, 
+                                 cd.current_driver as driver_name, cd.mobile_no, cd.whatsapp as driver_whatsapp, cd.sms as driver_sms, cd.call as driver_call,
+                                 cp.contact_person_name as contact_person, cp.contact_person_mobile as contact_mobile_no, cp.contact_person_email as email, cp.department as department, 
+                                 cp.custom_whatsapp as contact_whatsapp, cp.custom_sms as contatct_sms, cp.custom_call as contact_call,
+                                 cud.current_owner, cud.owner_mobile_no, cud.whatsapp as whatsapp, cud.call as `call`, cud.sms as sms, cud.owner_data as customer FROM `tabVehicle Details` as vd
+                                 join `tabCurrent Driver` as cd on cd.parent = vd.name 
+                                 join `tabCustomer Details` as cud on cud.license_plate = vd.name 
+                                 left join `tabContact Person` as cp on cp.parent = vd.name WHERE vd.license_plate = '{0}' AND cd.primary = 1 OR cp.custom_primary = 1""".format(vehicle_number))
     user_details = frappe.db.sql(""" SELECT vd.license_plate as vehicle_no, vd.vehicle_brand as vehicle_brand, vd.vehicle_model as vehicle_model_name, vd.vehicle_type, 
                                 vd.tyre_change as tyre_change_km, vd.last_odometer_reading as odo_reading_kms, vd.alignment as free_alignment_kms, 
                                  cd.current_driver as driver_name, cd.mobile_no, cd.whatsapp as driver_whatsapp, cd.sms as driver_sms, cd.call as driver_call,
@@ -339,9 +349,14 @@ def job_card(data):
                                  cud.current_owner, cud.owner_mobile_no, cud.whatsapp as whatsapp, cud.call as `call`, cud.sms as sms, cud.owner_data as customer FROM `tabVehicle Details` as vd
                                  join `tabCurrent Driver` as cd on cd.parent = vd.name 
                                  join `tabCustomer Details` as cud on cud.license_plate = vd.name 
-                                 left join `tabContact Person` as cp on cp.parent = vd.name WHERE vd.license_plate = %s AND cd.primary = 1 OR cp.custom_primary = 1""", vehicle_number,as_dict = True)[0]
+                                 left join `tabContact Person` as cp on cp.parent = vd.name WHERE vd.license_plate = '{0}' AND (cd.primary = 1 OR cp.custom_primary = 1)""".format(vehicle_number), as_dict = True)
+    if user_details:
+        user_details = user_details[0]
+    else:
+        user_details = {}
     val = frappe._dict(data.service)
-    # print(user_details)
+    print('vehicle number',vehicle_number)
+    print('user details in job card',user_details)
     # print(val.alignment['lastAlignment'])
     
     air,nitrogen = False,False
@@ -374,6 +389,7 @@ def job_card(data):
     billing_items = []
     total_amount = 0
     for items in bills:
+        print('items....',items)
         items = frappe._dict(items)
         total_amount += float(items.cost)
         billing_items.append({"item_code": items.itemCode, "warehouse": items.sourceWarehouse, "quantity" : items.requiredQuantity, "amount" : items.cost, "rate": items.rate})
@@ -399,7 +415,7 @@ def lead(**args):
         "custom_sms": data.sms,
         "custom_call": data.call,
     }
-
+    print("lead details",data)
     doc = frappe.db.exists("Lead",{ "mobile_no" : data.owner_mobile_no})
 
     if doc:
@@ -407,7 +423,7 @@ def lead(**args):
             "status": 400,
             "message": "Lead Already Exists"
         }
-    print( data.keys())
+    print( 'lkaklkflkak',data.keys())
     services = frappe._dict(data["services"])
 
     service_details = {
@@ -453,7 +469,7 @@ def lead(**args):
 
 @frappe.whitelist(allow_guest=True)
 def delete_lead(data):
-    print(data)
+    print('delete lead',data)
     frappe.delete_doc("Lead",data)
     return{
         "status": 200,
@@ -636,6 +652,15 @@ def get_billing_details(name):
   return {"billing_details":doc.billing_details, "total_amount": doc.total_amount}
 
 @frappe.whitelist(allow_guest=True)
+def get_enquiry(name):
+  doc = frappe.get_doc("Lead", name)
+  lead_items = []
+  for i in doc.custom_lead_items:
+      lead_items.append(i.as_dict())
+  print("get enquiry detailsssss", lead_items)
+  return {"enquiry_details":lead_items, "total_amount": doc.custom_total_amount}
+
+@frappe.whitelist(allow_guest=True)
 def get_item_rate(item_code):
     print(item_code)
     from erpnext.stock.report.item_price_stock.item_price_stock import get_item_price_qty_data
@@ -782,8 +807,8 @@ def send_quotation(data):
             print("else block")
             enquiry = frappe.get_doc("Lead",{"mobile_no":mobile})
             print('enquiry',enquiry)
-        job_card_detail = doc.as_dict()
-        print('..........',job_card_detail)
+        # job_card_detail = doc.as_dict()
+        # print('..........',job_card_detail)
         # def convert_to_dict(obj):
         # 	if isinstance(obj, datetime):
         # 		return obj.strftime("%Y-%m-%d %H:%M:%S")

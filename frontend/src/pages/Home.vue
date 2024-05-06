@@ -11,7 +11,7 @@
                 </h1>
             </span>
             <div v-if="Auth" class="flex flex-col space-y-1 items-center mr-[50px]">
-                <h1 class="text-[20px] font-bold mb-6">Welcome User 1</h1>
+                <h1 class="text-[20px] font-bold mb-6">Welcome User</h1>
             </div>
         </div>
         <div>
@@ -234,6 +234,8 @@
                                     this
                                     vehicle..</p>
                                 <p class="mb-4 text-red-500 font-bold" v-if="leadMobile">Lead Customer not found!</p>
+                                <p class="mb-4 text-red-500 font-bold" v-if="leadCustomer">Lead Customer already exists!
+                                </p>
                             </div>
                         </div>
                         <div v-if="showDeleteConfirmation"
@@ -263,7 +265,7 @@
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Job
                                         Card</button>
                                     <button
-                                        @click="hide = 'false', check = 'false', initial = 'true', initialNext = (responseData && responseData.message && nextButtonEnable) ? 'true' : 'false', searchShow = 'true'"
+                                        @click="hide = 'false', check = 'false', initial = 'true', initialNext = (responseData && responseData.message && nextButtonEnable) ? 'true' : 'false', searchShow = 'true',jobCardPopup = 'false'"
                                         v-if="hide != 'false'"
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Back</button>
                                 </div>
@@ -271,7 +273,7 @@
                                     <button @click="getEnquiry" v-if="hideEnq == 'false' && hide == 'false'"
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Enquiry</button>
                                     <button
-                                        @click="hideEnq = 'false', check = 'false', initial = 'true', initialNext = (responseData && responseData.message && nextButtonEnable) ? 'true' : 'false', searchShow = 'true'"
+                                        @click="hideEnq = 'false', check = 'false', initial = 'true', initialNext = (responseData && responseData.message && nextButtonEnable) ? 'true' : 'false', searchShow = 'true',enquiryPopup = 'false'"
                                         v-if="hideEnq != 'false'"
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Back</button>
                                 </div>
@@ -309,11 +311,11 @@
                                             </tr>
                                         </thead>
                                         <tbody style="max-height: 2rem; overflow-y: auto;">
-                                            <tr class="bg-white border-b dark:border-gray-700 dark:text-black"
+                                            <tr class="bg-white border-b dark:border-gray-700 dark:text-black" @click="fetchJobCard(jobcard.name)"
                                                 v-for="jobcard in jobCardDetails" :key="jobcard">
                                                 <th scope="row"
                                                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
-                                                    <a href="#" @click="fetchJobCard(jobcard.name)">{{ jobcard.name
+                                                    <a href="#">{{ jobcard.name
                                                         }}</a>
                                                 </th>
                                                 <td class="px-6 py-4">
@@ -399,7 +401,7 @@
                                     </div>
                                 </a>
                             </div>
-                            <div>
+                            <div v-if="enquiryPopup == 'false'">
                                 <div class="relative overflow-x-auto flex justify-center" v-if="hideEnq != 'false'">
                                     <div>
                                         <table
@@ -419,7 +421,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr class="bg-white border-b  dark:border-gray-700 dark:text-black"
+                                                <tr class="bg-white border-b  dark:border-gray-700 dark:text-black" @click="fetchEnquiry(enquiry.name)"
                                                     v-for="enquiry in enquiryDetails" :key="enquiry">
                                                     <th scope="row"
                                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">
@@ -436,6 +438,72 @@
                                         </table>
                                     </div>
                                 </div>
+                            </div>
+                            <div v-if="enquiryPopup == 'true'" class="relative overflow-x-auto flex justify-center">
+                                <a href="#"
+                                    class="block max-w-[70rem] p-10 pt-5 bg-white border border-gray-200 rounded-lg shadow">
+                                    <div class="grid grid-cols-2">
+                                        <div>
+                                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-black">
+                                                Details</h5>
+                                        </div>
+                                        <div class="flex justify-end">
+                                            <button @click="enquiryPopup = 'false'">
+                                                <svg class="w-3 h-3" aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                    <path stroke="currentColor" stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke-width="2"
+                                                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="relative overflow-x-auto">
+                                        <table
+                                            class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                            <thead
+                                                class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                                <tr>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Item Code
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Brand
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Quantity
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Rate
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Amount
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                                                    v-for="(item, index) in enquiryData.enquiry_details" :key="index">
+                                                    <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                                        scope="row">{{ item.item_code }}</td>
+                                                    <td class="px-6 py-3">{{ item.brand }}</td>
+                                                    <td class="px-6 py-3">{{ item.quantity }}</td>
+                                                    <td class="px-6 py-3">{{ item.rate }}</td>
+                                                    <td class="px-6 py-3">{{ item.amount }}</td>
+                                                </tr>
+                                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td
+                                                        class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Total Amount</td>
+                                                    <td class="px-6 py-3">{{ enquiryData.total_amount }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </a>
                             </div>
                             <div v-if="hasResponse && initial">
                                 <div class="flex justify-center" v-if="hide == 'false' && hideEnq == 'false'">
@@ -499,12 +567,6 @@
                                                 <label class="mt-3">
                                                     {{ responseData && responseData.message &&
                                                         responseData.message[0]?.vehicle_model || 'No data' }}</label>
-                                            </div>
-                                            <div class="mt-2">
-                                                <label>Chassis No&nbsp;&nbsp;:&nbsp; </label>
-                                                <label class="mt-3">{{ responseData && responseData.message &&
-                                                    responseData.message[0]?.chassis_no
-                                                    || 'No data' }}</label>
                                             </div>
                                             <div class="mt-2">
                                                 <label>Odometer reading&nbsp;&nbsp;:&nbsp;</label>
@@ -716,13 +778,6 @@
                                             <option v-for="model in vModel" :key="model">{{ model.model }}</option>
                                         </select>
                                     </p>
-
-                                    <p class="m-2">Chassis No <span class="text-red-500 font-bold">*</span><br>
-
-                                        <input type="text"
-                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                            v-model="vehicleData.chassis_no" placeholder="Enter Chassis No">
-                                    </p>
                                     <p class="m-2">Fuel Type <span class="text-red-500 font-bold">*</span><br>
                                         <select v-model="vehicleData.fuel_type"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black">
@@ -793,15 +848,13 @@
 
                                     </p>
                                     <p class="m-2">Vehicle Model <br>
-                                        <input type="text" v-if="check"
+                                        <select
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                            v-model="responseData.message[0].vehicle_model"
-                                            placeholder="Enter Vehicle Model">
-                                    </p>
-                                    <p class="m-2">Chassis No <br>
-                                        <input type="text" v-if="check"
-                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                            v-model="responseData.message[0].chassis_no" placeholder="Enter Chassis No">
+                                            v-model="vehicleData.vehicle_model" style="overflow-y: auto;">
+                                            <!-- Loop through vBrand and create an option for each brand -->
+                                            <option value="" disabled selected>Select model...</option>
+                                            <option v-for="model in vModel" :key="model">{{ model.model }}</option>
+                                        </select>
                                     </p>
                                     <p class="m-2">Fuel Type <br>
                                         <select v-if="check" v-model="responseData.message[0].fuel_type"
@@ -851,10 +904,10 @@
                                     </svg>
                                 </button>
                                 <div class="p-8 mt-[110px]">
-                                    <div class="pb-4 grid grid-cols-2 ml-24" v-if="hasResponse">
+                                    <div class="pb-4 grid grid-cols-2 ml-24" v-if="searchMobileAfterResponse">
                                         <input type="tel" v-model="searchMobile"
                                             class="w-[19rem] h-[3rem] mt-1 rounded-sm border-solid border border-black"
-                                            placeholder="Enter Customer Mobile No.">
+                                            placeholder="Enter Customer Mobile No." @keyup.enter="handleSearch">
                                         <div class="w-[3rem] h-[3rem] mt-1 ml-[7.6rem] bg-blue-600 rounded-sm">
                                             <FeatherIcon name="search" class="m-2 w-8 h-8 cursor-pointer text-gray-100"
                                                 @click="handleSearch" />
@@ -903,21 +956,19 @@
                                         class="bg-gray-300 rounded-sm">&nbsp;&nbsp; <label>WhatsApp</label>
                                     <span class="ml-5">
                                         <input type="checkbox" v-model="customerData.callChecked"
-                                            :checked="leadDetails.custom_whatsapp == '1'"
-                                            :disabled="boolDetails.state == 1"
+                                            :checked="leadDetails.custom_call == '1'" :disabled="boolDetails.state == 1"
                                             class="bg-gray-300 rounded-sm">&nbsp;&nbsp;<label>call</label>
                                     </span>
                                     <span class="ml-5">
                                         <input type="checkbox" v-model="customerData.smsChecked"
-                                            :checked="leadDetails.custom_whatsapp == '1'"
-                                            :disabled="boolDetails.state == 1"
+                                            :checked="leadDetails.custom_sms == '1'" :disabled="boolDetails.state == 1"
                                             class="bg-gray-300 rounded-sm">&nbsp;&nbsp;<label>SMS</label>
                                     </span>
 
                                     <div v-if="!handle && !hasResponse">
 
                                         <div v-for="(employee, index) in employees" :key="index" class="mt-2">
-                                            <div v-show="false">{{ sample22 = index }}</div>
+                                            <!-- <div v-show="false">{{ sample22 = index }}</div> -->
                                             <hr class="dark-hr m-4">
                                             <button
                                                 class="bg-blue-500 w-[100px] text-white font-bold  text-base p-4 rounded-lg mb-1 float-right"
@@ -1062,12 +1113,11 @@
                                                 <tbody>
                                                     <tr v-for="(item, index) in leadDetails.custom_lead_items"
                                                         :key="index">
-                                                        <td>{{ item.brand }}</td>
-                                                        <td>{{ item.size }}</td>
-                                                        <td>{{ item.quantity }}</td>
-                                                        <td>{{ item.quantity }}</td>
-                                                        <td>{{ item.type }}</td>
-                                                        <td>{{ item.pattern }}</td>
+                                                        <td>{{ item?.brand }}</td>
+                                                        <td>{{ item?.size }}</td>
+                                                        <td v-if="item.brand && item.size">{{ item?.quantity }}</td>
+                                                        <td>{{ item?.tyre_type }}</td>
+                                                        <td>{{ item?.pattern }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -2236,7 +2286,8 @@ const search = async () => {
                 searchQuery.value = ''
                 nextButtonEnable.value = true;
                 enquiryPage.value = false;
-                console.log("response",response.data.message)
+                searchMobileAfterResponse.value = false;
+                console.log("response", response.data.message)
                 return dataAssignment(response)
             }
         } else {
@@ -2313,6 +2364,24 @@ const fetchJobCard = async (id) => {
         });
         jobCardPopup.value = 'true'
         jobCardData.value = response.data.message;
+    }
+    catch (error) {
+        console.error("Error:", error);
+    }
+}
+const enquiryPopup = ref('false');
+const enquiryData = ref([]);
+const fetchEnquiry = async (id) => {
+    try {
+        const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_enquiry`, {
+            params: {
+                name: id
+            },
+            headers: headers
+        });
+        enquiryPopup.value = 'true'
+        enquiryData.value = response.data.message;
+        console.log("enquirydata",enquiryData.value)
     }
     catch (error) {
         console.error("Error:", error);
@@ -2418,7 +2487,6 @@ const vehicleDetails = ref({
     name: '',
     vehicle_brand: '',
     vehicle_model: '',
-    chassis_no: '',
     fuel_type: '',
     last_odometer_reading: '',
     tyre_change: '',
@@ -2448,7 +2516,6 @@ const vehicleData = ref({
     name: responseData?.message?.[0]?.name ?? '',
     vehicle_brand: '',
     vehicle_model: '',
-    chassis_no: '',
     fuel_type: '',
     last_odometer_reading: '',
     tyre_change: '',
@@ -2578,7 +2645,6 @@ const addModifiedData = async () => {
         name: responseData.value.message[0].name,
         vehicle_brand: responseData.value.message[0].vehicle_brand,
         vehicle_model: responseData.value.message[0].vehicle_model,
-        chassis_no: responseData.value.message[0].chassis_no,
         fuel_type: responseData.value.message[0].fuel_type,
         last_odometer_reading: responseData.value.message[0].last_odometer_reading,
         tyre_change: responseData.value.message[0].tyre_change,
@@ -2617,26 +2683,19 @@ const employees = ref([{
 const setPrimary = (index) => {
     let firstDriverIndex = -1;
     let firstContactPersonIndex = -1;
-    // Find the index of the first driver and contact person
-    customerData.value.employees.forEach((employee, index) => {
+
+    customerData.value.employees.forEach((employee, i) => {
         if (employee.type === 'current_driver' && firstDriverIndex === -1) {
-            firstDriverIndex = index;
+            firstDriverIndex = i;
         } else if (employee.type === 'contact_person' && firstContactPersonIndex === -1) {
-            firstContactPersonIndex = index;
+            firstContactPersonIndex = i;
         }
     });
 
-    // Check the checkbox for the first driver and contact person
-    if (firstDriverIndex !== -1) {
-        customerData.value.employees[firstDriverIndex].primary = true;
+    if (index === firstDriverIndex || index === firstContactPersonIndex) {
+        customerData.value.employees[index].primary = true;
     } else {
-        console.log(`No driver found.`);
-    }
-
-    if (firstContactPersonIndex !== -1) {
-        customerData.value.employees[firstContactPersonIndex].primary = true;
-    } else {
-        console.log(`No contact person found.`);
+        console.log(`No primary found for index ${index}.`);
     }
 };
 
@@ -2782,17 +2841,17 @@ const addCustomerData = async () => {
             }, 1000);
             return;
         }
-        if (employees.value.length === 0) {
-            showNewCustomer.value = false
-            showAlerts.value = true
-            notEmployeeAlert.value = true
-            setTimeout(() => {
-                showAlerts.value = false;
-                notEmployeeAlert.value = false;
-                showNewCustomer.value = true;
-            }, 1000);
-            return;
-        }
+        // if (employees.value.length === 0) {
+        //     showNewCustomer.value = false
+        //     showAlerts.value = true
+        //     notEmployeeAlert.value = true
+        //     setTimeout(() => {
+        //         showAlerts.value = false;
+        //         notEmployeeAlert.value = false;
+        //         showNewCustomer.value = true;
+        //     }, 1000);
+        //     return;
+        // }
         const isAnyEmployeeDataMissing = employees.value.some(employee => {
             return !employee.driver_name.trim() || !employee.mobile_no.trim();
         });
@@ -2960,21 +3019,21 @@ const quantity = ref('');
 const type = ref('');
 const pattern = ref('');
 const serviceDetails = ref({
-    alignment: 0,
-    oil_change: 0,
-    inflation: 0,
-    tyre_edge: 0,
-    mushroom_patch: 0,
-    battery: 0,
-    car_wash: 0,
-    rotation: 0,
-    balancing: 0,
-    puncture: 0,
-    tyre_patch: 0,
-    ac_service: 0,
-    wiper: 0
+    alignment: false,
+    oil_change: false,
+    inflation: false,
+    tyre_edge: false,
+    mushroom_patch: false,
+    battery: false,
+    car_wash: false,
+    rotation: false,
+    balancing: false,
+    puncture: false,
+    tyre_patch: false,
+    ac_service: false,
+    wiper: false
 })
-
+const leadCustomer = ref(false);
 const handleCustomer = async () => {
     showNewCustomer.value = false;
     if (customerData.value.current_owner && customerData.value.owner_mobile_no) {
@@ -2985,13 +3044,36 @@ const handleCustomer = async () => {
             call: customerData.value.callChecked,
             sms: customerData.value.smsChecked,
             items: items.value,
-            services: serviceDetails.value
+            services: {}
         }
+        for (const key in serviceDetails.value) {
+            if (Object.hasOwnProperty.call(serviceDetails.value, key)) {
+                customerDetails.services[key] = serviceDetails.value[key];
+            }
+        }
+
+        console.log('servicedetails', serviceDetails.value);
+        console.log('customerDetails', customerDetails);
+        console.log('customerDetails.services', customerDetails.services);
         try {
             const response = await axios.post(`${BaseURL}/api/method/tyre.api.lead`, customerDetails, { headers: headers })
-            popItems.value = response.data.message;
-
-            billPopup.value = 'true';
+            console.log("lead response", response.data);
+            console.log("lead response item", response.data.message.lead_item);
+            if (response.data.message.message == "Lead Created Successfully") {
+                popItems.value = response.data.message;
+                console.log("popitems", popItems.value)
+                billPopup.value = 'true';
+            } else if (response.data.message.message == "Lead Already Exists") {
+                showNewCustomer.value = false;
+                showAlerts.value = true;
+                leadCustomer.value = true;
+                setTimeout(() => {
+                    showNewCustomer.value = true;
+                    showAlerts.value = false;
+                    leadCustomer.value = false;
+                }, 1000);
+                return
+            }
             // if (responseData && responseData.messsage) {
             //    console.log('........');
             //    enquiryPage.value = false
@@ -3059,8 +3141,8 @@ const handleSearch = async () => {
             },
             headers: headers
         });
-        console.log("lead details search",response);
-        if(response && response.data.message.message == 'Lead Not Found'){
+        console.log("lead details search", response);
+        if (response && response.data.message.message == 'Lead Not Found') {
             showNewCustomer.value = false;
             showAlerts.value = true;
             leadMobile.value = true;
@@ -3068,13 +3150,16 @@ const handleSearch = async () => {
                 showNewCustomer.value = true;
                 showAlerts.value = false;
                 leadMobile.value = false;
+                searchMobile.value = ""
+                leadDetails.value = ""
             }, 1000);
             return;
         }
-        else if(response && response.data.message.message){
+        else if (response && response.data.message) {
             leadDetails.value = response.data.message;
             boolDetails.state = 1;
             mobileSearch.value = true;
+            searchMobile.value = ""
         }
 
     }
@@ -3096,11 +3181,13 @@ const okCustomer = () => {
     searchMobile.value = ''
 }
 
+const searchMobileAfterResponse = ref(true);
 const afterResponse = ref(false);
 const enquiryPage = ref(true);
 const handleEnquiry = async () => {
     if (!handle.value) {
         enquiryPage.value = true;
+        searchMobileAfterResponse.value = true;
         try {
             const response = await axios.get(`${BaseURL}/api/method/tyre.api.stock_details`);
             responseTyreData.value = response.data;
@@ -3109,6 +3196,7 @@ const handleEnquiry = async () => {
         }
     }
     else {
+        searchMobileAfterResponse.value = false;
         handle.value = false;
         hasResponse.value = false;
         enquiryPage.value = false;
@@ -3161,7 +3249,7 @@ const returnSearch = async (search) => {
             else {
                 initial.value = false
                 initialNext.value = true
-                console.log("response",response.data.message)
+                console.log("response", response.data.message)
                 return dataAssignment(response)
             }
         } else {
@@ -3210,10 +3298,10 @@ const removeEmployee3 = (index) => {
     }
 };
 const removeEmployee1 = (index) => {
-    if (sample22.value != 0) {
+    // if (sample22.value != 0) {
         employees.value.splice(index, 1);
         setPrimary();
-    }
+    // }
 };
 
 const deleteVehicle = () => {
@@ -3794,6 +3882,7 @@ const confirmDataSave = async () => {
         nextButtonEnable.value = false;
         afterResponse.value = false;
         handle.value = false
+        searchMobileAfterResponse.value = true
     }, 1000);
 }
 const cancelSaved = () => {
