@@ -375,9 +375,26 @@
                                                     <th scope="col" class="px-6 py-3">
                                                         Amount
                                                     </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Warranty
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Warranty Expired
+                                                    </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                                                    v-for="(item, index) in jobCardData.warranty" :key="index">
+                                                    <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                                        scope="row">{{ item.item_code }}</td>
+                                                    <td class="px-6 py-3">{{ item.warehouse }}</td>
+                                                    <td class="px-6 py-3">{{ item.quantity }}</td>
+                                                    <td class="px-6 py-3">{{ item.rate }}</td>
+                                                    <td class="px-6 py-3">{{ item.amount }}</td>
+                                                    <td class="px-6 py-3">{{ item.warranty }} years</td>
+                                                    <td class="px-6 py-3">{{ item.max_years }}</td>
+                                                </tr>
                                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                                                     v-for="(item, index) in jobCardData.billing_details" :key="index">
                                                     <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -386,6 +403,8 @@
                                                     <td class="px-6 py-3">{{ item.quantity }}</td>
                                                     <td class="px-6 py-3">{{ item.rate }}</td>
                                                     <td class="px-6 py-3">{{ item.amount }}</td>
+                                                    <td class="px-6 py-3">Nil</td>
+                                                    <td class="px-6 py-3">Nil</td>
                                                 </tr>
                                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                                     <td></td>
@@ -1128,80 +1147,80 @@
                                             <div>
                                                 <input type="checkbox" v-model="serviceDetails.alignment"
                                                     :checked="leadDetails.custom_alignment == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label class="p-2">Alignment</label>
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm" id="alignment">
+                                                <label class="p-2" for="alignment">Alignment</label>
                                             </div>
                                             <div>
                                                 <input type="checkbox" v-model="serviceDetails.rotation"
                                                     :checked="leadDetails.custom_rotation == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label class="p-2">Rotation</label>
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm" id="rotation">
+                                                <label class="p-2" for="rotation">Rotation</label>
                                             </div>
                                             <div>
                                                 <input type="checkbox" v-model="serviceDetails.oil_change"
                                                     :checked="leadDetails.custom_oil_change == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label class="p-2">Oil Change</label>
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm" id="oil_change">
+                                                <label class="p-2" for="oil_change">Oil Change</label>
                                             </div>
                                             <div>
                                                 <input type="checkbox" v-model="serviceDetails.balancing"
                                                     :checked="leadDetails.custom_balancing == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label class="p-2">Balancing</label>
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm" id="balancing">
+                                                <label class="p-2" for="balancing">Balancing</label>
                                             </div>
                                             <div>
                                                 <input type="checkbox" v-model="serviceDetails.inflation"
                                                     :checked="leadDetails.custom_inflation == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label class="p-2">Inflation</label>
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm" id="inflation">
+                                                <label class="p-2" for="inflation">Inflation</label>
                                             </div>
                                             <div>
                                                 <input type="checkbox" v-model="serviceDetails.puncture"
                                                     :checked="leadDetails.custom_puncture == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label class="p-2">Puncture</label>
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm" id="puncture">
+                                                <label class="p-2" for="puncture">Puncture</label>
                                             </div>
                                             <div>
                                                 <input type="checkbox" v-model="serviceDetails.tyre_edge"
                                                     :checked="leadDetails.custom_tyre_edge == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label class="p-2">Tyre Edge</label>
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm" id="tyre_edge">
+                                                <label class="p-2" for="tyre_edge">Tyre Edge</label>
                                             </div>
                                             <div>
                                                 <input type="checkbox" v-model="serviceDetails.tyre_patch"
-                                                    :checked="leadDetails.custom_tyre_edge == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label class="p-2">Tyre Patch</label>
+                                                    :checked="leadDetails.custom_tyre_patch == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm" id="tyre_patch">
+                                                <label class="p-2" for="tyre_patch">Tyre Patch</label>
                                             </div>
                                             <div>
                                                 <input type="checkbox" v-model="serviceDetails.mushroom_patch"
                                                     :checked="leadDetails.custom_mushroom_patch == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label class="p-2">Mushroom Patch</label>
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm" id="mushroom_patch">
+                                                <label class="p-2" for="mushroom_patch">Mushroom Patch</label>
                                             </div>
                                             <div>
                                                 <input type="checkbox" v-model="serviceDetails.ac_service"
                                                     :checked="leadDetails.custom_ac_service == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label class="p-2">AC Service</label>
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm" id="ac_service">
+                                                <label class="p-2" for="ac_service">AC Service</label>
                                             </div>
                                             <div>
                                                 <input type="checkbox" v-model="serviceDetails.battery"
                                                     :checked="leadDetails.custom_battery == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label class="p-2">Battery</label>
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm" id="battery">
+                                                <label class="p-2" for="battery">Battery</label>
                                             </div>
                                             <div>
                                                 <input type="checkbox" v-model="serviceDetails.wiper"
                                                     :checked="leadDetails.custom_wiper == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label class="p-2">Wiper</label>
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm" id="wiper">
+                                                <label class="p-2" for="wiper">Wiper</label>
                                             </div>
                                             <div>
                                                 <input type="checkbox" v-model="serviceDetails.car_wash"
                                                     :checked="leadDetails.custom_car_wash == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm">
-                                                <label class="p-2">Car Wash</label>
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm" id="car_wash">
+                                                <label class="p-2" for="car_wash">Car Wash</label>
                                             </div>
                                         </div>
                                         <div>
@@ -1542,9 +1561,9 @@
                                 </div>
                                 <div class="flex flex-row items-center space-x-3">
                                     <input class="w-5 h-5 rounded-sm border border-black bg-gray-200" type="checkbox"
-                                        v-model="show.mushroom_path_checkbox" id="mushroom_batch"
+                                        v-model="show.mushroom_path_checkbox" id="mushroom_patch"
                                         @change="handelCheck('mushroom_patch')">
-                                    <label class="text-[18px]" for="mashroom_batch">Mushroom Patch</label>
+                                    <label class="text-[18px]" for="mushroom_patch">Mushroom Patch</label>
                                 </div>
                             </div>
                             <!-- col-3 -->
@@ -1824,14 +1843,21 @@
                                         <option v-for="(type, index) in types[index]" :key="index">{{ type }}</option>
                                     </select>
                                 </div>
-                                <div class="mt-[50px]">
-                                    <button class="bg-gray-600 text-white rounded-lg p-1 font-bold"
-                                        @click="clearTyreData(index)">Clear</button>
+                                <div class="mt-[20px]">
+                                    <label :for="'pattern' + index">Warranty<span
+                                            v-if="tyre.mandatory && !tyre.warranty.trim()"
+                                            class="text-red-500 font-bold">*</span></label>
+                                            <!-- <span>(upto_{{maxYears}})</span> -->
+                                    <input type="text" class="w-[16rem] h-[52px] rounded-sm border-solid border border-black" v-model="tyre.warranty" @keyup="warrantyYears(tyre.warranty)">
                                 </div>
                             </div>
                             <div class="ml-[400px] mt-5">
                                 <FeatherIcon name="trash-2" class="mt-0 ml-2 w-6 h-6 cursor-pointer text-red-500"
-                                    @click="deleteTyreReplacement(index)" />
+                                @click="deleteTyreReplacement(index)" />
+                                <div class="mt-[80px]">
+                                    <button class="bg-gray-600 text-white rounded-lg p-1 font-bold"
+                                        @click="clearTyreData(index)">Clear</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1998,7 +2024,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, computed, onMounted } from 'vue';
+import { ref, reactive, watch, computed, onMounted,watchEffect } from 'vue';
 import { FeatherIcon } from 'frappe-ui'
 import axios from 'axios';
 
@@ -2315,6 +2341,7 @@ const getJobCard = async () => {
     try {
         const response = await axios.post(`${BaseURL}/api/method/tyre.api.get_jobcard_details`, { searchJobCard: searchJobCard.value }, { headers: headers });
         jobCardDetails.value = response.data.message;
+        console.log("jobcard details",jobCardDetails.value);
         if (responseData && responseData.value && responseData.value.message && responseData.value.message[0]?.name) {
             nextButtonEnable.value = true;
         } else {
@@ -2364,6 +2391,7 @@ const fetchJobCard = async (id) => {
         });
         jobCardPopup.value = 'true'
         jobCardData.value = response.data.message;
+        console.log("job card data",jobCardData.value);
     }
     catch (error) {
         console.error("Error:", error);
@@ -2433,14 +2461,14 @@ function nextPageAndHighlight() {
                 break;
             case 3:
                 jobCard["service"] = requireService.value
-                addValue(requireService.value)
+                addValue(requireService.value, replace)
                 break;
             case 4:
                 jobCard["replace"] = tyres.value
                 for (let i = 0; i < tyres.value.length; i++) {
                     const tyre = tyres.value[i];
                     if (tyre.type) {
-                        if (tyre.loadIndex == '' || tyre.brand == '' || tyre.speedRating == '' || tyre.size == '' || tyre.pattern == '' || tyre.ttTl == '') {
+                        if (tyre.loadIndex == '' || tyre.brand == '' || tyre.speedRating == '' || tyre.size == '' || tyre.pattern == '' || tyre.ttTl == '' || tyre.warranty == '') {
                             tyre.mandatory = true;
                             currentstep.value = 3;
                             return;
@@ -3475,8 +3503,9 @@ const requireService = ref({
 function checkup(data) {
     try {
         const response = axios.post(`${BaseURL}/api/method/tyre.api.job_card`, { data: JSON.stringify(data) }, { headers: headers })
+        console.log('job card after response',response);
     } catch (error) {
-        console.error("error");
+        console.log("error");
     }
 }
 function shooo() {
@@ -3615,11 +3644,26 @@ async function getrate(data) {
 
 //===================================================>>> Replacement Tyre Details <<<========================================================================//
 
+const maxYears = ref(0)
 const tyrePositions = ['Front Left', 'Front Right', 'Rear Left', 'Rear Right', 'Spare'];
 const replace = reactive({
     target: false
 });
 let billIndex = 0;
+const warrantyYears = (warranty) => {
+    const today = new Date();
+    const expiryDate = new Date(today.getFullYear() + parseFloat(warranty), today.getMonth(), today.getDate());
+    const month = expiryDate.getMonth() + 1; // Adding 1 because getMonth() returns zero-based index
+    const day = expiryDate.getDate();
+    const year = expiryDate.getFullYear();
+    maxYears.value = `${month}_${day}_${year}`;
+    const sendYears = `${year}-${month}-${day}`; // Formatting as 'YYYY-MM-DD'
+    console.log('send years ', sendYears);
+    if (!warranty) {
+        maxYears.value = 0;
+    }
+    return sendYears;
+}
 const tyres = ref([{
     type: '',
     loadIndex: '',
@@ -3630,9 +3674,16 @@ const tyres = ref([{
     ttTl: '',
     item: '',
     rate: '',
+    warranty:'',
+    maxYears:warrantyYears(0),
     mandatory: false,
-    status: false
+    status: false,
 }]);
+watchEffect(() => {
+    tyres.value.forEach(tyre => {
+        tyre.maxYears = warrantyYears(tyre.warranty);
+    });
+});
 
 const size = ref([])
 const saveData = (index) => {
@@ -3656,6 +3707,7 @@ const addTyreReplacement = () => {
             ttTl: '',
             item: '',
             rate: '',
+            warranty:'',
             status: false
         })
         setValue.index++;
@@ -3679,18 +3731,25 @@ const clearTyreData = (index) => {
     tyre.ttTl = '';
     tyre.rate = '';
     tyre.item = '';
+    tyre.warranty = '',
     tyre.mandatory = false;
     tyre.status = false;
 };
 let step = ref(0);
-
+const tableData = ref([]);
 function addValue(data, replace) {
     // Check if data is an array
+    console.log('addvalue function data',data);
     if (Array.isArray(data)) {
+        console.log(replace.target);
         // Data is a list (array)
         if (!replace.target) {
             data.forEach(item => {
+                console.log(item);
+                console.log(item.item);
+
                 let existingItemIndex = -1;
+
                 // Check if tableData.value[billIndex] is an array
                 if (Array.isArray(tableData.value)) {
                     for (let index = 0; index < tableData.value.length; index++) {
@@ -3699,11 +3758,11 @@ function addValue(data, replace) {
                             const items = rowData[i];
                             if (items.itemCode === item.item) {
                                 // Item already exists, update quantity and mark as processed
+                                console.log(items.requiredQuantity)
+                                items.requiredQuantity++;
+                                console.log(items.requiredQuantity)
+                                item.status = true;
                                 existingItemIndex = index;
-                                if (existingItemIndex !== undefined && item.status === false) {
-                                    items.requiredQuantity++;
-                                    item.status = true;
-                                }
                                 break;
                             }
                         }
@@ -3713,7 +3772,7 @@ function addValue(data, replace) {
                     }
                 }
 
-                if (existingItemIndex === -1 && !item.status && item.item !== '') {
+                if (existingItemIndex === -1 && !item.status) {
                     // If item is not found and not already processed, add it to tableData
                     if (!Array.isArray(tableData.value[billIndex])) {
                         tableData.value[billIndex] = [];
@@ -3733,10 +3792,10 @@ function addValue(data, replace) {
 
                     // Mark the item as processed
                     item.status = true;
-                    billIndex++;
                 }
 
                 calculateTotals();
+                billIndex++;
             });
         }
 
@@ -3769,6 +3828,7 @@ function addValue(data, replace) {
                         };
                         getrate(key).then(rate => {
                             newData.rate = rate
+                            console.log(newData.rate)
                         }).catch(error => {
                             console.error("Error:", error);
                         });
@@ -3787,10 +3847,8 @@ function addValue(data, replace) {
     // Update the step variable
     step = billIndex;
 }
-
 //===================================================>>> Billing Details <<<=========================================================================================//
 
-const tableData = ref([]);
 const totalRate = ref(0);
 const totalQuantity = ref(0);
 const totalCost = ref(0);
