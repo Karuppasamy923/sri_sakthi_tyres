@@ -154,6 +154,7 @@ def store_customer_details(data):
 			print("********old*******")
 		
 			#update a driver and conteact person
+			new_driver = new_drivers = None
 			for driver_data in data.get('employees', []):
 				doc_type = driver_data.get('type')
 				if doc_type == "current_driver":
@@ -161,70 +162,85 @@ def store_customer_details(data):
 					print(driver_data.get('name'))
 					# Append the name of the current_driver to the parent document
 					if not driver:
-						new_driver = frappe.new_doc("Driver")
-						new_driver.full_name=driver_data.get('current_driver')
-						new_driver.cell_number=driver_data.get('mobile_no')
-						new_driver.custom_whatsapp_check=driver_data.get('whatsapp')
-						new_driver.custom_sms_check=driver_data.get('sms')
-						new_driver.custom_call_check=driver_data.get('call')
-						new_driver.custom_primary=driver_data.get('primary')
-						new_driver.save(ignore_permissions=True)
-						driver = new_driver.name
-						doc.append("current_driver", {"current_driver": driver, "mobile_no": driver_data.get('mobile_no')})
+						mobile_no = frappe.db.get_value("Driver",{"cell_number":driver_data.get('mobile_no')})
+						if not mobile_no:
+							new_driver = frappe.new_doc("Driver")
+							new_driver.full_name=driver_data.get('current_driver')
+							new_driver.cell_number=driver_data.get('mobile_no')
+							new_driver.custom_whatsapp_check=driver_data.get('whatsapp')
+							new_driver.custom_sms_check=driver_data.get('sms')
+							new_driver.custom_call_check=driver_data.get('call')
+							new_driver.custom_primary=driver_data.get('primary')
+							# new_driver.save(ignore_permissions=True)
+							# driver = new_driver.name
+							# doc.append("current_driver", {"current_driver": driver, "mobile_no": driver_data.get('mobile_no')})
+						else:
+							return "driver already exist"
 					else:
 						print("11111111111")
-						new_driver=frappe.get_doc("Driver",{"name":driver_data.get('name')})
+						new_driver1=frappe.get_doc("Driver",{"name":driver_data.get('name')})
 						print(driver_data.get('current_driver'))
-						new_driver.full_name=driver_data.get('current_driver')
+						new_driver1.full_name=driver_data.get('current_driver')
 						print("2222")
-						new_driver.cell_number=driver_data.get('mobile_no')
+						new_driver1.cell_number=driver_data.get('mobile_no')
 						print("333")
-						new_driver.custom_whatsapp_check=driver_data.get('whatsapp')
-						new_driver.custom_sms_check=driver_data.get('sms')
-						new_driver.custom_call_check=driver_data.get('call')
+						new_driver1.custom_whatsapp_check=driver_data.get('whatsapp')
+						new_driver1.custom_sms_check=driver_data.get('sms')
+						new_driver1.custom_call_check=driver_data.get('call')
 						if driver_data.get('primary')== True:
-							new_driver.custom_primary=1
+							new_driver1.custom_primary=1
 						else:
-							new_driver.custom_primary=0    
-						new_driver.save(ignore_permissions=True)
+							new_driver1.custom_primary=0    
+						new_driver1.save(ignore_permissions=True)
 						# driver = new_driver.name  
 				else:
 					cPerson = frappe.db.get_value("ContactPerson",{"name":driver_data.get('name')})
 					print(cPerson)
 					if not cPerson:
 						print("#######")
-						new_driver = frappe.new_doc("ContactPerson")
-						new_driver.contact_person_name=driver_data.get('contact_person_name')
-						print(new_driver.contact_person_name)
-						new_driver.contact_person_mobile=driver_data.get('contact_person_mobile')
-						print(new_driver.contact_person_mobile)
-						new_driver.whatsapp=driver_data.get("custom_whatsapp")
-						new_driver.sms=driver_data.get("custom_sms")
-						new_driver.call=driver_data.get("custom_call")
-						new_driver.custom_primary=driver_data.get('custom_primary')
-						new_driver.save(ignore_permissions=True)
-						cPerson = new_driver.name
-						doc.append("contact_person", {"contact_person_name": cPerson, "contact_person_mobile": driver_data.get('contact_person_mobile')})
+						cPerson = frappe.db.get_value("ContactPerson",{"contact_person_mobile":driver_data.get('contact_person_mobile')})
+						print("contact person mobile",cPerson)
+						if not cPerson:
+							new_drivers = frappe.new_doc("ContactPerson")
+							new_drivers.contact_person_name=driver_data.get('contact_person_name')
+							print(new_drivers.contact_person_name)
+							new_drivers.contact_person_mobile=driver_data.get('contact_person_mobile')
+							print(new_drivers.contact_person_mobile)
+							new_drivers.whatsapp=driver_data.get("custom_whatsapp")
+							new_drivers.sms=driver_data.get("custom_sms")
+							new_drivers.call=driver_data.get("custom_call")
+							new_drivers.custom_primary=driver_data.get('custom_primary')
+							# new_drivers.save(ignore_permissions=True)
+						else:
+							return "contact person already exist"
 					else:
 						print("@@@@@@")
-						new_driver=frappe.get_doc("ContactPerson",{"name":driver_data.get('name')})
-						new_driver.contact_person_name=driver_data.get('contact_person_name')
-						print(new_driver.contact_person_name)
-						new_driver.contact_person_mobile=driver_data.get('contact_person_mobile')
-						print(new_driver.contact_person_mobile)
-						new_driver.whatsapp=driver_data.get("custom_whatsapp")
-						new_driver.sms=driver_data.get("custom_sms")
-						new_driver.call=driver_data.get("custom_call")
-						# new_driver.custom_primary=driver_data.get('primary')
+						new_driver2=frappe.get_doc("ContactPerson",{"name":driver_data.get('name')})
+						new_driver2.contact_person_name=driver_data.get('contact_person_name')
+						print(new_driver2.contact_person_name)
+						new_driver2.contact_person_mobile=driver_data.get('contact_person_mobile')
+						print(new_driver2.contact_person_mobile)
+						new_driver2.whatsapp=driver_data.get("custom_whatsapp")
+						new_driver2.sms=driver_data.get("custom_sms")
+						new_driver2.call=driver_data.get("custom_call")
+						# new_driver2.custom_primary=driver_data.get('primary')
 						if driver_data.get('custom_primary')== True:
-							new_driver.custom_primary=1
+							new_driver2.custom_primary=1
 						else:
-							new_driver.custom_primary=0
-						new_driver.save(ignore_permissions=True)
+							new_driver2.custom_primary=0
+						new_driver2.save(ignore_permissions=True)
 						# cPerson = new_driver.name 
 					# Append new Contact Person document to the parent document
 					#doc.append("contact_person", {"contact_person_name": cPerson, "contact_person_mobile":driver_data.get('mobile_no')})
-
+			if new_driver or new_drivers:
+				if new_driver:
+					new_driver.save(ignore_permissions=True)
+					driver = new_driver.name
+					doc.append("current_driver", {"current_driver": driver, "mobile_no": driver_data.get('mobile_no')})
+				if new_drivers:
+					new_drivers.save(ignore_permissions=True)
+					cPerson = new_drivers.name
+					doc.append("contact_person", {"contact_person_name": cPerson, "contact_person_mobile": driver_data.get('contact_person_mobile')})
 			# doc.save(ignore_permissions=True)  # Save customer document
 			doc.save(ignore_permissions=True)
 			frappe.db.commit()
@@ -235,55 +251,75 @@ def store_customer_details(data):
 			# New document in customer details
 			doc = frappe.new_doc('Customer Details')
 			doc.license_plate = license_plate
-			owner = frappe.db.get_value("Customer",{"customer_name":data.get('current_owner'),"mobile_no":data.get('owner_mobile_no')})
+			owner = frappe.db.get_value("Customer", {"customer_name": data.get('current_owner'), "mobile_no": data.get('owner_mobile_no')})
+
+			# Initialize new_owner
+			new_owner = None
+
+			# Check if owner data already exists
 			if not owner:
-				new_owner=frappe.new_doc("Customer")
+				new_owner = frappe.new_doc("Customer")
 				new_owner.customer_name = data.get('current_owner')
 				new_owner.mobile_no = data.get('owner_mobile_no')
-				new_owner.custom_whatsapp=data.get('whatsappChecked')
-				new_owner.custom_sms=data.get('smsChecked')
-				new_owner.custom_call=data.get('callChecked')
-				new_owner.save(ignore_permissions=True)
-				doc.owner_data=new_owner
-			# doc.owner_email_id = data.get('owner_email_id')
+				new_owner.custom_whatsapp = data.get('whatsappChecked')
+				new_owner.custom_sms = data.get('smsChecked')
+				new_owner.custom_call = data.get('callChecked')
 			else:
-				frappe.throw("already owner of exsist with given number"+data.get('owner_mobile_no'))
-			# New driver or contact person document
+				frappe.throw("Owner already exists with the given number: " + data.get('owner_mobile_no'))
+
+			# Initialize variables for new driver and contact person
+			new_driver = None
+			new_drivers = None
+
+			# Process driver and contact person data
 			for driver_data in data.get('employees', []):
 				doc_type = driver_data.get('type')
 				if doc_type == "current_driver":
-					driver = frappe.db.get_value("Driver",{"cell_number":driver_data.get('mobile_no')})
-					# Append the name of the current_driver to the parent document
+					driver = frappe.db.get_value("Driver", {"cell_number": driver_data.get('mobile_no')})
 					if not driver:
-						new_driver = frappe.new_doc("Driver")
-						new_driver.full_name=driver_data.get('driver_name')
-						new_driver.cell_number=driver_data.get('mobile_no')
-						new_driver.custom_whatsapp_check=driver_data.get('whatsappChecked1')
-						new_driver.custom_sms_check=driver_data.get('smsChecked1')
-						new_driver.custom_call_check=driver_data.get('callChecked1')
-						new_driver.custom_primary=driver_data.get('primary')
-						new_driver.save(ignore_permissions=True)
-						driver = new_driver.name
-					doc.append("current_driver", {"current_driver": driver, "mobile_no": driver_data.get('mobile_no')})
+						if not new_driver:
+							new_driver = frappe.new_doc("Driver")
+						new_driver.full_name = driver_data.get('driver_name')
+						new_driver.cell_number = driver_data.get('mobile_no')
+						new_driver.custom_whatsapp_check = driver_data.get('whatsappChecked1')
+						new_driver.custom_sms_check = driver_data.get('smsChecked1')
+						new_driver.custom_call_check = driver_data.get('callChecked1')
+						new_driver.custom_primary = driver_data.get('primary')
+					else:
+						return "driver already exist"
 				else:
-					cPerson = frappe.db.get_value("ContactPerson",{"contact_person_mobile":driver_data.get('mobile_no')})
+					cPerson = frappe.db.get_value("ContactPerson", {"contact_person_mobile": driver_data.get('mobile_no')})
 					if not cPerson:
-						new_driver = frappe.new_doc("ContactPerson")
-						print(driver_data.get('driver_name'))
-						new_driver.contact_person_name=driver_data.get('driver_name')
-						new_driver.contact_person_mobile=driver_data.get('mobile_no')
-						new_driver.whatsapp=driver_data.get('whatsappChecked1')
-						new_driver.sms=driver_data.get('smsChecked1')
-						new_driver.call=driver_data.get('callChecked1')
-						print("primary",driver_data.get('primary'))
-						new_driver.custom_primary=driver_data.get('primary')
-						print(new_driver.custom_primary)
-						new_driver.save(ignore_permissions=True)
-						cPerson = new_driver.name
-					# Append new Contact Person document to the parent document
-					doc.append("contact_person", {"contact_person_name": cPerson, "contact_person_mobile":driver_data.get('mobile_no')})
+						if not new_drivers:
+							new_drivers = frappe.new_doc("ContactPerson")
+						new_drivers.contact_person_name = driver_data.get('driver_name')
+						new_drivers.contact_person_mobile = driver_data.get('mobile_no')
+						new_drivers.whatsapp = driver_data.get('whatsappChecked1')
+						new_drivers.sms = driver_data.get('smsChecked1')
+						new_drivers.call = driver_data.get('callChecked1')
+						new_drivers.custom_primary = driver_data.get('primary')
+					else:
+						return "contact person already exist"
+
+			# Save the new owner, driver, and contact person data if they are new entries
+			if new_owner and (new_driver or new_drivers):
+				new_owner.save(ignore_permissions=True)
+				doc.owner_data = new_owner
+				if new_driver:
+					new_driver.save(ignore_permissions=True)
+					driver = new_driver.name
+					doc.append("current_driver", {"current_driver": driver, "mobile_no": driver_data.get('mobile_no')})
+				if new_drivers:
+					new_drivers.save(ignore_permissions=True)
+					cPerson = new_drivers.name
+					doc.append("contact_person", {"contact_person_name": cPerson, "contact_person_mobile": driver_data.get('mobile_no')})
+
+			# Save the customer details document
+			doc.save(ignore_permissions=True)
+			frappe.db.commit()
 
 			# doc.save(ignore_permissions=True)  # Save customer document
+
 			doc.save(ignore_permissions=True)
 			frappe.db.commit()
 			return ['',[doc]]
@@ -336,24 +372,58 @@ def job_card(data):
 	print('vehicle number',vehicle_number)
 	print("\n\n\n\ntyre replacement details:",tyre_replacement)
 	# print(vehicle_number)
-	print(""" SELECT vd.license_plate as vehicle_no, vd.vehicle_brand as vehicle_brand, vd.vehicle_model as vehicle_model_name, vd.vehicle_type, 
-								vd.tyre_change as tyre_change_km, vd.last_odometer_reading as odo_reading_kms, vd.alignment as free_alignment_kms, 
-								 cd.current_driver as driver_name, cd.mobile_no, cd.whatsapp as driver_whatsapp, cd.sms as driver_sms, cd.call as driver_call,
-								 cp.contact_person_name as contact_person, cp.contact_person_mobile as contact_mobile_no, cp.contact_person_email as email, cp.department as department, 
-								 cp.custom_whatsapp as contact_whatsapp, cp.custom_sms as contatct_sms, cp.custom_call as contact_call,
-								 cud.current_owner, cud.owner_mobile_no, cud.whatsapp as whatsapp, cud.call as `call`, cud.sms as sms, cud.owner_data as customer FROM `tabVehicle Details` as vd
-								 join `tabCurrent Driver` as cd on cd.parent = vd.name 
-								 join `tabCustomer Details` as cud on cud.license_plate = vd.name 
-								 left join `tabContact Person` as cp on cp.parent = vd.name WHERE vd.license_plate = '{0}' AND cd.primary = 1 OR cp.custom_primary = 1""".format(vehicle_number))
-	user_details = frappe.db.sql(""" SELECT vd.license_plate as vehicle_no, vd.vehicle_brand as vehicle_brand, vd.vehicle_model as vehicle_model_name, vd.vehicle_type, 
-								vd.tyre_change as tyre_change_km, vd.last_odometer_reading as odo_reading_kms, vd.alignment as free_alignment_kms, 
-								 cd.current_driver as driver_name, cd.mobile_no, cd.whatsapp as driver_whatsapp, cd.sms as driver_sms, cd.call as driver_call,
-								 cp.contact_person_name as contact_person, cp.contact_person_mobile as contact_mobile_no, cp.contact_person_email as email, cp.department as department, 
-								 cp.custom_whatsapp as contact_whatsapp, cp.custom_sms as contatct_sms, cp.custom_call as contact_call,
-								 cud.current_owner, cud.owner_mobile_no, cud.whatsapp as whatsapp, cud.call as `call`, cud.sms as sms, cud.owner_data as customer FROM `tabVehicle Details` as vd
-								 join `tabCurrent Driver` as cd on cd.parent = vd.name 
-								 join `tabCustomer Details` as cud on cud.license_plate = vd.name 
-								 left join `tabContact Person` as cp on cp.parent = vd.name WHERE vd.license_plate = '{0}' AND (cd.primary = 1 OR cp.custom_primary = 1)""".format(vehicle_number), as_dict = True)
+	print(""" SELECT vd.license_plate as vehicle_no,
+										vd.vehicle_brand as vehicle_brand,
+										vd.vehicle_model as vehicle_model_name,
+										vd.vehicle_type,
+										vd.tyre_change as tyre_change_km,
+										vd.last_odometer_reading as odo_reading_kms,
+										vd.alignment as free_alignment_kms,
+										COALESCE(cd.current_driver, cp.contact_person_name) as name,
+										COALESCE(cd.mobile_no, cp.contact_person_mobile, cud.owner_mobile_no) as mobile_no,
+										COALESCE(cd.whatsapp, cp.custom_whatsapp, cud.whatsapp) as whatsapp,
+										COALESCE(cd.sms, cp.custom_sms, cud.sms) as sms,
+										COALESCE(cd.`call`, cp.custom_call, cud.`call`) as `call`,
+										cp.contact_person_email as email,
+										cp.department as department,
+										cud.current_owner,
+										cud.owner_data as customer
+									FROM `tabVehicle Details` as vd
+									LEFT JOIN `tabCurrent Driver` as cd ON cd.parent = vd.name
+									LEFT JOIN `tabCustomer Details` as cud ON cud.license_plate = vd.name 
+									LEFT JOIN `tabContact Person` as cp ON cp.parent = vd.name
+									WHERE vd.license_plate = '{0}' 
+										AND (cd.current_driver IS NOT NULL OR cp.contact_person_name IS NOT NULL OR cud.owner_data IS NOT NULL)
+									""".format(vehicle_number))
+	user_details = frappe.db.sql(""" 
+									SELECT vd.license_plate as vehicle_no,
+										vd.vehicle_brand as vehicle_brand,
+										vd.vehicle_model as vehicle_model_name,
+										vd.vehicle_type,
+										vd.tyre_change as tyre_change_km,
+										vd.last_odometer_reading as odo_reading_kms,
+										vd.alignment as free_alignment_kms,
+										COALESCE(cd.current_driver, cp.contact_person_name) as name,
+										COALESCE(cd.mobile_no, cp.contact_person_mobile, cud.owner_mobile_no) as mobile_no,
+										COALESCE(cd.whatsapp, cp.custom_whatsapp, cud.whatsapp) as whatsapp,
+										COALESCE(cd.sms, cp.custom_sms, cud.sms) as sms,
+										COALESCE(cd.`call`, cp.custom_call, cud.`call`) as `call`,
+										cp.contact_person_email as email,
+										cp.department as department,
+										cud.current_owner,
+										cud.owner_data as customer
+									FROM `tabVehicle Details` as vd
+									LEFT JOIN `tabCurrent Driver` as cd ON cd.parent = vd.name
+									LEFT JOIN `tabCustomer Details` as cud ON cud.license_plate = vd.name 
+									LEFT JOIN `tabContact Person` as cp ON cp.parent = vd.name
+									WHERE vd.license_plate = '{0}' 
+										AND (cd.current_driver IS NOT NULL OR cp.contact_person_name IS NOT NULL OR cud.owner_data IS NOT NULL)
+									""".format(vehicle_number), as_dict=True)
+
+
+
+
+
 	if user_details:
 		user_details = user_details[0]
 	else:

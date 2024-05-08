@@ -2918,7 +2918,14 @@ const addCustomerData = async () => {
         try {
             const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_customer_details`, { data: JSON.stringify(data) }, { headers: headers })
             check.value = true;
-            if (response) {
+            console.log("customer details", response);
+            if(response.data.message == "driver already exist"){
+                alert("driver already exist")
+            }
+            else if(response.data.message == "contact person already exist"){
+                alert("contact person already exist")
+            }
+            else if (response) {
                 showNewCustomer.value = false;
                 dataAssignment(response)
                 showAlerts.value = true;
@@ -3013,16 +3020,26 @@ const addCustomerModifiedData = async () => {
     });
 
     try {
+        console.log("customer modified data before sending",modifiedData);
         const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_customer_details`, { data: JSON.stringify(modifiedData) }, { headers: headers });
-        check.value = true;
-        returnSearch(name)
-        showModifyCustomer.value = false;
-        showAlerts.value = true;
-        modifyAlert.value = true;
-        setTimeout(() => {
-            showAlerts.value = false;
-            modifyAlert.value = false;
-        }, 1000);
+        console.log("customer details", response);
+            if(response.data.message == "driver already exist"){
+                alert("driver already exist")
+            }
+            else if(response.data.message == "contact person already exist"){
+                alert("contact person already exist")
+            }
+            else if (response) {
+                check.value = true;
+                returnSearch(name)
+                showModifyCustomer.value = false;
+                showAlerts.value = true;
+                modifyAlert.value = true;
+                setTimeout(() => {
+                    showAlerts.value = false;
+                    modifyAlert.value = false;
+                }, 1000);
+            }
     } catch (error) {
         console.error("Error while processing request:", error.message);
     }
