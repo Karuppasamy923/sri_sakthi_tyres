@@ -367,6 +367,12 @@
                                                         Warehouse
                                                     </th>
                                                     <th scope="col" class="px-6 py-3">
+                                                        Warranty
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Warranty Expired
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
                                                         Quantity
                                                     </th>
                                                     <th scope="col" class="px-6 py-3">
@@ -374,12 +380,6 @@
                                                     </th>
                                                     <th scope="col" class="px-6 py-3">
                                                         Amount
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Warranty
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Warranty Expired
                                                     </th>
                                                 </tr>
                                             </thead>
@@ -389,30 +389,28 @@
                                                     <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                                                         scope="row">{{ item.item_code }}</td>
                                                     <td class="px-6 py-3">{{ item.warehouse }}</td>
+                                                    <td class="px-6 py-3">{{ item.warranty }} years</td>
+                                                    <td class="px-6 py-3">{{ item.max_years }}</td>
                                                     <td class="px-6 py-3">{{ item.quantity }}</td>
                                                     <td class="px-6 py-3">{{ item.rate }}</td>
                                                     <td class="px-6 py-3">{{ item.amount }}</td>
-                                                    <td class="px-6 py-3">{{ item.warranty }} years</td>
-                                                    <td class="px-6 py-3">{{ item.max_years }}</td>
                                                 </tr>
                                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                                                     v-for="(item, index) in jobCardData.billing_details" :key="index">
                                                     <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                                                         scope="row">{{ item.item_code }}</td>
                                                     <td class="px-6 py-3">{{ item.warehouse }}</td>
+                                                    <td class="px-6 py-3">Nil</td>
+                                                    <td class="px-6 py-3">Nil</td>
                                                     <td class="px-6 py-3">{{ item.quantity }}</td>
                                                     <td class="px-6 py-3">{{ item.rate }}</td>
                                                     <td class="px-6 py-3">{{ item.amount }}</td>
-                                                    <td class="px-6 py-3">Nil</td>
-                                                    <td class="px-6 py-3">Nil</td>
                                                 </tr>
                                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td
-                                                        class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                        Total Amount</td>
+                                                    <td colspan="4"></td>
+                                                    <td colspan="2"
+                                                    class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                                                    Total Amount</td>
                                                     <td class="px-6 py-3">{{ jobCardData.total_amount }}</td>
                                                 </tr>
                                             </tbody>
@@ -2596,6 +2594,11 @@ const addVehicleData = async () => {
         showNewVehicle.value = false
         showAlerts.value = true
         vehicleExist.value = true
+        setTimeout(() => {
+            showAlerts.value = false
+            vehicleExist.value = false
+            showNewVehicle.value = true
+        }, 1000);
         return;
     }
     else if (isVehicleExist && isVehicleExist == 'Enter a Valid vehicle number') {
@@ -2708,6 +2711,16 @@ const employees = ref([{
     smsChecked1: 0,
     primary: ref(primaryValue),
 }]);
+const customerData = ref({
+    name: '',
+    current_owner: '',
+    owner_mobile_no: '',
+    employees: employees.value,
+    whatsappChecked: 0,
+    callChecked: 0,
+    smsChecked: 0,
+});
+
 const setPrimary = (index) => {
     let firstDriverIndex = -1;
     let firstContactPersonIndex = -1;
@@ -2785,17 +2798,6 @@ const modifiedMoreEmployee = async (type) => {
 };
 
 const leadDetails = ref([])
-
-const customerData = ref({
-    name: '',
-    current_owner: '',
-    owner_mobile_no: '',
-    employees: employees.value,
-    whatsappChecked: 0,
-    callChecked: 0,
-    smsChecked: 0,
-});
-
 const handlePrimaryCheckbox = (clickedEmployee) => {
     if (clickedEmployee.type === 'contact_person') {
         employees.value.forEach(employee => {
@@ -3345,7 +3347,7 @@ const removeEmployee3 = (index) => {
 const removeEmployee1 = (index) => {
     // if (sample22.value != 0) {
         employees.value.splice(index, 1);
-        setPrimary();
+        // setPrimary();
     // }
 };
 

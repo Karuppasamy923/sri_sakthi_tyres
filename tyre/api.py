@@ -305,14 +305,20 @@ def store_customer_details(data):
 			if new_owner and (new_driver or new_drivers):
 				new_owner.save(ignore_permissions=True)
 				doc.owner_data = new_owner
+
 				if new_driver:
 					new_driver.save(ignore_permissions=True)
-					driver = new_driver.name
-					doc.append("current_driver", {"current_driver": driver, "mobile_no": driver_data.get('mobile_no')})
+					doc.append("current_driver", {"current_driver": new_driver.name, "mobile_no": driver_data.get('mobile_no')})
+
 				if new_drivers:
 					new_drivers.save(ignore_permissions=True)
-					cPerson = new_drivers.name
-					doc.append("contact_person", {"contact_person_name": cPerson, "contact_person_mobile": driver_data.get('mobile_no')})
+					doc.append("contact_person", {"contact_person_name": new_drivers.name, "contact_person_mobile": driver_data.get('mobile_no')})
+					
+				# Save the customer data
+				doc.save(ignore_permissions=True)
+			elif new_owner:
+				new_owner.save(ignore_permissions=True)
+				doc.owner_data = new_owner
 
 			# Save the customer details document
 			doc.save(ignore_permissions=True)
@@ -700,20 +706,57 @@ def get_jobcard_details(searchJobCard):
 
 @frappe.whitelist(allow_guest = True)
 def delete_vehicle(data):
-	print("delete vehicle number",data)
+	print("delete vehicle number", data)
 	data = json.loads(data)
 	license_plate = data.get('name').upper().replace(' ', '')
-	print("license plate",license_plate)
+	print("license plate", license_plate)
 	if frappe.db.exists("Vehicle Details", {"name": license_plate}):
-		vehicle_details = frappe.get_doc("Vehicle Details", {"name": license_plate})
-		print("vehicle details",vehicle_details)
+		vehicle_details = frappe.get_doc("Vehicle Details", license_plate)
+		print("vehicle details", vehicle_details)
 		frappe.delete_doc("Vehicle Details", license_plate, force=True)
 		if frappe.db.exists("Customer Details", {"name": license_plate}):
-			customer_details = frappe.get_doc("Customer Details", {"name": license_plate})
-			print("customer details",customer_details)
+			customer_details = frappe.get_doc("Customer Details", license_plate).as_dict()
+			print("customer details", customer_details)
+
+			# Check if there are any linked Tyre Job Cards
+			tyre_job_cards = frappe.get_all("Tyre Job Card", filters={"vehicle_no": customer_details["name"]})
+			if tyre_job_cards:
+				for tyre_job_card in tyre_job_cards:
+					print("Deleting linked Tyre Job Card:", tyre_job_card.name)
+					frappe.delete_doc("Tyre Job Card", tyre_job_card.name, force=True)
+
+			# Delete linked Driver documents
+			for driver in customer_details.get("current_driver", []):
+				if frappe.db.exists("Driver", {"cell_number": driver.mobile_no}):
+					driver_details = frappe.get_doc("Driver", {"cell_number": driver.mobile_no})
+					frappe.delete_doc("Driver", driver_details.name, force=True)
+					print("Deleted driver:", driver.mobile_no)
+				else:
+					print("Driver with mobile number {} not found. Skipping deletion.".format(driver.mobile_no))
+
+			# Delete linked Contact Person documents
+			for contact_person in customer_details.get("contact_person", []):
+				if frappe.db.exists("ContactPerson", {"contact_person_mobile": contact_person.contact_person_mobile}):
+					contact_person_details = frappe.get_doc("ContactPerson", {"contact_person_mobile": contact_person.contact_person_mobile})
+					frappe.delete_doc("ContactPerson", contact_person_details.name, force=True)
+					print("Deleted Contact Person with mobile number:", contact_person.contact_person_mobile)
+				else:
+					print('Contact Person with mobile number {} not found. Skipping deletion.'.format(contact_person.contact_person_mobile))
+
+			# Delete the Customer Details document
 			frappe.delete_doc("Customer Details", license_plate, force=True)
+
+			# Check if there's an original Customer linked and delete it
+			if frappe.db.exists("Customer", {"mobile_no": customer_details.owner_mobile_no}):
+				original_customer = frappe.get_doc("Customer", {"mobile_no": customer_details.owner_mobile_no})
+				frappe.delete_doc("Customer", original_customer.name)
+				print("Deleted original customer:", customer_details.owner_mobile_no)
+			else:
+				print("Original Customer not found.")
 			return "deleted"
-		return "deleted"
+	return "deleted"
+
+
 	
 @frappe.whitelist(allow_guest=True)
 def get_enquiry_details(data):
@@ -725,54 +768,54 @@ def get_enquiry_details(data):
 
 @frappe.whitelist(allow_guest=True)
 def get_billing_details(name):
-    doc = frappe.get_doc("Tyre Job Card", name)
-    print("\n\n\n\n\ntyre job card details", doc.as_dict())
-    brand_keys = ['fr', 'fl', 'rr', 'rl', 'sp']
+	doc = frappe.get_doc("Tyre Job Card", name)
+	print("\n\n\n\n\ntyre job card details", doc.as_dict())
+	brand_keys = ['fr', 'fl', 'rr', 'rl', 'sp']
 
-    details_to_send_to_frontend = {}
+	details_to_send_to_frontend = {}
 
-    for brand_key in brand_keys:
-        if doc.get(f"{brand_key}_brand"):
-            brand_details = {}
-            brand_details["brand"] = doc.get(f"{brand_key}_brand")
-            brand_details["item"] = doc.get(f"{brand_key}_item")
-            brand_details["load_index"] = doc.get(f"{brand_key}_load_index")
-            brand_details["max_years"] = doc.get(f"{brand_key}_max_years")
-            brand_details["pattern"] = doc.get(f"{brand_key}_pattern")
-            brand_details["size"] = doc.get(f"{brand_key}_size")
-            brand_details["speed_rating"] = doc.get(f"{brand_key}_speed_rating")
-            brand_details["tt_tl"] = doc.get(f"{brand_key}_tt_tl")
-            brand_details["warranty"] = doc.get(f"{brand_key}_warranty")
-            for brand in doc.billing_details:
-                if brand_details["item"] == brand.item_code:
-                    brand_details["item_code"] = brand.item_code
-                    brand_details["quantity"] = brand.quantity
-                    brand_details["rate"] = brand.rate
-                    brand_details["amount"] = brand.amount
-                    brand_details["warehouse"] = brand.warehouse
+	for brand_key in brand_keys:
+		if doc.get(f"{brand_key}_brand"):
+			brand_details = {}
+			brand_details["brand"] = doc.get(f"{brand_key}_brand")
+			brand_details["item"] = doc.get(f"{brand_key}_item")
+			brand_details["load_index"] = doc.get(f"{brand_key}_load_index")
+			brand_details["max_years"] = doc.get(f"{brand_key}_max_years")
+			brand_details["pattern"] = doc.get(f"{brand_key}_pattern")
+			brand_details["size"] = doc.get(f"{brand_key}_size")
+			brand_details["speed_rating"] = doc.get(f"{brand_key}_speed_rating")
+			brand_details["tt_tl"] = doc.get(f"{brand_key}_tt_tl")
+			brand_details["warranty"] = doc.get(f"{brand_key}_warranty")
+			for brand in doc.billing_details:
+				if brand_details["item"] == brand.item_code:
+					brand_details["item_code"] = brand.item_code
+					brand_details["quantity"] = brand.quantity
+					brand_details["rate"] = brand.rate
+					brand_details["amount"] = brand.amount
+					brand_details["warehouse"] = brand.warehouse
 
-            details_to_send_to_frontend[brand_key] = brand_details
+			details_to_send_to_frontend[brand_key] = brand_details
 
-    billing_details = []
-    for brand in doc.billing_details:
-        if not any(brand.item_code == details["item_code"] for details in details_to_send_to_frontend.values()):
-            billing_details.append({
-                "item_code": brand.item_code,
-                "quantity": brand.quantity,
-                "rate": brand.rate,
-                "amount": brand.amount,
-                "warehouse": brand.warehouse
-            })
+	billing_details = []
+	for brand in doc.billing_details:
+		if not any(brand.item_code == details["item_code"] for details in details_to_send_to_frontend.values()):
+			billing_details.append({
+				"item_code": brand.item_code,
+				"quantity": brand.quantity,
+				"rate": brand.rate,
+				"amount": brand.amount,
+				"warehouse": brand.warehouse
+			})
 
-    if details_to_send_to_frontend:
-        print("warranty details", details_to_send_to_frontend)
-        return {
-            "billing_details": billing_details,
-            "total_amount": doc.total_amount,
-            "warranty": details_to_send_to_frontend
-        }
-    else:
-        print('No brand details available')
+	if details_to_send_to_frontend:
+		print("warranty details", details_to_send_to_frontend)
+		return {
+			"billing_details": billing_details,
+			"total_amount": doc.total_amount,
+			"warranty": details_to_send_to_frontend
+		}
+	else:
+		print('No brand details available')
 
 @frappe.whitelist(allow_guest=True)
 def get_enquiry(name):
