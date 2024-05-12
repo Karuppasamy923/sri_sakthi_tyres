@@ -1906,12 +1906,12 @@
                                 <tr v-for="(data, index) in tableData" :key="index">
                                     <td class="border border-gray-800 px-4 py-2 w-[10rem]">{{ index + 1 }}</td>
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="text" v-model="data[billIndex].itemCode"
+                                        <input type="text" v-model="data[0].itemCode"
                                             class="w-[10rem] rounded-sm border-solid border border-black">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
                                         <div style="max-height: 200px; overflow-y: auto;">
-                                            <select v-model="data[billIndex].sourceWarehouse"
+                                            <select v-model="data[0].sourceWarehouse"
                                                 class="w-[10rem] rounded-sm border-solid border border-black">
                                                 <option value="">Select Warehouse</option>
                                                 <!-- Loop through warehouseList and create an option for each warehouse -->
@@ -1924,17 +1924,17 @@
                                     </td>
 
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="number" v-model="data[billIndex].requiredQuantity"
+                                        <input type="number" v-model="data[0].requiredQuantity"
                                             @input="calculateTotals"
                                             class="w-[10rem] rounded-sm border-solid border border-black">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="float" v-model="data[billIndex].rate" @input="calculateTotals"
+                                        <input type="float" v-model="data[0].rate" @input="calculateTotals"
                                             readonly
                                             class="w-[10rem] h-[2.6rem] pl-[0.7rem] rounded-sm border-solid border border-black text-justify">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="text" v-model="data[billIndex].cost" readonly
+                                        <input type="text" v-model="data[0].cost" readonly
                                             class=" w-[10rem] rounded-sm border-solid border border-black cursor-not-allowed">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
@@ -2434,6 +2434,7 @@ function previousPage() {
 
 const showWarning = ref(false)
 function nextPageAndHighlight() {
+    console.log(billIndex,"billIndex-kp")
     if (currentstep.value < maxStep) {
         currentstep.value++;
         currentPage.value = getPageName(currentstep.value);
@@ -3758,75 +3759,95 @@ let step = ref(0);
 const tableData = ref([]);
 function addValue(data, replace) {
     // Check if data is an array
+    console.log('addvalue function data-type',typeof data);
+
     console.log('addvalue function data',data);
     if (Array.isArray(data)) {
-        console.log(replace.target);
+        console.log(replace.target,"UIO");
         // Data is a list (array)
         if (!replace.target) {
             data.forEach(item => {
-                console.log(item);
-                console.log(item.item);
+                console.log(billIndex,"billIndex-A")
+                console.log(item,"item");
+                console.log(item.item,"item-item");
 
                 let existingItemIndex = -1;
+                //check if add a new data
+                console.log(item.status,"status")
+                if (existingItemIndex === -1 && !item.status) {
+                    // If item is not found and not already processed, add it to tableData
+                    console.log(billIndex,"billIndex-N")
+                    
 
-                // Check if tableData.value[billIndex] is an array
-                if (Array.isArray(tableData.value)) {
-                    for (let index = 0; index < tableData.value.length; index++) {
-                        const rowData = tableData.value[index];
-                        for (let i = 0; i < rowData.length; i++) {
-                            const items = rowData[i];
-                            if (items.itemCode === item.item) {
-                                // Item already exists, update quantity and mark as processed
-                                console.log(items.requiredQuantity)
-                                items.requiredQuantity++;
-                                console.log(items.requiredQuantity)
-                                item.status = true;
-                                existingItemIndex = index;
+                    let newOne = true;
+                    // Check if tableData.value[billIndex] is an array
+                    if (Array.isArray(tableData.value)) {
+                        for (let index = 0; index < tableData.value.length; index++) {
+                            const rowData = tableData.value[index];
+                            console.log(rowData,"Array")
+                            for (let i = 0; i < rowData.length; i++) {
+                                const items = rowData[i];
+                                if (items.itemCode === item.item) {
+                                    // Item already exists, update quantity and mark as processed
+                                    console.log(items.requiredQuantity)
+                                    items.requiredQuantity++;
+                                    console.log(items.requiredQuantity)
+                                    item.status = true;
+                                    existingItemIndex = index;
+                                    break;
+                                }
+                            }
+                            if (existingItemIndex > -1) {
+                                console.log(existingItemIndex,"EI")
+                                newOne=false;
                                 break;
                             }
                         }
-                        if (existingItemIndex > -1) {
-                            break;
-                        }
-                    }
-                }
-
-                if (existingItemIndex === -1 && !item.status) {
-                    // If item is not found and not already processed, add it to tableData
-                    if (!Array.isArray(tableData.value[billIndex])) {
-                        tableData.value[billIndex] = [];
                     }
 
                     // Create a new object for the item
-                    const newData = {
-                        itemCode: item.item,
-                        sourceWarehouse: '',
-                        rate: item.rate,
-                        requiredQuantity: 1, // Set initial quantity to 1
-                        cost: ''
-                    };
-
-                    // Push the new object into the array at the specified billIndex
-                    tableData.value[billIndex].push(newData);
-
-                    // Mark the item as processed
-                    item.status = true;
+                    console.log(existingItemIndex,"EO");
+                    if(existingItemIndex < 0){
+                        if (!Array.isArray(tableData.value[billIndex])) {
+                        tableData.value[billIndex] = [];
+                    }
+                        const newData = {
+                            itemCode: item.item,
+                            sourceWarehouse: '',
+                            rate: item.rate,
+                            requiredQuantity: 1, // Set initial quantity to 1
+                            cost: ''
+                        };
+    
+                        // Push the new object into the array at the specified billIndex
+                        console.log(newData,"newData")
+                        console.log(billIndex,"push")
+                        tableData.value[billIndex].push(newData);
+    
+                        // Mark the item as processed
+                        item.status = true;
+                        billIndex++;
+                        console.log(billIndex,"After-Push")
+                    }
                 }
 
                 calculateTotals();
-                billIndex++;
+                // billIndex++;
             });
         }
 
         // If the current step is 3, empty the tableData
-        if (step === 3) {
-            tableData.value = [];
-        }
+            // if (step === 3) {
+            //     console.log("hiiii")
+            //     tableData.value = [];
+            // }
 
         replace.target = true;
+        console.log(billIndex,"Total")
     }
     else if (typeof data === 'object') {
         for (const key in data) {
+            // console.log(Object.hasOwnProperty.call(data, key),"object")
             if (Object.hasOwnProperty.call(data, key)) {
                 if (data[key] === true) {
                     let itemExists = false;
@@ -3838,7 +3859,6 @@ function addValue(data, replace) {
                         });
                     });
                     if (!itemExists) {
-
                         const newData = {
                             itemCode: key,
                             sourceWarehouse: '',
@@ -3851,13 +3871,17 @@ function addValue(data, replace) {
                         }).catch(error => {
                             console.error("Error:", error);
                         });
+                        console.log(billIndex,"before")
                         if (!Array.isArray(tableData.value[billIndex])) {
+                            console.log("hello")
                             tableData.value[billIndex] = [];
                         }
+
                         tableData.value[billIndex].push(newData);
                         calculateTotals();
 
                         billIndex++;
+                        console.log(billIndex,"after")
                     }
                 }
             }
@@ -3879,8 +3903,10 @@ const calculateTotals = () => {
     let sumQuantity = 0;
     let sumCost = 0;
 
+    console.log(tableData.value,"tableData.value")
     tableData.value.forEach(row => {
         // Assuming each row is an object
+        console.log(row,"row")
         const rate = parseFloat(row[0].rate) || 0;
         const quantity = parseFloat(row[0].requiredQuantity) || 0;
         row[0].cost = (rate * quantity).toFixed(2);
