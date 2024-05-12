@@ -3900,7 +3900,6 @@ function addValue(data, replace) {
                         calculateTotals();
 
                         billIndex++;
-                        console.log(billIndex,"after")
                     }
                 }
                 else{
