@@ -802,7 +802,6 @@
                                             <option value="Petrol">Petrol</option>
                                             <option value="Diesel">Diesel</option>
                                             <option value="EV">EV</option>
-                                            <option value="hybrid ">Hybrid</option>
                                         </select>
                                     </p>
                                     <p class="m-2">Odometer reading (kms) <span
@@ -1057,40 +1056,43 @@
                                             <div class="flex flex-col ml-1">
                                                 <label class="mt-2">Variants</label>
                                                 <select
-                                                    class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
-                                                    v-model="selectedVariant"
-                                                    @change="getType(selectedBrand, selectedVariant, index)">
+                                                class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
+                                                v-model="selectedVariant"
+                                                @change="getPattern(selectedBrand, selectedVariant, index)"
+                                                    >
                                                     <option v-for="(variant, index) in rs" :key="index">{{ variant.size
-                                                        }}</option>
+                                                    }}</option>
                                                 </select>
                                             </div>
                                             <div class="flex flex-col ml-1">
                                                 <label class="mt-2">Quantity</label>
                                                 <input
-                                                    class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
-                                                    type="number" v-model="quantity">
+                                                class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
+                                                type="number" v-model="quantity">
                                             </div>
                                             <div class="flex flex-col ml-1">
                                                 <Button class="w-[4rem] mt-10" @click="addItem">Add</Button>
+                                            </div>
+                                            <div class="flex flex-col ml-1">
+                                                <label class="mt-2">Pattern</label>
+                                                <select
+                                                class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
+                                                v-model="pattern"
+                                                @change="getType(selectedBrand, selectedVariant, pattern, index)"
+                                                >
+                                                <option v-for="(pattern, index) in patterns[index]" :key="index">{{
+                                                        pattern
+                                                    }}</option>
+                                                </select>
                                             </div>
                                             <div class="flex flex-col ml-1">
                                                 <label class="mt-2">Type</label>
                                                 <select
                                                     class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
                                                     v-model="type"
-                                                    @change="getPattern(selectedBrand, selectedVariant, type, index)">
+                                                    >
                                                     <option v-for="(type, index) in types[index]" :key="index">{{ type
                                                         }}</option>
-                                                </select>
-                                            </div>
-                                            <div class="flex flex-col ml-1">
-                                                <label class="mt-2">Pattern</label>
-                                                <select
-                                                    class="w-[8rem] h-[3rem] rounded-sm border-solid border border-black"
-                                                    v-model="pattern">
-                                                    <option v-for="(pattern, index) in patterns[index]" :key="index">{{
-                                                        pattern
-                                                    }}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -1820,27 +1822,29 @@
                                     </select>
                                 </div>
                                 <div class="mt-[20px]">
-                                    <label :for="'pattern' + index">Pattern<span
-                                            v-if="tyre.mandatory && !tyre.pattern.trim()"
+                                    <div>
+                                        <label :for="'ttTl' + index">TT/TL<span v-if="tyre.mandatory && !tyre.ttTl.trim()"
                                             class="text-red-500 font-bold">*</span></label>
-                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                        v-model="tyre.pattern"
-                                        @change="getItemCode(tyre.brand, tyre.size, tyre.ttTl, tyre.pattern, index)">
-                                        <option v-for="(pattern, index) in patterns[index]" :key="index">{{ pattern }}
-                                        </option>
-                                    </select>
+                                            <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
+                                            v-model="tyre.ttTl"
+                                            @change="getItemCode(tyre.brand, tyre.size, tyre.ttTl, tyre.pattern, index)"
+                                            >
+                                            <option v-for="(type, index) in types[index]" :key="index">{{ type }}</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="ml-[300px]">
-                                <div>
-                                    <label :for="'ttTl' + index">TT/TL<span v-if="tyre.mandatory && !tyre.ttTl.trim()"
-                                            class="text-red-500 font-bold">*</span></label>
-                                    <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
-                                        v-model="tyre.ttTl"
-                                        @change="getPattern(tyre.brand, tyre.size, tyre.ttTl, index)">
-                                        <option v-for="(type, index) in types[index]" :key="index">{{ type }}</option>
-                                    </select>
-                                </div>
+                                <label :for="'pattern' + index">Pattern<span
+                                        v-if="tyre.mandatory && !tyre.pattern.trim()"
+                                        class="text-red-500 font-bold">*</span></label>
+                                <select class="w-[16rem] h-[52px] rounded-sm border-solid border border-black"
+                                    v-model="tyre.pattern"
+                                    @change="getType(tyre.brand, tyre.size, tyre.pattern, index)"
+                                    >
+                                    <option v-for="(pattern, index) in patterns[index]" :key="index">{{ pattern }}
+                                    </option>
+                                </select>
                                 <div class="mt-[20px]">
                                     <label :for="'pattern' + index">Warranty<span
                                             v-if="tyre.mandatory && !tyre.warranty.trim()"
@@ -2154,19 +2158,20 @@ const getOther = (brand, data, index) => {
         if (sizeData.size == data) {
             tyres.value[index].loadIndex = sizeData.load_index;
             tyres.value[index].speedRating = sizeData.speed_rating;
-            getType(brand, data, index)
+            // getType(brand, data, index)
+            getPattern(brand,data,index)
         }
         i++;
     }
 }
-const getType = (brand, data, index) => {
-    axios.post(`${BaseURL}/api/method/tyre.api.get_type`, { brand: brand, size: data }, { headers: headers })
+const getType = (brand, data, pattern, index) => {
+    axios.post(`${BaseURL}/api/method/tyre.api.get_type`, { brand: brand, size: data, pattern:pattern }, { headers: headers })
         .then(response => {
             types.value[index] = response.data.message;
         });
 }
-const getPattern = (brand, size, type, index) => {
-    axios.post(`${BaseURL}/api/method/tyre.api.get_pattern`, { brand: brand, size: size, tyer_type: type }, { headers: headers })
+const getPattern = (brand, size, index) => {
+    axios.post(`${BaseURL}/api/method/tyre.api.get_pattern`, { brand: brand, size: size }, { headers: headers })
         .then(response => {
             patterns.value[index] = response.data.message;
         });
@@ -3222,11 +3227,23 @@ const handleSearch = async () => {
         }, 1000);
     }
 }
-const okCustomer = () => {
-    leadDetails.value = '';
-    boolDetails.state = 0;
-    mobileSearch.value = false;
-    searchMobile.value = ''
+const okCustomer = async() => {
+    const data = {
+        mobile_no: leadDetails.value.mobile_no,
+    };
+    console.log("before whatsapp integration enquiry", data.mobile_no)
+    try {
+        const response = await axios.post(`${BaseURL}/api/method/tyre.api.send_quotation`, { data: JSON.stringify(data) }, { headers: headers })
+        console.log("enquiry whatsapp integration success:", response);
+    } catch (error) {
+        console.log("enquiry whatsapp integration error:", error);
+    }
+    setTimeout(() => {
+        leadDetails.value = '';
+        boolDetails.state = 0;
+        mobileSearch.value = false;
+        searchMobile.value = ''
+    }, 1000);
 }
 
 const searchMobileAfterResponse = ref(true);
@@ -3511,14 +3528,14 @@ const requireService = ref({
         ft: '',
         rt: ''
     },
-    ac: '',
-    battery: '',
-    wiper: '',
-    car_wash: '',
-    puncture: false,
-    tyre_edge: false,
-    tyre_patch: false,
-    mushroom_patch: false,
+    // ac: '',
+    // battery: '',
+    // wiper: '',
+    // car_wash: '',
+    Puncture: false,
+    TyreEdge: false,
+    TyrePatch: false,
+    MushroomPatch: false,
 })
 function checkup(data) {
     try {
@@ -3767,9 +3784,8 @@ function addValue(data, replace) {
         // Data is a list (array)
         if (!replace.target) {
             data.forEach(item => {
-                console.log(billIndex,"billIndex-A")
-                console.log(item,"item");
-                console.log(item.item,"item-item");
+                console.log(item);
+                console.log('is this addvalue parameter data?',item.item);
 
                 let existingItemIndex = -1;
                 //check if add a new data
@@ -3849,11 +3865,14 @@ function addValue(data, replace) {
         for (const key in data) {
             // console.log(Object.hasOwnProperty.call(data, key),"object")
             if (Object.hasOwnProperty.call(data, key)) {
-                if (data[key] === true) {
+                console.log("key checking",data[key])
+                if (data[key] == true) {
                     let itemExists = false;
                     tableData.value.forEach((rowData, index) => {
                         rowData.forEach(item => {
+                            console.log("step 2: itemcode in billing page for tyre 11",item.itemCode)
                             if (item.itemCode === key) {
+                                console.log("step 3:itemcode in billing page for tyre 22",item.itemCode)
                                 itemExists = true;
                             }
                         });
@@ -3883,6 +3902,9 @@ function addValue(data, replace) {
                         billIndex++;
                         console.log(billIndex,"after")
                     }
+                }
+                else{
+                    console.log("hi this is else block")
                 }
             }
         }

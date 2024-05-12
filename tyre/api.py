@@ -596,8 +596,8 @@ def get_size(brand):
 		}
 
 @frappe.whitelist(allow_guest=True)
-def get_type(brand, size):
-	results = frappe.get_all("Brand Details", {"parent": brand, "size": size}, ["tyer_type"])
+def get_type(brand, size, pattern):
+	results = frappe.get_all("Brand Details", {"parent": brand, "size": size, "pattern":pattern}, ["tyer_type"])
 	unique_types = set()
 	for result in results:
 		tyer_type = result.get("tyer_type")
@@ -612,8 +612,8 @@ def get_type(brand, size):
 
 
 @frappe.whitelist(allow_guest=True)
-def get_pattern(brand, size, tyer_type):
-	results = frappe.get_all("Brand Details", filters={"parent": brand, "size": size, "tyer_type": tyer_type}, fields=["pattern"])
+def get_pattern(brand, size):
+	results = frappe.get_all("Brand Details", filters={"parent": brand, "size": size}, fields=["pattern"])
 	unique_patterns = set(result.get("pattern") for result in results)
 	if unique_patterns :
 		return list(unique_patterns)
@@ -992,7 +992,7 @@ def send_quotation(data):
 			docs = frappe.get_doc("Customer Details",{"name":license_plate})
 			print("Tyre Job Card found:", docs.current_owner)
 			headers = {
-				'Authorization':'Bearer EAAPvJMkEALEBO6ktX1AGfUq9ebY44WjZAGG4AMFQCV8sPRr84ATfueZCZB0NnqZAabZCVRdA8cCCAWnwgUvpkXbC9f3GC2i98YO3cZBXTwgtsSto0VfOkFZAiQzmpEaY9viZAoZB8pm6yGZCSWZBWBpvQsAX3iGWZAVqfxaOCjnfAzZAkIZC68cLnFC7T9Pe2BRTACsu4eO9b5YYyOBXTKZBwChQrMZD',
+				'Authorization':'Bearer EAAPvJMkEALEBOZBBCXNKfsMoS9N93W9t1Ni9u34QFGvCG7JsaRULeubdJE2VUfxiHKyo6uZB4vxigiD8J8jQe7inEAY1WVqWscdUizF5veJ1Tuim5uI76aRyPvvuXX8YqNVUwBvwOlxZADAVeB3B40mmtSIqSsjcbgDXxWhxXxusZAIeM1AploBHB9N0Ki2xC8ouvcAiZAx2HK7VPyo5n',
 				'Content-Type': 'application/json'
 			}
 			payload = json.dumps({
@@ -1029,7 +1029,7 @@ def send_quotation(data):
 							"parameters":[
 								{
 									"type":"text",
-									"text":"https://google.com"
+									"text":f"http://127.0.0.1:8000/api/method/frappe.utils.print_format.download_pdf?doctype=Lead&name={doc.name}&format=Standard&no_letterhead=1&letterhead=No%20Letterhead&settings=%7B%7D&_lang=en"
 								}
 							]
 						}
@@ -1046,7 +1046,7 @@ def send_quotation(data):
 		if enquiry:
 			print("Tyre Job Card found:", enquiry.name)
 			headers = {
-				'Authorization':'Bearer EAAPvJMkEALEBO6ktX1AGfUq9ebY44WjZAGG4AMFQCV8sPRr84ATfueZCZB0NnqZAabZCVRdA8cCCAWnwgUvpkXbC9f3GC2i98YO3cZBXTwgtsSto0VfOkFZAiQzmpEaY9viZAoZB8pm6yGZCSWZBWBpvQsAX3iGWZAVqfxaOCjnfAzZAkIZC68cLnFC7T9Pe2BRTACsu4eO9b5YYyOBXTKZBwChQrMZD',
+				'Authorization':'Bearer EAAPvJMkEALEBOZBBCXNKfsMoS9N93W9t1Ni9u34QFGvCG7JsaRULeubdJE2VUfxiHKyo6uZB4vxigiD8J8jQe7inEAY1WVqWscdUizF5veJ1Tuim5uI76aRyPvvuXX8YqNVUwBvwOlxZADAVeB3B40mmtSIqSsjcbgDXxWhxXxusZAIeM1AploBHB9N0Ki2xC8ouvcAiZAx2HK7VPyo5n',
 				'Content-Type': 'application/json'
 			}
 			payload = json.dumps({
@@ -1072,7 +1072,7 @@ def send_quotation(data):
 								},
 								{
 									"type": "text",
-									"text": enquiry.annual_revenue
+									"text": enquiry.custom_total_amount
 								}
 							]
 						},
@@ -1083,7 +1083,7 @@ def send_quotation(data):
 							"parameters":[
 								{
 									"type":"text",
-									"text":"https://google.com"
+									"text":f"http://127.0.0.1:8000/api/method/frappe.utils.print_format.download_pdf?doctype=Lead&name={enquiry.name}&format=Standard&no_letterhead=1&letterhead=No%20Letterhead&settings=%7B%7D&_lang=en"
 								}
 							]
 						}
