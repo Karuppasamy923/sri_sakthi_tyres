@@ -441,10 +441,10 @@ def job_card(data):
 	
 	air,nitrogen = False,False
 
-	if val.inflation['type'] == 'air' :
+	if val.inflations['type'] == 'air' :
 		air = True
 		nitrogen = False
-	elif val.inflation['type'] == 'nitrogen' :
+	elif val.inflations['type'] == 'nitrogen' :
 		air = False
 		nitrogen = True
 	else:
@@ -452,11 +452,11 @@ def job_card(data):
 		nitrogen = False
 	
 	service = {"alignment": val.Alignment, "rotation": val.Rotation, "oil_change": val.Oil_change, "balancing": val.Balancing, "inflation": val.Inflation,
-				"ac_service": val.AcService, "battery": val.Battery, "wiper": val.Wiper, "car_wash": val.CarWash, "puncture": val.puncture, "tyre_edge" :val.tyre_edge,
-				"tyre_patch": val.tyre_patch, "mushroom_patch": val.mashroom_patch, "last_alignment_kms": val.alignment['lastAlignment'], "next_alignment_kms": val.alignment['nextAlignment'],
-				"rim": val.rotation['rim'], "wheel": val.rotation['wheel'], "oil_quality": val.oil_change['oil_quality'], "oil_quantity": val.oil_change['oil_quantity'], "front_left_gm": val.balancing['fl'],
-				"front_right_gms": val.balancing['fr'], "rear_left_gms":val.balancing['bl'], "rear_right_gms":val.balancing['br'], "spare_tyre_gms": val.balancing['st'], "air": air, "nitrogen": nitrogen, "front_tyres_psi":val.inflation['ft'],
-				"rear_tyres_psi": val.inflation['rt'], "ac_service_detail": val.ac, "wiper_detail": val.wiper, "battery_detail": val.battery, "car_wash_detail":val.car_wash   }
+				"ac_service": val.AcService, "battery": val.Battery, "wiper": val.Wiper, "car_wash": val.CarWash, "puncture": val.Puncture, "tyre_edge" :val.TyreEdge,
+				"tyre_patch": val.TyrePatch, "mushroom_patch": val.MushroomPatch, "last_alignment_kms": val.alignments['lastAlignment'], "next_alignment_kms": val.alignments['nextAlignment'],
+				"rim": val.rotations['rim'], "wheel": val.rotations['wheel'], "oil_quality": val.oil_changes['oil_quality'], "oil_quantity": val.oil_changes['oil_quantity'], "front_left_gm": val.balancings['fl'],
+				"front_right_gms": val.balancings['fr'], "rear_left_gms":val.balancings['bl'], "rear_right_gms":val.balancings['br'], "spare_tyre_gms": val.balancings['st'], "air": air, "nitrogen": nitrogen, "front_tyres_psi":val.inflations['ft'],
+				"rear_tyres_psi": val.inflations['rt'], "ac_service_detail": val.ac, "wiper_detail": val.wiper, "battery_detail": val.battery, "car_wash_detail":val.car_wash   }
 		
 
 	doc = frappe.new_doc("Tyre Job Card")
@@ -989,10 +989,10 @@ def send_quotation(data):
 		# doc_json = json.dumps(doc_serializable)
 		if doc:
 			print("Tyre Job Card found:", doc.name)
-			docs = frappe.get_doc("Customer Details",{"name":license_plate})
-			print("Tyre Job Card found:", docs.current_owner)
+			docs = frappe.get_doc("Customer Details",{"name":license_plate}).as_dict()
+			print("Tyre Job Card found:", docs)
 			headers = {
-				'Authorization':'Bearer EAAPvJMkEALEBOZBBCXNKfsMoS9N93W9t1Ni9u34QFGvCG7JsaRULeubdJE2VUfxiHKyo6uZB4vxigiD8J8jQe7inEAY1WVqWscdUizF5veJ1Tuim5uI76aRyPvvuXX8YqNVUwBvwOlxZADAVeB3B40mmtSIqSsjcbgDXxWhxXxusZAIeM1AploBHB9N0Ki2xC8ouvcAiZAx2HK7VPyo5n',
+				'Authorization':'Bearer EAAPvJMkEALEBO6dcBS0YuNy5Iq6gftR6hjykaMgrYBMlsVQIRc9ZCub7cQnXE52GfWTkOkAcOFOCPF2zod2NFvkjGOjKDgC7rL7PvPk36aC49tii1TDq2HjoBlz44MZCcKnm3WHxRBlX4NuJpM6S1oisCA5FVk7pnDGGIojE6QZCk8fnnxBRiOLDBvtZAaiN',
 				'Content-Type': 'application/json'
 			}
 			payload = json.dumps({
@@ -1014,7 +1014,7 @@ def send_quotation(data):
 								},
 								{
 									"type": "text",
-									"text": docs.name
+									"text": docs.owner_data
 								},
 								{
 									"type": "text",
@@ -1029,7 +1029,7 @@ def send_quotation(data):
 							"parameters":[
 								{
 									"type":"text",
-									"text":f"http://127.0.0.1:8000/api/method/frappe.utils.print_format.download_pdf?doctype=Lead&name={doc.name}&format=Standard&no_letterhead=1&letterhead=No%20Letterhead&settings=%7B%7D&_lang=en"
+									"text":f"{frappe.utils.get_site_url(frappe.local.site)}/api/method/frappe.utils.print_format.download_pdf?doctype=Tyre%20Job%20Card&name={doc.name}&format=Standard&no_letterhead=1&letterhead=No%20Letterhead&settings=%7B%7D&_lang=en"
 								}
 							]
 						}
@@ -1046,7 +1046,7 @@ def send_quotation(data):
 		if enquiry:
 			print("Tyre Job Card found:", enquiry.name)
 			headers = {
-				'Authorization':'Bearer EAAPvJMkEALEBOZBBCXNKfsMoS9N93W9t1Ni9u34QFGvCG7JsaRULeubdJE2VUfxiHKyo6uZB4vxigiD8J8jQe7inEAY1WVqWscdUizF5veJ1Tuim5uI76aRyPvvuXX8YqNVUwBvwOlxZADAVeB3B40mmtSIqSsjcbgDXxWhxXxusZAIeM1AploBHB9N0Ki2xC8ouvcAiZAx2HK7VPyo5n',
+				'Authorization':'Bearer EAAPvJMkEALEBO6dcBS0YuNy5Iq6gftR6hjykaMgrYBMlsVQIRc9ZCub7cQnXE52GfWTkOkAcOFOCPF2zod2NFvkjGOjKDgC7rL7PvPk36aC49tii1TDq2HjoBlz44MZCcKnm3WHxRBlX4NuJpM6S1oisCA5FVk7pnDGGIojE6QZCk8fnnxBRiOLDBvtZAaiN',
 				'Content-Type': 'application/json'
 			}
 			payload = json.dumps({
@@ -1083,7 +1083,7 @@ def send_quotation(data):
 							"parameters":[
 								{
 									"type":"text",
-									"text":f"http://127.0.0.1:8000/api/method/frappe.utils.print_format.download_pdf?doctype=Lead&name={enquiry.name}&format=Standard&no_letterhead=1&letterhead=No%20Letterhead&settings=%7B%7D&_lang=en"
+									"text":f"{frappe.utils.get_site_url(frappe.local.site)}/api/method/frappe.utils.print_format.download_pdf?doctype=Lead&name={enquiry.name}&format=Standard&no_letterhead=1&letterhead=No%20Letterhead&settings=%7B%7D&_lang=en"
 								}
 							]
 						}

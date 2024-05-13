@@ -186,6 +186,8 @@
   "column_break_qvil",
   "fl_item",
   "copy_for_all",
+  "fl_warranty",
+  "fl_max_years",
   "front_right_tyre_section",
   "fr_brand",
   "fr_load_index",
@@ -197,6 +199,8 @@
   "fr_size",
   "column_break_kvmi",
   "fr_item",
+  "fr_warranty",
+  "fr_max_years",
   "rear_left_tyre_section",
   "rl_brand",
   "rl_load_index",
@@ -208,6 +212,8 @@
   "rl_size",
   "column_break_xqav",
   "rl_item",
+  "rl_warranty",
+  "rl_max_years",
   "rear_right_tyre_section",
   "rr_brand",
   "rr_load_index",
@@ -219,6 +225,8 @@
   "rr_size",
   "column_break_yend",
   "rr_item",
+  "rr_warranty",
+  "rr_max_years",
   "spare_tyre_sb",
   "sp_brand",
   "sp_load_index",
@@ -230,6 +238,8 @@
   "sp_size",
   "column_break_bwhf",
   "sp_item",
+  "sp_warranty",
+  "sp_max_years",
   "billing_details_tab",
   "total_amount",
   "billing_details"
@@ -1421,12 +1431,62 @@
    "fieldtype": "Table",
    "label": "Billing Details",
    "options": "Tyre Billing Detail"
+  },
+  {
+   "fieldname": "fl_warranty",
+   "fieldtype": "Int",
+   "label": "Warranty"
+  },
+  {
+   "fieldname": "fl_max_years",
+   "fieldtype": "Date",
+   "label": "Max Years"
+  },
+  {
+   "fieldname": "fr_warranty",
+   "fieldtype": "Int",
+   "label": "Warranty"
+  },
+  {
+   "fieldname": "fr_max_years",
+   "fieldtype": "Date",
+   "label": "Max Years"
+  },
+  {
+   "fieldname": "rr_warranty",
+   "fieldtype": "Int",
+   "label": "Warranty"
+  },
+  {
+   "fieldname": "rr_max_years",
+   "fieldtype": "Date",
+   "label": "Max Years"
+  },
+  {
+   "fieldname": "sp_warranty",
+   "fieldtype": "Int",
+   "label": "Warranty"
+  },
+  {
+   "fieldname": "sp_max_years",
+   "fieldtype": "Date",
+   "label": "Max Years"
+  },
+  {
+   "fieldname": "rl_warranty",
+   "fieldtype": "Int",
+   "label": "Warranty"
+  },
+  {
+   "fieldname": "rl_max_years",
+   "fieldtype": "Date",
+   "label": "Max Years"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-04-12 18:28:27.962199",
+ "modified": "2024-05-13 11:51:08.202207",
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "Tyre Job Card",
