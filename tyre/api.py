@@ -979,7 +979,7 @@ def send_quotation(data):
 		elif mobile and not license_plate:
 			print("else block")
 			enquiry = frappe.get_doc("Lead",{"mobile_no":mobile})
-			print('enquiry',enquiry)
+			print('enquiry details',enquiry)
 		# job_card_detail = doc.as_dict()
 		# print('..........',job_card_detail)
 		# def convert_to_dict(obj):
