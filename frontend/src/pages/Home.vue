@@ -385,17 +385,19 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                                                    v-for="(item, index) in jobCardData.warranty" :key="index">
-                                                    <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                                        scope="row">{{ item.item_code }}</td>
-                                                    <td class="px-6 py-3">{{ item.warehouse }}</td>
-                                                    <td class="px-6 py-3">{{ item.warranty }} years</td>
-                                                    <td class="px-6 py-3">{{ item.max_years }}</td>
-                                                    <td class="px-6 py-3">{{ item.quantity }}</td>
-                                                    <td class="px-6 py-3">{{ item.rate }}</td>
-                                                    <td class="px-6 py-3">{{ item.amount }}</td>
-                                                </tr>
+                                                <template v-if="jobCardData.warranty">
+                                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                                                        v-for="(item, index) in jobCardData.warranty" :key="index">
+                                                        <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                                            scope="row">{{ item.item_code }}</td>
+                                                        <td class="px-6 py-3">{{ item.warehouse }}</td>
+                                                        <td class="px-6 py-3">{{ item.warranty }} years</td>
+                                                        <td class="px-6 py-3">{{ item.max_years }}</td>
+                                                        <td class="px-6 py-3">{{ item.quantity }}</td>
+                                                        <td class="px-6 py-3">{{ item.rate }}</td>
+                                                        <td class="px-6 py-3">{{ item.amount }}</td>
+                                                    </tr>
+                                                </template>
                                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                                                     v-for="(item, index) in jobCardData.billing_details" :key="index">
                                                     <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -3456,7 +3458,7 @@ const clearData = (index) => {
 
 //========================================================>>> Required Services <<<============================================================================//
 
-let selectedCheckbox = null;
+let selectedCheckbox = ref(null);
 
 const show = ref({
     Ac: false,
@@ -3486,12 +3488,12 @@ const show = ref({
 })
 
 function handleCheckboxChange(checkboxId) {
-    if (this.selectedCheckbox === checkboxId) {
-        selectedCheckbox = null;
+    if (selectedCheckbox.value === checkboxId) {
+        selectedCheckbox.value = null;
     } else {
-        selectedCheckbox = checkboxId;
+        selectedCheckbox.value = checkboxId;
         const otherCheckboxId = checkboxId === 'air' ? 'nitrogen' : 'air';
-        requireService.value.inflations.type = selectedCheckbox;
+        requireService.value.inflations.type = selectedCheckbox.value;
         const otherCheckbox = document.getElementById(otherCheckboxId);
         if (otherCheckbox) {
             otherCheckbox.checked = false;
