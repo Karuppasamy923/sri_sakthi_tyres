@@ -768,55 +768,62 @@ def get_enquiry_details(data):
 
 @frappe.whitelist(allow_guest=True)
 def get_billing_details(name):
-	doc = frappe.get_doc("Tyre Job Card", name)
-	print("\n\n\n\n\ntyre job card details", doc.as_dict())
-	brand_keys = ['fr', 'fl', 'rr', 'rl', 'sp']
+    doc = frappe.get_doc("Tyre Job Card", name)
+    print("\n\n\n\n\ntyre job card details", doc.as_dict())
+    brand_keys = ['fr', 'fl', 'rr', 'rl', 'sp']
 
-	details_to_send_to_frontend = {}
+    details_to_send_to_frontend = {}
 
-	for brand_key in brand_keys:
-		if doc.get(f"{brand_key}_brand"):
-			brand_details = {}
-			brand_details["brand"] = doc.get(f"{brand_key}_brand")
-			brand_details["item"] = doc.get(f"{brand_key}_item")
-			brand_details["load_index"] = doc.get(f"{brand_key}_load_index")
-			brand_details["max_years"] = doc.get(f"{brand_key}_max_years")
-			brand_details["pattern"] = doc.get(f"{brand_key}_pattern")
-			brand_details["size"] = doc.get(f"{brand_key}_size")
-			brand_details["speed_rating"] = doc.get(f"{brand_key}_speed_rating")
-			brand_details["tt_tl"] = doc.get(f"{brand_key}_tt_tl")
-			brand_details["warranty"] = doc.get(f"{brand_key}_warranty")
-			for brand in doc.billing_details:
-				if brand_details["item"] == brand.item_code:
-					brand_details["item_code"] = brand.item_code
-					brand_details["quantity"] = brand.quantity
-					brand_details["rate"] = brand.rate
-					brand_details["amount"] = brand.amount
-					brand_details["warehouse"] = brand.warehouse
+    for brand_key in brand_keys:
+        print("for loop")
+        a = doc.get(f"{brand_key}_brand")
+        print("brand key", a)
+        if a:
+            brand_details = {}
+            brand_details["brand"] = doc.get(f"{brand_key}_brand")
+            brand_details["item"] = doc.get(f"{brand_key}_item")
+            brand_details["load_index"] = doc.get(f"{brand_key}_load_index")
+            brand_details["max_years"] = doc.get(f"{brand_key}_max_years")
+            brand_details["pattern"] = doc.get(f"{brand_key}_pattern")
+            brand_details["size"] = doc.get(f"{brand_key}_size")
+            brand_details["speed_rating"] = doc.get(f"{brand_key}_speed_rating")
+            brand_details["tt_tl"] = doc.get(f"{brand_key}_tt_tl")
+            brand_details["warranty"] = doc.get(f"{brand_key}_warranty")
+            for billing_detail in doc.billing_details:
+                if brand_details["item"] == billing_detail.item_code:
+                    brand_details["item_code"] = billing_detail.item_code
+                    brand_details["quantity"] = billing_detail.quantity
+                    brand_details["rate"] = billing_detail.rate
+                    brand_details["amount"] = billing_detail.amount
+                    brand_details["warehouse"] = billing_detail.warehouse
 
-			details_to_send_to_frontend[brand_key] = brand_details
+            details_to_send_to_frontend[brand_key] = brand_details
+            print("loop details", details_to_send_to_frontend)
 
-	billing_details = []
-	for brand in doc.billing_details:
-		if not any(brand.item_code == details["item_code"] for details in details_to_send_to_frontend.values()):
-			billing_details.append({
-				"item_code": brand.item_code,
-				"quantity": brand.quantity,
-				"rate": brand.rate,
-				"amount": brand.amount,
-				"warehouse": brand.warehouse
-			})
-
-	if details_to_send_to_frontend:
-		print("warranty details", details_to_send_to_frontend)
-		return {
-			"billing_details": billing_details,
-			"total_amount": doc.total_amount,
-			"warranty": details_to_send_to_frontend
-		}
-	else:
-		print('No brand details available')
-
+    billing_details = []
+    for billing_detail in doc.billing_details:
+        if not any(billing_detail.item_code == details["item_code"] for details in details_to_send_to_frontend.values()):
+            billing_details.append({
+                "item_code": billing_detail.item_code,
+                "quantity": billing_detail.quantity,
+                "rate": billing_detail.rate,
+                "amount": billing_detail.amount,
+                "warehouse": billing_detail.warehouse
+            })
+    print('details_to_send_to_frontend', details_to_send_to_frontend)
+    if details_to_send_to_frontend:
+        print("warranty details", details_to_send_to_frontend)
+        return {
+            "billing_details": billing_details,
+            "total_amount": doc.total_amount,
+            "warranty": details_to_send_to_frontend
+        }
+    else:
+        return {
+            "billing_details": billing_details,
+            "total_amount": doc.total_amount,
+        }
+        print('No brand details available')
 @frappe.whitelist(allow_guest=True)
 def get_enquiry(name):
 	doc = frappe.get_doc("Lead", name)
