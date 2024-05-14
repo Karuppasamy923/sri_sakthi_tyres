@@ -1021,7 +1021,7 @@ def send_quotation(data):
 								},
 								{
 									"type": "text",
-									"text": docs.owner_data
+									"text": doc.owner_data
 								},
 								{
 									"type": "text",
