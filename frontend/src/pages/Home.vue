@@ -252,31 +252,54 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="flex justify-center m-5" v-if="searchShow">
-                            <input type="text" class="w-[338px] h-[52px] rounded-sm border-solid border border-black"
-                                v-model="searchQuery" @keyup.enter="search" placeholder="Enter Vehicle Number">
-                            <button class="bg-blue-500 w-[150px] text-white font-bold text-base p-4 rounded-lg ml-3"
-                                @click="search">Search</button>
-                        </div>
+                        <div v-if="hide == 'false' && hideEnq == 'false'" class="relative cursor-pointer ml-1">
+                            <div class="flex justify-between items-center  text-black p-3 mt-1 rounded-lg w-15"  @click="toggleMenu">
+                              <FeatherIcon name="menu" width="35" height="35"></FeatherIcon>
+                            </div>
+                            <div v-if="showMenu" class="absolute left-0 mt-1 border border-gray-300 ml-3 bg-white rounded-lg shadow-lg w-40">
+                              <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" @click="getJobCard(),showMenu=false">
+                                <button v-if="hide == 'false' && hideEnq == 'false'">Job Card List</button>
+                              </div>
+                              <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" @click="getEnquiry(),showMenu=false">
+                                <button v-if="hideEnq == 'false' && hide == 'false'">Enquiry</button>
+                              </div>
+                              <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" @click="currentstep = 4; billing = true; showMenu=false">
+                                <button v-if="hideEnq == 'false' && hide == 'false'">Billing</button>
+                              </div>
+                            </div>
+                          </div>
+                        
+                          <div class="flex justify-center m-5" v-if="searchShow">
+                            <div class="flex items-center space-x-3">
+                              <input type="text" class="w-[338px] h-[52px] rounded-sm border-solid border border-black"
+                                     v-model="searchQuery" @keyup.enter="search" placeholder="Enter Vehicle Number">
+                              <button class="bg-blue-500 w-[150px] text-white font-bold text-base p-4 rounded-lg"
+                                      @click="search">Search</button>
+                            </div>
+                          </div>
                         <div v-if="(hasResponse && initial) || checked">
                             <div class="flex ml-6">
                                 <div class="mr-8">
-                                    <button @click="getJobCard" v-if="hide == 'false' && hideEnq == 'false'"
+                                    <!-- <button @click="getJobCard" v-if="hide == 'false' && hideEnq == 'false'"
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Job
-                                        Card</button>
+                                        Card</button> -->
                                     <button
                                         @click="hide = 'false', check = 'false', initial = 'true', initialNext = (responseData && responseData.message && nextButtonEnable) ? 'true' : 'false', searchShow = 'true', jobCardPopup = 'false'"
                                         v-if="hide != 'false'"
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Back</button>
                                 </div>
                                 <div>
-                                    <button @click="getEnquiry" v-if="hideEnq == 'false' && hide == 'false'"
-                                        class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Enquiry</button>
+                                    <!-- <button @click="getEnquiry" v-if="hideEnq == 'false' && hide == 'false'"
+                                        class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Enquiry</button> -->
                                     <button
                                         @click="hideEnq = 'false', check = 'false', initial = 'true', initialNext = (responseData && responseData.message && nextButtonEnable) ? 'true' : 'false', searchShow = 'true', enquiryPopup = 'false'"
                                         v-if="hideEnq != 'false'"
                                         class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Back</button>
                                 </div>
+                                <!-- <div class="ml-6">
+                                    <button @click="currentstep = 4; billing = true" v-if="hideEnq == 'false' && hide == 'false'"
+                                        class="bg-blue-500 w-[100px] text-white font-bold p-2 rounded-lg mt-4 mb-4">Billing</button>
+                                </div> -->
                                 <div>
                                     <input type="number" placeholder="search ..." v-if="hideEnq != 'false'"
                                         v-model="searchEnquiry"
@@ -1886,7 +1909,7 @@
                 </div>
             </div>
             <!-- Billing Details -->
-            <div v-if="currentstep == 4">
+            <div v-if="currentstep == 4" @click="dataLoaded =false; billCustomer=''">
                 <div v-if="showConfirm"
                     class="fixed inset-1 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
                     <div class="bg-white rounded-lg p-8 shadow-xl">
@@ -1900,6 +1923,19 @@
                         </div>
                     </div>
                 </div>
+                <div v-if="showpop"
+                    class="fixed inset-1 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                    <div class="bg-white rounded-lg p-8 shadow-xl">
+                        <h2 class="text-xl font-semibold mb-4">Confirm Save</h2>
+                        <p class="mb-4">Are you sure want to save the details?</p>
+                        <div class="flex justify-center">
+                            <button @click="confirmBill"
+                                class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
+                            <button @click="showpop=false"
+                                class="bg-red-500 text-white font-semibold px-4 py-2 rounded">Cancel</button>
+                        </div>
+                    </div>
+                </div>
                 <div v-if="finalSuccess"
                     class="fixed inset-1 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
                     <div class="bg-white rounded-lg p-8 shadow-xl">
@@ -1907,6 +1943,56 @@
                     </div>
                 </div>
                 <div class="pt-24 p-12">
+                    <div v-if="newpop" class="fixed inset-1 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                        <div class="bg-white rounded-lg p-12 shadow-x">
+                            <div class="text-red-500 mb-4">
+                                <h6 class="flex justify-center">{{customerResponse}}</h6>
+                            </div>
+                            <h2 class="text-3xl font-semibold mb-3 mr-4">New Customer</h2>
+                            <div class="mb-2 ml-20rem">
+                                <p>Customer Name <span v-if="mentatory && !newName" class="text-red-500">*</span></p>
+                                <input type="text" class="w-[100%] h-[3rem] rounded-sm border-solid border border-black" v-model="newName"/>
+                            </div>
+                            <div class="mb-3">
+                                <p>Customer Mobile No <span v-if="mentatory && !newNumber" class="text-red-500">*</span></p>
+                                <input type="tel" class="w-[100%] h-[3rem] rounded-sm border-solid border border-black" v-model="newNumber" @input="customerResponse=''"/>
+                            </div>    
+                            <div class="flex justify-center">
+                                <button @click="newCustomer" class="bg-green-500 w-[9rem] text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
+                                <button @click="newpop=false;mentatory=false" class="bg-red-500 w-[9rem] text-white font-semibold px-4 py-2 rounded">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="billing === true" > 
+                        <h1 class="text-[20px] font-bold mb-1">Customer Deatils</h1>
+                        <hr class="mt-2" :style="{ borderWidth: '2px', borderColor: 'gray' }">
+                        <div class="custom-dropdown">
+                            <input type="text" placeholder="Search..." v-model="billCustomer" @input="checkcustomer" class="custom-input w-[100%] h-[2.5rem] rounded-sm border-solid border border-black">
+                                <ul v-show="dataLoaded" class="custom-dropdown-list">
+                                    <li v-for="option in customers" :key="option.value" @click="selectOption(option)" class="custom-dropdown-item">
+                                        <div v-if="option.customer_name">
+                                            <label>{{ option.customer_name }}</label><br>
+                                            <label>{{ option.mobile_no }}</label>                                   
+                                        </div>
+                                        <div v-if="!option.customer_name">
+                                            <label>No data found</label>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <button class="bg-blue-500 text-white font-bold text-base p-3 ml-3 rounded-sm mt-3" @click="addNew()">Create Customer</button>
+                        </div>
+                        <label><span v-if="respop && !selectedname" class="text-red-500">{{respop}}</span></label>                         
+                        <div class="mt-3" v-if="selectedname && selectednumber">
+                            <div>
+                                <label>Name      :</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <label>{{selectedname}}</label>
+                            </div>
+                            <div class="mt-1">
+                                <label>Phone No  :</label>&nbsp;&nbsp;
+                                <label>{{selectednumber}}</label>
+                            </div>
+                        </div>
+                    </div>
                     <h1 class="text-[20px] font-bold mb-1">Items</h1>
                     <hr class="mt-2" :style="{ borderWidth: '2px', borderColor: 'gray' }">
                     <div class="pt-5">
@@ -1915,24 +2001,35 @@
                             <thead>
                                 <tr>
                                     <th class="border border-gray-800 px-4 py-4 w-[10rem]">SI.No</th>
-                                    <th class="border border-gray-800 px-4 py-4 w-[10rem]">Item</th>
-                                    <th class="border border-gray-800 px-4 py-4 w-[16rem]">Warehouse</th>
-                                    <th class="border border-gray-800 px-4 py-4 w-[16rem]">Quantity</th>
+                                    <th class="border border-gray-800 px-4 py-4 w-[10rem]">Item<span v-if="itempop" class="text-red-500">*</span></th>
+                                    <th class="border border-gray-800 px-4 py-4 w-[16rem]">Warehouse<span v-if="warepop" class="text-red-500">*</span></th>
+                                    <th class="border border-gray-800 px-4 py-4 w-[16rem]">Quantity<span v-if="qutpop" class="text-red-500">*</span></th>
                                     <th class="border border-gray-800 px-4 py-4 w-[10rem]">Rate</th>
                                     <th class="border border-gray-800 px-4 py-4 w-[10rem]">Amount</th>
                                 </tr>
                             </thead>
+                            <pre>{{tableData.value}}</pre>
                             <tbody class="border border-gray-800 text-center">
                                 <tr v-for="(data, index) in tableData" :key="index">
                                     <td class="border border-gray-800 px-4 py-2 w-[10rem]">{{ index + 1 }}</td>
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="text" v-model="data[0].itemCode"
+                                        <!-- <input type="text" v-model="data[0].itemCode"
+                                            class="w-[10rem] rounded-sm border-solid border border-black"> -->
+                                            <select v-model="data[0].itemCode" @change="get_itemrate($event.target.value, index);itempop='';billpop='';data[0].requiredQuantity=0"
                                             class="w-[10rem] rounded-sm border-solid border border-black">
+                                        <option value="">Select Item</option>
+                                        <!-- Loop through billitems and create an option for each item -->
+                                        <option v-for="(item) in billitems" :key="item.id" :value="item.name">
+                                            {{ item.name }}
+                                        </option>
+                                    </select>
+                                    
+                                        
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
                                         <div style="max-height: 200px; overflow-y: auto;">
                                             <select v-model="data[0].sourceWarehouse"
-                                                class="w-[10rem] rounded-sm border-solid border border-black">
+                                                class="w-[10rem] rounded-sm border-solid border border-black" @change="warepop='';bilpop=''">
                                                 <option value="">Select Warehouse</option>
                                                 <!-- Loop through warehouseList and create an option for each warehouse -->
                                                 <option v-for="warehouse in Warehouse" :key="warehouse"
@@ -1944,7 +2041,7 @@
                                     </td>
 
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="number" v-model="data[0].requiredQuantity" @input="calculateTotals"
+                                        <input type="number" v-model="data[0].requiredQuantity" @input="calculateTotals();qutpop='';billpop=''"
                                             class="w-[10rem] rounded-sm border-solid border border-black">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
@@ -1981,9 +2078,10 @@
                                 </tr>
                             </tfoot>
                         </table>
+                        <label><span v-if="billpop" class="text-red-500">{{billpop}}</span></label>
                         <div class="mb-9">
                             <button class="bg-blue-500 text-white font-bold text-base p-3 rounded-lg mt-3"
-                                @click="addNewRow(billIndex)">Add row</button>
+                                @click="addNewRow(billIndex); billpop=''">Add row</button>
                         </div>
                         <div class="flex">
                             <label>Discount Rate: <input type="text" v-model="discountRate"
@@ -1999,7 +2097,7 @@
             </div>
             <div v-if="Auth">
                 <div class="flex justify-center space-x-5 p-5 mt-5 ml-3">
-                    <button v-if="currentstep != 0"
+                    <button v-if="currentstep != 0 && billing !== true"
                         class="bg-blue-500 w-[45%] text-white font-bold  text-base p-4 rounded-lg"
                         @click="previousPage">Previous
                     </button>
@@ -2007,7 +2105,15 @@
                         class="bg-blue-500 w-[45%] text-white font-bold  text-base p-4 rounded-lg"
                         @click="nextPageAndHighlight">Next
                     </button>
-                    <button v-if="currentstep == 4" @click="dataFinalSubmission"
+                    <button v-if="currentstep == 4 && billing !== true" @click="dataFinalSubmission"
+                        class="bg-green-700 w-[45%] text-white font-bold  text-base p-4 rounded-lg">
+                        Submit
+                    </button>
+                    <button v-if="currentstep != 0 && billing === true"
+                        class="bg-red-500 w-[45%] text-white font-bold  text-base p-4 rounded-lg"
+                        @click="currentstep =0">Cancel
+                    </button>
+                    <button v-if="currentstep == 4 && billing === true" @click="finalSubmit"
                         class="bg-green-700 w-[45%] text-white font-bold  text-base p-4 rounded-lg">
                         Submit
                     </button>
@@ -2054,6 +2160,9 @@ const data = reactive({
     selectedAlt: ''
 });
 
+const billing = ref(false)
+const billCustomer = ref('');
+
 const headers = {
     'Content-Type': 'application/json',
 
@@ -2084,6 +2193,168 @@ function handleImgSelection(event) {
     selectImg.value = true;
     data.selectedImgSrc = event.target.src;
     data.selectedAlt = event.target.alt;
+}
+
+const customers =ref([])
+const dataLoaded =ref(false)
+const selectedname=ref('')
+const selectednumber=ref('')
+const selecteddoc=ref('')
+
+function selectOption(data){
+    selecteddoc.value=data.name;
+    selectedname.value=data.customer_name;
+    selectednumber.value=data.mobile_no;
+    console.log(data,"data")
+    dataLoaded.value=false;
+    billCustomer.value='';
+}
+
+//==========menu  icon=========//
+const item = ref([
+  { title: 'Billing' },
+  { title: 'Sales Invoices' },
+  { title: 'Paid Invoices' },
+  { title: 'Enquiry List' },
+  { title: 'Job Card List' },
+])
+
+const showMenu = ref(false)
+
+const toggleMenu = () => {
+  showMenu.value = !showMenu.value
+}
+
+
+
+
+function checkcustomer(){
+    console.log(billCustomer)
+    axios.post(`${BaseURL}/api/method/tyre.api.get_customer`, { data: billCustomer.value }, { headers: headers })
+        .then(response => {
+            console.log(response.data.message)
+            customers.value=response.data.message
+            console.log("Customer",customers.value)
+            dataLoaded.value=true
+        })
+}
+const billitems=ref([]);
+
+onMounted(() => {
+    axios.get(`${BaseURL}/api/method/tyre.api.get_items`, { headers: headers })
+        .then(response => {
+            console.log(response.data.message);
+            // brand.value = response.data.message;
+            billitems.value=response.data.message;
+            console.log(billitems.value)
+        })
+});
+
+const newpop =ref(false)
+const newName=ref('')
+const newNumber=ref('')
+
+function addNew(){
+    console.log("create new")
+    newpop.value=true
+    newName.value=''
+    newNumber.value=''
+}
+
+const mentatory=ref(false)
+const customerResponse=ref('')
+
+function newCustomer(){
+    if(newName.value && newNumber.value){
+        console.log("created")
+        axios.post(`${BaseURL}/api/method/tyre.api.create_customer`,{name:newName.value,no:newNumber.value},{headers:headers})
+        .then(response=>{
+            if(response.data.message === "Customer created successfully"){
+                newpop.value=false
+                selectedname.value=newName.value
+                selectednumber.value=newNumber.value
+            }else{
+                customerResponse.value=response.data.message;
+            }
+        })
+    }else{
+        mentatory.value=true
+    }
+}
+
+const showpop=ref(false)
+const respop=ref('')
+const billpop=ref('')
+const itempop=ref(false)
+const warepop=ref(false)
+const qutpop=ref(false)
+
+function finalSubmit(){
+    if(selectedname.value && selectednumber.value){
+        if(tableData.value.length !== 0){
+            console.log(tableData.value)
+            for(let i=0;i < tableData.value.length;i++){
+                if(!tableData.value[i][0].itemCode && !tableData.value[i][0].sourceWarehouse && !tableData.value[i][0].requiredQuantity){
+                    console.log("no data")
+                    billpop.value="Fill the require fields...!"
+                    itempop.value=true;
+                    warepop.value=true
+                    qutpop.value=true
+                    break;
+                }else if(!tableData.value[i][0].itemCode && !tableData.value[i][0].sourceWarehouse){
+                    billpop.value="Fill the require fields...!"
+                    itempop.value=true;
+                    warepop.value=true
+                    break;
+                }else if(!tableData.value[i][0].sourceWarehouse && !tableData.value[i][0].requiredQuantity){
+                    billpop.value="Fill the require fields...!"
+                    warepop.value=true
+                    qutpop.value=true
+                    break;
+                }else if(!tableData.value[i][0].itemCode && !tableData.value[i][0].requiredQuantity){
+                    billpop.value="Fill the require fields...!"
+                    itempop.value=true;
+                    qutpop.value=true
+                    break;
+                }
+                
+            }
+            console.log(billpop.value)
+            if(!billpop.value){
+                showpop.value=true;
+            }
+        }else{
+            billpop.value="Add billing data...!";
+        }
+    }else{
+        respop.value="Select a customer...!"
+    }
+}
+
+function confirmBill(){
+    console.log(tableData.value)
+    console.log(selectedname.value)
+    console.log(selectednumber.value)
+    console.log(selecteddoc.value)
+    axios.post(`${BaseURL}/api/method/tyre.api.sales_order`,{data:tableData.value,name:selecteddoc.value},{headers:headers})
+    .then(response=>{
+        if(response.data.message === "done"){
+            showpop.value=false
+            finalSuccess.value=true
+            console.log(tableData.value)
+            setTimeout(() => {
+                finalSuccess.value = false;
+                currentstep.value=0
+                selectedname.value=''
+                selectednumber.value=''
+                tableData.value=[]
+                totalQuantity.value = '';
+                totalRate.value=0.00;
+                totalCost.value = 0.00;
+                finalAmount.value = 0.00;
+            }, 2000);
+        }
+    })
 }
 
 function focusNext(event, nextInput) {
@@ -3676,22 +3947,70 @@ function handelCheck(data) {
     }
 }
 
-async function getrate(data) {
-    let rate = 0
+// function get_itemrate(data,index){
+//     console.log("data",data)
+//     console.log("index",index)
+//     console.log(tableData.value);
+//     let amount=getrate(data)
+//     console.log("rate",amount.value);
+//     console.log(tableData.value[index][0].itemCode)
+//     tableData.value[index][0].rate=getrate(data);
+//     console.log(tableData.value);
+//     // print(tableData)
+// }
+
+// async function getrate(data) {
+//     let rate = 0
+//     console.log(data)
+//     try {
+//         // Assuming headers is defined elsewhere
+//         const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_item_rate`, {
+//             params: { item_code: data },
+//             headers: headers // Assuming headers is defined elsewhere
+//         }).then((response) => {
+//             rate = response.data.message
+//             console.log(rate, "rate - bhavan");
+//         })
+//         console.log(rate)
+//         return rate;
+//     } catch (error) {
+//         console.error("Error:", error);
+//         throw error; // Rethrow the error to be caught by the caller
+//     }
+// }
+
+async function get_itemrate(data, index) {
+    console.log("data", data);
+    console.log("index", index);
+    console.log(tableData.value);
+
     try {
-        // Assuming headers is defined elsewhere
+        let rate = await getrate(data); // Wait for getrate() to complete and get the rate
+        console.log("rate", rate);
+        console.log(tableData.value[index][0].itemCode);
+        tableData.value[index][0].rate = rate; // Set the rate in the tableData
+        console.log(tableData.value);
+    } catch (error) {
+        console.error("Error:", error);
+        // Handle the error as needed
+    }
+}
+
+async function getrate(data) {
+    try {
         const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_item_rate`, {
             params: { item_code: data },
             headers: headers // Assuming headers is defined elsewhere
-        }).then((response) => {
-            rate = response.data.message
-        })
+        });
+        const rate = response.data.message;
+        console.log(rate, "rate - bhavan");
         return rate;
     } catch (error) {
         console.error("Error:", error);
         throw error; // Rethrow the error to be caught by the caller
     }
 }
+
 
 //===================================================>>> Replacement Tyre Details <<<========================================================================//
 
@@ -3786,7 +4105,7 @@ const clearTyreData = (index) => {
         tyre.mandatory = false;
     tyre.status = false;
 };
-let step = ref(0);
+let step = 0;
 const tableData = ref([]);
 function addValue(data, replace) {
     // Check if data is an array
@@ -3819,7 +4138,7 @@ function addValue(data, replace) {
                                 const items = rowData[i];
                                 if (items.itemCode === item.item) {
                                     // Item already exists, update quantity and mark as processed
-                                    console.log(items.requiredQuantity)
+                                    console.log(items.requiredQuantity,"exist")
                                     items.requiredQuantity++;
                                     console.log(items.requiredQuantity)
                                     item.status = true;
@@ -3838,9 +4157,6 @@ function addValue(data, replace) {
                     // Create a new object for the item
                     console.log(existingItemIndex, "EO");
                     if (existingItemIndex < 0) {
-                        if (!Array.isArray(tableData.value[billIndex])) {
-                            tableData.value[billIndex] = [];
-                        }
                         const newData = {
                             itemCode: item.item,
                             sourceWarehouse: '',
@@ -3848,16 +4164,23 @@ function addValue(data, replace) {
                             requiredQuantity: 1, // Set initial quantity to 1
                             cost: ''
                         };
-
+                        
                         // Push the new object into the array at the specified billIndex
                         console.log(newData, "newData")
                         console.log(billIndex, "push")
-                        tableData.value[billIndex].push(newData);
+                        if(newData.itemCode){
+                            if (!Array.isArray(tableData.value[billIndex])) {
+                                tableData.value[billIndex] = [];
+                            }
 
-                        // Mark the item as processed
-                        item.status = true;
-                        billIndex++;
+                            tableData.value[billIndex].push(newData);
+    
+                            // Mark the item as processed
+                            item.status = true;
+                            billIndex++;
+                        }
                         console.log(billIndex, "After-Push")
+                        
                     }
                 }
 
@@ -3871,8 +4194,11 @@ function addValue(data, replace) {
         //     console.log("hiiii")
         //     tableData.value = [];
         // }
+        console.log(tableData.value.itemCode);
+        console.log(billIndex)
+        console.log(tableData[billIndex], "new");
 
-        replace.target = true;
+        // replace.target = true;
         console.log(billIndex, "Total")
     }
     else if (typeof data === 'object') {
@@ -3965,6 +4291,8 @@ const calculateDiscountRate = () => {
 
 const addNewRow = (billIndex) => {
     // Check if tableData[billIndex] is defined and is an array
+    console.log(billIndex)
+    console.log(step)
     if (!Array.isArray(tableData.value[step])) {
         tableData.value[step] = [];
     }
@@ -3976,6 +4304,7 @@ const addNewRow = (billIndex) => {
         requiredQuantity: '',
         cost: '',
     });
+    console.log(tableData.value[step])
     step++;
     billIndex = step
 };
@@ -4087,4 +4416,39 @@ const cancelSaved = () => {
     flex-direction: column;
     align-items: center;
 }
+.custom-dropdown {
+    position: relative;
+    margin-top: 1rem;
+  }
+  
+  .custom-input {
+    width: 20%;
+  }
+  
+  .custom-dropdown-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 20%;
+    max-height: 150px;
+    overflow-y: auto;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-top: none;
+    list-style-type: none;
+    padding: 0;
+    border-radius: 0.75rem;
+  }
+  
+  .custom-dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .custom-dropdown-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+  
+  
 </style>
