@@ -1929,10 +1929,23 @@
                         <h2 class="text-xl font-semibold mb-4">Confirm Save</h2>
                         <p class="mb-4">Are you sure want to save the details?</p>
                         <div class="flex justify-center">
-                            <button @click="confirmBill"
+                            <button @click="confirmBill(),respop=''"
                                 class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
                             <button @click="showpop=false"
                                 class="bg-red-500 text-white font-semibold px-4 py-2 rounded">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="cancelpop"
+                    class="fixed inset-1 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                    <div class="bg-white rounded-lg p-8 shadow-xl">
+                        <h2 class="text-xl font-semibold mb-4">Confirm Cancel</h2>
+                        <p class="mb-4">Are you sure want to cancel the details?</p>
+                        <div class="flex justify-center">
+                            <button @click="currentstep=0;cancelpop=false;tableData=[];selectedname='';selectednumber='';totalRate=0,totalQuantity=0,totalCost=0,finalAmount=0,respop=''"
+                                class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Yes</button>
+                            <button @click="cancelpop=false"
+                                class="bg-red-500 text-white font-semibold px-4 py-2 rounded">No</button>
                         </div>
                     </div>
                 </div>
@@ -1979,7 +1992,7 @@
                                         </div>
                                     </li>
                                 </ul>
-                                <button class="bg-blue-500 text-white font-bold text-base p-3 ml-3 rounded-sm mt-3" @click="addNew()">Create Customer</button>
+                                <button class="bg-blue-500 text-white font-bold text-base p-3 rounded-sm mt-3" @click="addNew()">Create Customer</button>
                         </div>
                         <label><span v-if="respop && !selectedname" class="text-red-500">{{respop}}</span></label>                         
                         <div class="mt-3" v-if="selectedname && selectednumber">
@@ -2015,7 +2028,7 @@
                                     <td class="border border-gray-800 px-4 py-2">
                                         <!-- <input type="text" v-model="data[0].itemCode"
                                             class="w-[10rem] rounded-sm border-solid border border-black"> -->
-                                            <select v-model="data[0].itemCode" @change="get_itemrate($event.target.value, index);itempop='';billpop='';data[0].requiredQuantity=0"
+                                            <select v-model="data[0].itemCode" @change="get_itemrate($event.target.value, index);itempop='';billpop='';"
                                             class="w-[10rem] rounded-sm border-solid border border-black">
                                         <option value="">Select Item</option>
                                         <!-- Loop through billitems and create an option for each item -->
@@ -2111,7 +2124,7 @@
                     </button>
                     <button v-if="currentstep != 0 && billing === true"
                         class="bg-red-500 w-[45%] text-white font-bold  text-base p-4 rounded-lg"
-                        @click="currentstep =0">Cancel
+                        @click="cancelpop=true">Cancel
                     </button>
                     <button v-if="currentstep == 4 && billing === true" @click="finalSubmit"
                         class="bg-green-700 w-[45%] text-white font-bold  text-base p-4 rounded-lg">
@@ -2283,6 +2296,7 @@ function newCustomer(){
 }
 
 const showpop=ref(false)
+const cancelpop=ref(false)
 const respop=ref('')
 const billpop=ref('')
 const itempop=ref(false)
@@ -2352,6 +2366,7 @@ function confirmBill(){
                 totalRate.value=0.00;
                 totalCost.value = 0.00;
                 finalAmount.value = 0.00;
+                step=0;
             }, 2000);
         }
     })
@@ -3824,7 +3839,7 @@ const requireService = ref({
 })
 function checkup(data) {
     try {
-        const response = axios.post(`${BaseURL}/api/method/tyre.api.job_card`, { data: JSON.stringify(data) }, { headers: headers })
+        const response = axios.post(`${BaseURL}/api/method/tyre.api.job_card`, { data: JSON.stringify(data),brand:responseData.value.message[0].vehicle_brand,model:responseData.value.message[0].vehicle_model }, { headers: headers })
         console.log('job card after response', response);
     } catch (error) {
         console.log("error");
@@ -3997,9 +4012,12 @@ async function get_itemrate(data, index) {
 }
 
 async function getrate(data) {
+    console.log(responseData.value.message[0].vehicle_brand
+,"================================================================")
+    console.log(vBrand.value[0].name,"-data-",vModel.value)
     try {
         const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_item_rate`, {
-            params: { item_code: data },
+            params: { item_code: data,brand:responseData.value.message[0].vehicle_brand,model:responseData.value.message[0].vehicle_model},
             headers: headers // Assuming headers is defined elsewhere
         });
         const rate = response.data.message;
@@ -4301,7 +4319,7 @@ const addNewRow = (billIndex) => {
         itemCode: '',
         sourceWarehouse: '',
         rate: '',
-        requiredQuantity: '',
+        requiredQuantity: 0,
         cost: '',
     });
     console.log(tableData.value[step])
@@ -4417,19 +4435,21 @@ const cancelSaved = () => {
     align-items: center;
 }
 .custom-dropdown {
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     margin-top: 1rem;
+    width: 20%; /* Set width here instead of in the input */
   }
   
   .custom-input {
-    width: 20%;
+    width: 100%; /* Input takes full width of the parent */
+    box-sizing: border-box; /* Include padding and border in the element's total width */
   }
   
   .custom-dropdown-list {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 20%;
+    display: none; /* Hide dropdown list by default */
+    width: 100%; /* Full width of the parent */
     max-height: 150px;
     overflow-y: auto;
     background-color: #fff;
@@ -4438,6 +4458,7 @@ const cancelSaved = () => {
     list-style-type: none;
     padding: 0;
     border-radius: 0.75rem;
+    margin: 0;
   }
   
   .custom-dropdown-item {
@@ -4447,6 +4468,10 @@ const cancelSaved = () => {
   
   .custom-dropdown-item:hover {
     background-color: #f0f0f0;
+  }
+  
+  .custom-dropdown:hover .custom-dropdown-list {
+    display: block; /* Show dropdown list on hover */
   }
   
   

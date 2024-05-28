@@ -1,29 +1,36 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2024-04-16 11:08:44.810651",
+ "creation": "2024-05-28 16:17:12.271627",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "model"
+  "item",
+  "price"
  ],
  "fields": [
   {
-   "fieldname": "model",
+   "fieldname": "item",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Model",
-   "options": "Vehicle Model List"
+   "label": "Item",
+   "options": "Item"
+  },
+  {
+   "fieldname": "price",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Price"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-05-28 15:56:54.162628",
+ "modified": "2024-05-28 16:18:35.131092",
  "modified_by": "Administrator",
  "module": "Tyre",
- "name": "Vehicle Models",
+ "name": "Vehicle Model Item Price",
  "owner": "Administrator",
  "permissions": [],
  "sort_field": "modified",

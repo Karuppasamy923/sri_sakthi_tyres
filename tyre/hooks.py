@@ -127,9 +127,9 @@ doc_events = {
 	"Lead": {
 		"validate": "tyre.api.calculate_total_amount",
 	},
-	"Tyre Job Card": {
-		"validate": "tyre.api.calculate_total_amount",
-	}
+	# "Tyre Job Card": {
+	# 	"validate": "tyre.api.calculate_total_amount",
+	# }
 }
 
 # Scheduled Tasks
