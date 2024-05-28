@@ -337,8 +337,10 @@ def store_customer_details(data):
 
 # function to create job card
 @frappe.whitelist(allow_guest=True)
-def job_card(data):
+def job_card(data,brand,model):
+    print(model)
     data = frappe._dict(json.loads(data))
+    print("**************************************************************",data)
     five_point_checkup = {}
     tyre_abbr = {"Rear Left": "rl_", "Front Right": "fr_", "Front Left": "fl_", "Rear Right": "rr_","Spare Tyre": "sp1_"}
     for checkup in data.checkup:
@@ -449,6 +451,7 @@ def job_card(data):
     for items in bills:
         print('items....',items)
         items = frappe._dict(items)
+        print(items)
         total_amount += float(items.cost)
         billing_items.append({"item_code": items.itemCode, "warehouse": items.sourceWarehouse, "quantity" : items.requiredQuantity, "amount" : items.cost, "rate": items.rate})
     # print(doc.as_dict(), "as_dict")
@@ -457,7 +460,7 @@ def job_card(data):
     doc.total_amount = total_amount
     doc.save(ignore_permissions=True)  # Save customer document
     sales_order(bills,user_details.customer)
-    # print(doc.as_dict(), "as_dict")
+    print(doc.as_dict(), "as_dict===============================================")
     return {
         "status": 200,
         "message": "Jobcard Created Successfully",
@@ -631,6 +634,7 @@ def create_service_items():
 
 @frappe.whitelist(allow_guest=True)
 def get_ItemCode(brand, size, tyer_type,pattern):
+    print(brand, size, tyer_type, pattern)
     item_code = frappe.get_all("Brand Details", filters={"parent": brand, "size": size, "tyer_type": tyer_type, "pattern":pattern}, pluck="item_code")[0]
     return [item_code, get_item_rate(item_code)]
     
@@ -813,10 +817,18 @@ def get_enquiry(name):
     return {"enquiry_details":lead_items, "total_amount": doc.custom_total_amount}
 
 @frappe.whitelist(allow_guest=True)
-def get_item_rate(item_code):
-    print(item_code)
+def get_item_rate(item_code,brand,model):
+    # print("brand=================",brand)
+    # print("model=================",model)
+    # print("============================================", item_code)
+    
+    doc = frappe.get_all("Vehicle Model Item Price", filters={'parent':model, "item":item_code}, fields={'price'})
+    if doc:
+        return doc[0].price
+    print(item_code,"-rate")
     from erpnext.stock.report.item_price_stock.item_price_stock import get_item_price_qty_data
     price_list = get_item_price_qty_data({"item_code": item_code})
+    print(price_list)
     if price_list:
         return price_list[0]["selling_rate"]
     
@@ -832,7 +844,7 @@ def get_item(args):
 def get_warehouse():
     return frappe.get_all("Warehouse",{"is_group":0}, pluck="name")
 
-def calculate_total_amount(self, method):
+# def calculate_total_amount(self, method):
     if self.doctype == "Lead":
         total_amount = 0
         for row in self.custom_lead_items:
