@@ -414,7 +414,7 @@ def job_card(data,brand,model):
         print(user_details)
     else:
         user_details = {}
-    val = frappe._dict(data.service)
+    val = frappe._dict(data.service)    
     print('vehicle number',vehicle_number)
     print('user details in job card',user_details)
     # print(val.alignment['lastAlignment'])
@@ -434,11 +434,10 @@ def job_card(data,brand,model):
     service = {"alignment": val.Alignment, "rotation": val.Rotation, "oil_change": val.Oil_change, "balancing": val.Balancing, "inflation": val.Inflation,
                 "ac_service": val.AcService, "battery": val.Battery, "wiper": val.Wiper, "car_wash": val.CarWash, "puncture": val.Puncture, "tyre_edge" :val.TyreEdge,
                 "tyre_patch": val.TyrePatch, "mushroom_patch": val.MushroomPatch, "last_alignment_kms": val.alignments['lastAlignment'], "next_alignment_kms": val.alignments['nextAlignment'],
-                "rim": val.rotations['rim'], "wheel": val.rotations['wheel'], "oil_quality": val.oil_changes['oil_quality'], "oil_quantity": val.oil_changes['oil_quantity'], "front_left_gm": val.balancings['fl'],
+                "rim": val.rotations['inche'], "wheel": val.rotations['wheel_count'], "oil_quality": val.oil_changes['oil_quality'], "oil_quantity": val.oil_changes['oil_quantity'],"custom_inches":val.balancings['inches'],"custom_type":val.balancings['type'],"custom_grams_check":val.balancings['gramsCheck'], "front_left_gm": val.balancings['fl'],
                 "front_right_gms": val.balancings['fr'], "rear_left_gms":val.balancings['bl'], "rear_right_gms":val.balancings['br'], "spare_tyre_gms": val.balancings['st'], "air": air, "nitrogen": nitrogen, "front_tyres_psi":val.inflations['ft'],
                 "rear_tyres_psi": val.inflations['rt'], "ac_service_detail": val.ac, "wiper_detail": val.wiper, "battery_detail": val.battery, "car_wash_detail":val.car_wash   }
         
-
     doc = frappe.new_doc("Tyre Job Card")
     doc.update(five_point_checkup)
     doc.update(tyre_replacement)
@@ -479,13 +478,13 @@ def lead(**args):
         "custom_call": data.call,
     }
     print("lead details",data)
-    # doc = frappe.db.exists("Lead",{ "mobile_no" : data.owner_mobile_no})
+    doc = frappe.db.exists("Lead",{ "mobile_no" : data.owner_mobile_no})
 
-    # if doc:
-    #     return {
-    #         "status": 400,
-    #         "message": "Lead Already Exists"
-    #     }
+    if doc:
+        return {
+            "status": 400,
+            "message": "Lead Already Exists"
+        }
     print( 'lkaklkflkak',data.keys())
     services = frappe._dict(data["services"])
 
@@ -817,10 +816,17 @@ def get_enquiry(name):
     return {"enquiry_details":lead_items, "total_amount": doc.custom_total_amount}
 
 @frappe.whitelist(allow_guest=True)
-def get_item_rate(item_code,brand,model):
+def get_item_rate(item_code,brand,model,inch,type):
+    print(type,"+++++++++++++++++++++++++++++++++")
+    print(inch,"=====================================")
     # print("brand=================",brand)
     # print("model=================",model)
     # print("============================================", item_code)
+    if inch:
+        if item_code == "Rotation":
+            doc = frappe.get_all("Tyre Edge Rotation Price", filters={"name": inch}, fields=["price"])
+            print(doc[0].price,"+++++++++++++")
+            return doc[0].price
     
     doc = frappe.get_all("Vehicle Model Item Price", filters={'parent':model, "item":item_code}, fields={'price'})
     if doc:
