@@ -635,7 +635,11 @@ def create_service_items():
 def get_ItemCode(brand, size, tyer_type,pattern):
     print(brand, size, tyer_type, pattern)
     item_code = frappe.get_all("Brand Details", filters={"parent": brand, "size": size, "tyer_type": tyer_type, "pattern":pattern}, pluck="item_code")[0]
-    return [item_code, get_item_rate(item_code)]
+    brand=None
+    model=None
+    inch=None
+    type=None
+    return [item_code, get_item_rate(item_code,brand,model,inch,type)]
     
 # function to create job card
 @frappe.whitelist(allow_guest=True)
@@ -819,17 +823,22 @@ def get_enquiry(name):
 def get_item_rate(item_code,brand,model,inch,type):
     print(type,"+++++++++++++++++++++++++++++++++")
     print(inch,"=====================================")
-    # print("brand=================",brand)
-    # print("model=================",model)
+    print("brand=================",brand)
+    print("model=================",model)
     # print("============================================", item_code)
     if inch:
         if item_code == "Rotation":
             doc = frappe.get_all("Tyre Edge Rotation Price", filters={"name": inch}, fields=["price"])
-            print(doc[0].price,"+++++++++++++")
+            return doc[0].price
+        if item_code == "Balancing" and type:
+            print("Balancing")
+            doc = frappe.get_all("Wheel Balancing", filters={"inche": inch,"type":type}, fields=["price"])
+            print(doc[0].price)
             return doc[0].price
     
     doc = frappe.get_all("Vehicle Model Item Price", filters={'parent':model, "item":item_code}, fields={'price'})
     if doc:
+        print(doc)
         return doc[0].price
     print(item_code,"-rate")
     from erpnext.stock.report.item_price_stock.item_price_stock import get_item_price_qty_data
@@ -853,12 +862,14 @@ def get_warehouse():
 def calculate_total_amount(self, method):
     model = None
     brand = None
+    inch = None
+    type = None
     if self.doctype == "Lead":
         total_amount = 0
         for row in self.custom_lead_items:
             if row.item_code:
                 # print(price_list)
-                price_list = get_item_rate(row.item_code,brand,model)
+                price_list = get_item_rate(row.item_code,brand,model,inch,type)
                 self.custom_lead_items[row.idx - 1].rate = float(price_list)
                 self.custom_lead_items[row.idx - 1].amount =int(row.quantity)* float(price_list)
                 total_amount += self.custom_lead_items[row.idx - 1].amount
@@ -873,7 +884,7 @@ def calculate_total_amount(self, method):
                 self.custom_lead_items[row.idx - 1].rate = 0
                 self.custom_lead_items[row.idx - 1].amount = 0
                 if item_code:
-                    price_list = get_item_rate(item_code,brand,model)
+                    price_list = get_item_rate(item_code,brand,model,inch,type)
                     # print(price_list)
                     self.custom_lead_items[row.idx - 1].item_code = item_code
                     self.custom_lead_items[row.idx - 1].rate = float(price_list)
@@ -1184,6 +1195,14 @@ def sales_order(data, name):
     # pay_invoice(si_doc.name)
     return "done"
 
+@frappe.whitelist()
+def get_inch_list():
+    items = frappe.get_all("Tyre Edge Rotation Price", fields=["name"])
+    inch_list = [item['name'] for item in items]
+    inch_list.sort()
+    
+    return inch_list
+    
 # @frappe.whitelist()
 # def pay_invoice(name):
 #     print(name)

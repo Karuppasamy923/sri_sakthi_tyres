@@ -1695,9 +1695,14 @@
                                 <h1 class="text-[20px] font-bold ml-1 mb-6">Tyre Rotation Details</h1>
                                 <div class="flex flex-row space-x-[12rem] ml-[55px]">
                                     <div class="flex flex-col space-y-1">
-                                        <label class="text-[16px]" for="rim">Rim</label>
-                                        <input class="w-[16rem]] h-[3rem] rounded-sm border-solid border border-black"
-                                            type="text" id="inche" v-model="requireService.rotations.inche">
+                                        <label class="text-[16px]" for="inche">Inche</label>
+                                        <!-- <input class="w-[16rem]] h-[3rem] rounded-sm border-solid border border-black"
+                                            type="text" id="inche" v-model="requireService.rotations.inche"> -->
+                                        <select class="w-[16rem] h-[3rem] rounded-sm border-solid border border-black"
+                                            id="inche" v-model="requireService.rotations.inche">
+                                            <option value="" disabled selected>Select an Inche</option>
+                                            <option v-for="inch in R_inch" :key="inch" :value="inch">{{ inch }}</option>
+                                        </select>
                                     </div>
                                     <div class="flex flex-col space-y-1">
                                         <label class="text-[16px]" for="wheel">Wheel Count</label>
@@ -1747,8 +1752,13 @@
                                 <div class="flex flex-row justify-around">
                                     <div class="flex flex-col space-y-1">
                                         <label class="text-[1rem]" for="FL">Inches</label>
-                                        <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
-                                            type="text" id="FL" v-model="requireService.balancings.inches">
+                                        <!-- <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
+                                            type="text" id="FL" v-model="requireService.balancings.inches"> -->
+                                            <select class="w-[16rem] h-[3rem] rounded-sm border-solid border border-black"
+                                            id="inche" v-model="requireService.balancings.inches">
+                                            <option value="" disabled selected>Select an Inche</option>
+                                            <option v-for="inch in B_inch" :key="inch" :value="inch">{{ inch }}</option>
+                                        </select>
                                     </div>
                                     <div class="flex flex-col space-y-1">
                                         <label class="text-[1rem]" for="FL">Type</label>
@@ -2309,6 +2319,14 @@ onMounted(() => {
             // brand.value = response.data.message;
             billitems.value = response.data.message;
             console.log(billitems.value)
+        })
+});
+const B_inch=[12,13,14,15,16,17,18,19,20,21,22];
+const R_inch=ref([])
+onMounted(() => {
+    axios.get(`${BaseURL}/api/method/tyre.api.get_inch_list`, { headers: headers })
+        .then(response => {
+            R_inch.value = response.data.message;
         })
 });
 
@@ -4304,6 +4322,9 @@ function addValue(data, replace) {
                             if (item.itemCode === key) {
                                 console.log("step 3:itemcode in billing page for tyre 22", item.itemCode)
                                 itemExists = true;
+                                getrate(key).then(rate => {
+                                    item.rate=rate;
+                                })
                             }
                         });
                     });
@@ -4480,7 +4501,7 @@ const confirmDataSave = async () => {
         // show.oil_change.value = false;
         // show.inflation.value = false;
         // show.balancing.value = false;
-        // window.location.reload()
+        window.location.reload()
     }, 1000);
 }
 const cancelSaved = () => {
