@@ -844,13 +844,15 @@ def get_item(args):
 def get_warehouse():
     return frappe.get_all("Warehouse",{"is_group":0}, pluck="name")
 
-# def calculate_total_amount(self, method):
+def calculate_total_amount(self, method):
+    model = None
+    brand = None
     if self.doctype == "Lead":
         total_amount = 0
         for row in self.custom_lead_items:
             if row.item_code:
                 # print(price_list)
-                price_list = get_item_rate(row.item_code)
+                price_list = get_item_rate(row.item_code,brand,model)
                 self.custom_lead_items[row.idx - 1].rate = float(price_list)
                 self.custom_lead_items[row.idx - 1].amount =int(row.quantity)* float(price_list)
                 total_amount += self.custom_lead_items[row.idx - 1].amount
@@ -865,7 +867,7 @@ def get_warehouse():
                 self.custom_lead_items[row.idx - 1].rate = 0
                 self.custom_lead_items[row.idx - 1].amount = 0
                 if item_code:
-                    price_list = get_item_rate(item_code)
+                    price_list = get_item_rate(item_code,brand,model)
                     # print(price_list)
                     self.custom_lead_items[row.idx - 1].item_code = item_code
                     self.custom_lead_items[row.idx - 1].rate = float(price_list)
@@ -881,7 +883,7 @@ def get_warehouse():
             self.billing_details[row.idx - 1].rate = 0
             self.billing_details[row.idx - 1].amount = 0
             if row.item_code:
-                price_list = get_item_rate(row.item_code)
+                price_list = get_item_rate(row.item_code,brand,model)
                 print(price_list)
                 self.billing_details[row.idx - 1].rate = price_list
                 self.billing_details[row.idx - 1].amount = row.quantity * price_list
