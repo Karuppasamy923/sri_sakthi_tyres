@@ -253,30 +253,36 @@
                             </div>
                         </div>
                         <div v-if="hide == 'false' && hideEnq == 'false'" class="relative cursor-pointer ml-1">
-                            <div class="flex justify-between items-center  text-black p-3 mt-1 rounded-lg w-15"  @click="toggleMenu">
-                              <FeatherIcon name="menu" width="35" height="35"></FeatherIcon>
+                            <div class="flex justify-between items-center  text-black p-3 mt-1 rounded-lg w-15"
+                                @click="toggleMenu">
+                                <FeatherIcon name="menu" width="35" height="35"></FeatherIcon>
                             </div>
-                            <div v-if="showMenu" class="absolute left-0 mt-1 border border-gray-300 ml-3 bg-white rounded-lg shadow-lg w-40">
-                              <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" @click="getJobCard(),showMenu=false">
-                                <button v-if="hide == 'false' && hideEnq == 'false'">Job Card List</button>
-                              </div>
-                              <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" @click="getEnquiry(),showMenu=false">
-                                <button v-if="hideEnq == 'false' && hide == 'false'">Enquiry</button>
-                              </div>
-                              <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" @click="currentstep = 4; billing = true; showMenu=false">
-                                <button v-if="hideEnq == 'false' && hide == 'false'">Billing</button>
-                              </div>
+                            <div v-if="showMenu"
+                                class="absolute left-0 mt-1 border border-gray-300 ml-3 bg-white rounded-lg shadow-lg w-40">
+                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                    @click="getJobCard(), showMenu = false">
+                                    <button v-if="hide == 'false' && hideEnq == 'false'">Job Card List</button>
+                                </div>
+                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                    @click="getEnquiry(), showMenu = false">
+                                    <button v-if="hideEnq == 'false' && hide == 'false'">Enquiry</button>
+                                </div>
+                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                    @click="currentstep = 4; billing = true; showMenu = false">
+                                    <button v-if="hideEnq == 'false' && hide == 'false'">Billing</button>
+                                </div>
                             </div>
-                          </div>
-                        
-                          <div class="flex justify-center m-5" v-if="searchShow">
+                        </div>
+
+                        <div class="flex justify-center m-5" v-if="searchShow">
                             <div class="flex items-center space-x-3">
-                              <input type="text" class="w-[338px] h-[52px] rounded-sm border-solid border border-black"
-                                     v-model="searchQuery" @keyup.enter="search" placeholder="Enter Vehicle Number">
-                              <button class="bg-blue-500 w-[150px] text-white font-bold text-base p-4 rounded-lg"
-                                      @click="search">Search</button>
+                                <input type="text"
+                                    class="w-[338px] h-[52px] rounded-sm border-solid border border-black"
+                                    v-model="searchQuery" @keyup.enter="search" placeholder="Enter Vehicle Number">
+                                <button class="bg-blue-500 w-[150px] text-white font-bold text-base p-4 rounded-lg"
+                                    @click="search">Search</button>
                             </div>
-                          </div>
+                        </div>
                         <div v-if="(hasResponse && initial) || checked">
                             <div class="flex ml-6">
                                 <div class="mr-8">
@@ -424,7 +430,8 @@
                                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                                                     v-for="(item, index) in jobCardData.billing_details" :key="index">
                                                     <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                                        scope="row">{{ item.item_code }}</td>
+                                                        scope="row">{{ item.item_code }}
+                                                    </td>
                                                     <td class="px-6 py-3">{{ item.warehouse }}</td>
                                                     <td class="px-6 py-3">Nil</td>
                                                     <td class="px-6 py-3">Nil</td>
@@ -529,7 +536,8 @@
                                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                                                     v-for="(item, index) in enquiryData.enquiry_details" :key="index">
                                                     <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                                        scope="row">{{ item.item_code }}</td>
+                                                        scope="row">{{
+                                                        item.item_code }}</td>
                                                     <td class="px-6 py-3">{{ item.brand }}</td>
                                                     <td class="px-6 py-3">{{ item.quantity }}</td>
                                                     <td class="px-6 py-3">{{ item.rate }}</td>
@@ -1107,7 +1115,7 @@
                                                     @change="getType(selectedBrand, selectedVariant, pattern, index)">
                                                     <option v-for="(pattern, index) in patterns[index]" :key="index">{{
                                                         pattern
-                                                    }}</option>
+                                                        }}</option>
                                                 </select>
                                             </div>
                                             <div class="flex flex-col ml-1">
@@ -1338,7 +1346,8 @@
                                                     :selected="employee.parentfield === 'current_driver'">Driver
                                                 </option>
                                                 <option :value="'contact_person'"
-                                                    :selected="employee.parentfield === 'contact_person'">Contact Person
+                                                    :selected="employee.parentfield === 'contact_person'">Contact
+                                                    Person
                                                 </option>
                                             </select>
                                         </p>
@@ -1384,7 +1393,8 @@
                                                     :selected="contact.parentfield === 'current_driver'">Driver
                                                 </option>
                                                 <option :value="'contact_person'"
-                                                    :selected="contact.parentfield === 'contact_person'">Contact Person
+                                                    :selected="contact.parentfield === 'contact_person'">Contact
+                                                    Person
                                                 </option>
                                             </select>
                                         </p>
@@ -1685,12 +1695,12 @@
                                 <h1 class="text-[20px] font-bold ml-1 mb-6">Tyre Rotation Details</h1>
                                 <div class="flex flex-row space-x-[12rem] ml-[55px]">
                                     <div class="flex flex-col space-y-1">
-                                        <label class="text-[16px]" for="inche">Inche</label>
+                                        <label class="text-[16px]" for="rim">Rim</label>
                                         <input class="w-[16rem]] h-[3rem] rounded-sm border-solid border border-black"
                                             type="text" id="inche" v-model="requireService.rotations.inche">
                                     </div>
                                     <div class="flex flex-col space-y-1">
-                                        <label class="text-[16px]" for="wheel">Wheel</label>
+                                        <label class="text-[16px]" for="wheel">Wheel Count</label>
                                         <input class="w-[16rem]] h-[3rem] rounded-sm border-solid border border-black"
                                             type="text" id="wheel" v-model='requireService.rotations.wheel_count'
                                             @change="shooo">
@@ -1731,8 +1741,30 @@
                             </div>
                             <div v-if="show.balancing"
                                 class="p-6 bg-gray-200 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg">
-                                <h1 class="text-[20px] font-bold ml-1 mb-6">Balancing Details</h1>
+                                <h1 class="text-[20px] font-bold ml-1 mb-6">Balancing Details
+                                </h1>
+                                
                                 <div class="flex flex-row justify-around">
+                                    <div class="flex flex-col space-y-1">
+                                        <label class="text-[1rem]" for="FL">Inches</label>
+                                        <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
+                                            type="text" id="FL" v-model="requireService.balancings.inches">
+                                    </div>
+                                    <div class="flex flex-col space-y-1">
+                                        <label class="text-[1rem]" for="FL">Type</label>
+                                        <div>
+                                            <select class="w-[15rem] h-[3rem] rounded-sm"
+                                                style="border: 1px solid black;" id="type"
+                                                v-model="requireService.balancings.type">
+                                                <option value="" selected disabled hidden>Please select...</option>
+                                                <option value="Ordinary">Ordinary</option>
+                                                <option value="Alloy">Alloy</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="checkbox" class="w-5 h-5 rounded-sm border border-black bg-gray-200" @change="handleGrams()" v-model="requireService.balancings.gramsCheck" id="Grams"><label for="Grams" class="text-[18px] pl-[12px]">Grams</label>
+                                <div class="flex flex-row justify-around mt-5" v-if="showGrams">
                                     <div class="flex flex-col space-y-1">
                                         <label class="text-[1rem]" for="FL">Front-Left (gm)</label>
                                         <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
@@ -1909,7 +1941,7 @@
                 </div>
             </div>
             <!-- Billing Details -->
-            <div v-if="currentstep == 4" @click="dataLoaded =false; billCustomer=''">
+            <div v-if="currentstep == 4" @click="dataLoaded = false; billCustomer = ''">
                 <div v-if="showConfirm"
                     class="fixed inset-1 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
                     <div class="bg-white rounded-lg p-8 shadow-xl">
@@ -1929,9 +1961,9 @@
                         <h2 class="text-xl font-semibold mb-4">Confirm Save</h2>
                         <p class="mb-4">Are you sure want to save the details?</p>
                         <div class="flex justify-center">
-                            <button @click="confirmBill(),respop=''"
+                            <button @click="confirmBill(), respop = ''"
                                 class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
-                            <button @click="showpop=false"
+                            <button @click="showpop = false"
                                 class="bg-red-500 text-white font-semibold px-4 py-2 rounded">Cancel</button>
                         </div>
                     </div>
@@ -1942,9 +1974,10 @@
                         <h2 class="text-xl font-semibold mb-4">Confirm Cancel</h2>
                         <p class="mb-4">Are you sure want to cancel the details?</p>
                         <div class="flex justify-center">
-                            <button @click="currentstep=0;cancelpop=false;tableData=[];selectedname='';selectednumber='';totalRate=0,totalQuantity=0,totalCost=0,finalAmount=0,respop=''"
+                            <button
+                                @click="currentstep = 0; cancelpop = false; tableData = []; selectedname = ''; selectednumber = ''; totalRate = 0, totalQuantity = 0, totalCost = 0, finalAmount = 0, respop = ''"
                                 class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Yes</button>
-                            <button @click="cancelpop=false"
+                            <button @click="cancelpop = false"
                                 class="bg-red-500 text-white font-semibold px-4 py-2 rounded">No</button>
                         </div>
                     </div>
@@ -1956,53 +1989,63 @@
                     </div>
                 </div>
                 <div class="pt-24 p-12">
-                    <div v-if="newpop" class="fixed inset-1 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                    <div v-if="newpop"
+                        class="fixed inset-1 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
                         <div class="bg-white rounded-lg p-12 shadow-x">
                             <div class="text-red-500 mb-4">
-                                <h6 class="flex justify-center">{{customerResponse}}</h6>
+                                <h6 class="flex justify-center">{{ customerResponse }}</h6>
                             </div>
                             <h2 class="text-3xl font-semibold mb-3 mr-4">New Customer</h2>
                             <div class="mb-2 ml-20rem">
                                 <p>Customer Name <span v-if="mentatory && !newName" class="text-red-500">*</span></p>
-                                <input type="text" class="w-[100%] h-[3rem] rounded-sm border-solid border border-black" v-model="newName"/>
+                                <input type="text" class="w-[100%] h-[3rem] rounded-sm border-solid border border-black"
+                                    v-model="newName" />
                             </div>
                             <div class="mb-3">
-                                <p>Customer Mobile No <span v-if="mentatory && !newNumber" class="text-red-500">*</span></p>
-                                <input type="tel" class="w-[100%] h-[3rem] rounded-sm border-solid border border-black" v-model="newNumber" @input="customerResponse=''"/>
-                            </div>    
+                                <p>Customer Mobile No <span v-if="mentatory && !newNumber" class="text-red-500">*</span>
+                                </p>
+                                <input type="tel" class="w-[100%] h-[3rem] rounded-sm border-solid border border-black"
+                                    v-model="newNumber" @input="customerResponse = ''" />
+                            </div>
                             <div class="flex justify-center">
-                                <button @click="newCustomer" class="bg-green-500 w-[9rem] text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
-                                <button @click="newpop=false;mentatory=false" class="bg-red-500 w-[9rem] text-white font-semibold px-4 py-2 rounded">Cancel</button>
+                                <button @click="newCustomer"
+                                    class="bg-green-500 w-[9rem] text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
+                                <button @click="newpop = false; mentatory = false"
+                                    class="bg-red-500 w-[9rem] text-white font-semibold px-4 py-2 rounded">Cancel</button>
                             </div>
                         </div>
                     </div>
-                    <div v-if="billing === true" > 
+                    <div v-if="billing === true">
                         <h1 class="text-[20px] font-bold mb-1">Customer Deatils</h1>
                         <hr class="mt-2" :style="{ borderWidth: '2px', borderColor: 'gray' }">
                         <div class="custom-dropdown">
-                            <input type="text" placeholder="Search..." v-model="billCustomer" @input="checkcustomer" class="custom-input w-[100%] h-[2.5rem] rounded-sm border-solid border border-black">
-                                <ul v-show="dataLoaded" class="custom-dropdown-list">
-                                    <li v-for="option in customers" :key="option.value" @click="selectOption(option)" class="custom-dropdown-item">
-                                        <div v-if="option.customer_name">
-                                            <label>{{ option.customer_name }}</label><br>
-                                            <label>{{ option.mobile_no }}</label>                                   
-                                        </div>
-                                        <div v-if="!option.customer_name">
-                                            <label>No data found</label>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <button class="bg-blue-500 text-white font-bold text-base p-3 rounded-sm mt-3" @click="addNew()">Create Customer</button>
+                            <input type="text" placeholder="Search..." v-model="billCustomer" @input="checkcustomer"
+                                class="custom-input w-[100%] h-[2.5rem] rounded-sm border-solid border border-black">
+                            <ul v-show="dataLoaded" class="custom-dropdown-list">
+                                <li v-for="option in customers" :key="option.value" @click="selectOption(option)"
+                                    class="custom-dropdown-item">
+                                    <div v-if="option.customer_name">
+                                        <label>{{ option.customer_name }}</label><br>
+                                        <label>{{ option.mobile_no }}</label>
+                                    </div>
+                                    <div v-if="!option.customer_name">
+                                        <label>No data found</label>
+                                    </div>
+                                </li>
+                            </ul>
+                            <button class="bg-blue-500 text-white font-bold text-base p-3 rounded-sm mt-3"
+                                @click="addNew()">Create
+                                Customer</button>
                         </div>
-                        <label><span v-if="respop && !selectedname" class="text-red-500">{{respop}}</span></label>                         
+                        <label><span v-if="respop && !selectedname" class="text-red-500">{{ respop }}</span></label>
                         <div class="mt-3" v-if="selectedname && selectednumber">
                             <div>
-                                <label>Name      :</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <label>{{selectedname}}</label>
+                                <label>Name :</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <label>{{ selectedname }}</label>
                             </div>
                             <div class="mt-1">
-                                <label>Phone No  :</label>&nbsp;&nbsp;
-                                <label>{{selectednumber}}</label>
+                                <label>Phone No :</label>&nbsp;&nbsp;
+                                <label>{{ selectednumber }}</label>
                             </div>
                         </div>
                     </div>
@@ -2014,35 +2057,40 @@
                             <thead>
                                 <tr>
                                     <th class="border border-gray-800 px-4 py-4 w-[10rem]">SI.No</th>
-                                    <th class="border border-gray-800 px-4 py-4 w-[10rem]">Item<span v-if="itempop" class="text-red-500">*</span></th>
-                                    <th class="border border-gray-800 px-4 py-4 w-[16rem]">Warehouse<span v-if="warepop" class="text-red-500">*</span></th>
-                                    <th class="border border-gray-800 px-4 py-4 w-[16rem]">Quantity<span v-if="qutpop" class="text-red-500">*</span></th>
+                                    <th class="border border-gray-800 px-4 py-4 w-[10rem]">Item<span v-if="itempop"
+                                            class="text-red-500">*</span></th>
+                                    <th class="border border-gray-800 px-4 py-4 w-[16rem]">Warehouse<span v-if="warepop"
+                                            class="text-red-500">*</span></th>
+                                    <th class="border border-gray-800 px-4 py-4 w-[16rem]">Quantity<span v-if="qutpop"
+                                            class="text-red-500">*</span></th>
                                     <th class="border border-gray-800 px-4 py-4 w-[10rem]">Rate</th>
                                     <th class="border border-gray-800 px-4 py-4 w-[10rem]">Amount</th>
                                 </tr>
                             </thead>
-                            <pre>{{tableData.value}}</pre>
+                            <pre>{{ tableData.value }}</pre>
                             <tbody class="border border-gray-800 text-center">
                                 <tr v-for="(data, index) in tableData" :key="index">
                                     <td class="border border-gray-800 px-4 py-2 w-[10rem]">{{ index + 1 }}</td>
                                     <td class="border border-gray-800 px-4 py-2">
                                         <!-- <input type="text" v-model="data[0].itemCode"
                                             class="w-[10rem] rounded-sm border-solid border border-black"> -->
-                                            <select v-model="data[0].itemCode" @change="get_itemrate($event.target.value, index);itempop='';billpop='';"
+                                        <select v-model="data[0].itemCode"
+                                            @change="get_itemrate($event.target.value, index); itempop = ''; billpop = '';"
                                             class="w-[10rem] rounded-sm border-solid border border-black">
-                                        <option value="">Select Item</option>
-                                        <!-- Loop through billitems and create an option for each item -->
-                                        <option v-for="(item) in billitems" :key="item.id" :value="item.name">
-                                            {{ item.name }}
-                                        </option>
-                                    </select>
-                                    
-                                        
+                                            <option value="">Select Item</option>
+                                            <!-- Loop through billitems and create an option for each item -->
+                                            <option v-for="(item) in billitems" :key="item.id" :value="item.name">
+                                                {{ item.name }}
+                                            </option>
+                                        </select>
+
+
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
                                         <div style="max-height: 200px; overflow-y: auto;">
                                             <select v-model="data[0].sourceWarehouse"
-                                                class="w-[10rem] rounded-sm border-solid border border-black" @change="warepop='';bilpop=''">
+                                                class="w-[10rem] rounded-sm border-solid border border-black"
+                                                @change="warepop = ''; bilpop = ''">
                                                 <option value="">Select Warehouse</option>
                                                 <!-- Loop through warehouseList and create an option for each warehouse -->
                                                 <option v-for="warehouse in Warehouse" :key="warehouse"
@@ -2054,7 +2102,8 @@
                                     </td>
 
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="number" v-model="data[0].requiredQuantity" @input="calculateTotals();qutpop='';billpop=''"
+                                        <input type="number" v-model="data[0].requiredQuantity"
+                                            @input="calculateTotals(); qutpop = ''; billpop = ''"
                                             class="w-[10rem] rounded-sm border-solid border border-black">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
@@ -2091,10 +2140,10 @@
                                 </tr>
                             </tfoot>
                         </table>
-                        <label><span v-if="billpop" class="text-red-500">{{billpop}}</span></label>
+                        <label><span v-if="billpop" class="text-red-500">{{ billpop }}</span></label>
                         <div class="mb-9">
                             <button class="bg-blue-500 text-white font-bold text-base p-3 rounded-lg mt-3"
-                                @click="addNewRow(billIndex); billpop=''">Add row</button>
+                                @click="addNewRow(billIndex); billpop = ''">Add row</button>
                         </div>
                         <div class="flex">
                             <label>Discount Rate: <input type="text" v-model="discountRate"
@@ -2124,7 +2173,7 @@
                     </button>
                     <button v-if="currentstep != 0 && billing === true"
                         class="bg-red-500 w-[45%] text-white font-bold  text-base p-4 rounded-lg"
-                        @click="cancelpop=true">Cancel
+                        @click="cancelpop = true">Cancel
                     </button>
                     <button v-if="currentstep == 4 && billing === true" @click="finalSubmit"
                         class="bg-green-700 w-[45%] text-white font-bold  text-base p-4 rounded-lg">
@@ -2208,168 +2257,168 @@ function handleImgSelection(event) {
     data.selectedAlt = event.target.alt;
 }
 
-const customers =ref([])
-const dataLoaded =ref(false)
-const selectedname=ref('')
-const selectednumber=ref('')
-const selecteddoc=ref('')
+const customers = ref([])
+const dataLoaded = ref(false)
+const selectedname = ref('')
+const selectednumber = ref('')
+const selecteddoc = ref('')
 
-function selectOption(data){
-    selecteddoc.value=data.name;
-    selectedname.value=data.customer_name;
-    selectednumber.value=data.mobile_no;
-    console.log(data,"data")
-    dataLoaded.value=false;
-    billCustomer.value='';
+function selectOption(data) {
+    selecteddoc.value = data.name;
+    selectedname.value = data.customer_name;
+    selectednumber.value = data.mobile_no;
+    console.log(data, "data")
+    dataLoaded.value = false;
+    billCustomer.value = '';
 }
 
 //==========menu  icon=========//
 const item = ref([
-  { title: 'Billing' },
-  { title: 'Sales Invoices' },
-  { title: 'Paid Invoices' },
-  { title: 'Enquiry List' },
-  { title: 'Job Card List' },
+    { title: 'Billing' },
+    { title: 'Sales Invoices' },
+    { title: 'Paid Invoices' },
+    { title: 'Enquiry List' },
+    { title: 'Job Card List' },
 ])
 
 const showMenu = ref(false)
 
 const toggleMenu = () => {
-  showMenu.value = !showMenu.value
+    showMenu.value = !showMenu.value
 }
 
 
 
 
-function checkcustomer(){
+function checkcustomer() {
     console.log(billCustomer)
     axios.post(`${BaseURL}/api/method/tyre.api.get_customer`, { data: billCustomer.value }, { headers: headers })
         .then(response => {
             console.log(response.data.message)
-            customers.value=response.data.message
-            console.log("Customer",customers.value)
-            dataLoaded.value=true
+            customers.value = response.data.message
+            console.log("Customer", customers.value)
+            dataLoaded.value = true
         })
 }
-const billitems=ref([]);
+const billitems = ref([]);
 
 onMounted(() => {
     axios.get(`${BaseURL}/api/method/tyre.api.get_items`, { headers: headers })
         .then(response => {
             console.log(response.data.message);
             // brand.value = response.data.message;
-            billitems.value=response.data.message;
+            billitems.value = response.data.message;
             console.log(billitems.value)
         })
 });
 
-const newpop =ref(false)
-const newName=ref('')
-const newNumber=ref('')
+const newpop = ref(false)
+const newName = ref('')
+const newNumber = ref('')
 
-function addNew(){
+function addNew() {
     console.log("create new")
-    newpop.value=true
-    newName.value=''
-    newNumber.value=''
+    newpop.value = true
+    newName.value = ''
+    newNumber.value = ''
 }
 
-const mentatory=ref(false)
-const customerResponse=ref('')
+const mentatory = ref(false)
+const customerResponse = ref('')
 
-function newCustomer(){
-    if(newName.value && newNumber.value){
+function newCustomer() {
+    if (newName.value && newNumber.value) {
         console.log("created")
-        axios.post(`${BaseURL}/api/method/tyre.api.create_customer`,{name:newName.value,no:newNumber.value},{headers:headers})
-        .then(response=>{
-            if(response.data.message === "Customer created successfully"){
-                newpop.value=false
-                selectedname.value=newName.value
-                selectednumber.value=newNumber.value
-            }else{
-                customerResponse.value=response.data.message;
-            }
-        })
-    }else{
-        mentatory.value=true
+        axios.post(`${BaseURL}/api/method/tyre.api.create_customer`, { name: newName.value, no: newNumber.value }, { headers: headers })
+            .then(response => {
+                if (response.data.message === "Customer created successfully") {
+                    newpop.value = false
+                    selectedname.value = newName.value
+                    selectednumber.value = newNumber.value
+                } else {
+                    customerResponse.value = response.data.message;
+                }
+            })
+    } else {
+        mentatory.value = true
     }
 }
 
-const showpop=ref(false)
-const cancelpop=ref(false)
-const respop=ref('')
-const billpop=ref('')
-const itempop=ref(false)
-const warepop=ref(false)
-const qutpop=ref(false)
+const showpop = ref(false)
+const cancelpop = ref(false)
+const respop = ref('')
+const billpop = ref('')
+const itempop = ref(false)
+const warepop = ref(false)
+const qutpop = ref(false)
 
-function finalSubmit(){
-    if(selectedname.value && selectednumber.value){
-        if(tableData.value.length !== 0){
+function finalSubmit() {
+    if (selectedname.value && selectednumber.value) {
+        if (tableData.value.length !== 0) {
             console.log(tableData.value)
-            for(let i=0;i < tableData.value.length;i++){
-                if(!tableData.value[i][0].itemCode && !tableData.value[i][0].sourceWarehouse && !tableData.value[i][0].requiredQuantity){
+            for (let i = 0; i < tableData.value.length; i++) {
+                if (!tableData.value[i][0].itemCode && !tableData.value[i][0].sourceWarehouse && !tableData.value[i][0].requiredQuantity) {
                     console.log("no data")
-                    billpop.value="Fill the require fields...!"
-                    itempop.value=true;
-                    warepop.value=true
-                    qutpop.value=true
+                    billpop.value = "Fill the require fields...!"
+                    itempop.value = true;
+                    warepop.value = true
+                    qutpop.value = true
                     break;
-                }else if(!tableData.value[i][0].itemCode && !tableData.value[i][0].sourceWarehouse){
-                    billpop.value="Fill the require fields...!"
-                    itempop.value=true;
-                    warepop.value=true
+                } else if (!tableData.value[i][0].itemCode && !tableData.value[i][0].sourceWarehouse) {
+                    billpop.value = "Fill the require fields...!"
+                    itempop.value = true;
+                    warepop.value = true
                     break;
-                }else if(!tableData.value[i][0].sourceWarehouse && !tableData.value[i][0].requiredQuantity){
-                    billpop.value="Fill the require fields...!"
-                    warepop.value=true
-                    qutpop.value=true
+                } else if (!tableData.value[i][0].sourceWarehouse && !tableData.value[i][0].requiredQuantity) {
+                    billpop.value = "Fill the require fields...!"
+                    warepop.value = true
+                    qutpop.value = true
                     break;
-                }else if(!tableData.value[i][0].itemCode && !tableData.value[i][0].requiredQuantity){
-                    billpop.value="Fill the require fields...!"
-                    itempop.value=true;
-                    qutpop.value=true
+                } else if (!tableData.value[i][0].itemCode && !tableData.value[i][0].requiredQuantity) {
+                    billpop.value = "Fill the require fields...!"
+                    itempop.value = true;
+                    qutpop.value = true
                     break;
                 }
-                
+
             }
             console.log(billpop.value)
-            if(!billpop.value){
-                showpop.value=true;
+            if (!billpop.value) {
+                showpop.value = true;
             }
-        }else{
-            billpop.value="Add billing data...!";
+        } else {
+            billpop.value = "Add billing data...!";
         }
-    }else{
-        respop.value="Select a customer...!"
+    } else {
+        respop.value = "Select a customer...!"
     }
 }
 
-function confirmBill(){
+function confirmBill() {
     console.log(tableData.value)
     console.log(selectedname.value)
     console.log(selectednumber.value)
     console.log(selecteddoc.value)
-    axios.post(`${BaseURL}/api/method/tyre.api.sales_order`,{data:tableData.value,name:selecteddoc.value},{headers:headers})
-    .then(response=>{
-        if(response.data.message === "done"){
-            showpop.value=false
-            finalSuccess.value=true
-            console.log(tableData.value)
-            setTimeout(() => {
-                finalSuccess.value = false;
-                currentstep.value=0
-                selectedname.value=''
-                selectednumber.value=''
-                tableData.value=[]
-                totalQuantity.value = '';
-                totalRate.value=0.00;
-                totalCost.value = 0.00;
-                finalAmount.value = 0.00;
-                step=0;
-            }, 2000);
-        }
-    })
+    axios.post(`${BaseURL}/api/method/tyre.api.sales_order`, { data: tableData.value, name: selecteddoc.value }, { headers: headers })
+        .then(response => {
+            if (response.data.message === "done") {
+                showpop.value = false
+                finalSuccess.value = true
+                console.log(tableData.value)
+                setTimeout(() => {
+                    finalSuccess.value = false;
+                    currentstep.value = 0
+                    selectedname.value = ''
+                    selectednumber.value = ''
+                    tableData.value = []
+                    totalQuantity.value = '';
+                    totalRate.value = 0.00;
+                    totalCost.value = 0.00;
+                    finalAmount.value = 0.00;
+                    step = 0;
+                }, 2000);
+            }
+        })
 }
 
 function focusNext(event, nextInput) {
@@ -2766,6 +2815,7 @@ function nextPageAndHighlight() {
             case 3:
                 jobCard["service"] = requireService.value
                 addValue(requireService.value, replace)
+                console.log("checking requireservice data for inches and type in balancing", requireService.value)
                 break;
             case 4:
                 jobCard["replace"] = tyres.value
@@ -2787,6 +2837,7 @@ function nextPageAndHighlight() {
                 break;
             case 5:
                 checkup(jobCard);
+                console.log("final jobcard data",jobCard);
                 break;
         }
     }
@@ -3770,7 +3821,7 @@ const show = ref({
     puncture_checkbox: false,
     tyre_edge_checkbox: false,
     tyre_path_checkbox: false,
-    mushroom_path_checkbox: false,
+    mushroom_path_checkbox: false
 })
 
 function handleCheckboxChange(checkboxId) {
@@ -3821,7 +3872,10 @@ const requireService = ref({
         fr: '',
         bl: '',
         br: '',
-        st: ''
+        st: '',
+        inches:'',
+        type: '',
+        gramsCheck:false
     },
     inflations: {
         type: '',
@@ -3837,9 +3891,18 @@ const requireService = ref({
     TyrePatch: false,
     MushroomPatch: false,
 })
+const showGrams = ref(false)
+function handleGrams(){
+    if(requireService.value.balancings.gramsCheck){
+        showGrams.value = true;
+    } else {
+        showGrams.value = false
+    }
+}
+
 function checkup(data) {
     try {
-        const response = axios.post(`${BaseURL}/api/method/tyre.api.job_card`, { data: JSON.stringify(data),brand:responseData.value.message[0].vehicle_brand,model:responseData.value.message[0].vehicle_model }, { headers: headers })
+        const response = axios.post(`${BaseURL}/api/method/tyre.api.job_card`, { data: JSON.stringify(data), brand: responseData.value.message[0].vehicle_brand, model: responseData.value.message[0].vehicle_model }, { headers: headers })
         console.log('job card after response', response);
     } catch (error) {
         console.log("error");
@@ -3924,7 +3987,6 @@ function handleShow(item) {
             break;
     }
 }
-
 function handelCheck(data) {
     switch (data) {
         case 'puncture':
@@ -4013,20 +4075,21 @@ async function get_itemrate(data, index) {
 
 async function getrate(data) {
     let inch=''
+    let type=''
     if(data === "Rotation"){
         console.log("+++++++++++++++++++yes++++++++++++++++++")
         inch=requireService.value.rotations.inche;
-        console.log(inch)
     }
     else if(data === "Balancing"){
-        console.log("+++++++++++++++++balancing+++++++++++++++++")
+        type=requireService.value.balancings.type;
+        inch=requireService.value.balancings.inches;
     }
     else{
         inch= ''
     }
     try {
         const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_item_rate`, {
-            params: { item_code: data,brand:responseData.value.message[0].vehicle_brand,model:responseData.value.message[0].vehicle_model,inch:inch},
+            params: { item_code: data,brand:responseData.value.message[0].vehicle_brand,model:responseData.value.message[0].vehicle_model,inch:inch,type:type},
             headers: headers // Assuming headers is defined elsewhere
         });
         const rate = response.data.message;
@@ -4165,7 +4228,7 @@ function addValue(data, replace) {
                                 const items = rowData[i];
                                 if (items.itemCode === item.item) {
                                     // Item already exists, update quantity and mark as processed
-                                    console.log(items.requiredQuantity,"exist")
+                                    console.log(items.requiredQuantity, "exist")
                                     items.requiredQuantity++;
                                     console.log(items.requiredQuantity)
                                     item.status = true;
@@ -4191,23 +4254,23 @@ function addValue(data, replace) {
                             requiredQuantity: 1, // Set initial quantity to 1
                             cost: ''
                         };
-                        
+
                         // Push the new object into the array at the specified billIndex
                         console.log(newData, "newData")
                         console.log(billIndex, "push")
-                        if(newData.itemCode){
+                        if (newData.itemCode) {
                             if (!Array.isArray(tableData.value[billIndex])) {
                                 tableData.value[billIndex] = [];
                             }
 
                             tableData.value[billIndex].push(newData);
-    
+
                             // Mark the item as processed
                             item.status = true;
                             billIndex++;
                         }
                         console.log(billIndex, "After-Push")
-                        
+
                     }
                 }
 
@@ -4448,22 +4511,28 @@ const cancelSaved = () => {
     flex-direction: column;
     align-items: center;
 }
+
 .custom-dropdown {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     margin-top: 1rem;
-    width: 20%; /* Set width here instead of in the input */
-  }
-  
-  .custom-input {
-    width: 100%; /* Input takes full width of the parent */
-    box-sizing: border-box; /* Include padding and border in the element's total width */
-  }
-  
-  .custom-dropdown-list {
-    display: none; /* Hide dropdown list by default */
-    width: 100%; /* Full width of the parent */
+    width: 20%;
+    /* Set width here instead of in the input */
+}
+
+.custom-input {
+    width: 100%;
+    /* Input takes full width of the parent */
+    box-sizing: border-box;
+    /* Include padding and border in the element's total width */
+}
+
+.custom-dropdown-list {
+    display: none;
+    /* Hide dropdown list by default */
+    width: 100%;
+    /* Full width of the parent */
     max-height: 150px;
     overflow-y: auto;
     background-color: #fff;
@@ -4473,21 +4542,19 @@ const cancelSaved = () => {
     padding: 0;
     border-radius: 0.75rem;
     margin: 0;
-  }
-  
-  .custom-dropdown-item {
+}
+
+.custom-dropdown-item {
     padding: 10px;
     cursor: pointer;
-  }
-  
-  .custom-dropdown-item:hover {
+}
+
+.custom-dropdown-item:hover {
     background-color: #f0f0f0;
-  }
-  
-  .custom-dropdown:hover .custom-dropdown-list {
-    display: block; /* Show dropdown list on hover */
-  }
-  
-  
-  
+}
+
+.custom-dropdown:hover .custom-dropdown-list {
+    display: block;
+    /* Show dropdown list on hover */
+}
 </style>
