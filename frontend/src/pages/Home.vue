@@ -537,7 +537,7 @@
                                                     v-for="(item, index) in enquiryData.enquiry_details" :key="index">
                                                     <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                                                         scope="row">{{
-                                                        item.item_code }}</td>
+                                                            item.item_code }}</td>
                                                     <td class="px-6 py-3">{{ item.brand }}</td>
                                                     <td class="px-6 py-3">{{ item.quantity }}</td>
                                                     <td class="px-6 py-3">{{ item.rate }}</td>
@@ -1678,12 +1678,16 @@
                                 <h1 class="text-[20px] font-bold ml-1 mb-6">Alignment Details</h1>
                                 <div class="flex flex-row space-x-[12rem] ml-[55px]">
                                     <div class="flex flex-col space-y-1">
-                                        <label class="text-[16px]" for="LA">Last Alignment (kms)</label>
+                                        <label class="text-[16px]" for="LA">Last Alignment (kms)<span
+                                                v-if="requireService.mandatory && !requireService.alignments.lastAlignment.trim()"
+                                                class="text-red-500 font-bold">*</span></label>
                                         <input class="w-[16rem]] h-[3rem] rounded-sm border-solid border border-black"
                                             type="text" id="LA" v-model="requireService.alignments.lastAlignment">
                                     </div>
                                     <div class="flex flex-col space-y-1">
-                                        <label class="text-[16px]" for="NA">Next Alignment (kms)</label>
+                                        <label class="text-[16px]" for="NA">Next Alignment (kms)<span
+                                                v-if="requireService.mandatory && !requireService.alignments.nextAlignment.trim()"
+                                                class="text-red-500 font-bold">*</span></label>
                                         <input class="w-[16rem]] h-[3rem] rounded-sm border-solid border border-black"
                                             type="text" id="NA" v-model="requireService.alignments.nextAlignment"
                                             @change="shooo">
@@ -1695,12 +1699,20 @@
                                 <h1 class="text-[20px] font-bold ml-1 mb-6">Tyre Rotation Details</h1>
                                 <div class="flex flex-row space-x-[12rem] ml-[55px]">
                                     <div class="flex flex-col space-y-1">
-                                        <label class="text-[16px]" for="rim">Rim</label>
+                                        <label class="text-[16px]" for="rim">Rim
+                                            <span
+                                                v-if="requireService.mandatory && !requireService.rotations.inche.trim()"
+                                                class="text-red-500 font-bold">*</span>
+                                        </label>
                                         <input class="w-[16rem]] h-[3rem] rounded-sm border-solid border border-black"
                                             type="text" id="inche" v-model="requireService.rotations.inche">
                                     </div>
                                     <div class="flex flex-col space-y-1">
-                                        <label class="text-[16px]" for="wheel">Wheel Count</label>
+                                        <label class="text-[16px]" for="wheel">Wheel Count
+                                            <span
+                                                v-if="requireService.mandatory && !requireService.rotations.wheel_count"
+                                                class="text-red-500 font-bold">*</span>
+                                        </label>
                                         <input class="w-[16rem]] h-[3rem] rounded-sm border-solid border border-black"
                                             type="text" id="wheel" v-model='requireService.rotations.wheel_count'
                                             @change="shooo">
@@ -1712,7 +1724,11 @@
                                 <h1 class="text-[20px] font-bold ml-1 mb-6">Oil Service</h1>
                                 <div class="flex flex-row space-x-[12rem] ml-[55px]">
                                     <div class="flex flex-col space-y-1">
-                                        <label class="text-[16px]" for="oil_quality">Oil Quality</label>
+                                        <label class="text-[16px]" for="oil_quality">Oil Quality
+                                            <span
+                                                v-if="requireService.mandatory && !requireService.oil_changes.oil_quality.trim()"
+                                                class="text-red-500 font-bold">*</span>
+                                        </label>
                                         <div>
                                             <select class="w-[15rem] h-[3rem] rounded-sm"
                                                 style="border: 1px solid black;" id="oil_quality"
@@ -1725,7 +1741,11 @@
                                         </div>
                                     </div>
                                     <div class="flex flex-col space-y-1">
-                                        <label class="text-[16px]" for="oil_quantity">Oil Quantity</label>
+                                        <label class="text-[16px]" for="oil_quantity">Oil Quantity
+                                            <span
+                                                v-if="requireService.mandatory && !requireService.oil_changes.oil_quantity.trim()"
+                                                class="text-red-500 font-bold">*</span>
+                                        </label>
                                         <div>
                                             <select class="w-[15rem] h-[3rem] rounded-sm"
                                                 style="border: 1px solid black;" id="oil_quantity"
@@ -1743,15 +1763,23 @@
                                 class="p-6 bg-gray-200 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg">
                                 <h1 class="text-[20px] font-bold ml-1 mb-6">Balancing Details
                                 </h1>
-                                
+
                                 <div class="flex flex-row justify-around">
                                     <div class="flex flex-col space-y-1">
-                                        <label class="text-[1rem]" for="FL">Inches</label>
+                                        <label class="text-[1rem]" for="FL">Inches
+                                            <span
+                                                v-if="requireService.mandatory && !requireService.balancings.inches.trim()"
+                                                class="text-red-500 font-bold">*</span>
+                                        </label>
                                         <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
                                             type="text" id="FL" v-model="requireService.balancings.inches">
                                     </div>
                                     <div class="flex flex-col space-y-1">
-                                        <label class="text-[1rem]" for="FL">Type</label>
+                                        <label class="text-[1rem]" for="FL">Type
+                                            <span
+                                                v-if="requireService.mandatory && !requireService.balancings.type.trim()"
+                                                class="text-red-500 font-bold">*</span>
+                                        </label>
                                         <div>
                                             <select class="w-[15rem] h-[3rem] rounded-sm"
                                                 style="border: 1px solid black;" id="type"
@@ -1763,30 +1791,52 @@
                                         </div>
                                     </div>
                                 </div>
-                                <input type="checkbox" class="w-5 h-5 rounded-sm border border-black bg-gray-200" @change="handleGrams()" v-model="requireService.balancings.gramsCheck" id="Grams"><label for="Grams" class="text-[18px] pl-[12px]">Grams</label>
+                                <input type="checkbox" class="w-5 h-5 rounded-sm border border-black bg-gray-200"
+                                    @change="handleGrams()" v-model="requireService.balancings.gramsCheck"
+                                    id="Grams"><label for="Grams" class="text-[18px] pl-[12px]">Grams</label>
                                 <div class="flex flex-row justify-around mt-5" v-if="showGrams">
                                     <div class="flex flex-col space-y-1">
-                                        <label class="text-[1rem]" for="FL">Front-Left (gm)</label>
+                                        <label class="text-[1rem]" for="FL">Front-Left (gm)
+                                            <span
+                                                v-if="requireService.mandatory && requireService.balancings.gramsCheck && !requireService.balancings.fl.trim()"
+                                                class="text-red-500 font-bold">*</span>
+                                        </label>
                                         <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
                                             type="text" id="FL" v-model="requireService.balancings.fl">
                                     </div>
                                     <div class="flex flex-col space-y-1">
-                                        <label class="text-[1rem]" for="FR">Front-Right (gm)</label>
+                                        <label class="text-[1rem]" for="FR">Front-Right (gm)
+                                            <span
+                                                v-if="requireService.mandatory && requireService.balancings.gramsCheck && !requireService.balancings.fr.trim()"
+                                                class="text-red-500 font-bold">*</span>
+                                        </label>
                                         <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
                                             type="text" id="FR" v-model="requireService.balancings.fr">
                                     </div>
                                     <div class="flex flex-col space-y-1">
-                                        <label class="text-[1rem]" for="BL">Back-Left (gm)</label>
+                                        <label class="text-[1rem]" for="BL">Back-Left (gm)
+                                            <span
+                                                v-if="requireService.mandatory && requireService.balancings.gramsCheck && !requireService.balancings.bl.trim()"
+                                                class="text-red-500 font-bold">*</span>
+                                        </label>
                                         <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
                                             type="text" id="BL" v-model="requireService.balancings.bl">
                                     </div>
                                     <div class="flex flex-col space-y-1">
-                                        <label class="text-[1rem]" for="BR">Back-Right (gm)</label>
+                                        <label class="text-[1rem]" for="BR">Back-Right (gm)
+                                            <span
+                                                v-if="requireService.mandatory && requireService.balancings.gramsCheck && !requireService.balancings.br.trim()"
+                                                class="text-red-500 font-bold">*</span>
+                                        </label>
                                         <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
                                             type="text" id="BR" v-model="requireService.balancings.br">
                                     </div>
                                     <div class="flex flex-col space-y-1">
-                                        <label class="text-[1rem]" for="ST">Spare Tyre (gm)</label>
+                                        <label class="text-[1rem]" for="ST">Spare Tyre (gm)
+                                            <span
+                                                v-if="requireService.mandatory && requireService.balancings.gramsCheck && !requireService.balancings.st.trim()"
+                                                class="text-red-500 font-bold">*</span>
+                                        </label>
                                         <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
                                             type="text" id="ST" v-model='requireService.balancings.st' @change="shooo">
                                     </div>
@@ -1813,13 +1863,21 @@
                                     </div>
                                     <div class="flex flex-row space-x-[100px]">
                                         <div class="flex flex-col space-y-1">
-                                            <label class="text-[16px]" for="FTS">Front Tyres (psi)</label>
+                                            <label class="text-[16px]" for="FTS">Front Tyres (psi)
+                                                <span
+                                                    v-if="requireService.mandatory && !requireService.inflations.ft.trim()"
+                                                    class="text-red-500 font-bold">*</span>
+                                            </label>
                                             <input
                                                 class="w-[12rem]] h-[3rem] rounded-sm border-solid border border-black"
                                                 type="text" id="FTS" v-model="requireService.inflations.ft">
                                         </div>
                                         <div class="flex flex-col space-y-1">
-                                            <label class="text-[16px]" for="RTS">Rear Tyres (psi)</label>
+                                            <label class="text-[16px]" for="RTS">Rear Tyres (psi)
+                                                <span
+                                                    v-if="requireService.mandatory && !requireService.inflations.rt.trim()"
+                                                    class="text-red-500 font-bold">*</span>
+                                            </label>
                                             <input
                                                 class="w-[12rem]] h-[3rem] rounded-sm border-solid border border-black"
                                                 type="text" id="RTS" v-model="requireService.inflations.rt"
@@ -2814,6 +2872,49 @@ function nextPageAndHighlight() {
                 break;
             case 3:
                 jobCard["service"] = requireService.value
+                requireService.value.mandatory = false;
+
+                if (requireService.value.Alignment &&
+                    (!requireService.value.alignments.lastAlignment || !requireService.value.alignments.nextAlignment)) {
+                    requireService.value.mandatory = true;
+                    currentstep.value = 2;
+                    return;
+                }
+                else {
+                    requireService.value.mandatory = false;
+                }
+
+                if (requireService.value.Rotation &&
+                    (!requireService.value.rotations.inche || !requireService.value.rotations.wheel_count)) {
+                    requireService.value.mandatory = true;
+                    currentstep.value = 2;
+                    return;
+                }
+
+                if (requireService.value.Oil_change &&
+                    (!requireService.value.oil_changes.oil_quality || !requireService.value.oil_changes.oil_quantity)) {
+                    requireService.value.mandatory = true;
+                    currentstep.value = 2;
+                    return;
+                }
+
+                if (requireService.value.Balancing) {
+                    if (requireService.value.balancings.gramsCheck &&
+                        (!requireService.value.balancings.fl || !requireService.value.balancings.fr || !requireService.value.balancings.bl ||
+                            !requireService.value.balancings.br || !requireService.value.balancings.st || !requireService.value.balancings.inches ||
+                            !requireService.value.balancings.type || !requireService.value.balancings.gramsCheck)) {
+                        requireService.value.mandatory = true;
+                        currentstep.value = 2;
+                        return;
+                    }
+                }
+
+                if (requireService.value.Inflation &&
+                    (!requireService.value.inflations.type || !requireService.value.inflations.ft || !requireService.value.inflations.rt)) {
+                    requireService.value.mandatory = true;
+                    currentstep.value = 2;
+                    return;
+                }
                 addValue(requireService.value, replace)
                 console.log("checking requireservice data for inches and type in balancing", requireService.value)
                 break;
@@ -2837,7 +2938,7 @@ function nextPageAndHighlight() {
                 break;
             case 5:
                 checkup(jobCard);
-                console.log("final jobcard data",jobCard);
+                console.log("final jobcard data", jobCard);
                 break;
         }
     }
@@ -3846,6 +3947,7 @@ function handleCheckboxChange(checkboxId) {
     }
 }
 const requireService = ref({
+    mandatory: false,
     Alignment: false,
     Rotation: false,
     Oil_change: false,
@@ -3873,9 +3975,9 @@ const requireService = ref({
         bl: '',
         br: '',
         st: '',
-        inches:'',
+        inches: '',
         type: '',
-        gramsCheck:false
+        gramsCheck: false
     },
     inflations: {
         type: '',
@@ -3892,8 +3994,8 @@ const requireService = ref({
     MushroomPatch: false,
 })
 const showGrams = ref(false)
-function handleGrams(){
-    if(requireService.value.balancings.gramsCheck){
+function handleGrams() {
+    if (requireService.value.balancings.gramsCheck) {
         showGrams.value = true;
     } else {
         showGrams.value = false
@@ -4074,22 +4176,22 @@ async function get_itemrate(data, index) {
 }
 
 async function getrate(data) {
-    let inch=''
-    let type=''
-    if(data === "Rotation"){
+    let inch = ''
+    let type = ''
+    if (data === "Rotation") {
         console.log("+++++++++++++++++++yes++++++++++++++++++")
-        inch=requireService.value.rotations.inche;
+        inch = requireService.value.rotations.inche;
     }
-    else if(data === "Balancing"){
-        type=requireService.value.balancings.type;
-        inch=requireService.value.balancings.inches;
+    else if (data === "Balancing") {
+        type = requireService.value.balancings.type;
+        inch = requireService.value.balancings.inches;
     }
-    else{
-        inch= ''
+    else {
+        inch = ''
     }
     try {
         const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_item_rate`, {
-            params: { item_code: data,brand:responseData.value.message[0].vehicle_brand,model:responseData.value.message[0].vehicle_model,inch:inch,type:type},
+            params: { item_code: data, brand: responseData.value.message[0].vehicle_brand, model: responseData.value.message[0].vehicle_model, inch: inch, type: type },
             headers: headers // Assuming headers is defined elsewhere
         });
         const rate = response.data.message;
@@ -4314,12 +4416,12 @@ function addValue(data, replace) {
                             requiredQuantity: 1,
                             cost: ''
                         };
-                        console.log("==============",key,"********************")
+                        console.log("==============", key, "********************")
                         getrate(key).then(rate => {
-                            if(key === "Rotation"){
-                                newData.requiredQuantity=requireService.value.rotations.wheel_count;
+                            if (key === "Rotation") {
+                                newData.requiredQuantity = requireService.value.rotations.wheel_count;
                             }
-                            console.log(newData,"----------------------------------")
+                            console.log(newData, "----------------------------------")
                             newData.rate = rate
                             console.log(newData.rate)
                         }).catch(error => {
