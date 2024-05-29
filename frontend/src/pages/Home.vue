@@ -1685,14 +1685,14 @@
                                 <h1 class="text-[20px] font-bold ml-1 mb-6">Tyre Rotation Details</h1>
                                 <div class="flex flex-row space-x-[12rem] ml-[55px]">
                                     <div class="flex flex-col space-y-1">
-                                        <label class="text-[16px]" for="rim">Rim</label>
+                                        <label class="text-[16px]" for="inche">Inche</label>
                                         <input class="w-[16rem]] h-[3rem] rounded-sm border-solid border border-black"
-                                            type="text" id="rim" v-model="requireService.rotations.rim">
+                                            type="text" id="inche" v-model="requireService.rotations.inche">
                                     </div>
                                     <div class="flex flex-col space-y-1">
                                         <label class="text-[16px]" for="wheel">Wheel</label>
                                         <input class="w-[16rem]] h-[3rem] rounded-sm border-solid border border-black"
-                                            type="text" id="wheel" v-model='requireService.rotations.wheel'
+                                            type="text" id="wheel" v-model='requireService.rotations.wheel_count'
                                             @change="shooo">
                                     </div>
                                 </div>
@@ -3809,8 +3809,8 @@ const requireService = ref({
         nextAlignment: ''
     },
     rotations: {
-        rim: '',
-        wheel: ''
+        inche: '',
+        wheel_count: 1
     },
     oil_changes: {
         oil_quality: '',
@@ -3890,8 +3890,8 @@ function handleShow(item) {
             show.value.rotation = !show.value.rotation;
             requireService.value.Rotation = show.value.rotation;
             if (show.value.rotation == false) {
-                requireService.value.rotations.rim = '';
-                requireService.value.rotations.wheel = '';
+                requireService.value.rotations.Inche = '';
+                requireService.value.rotations.wheel_count = 1;
             }
             break;
         case 'oil_change':
@@ -3995,7 +3995,7 @@ function handelCheck(data) {
 // }
 
 async function get_itemrate(data, index) {
-    console.log("data", data);
+    console.log("======================data========================", data);
     console.log("index", index);
     console.log(tableData.value);
 
@@ -4012,12 +4012,21 @@ async function get_itemrate(data, index) {
 }
 
 async function getrate(data) {
-    console.log(responseData.value.message[0].vehicle_brand
-,"================================================================")
-    console.log(vBrand.value[0].name,"-data-",vModel.value)
+    let inch=''
+    if(data === "Rotation"){
+        console.log("+++++++++++++++++++yes++++++++++++++++++")
+        inch=requireService.value.rotations.inche;
+        console.log(inch)
+    }
+    else if(data === "Balancing"){
+        console.log("+++++++++++++++++balancing+++++++++++++++++")
+    }
+    else{
+        inch= ''
+    }
     try {
         const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_item_rate`, {
-            params: { item_code: data,brand:responseData.value.message[0].vehicle_brand,model:responseData.value.message[0].vehicle_model},
+            params: { item_code: data,brand:responseData.value.message[0].vehicle_brand,model:responseData.value.message[0].vehicle_model,inch:inch},
             headers: headers // Assuming headers is defined elsewhere
         });
         const rate = response.data.message;
@@ -4242,7 +4251,12 @@ function addValue(data, replace) {
                             requiredQuantity: 1,
                             cost: ''
                         };
+                        console.log("==============",key,"********************")
                         getrate(key).then(rate => {
+                            if(key === "Rotation"){
+                                newData.requiredQuantity=requireService.value.rotations.wheel_count;
+                            }
+                            console.log(newData,"----------------------------------")
                             newData.rate = rate
                             console.log(newData.rate)
                         }).catch(error => {
@@ -4403,7 +4417,7 @@ const confirmDataSave = async () => {
         // show.oil_change.value = false;
         // show.inflation.value = false;
         // show.balancing.value = false;
-        window.location.reload()
+        // window.location.reload()
     }, 1000);
 }
 const cancelSaved = () => {
