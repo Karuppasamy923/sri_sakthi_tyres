@@ -4180,6 +4180,8 @@ async function get_itemrate(data, index) {
 async function getrate(data) {
     let inch = ''
     let type = ''
+    let brand =''
+    let model =''
     if (data === "Rotation") {
         console.log("+++++++++++++++++++yes++++++++++++++++++")
         inch = requireService.value.rotations.inche;
@@ -4191,9 +4193,13 @@ async function getrate(data) {
     else {
         inch = ''
     }
+    if(responseData.value.message){
+        brand=responseData.value.message[0].vehicle_brand;
+        model=responseData.value.message[0].vehicle_model;
+    }
     try {
         const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_item_rate`, {
-            params: { item_code: data, brand: responseData.value.message[0].vehicle_brand, model: responseData.value.message[0].vehicle_model, inch: inch, type: type },
+            params: { item_code: data, brand: brand, model: model, inch: inch, type: type },
             headers: headers // Assuming headers is defined elsewhere
         });
         const rate = response.data.message;
