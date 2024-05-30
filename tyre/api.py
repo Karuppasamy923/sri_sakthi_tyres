@@ -452,7 +452,7 @@ def job_card(data,brand,model):
         items = frappe._dict(items)
         print(items)
         total_amount += float(items.cost)
-        billing_items.append({"item_code": items.itemCode, "warehouse": items.sourceWarehouse, "quantity" : items.requiredQuantity, "amount" : items.cost, "rate": items.rate, "warranty":items.warranty, "max_years":maxyears(items.warranty)})
+        billing_items.append({"item_code": items.itemCode, "warehouse": items.sourceWarehouse, "quantity" : items.requiredQuantity, "amount" : items.cost, "rate": items.rate, "warranty":items.warranty, "max_years":maxyears(items.warranty), "additional":items.additional})
     # print(doc.as_dict(), "as_dict")
     print("billing details for checking warranty and max years",billing_items)
     doc.extend("billing_details", billing_items)
@@ -777,6 +777,7 @@ def get_billing_details(name):
     doc = frappe.get_doc("Tyre Job Card", name)
     print("\n\n\n\n\ntyre job card details", doc.as_dict())
     billing_details = []
+    
     for billing_detail in doc.billing_details:
         billing_details.append({
             "item_code": billing_detail.item_code,
@@ -784,9 +785,10 @@ def get_billing_details(name):
             "rate": billing_detail.rate,
             "amount": billing_detail.amount,
             "warehouse": billing_detail.warehouse,
-            "warranty":billing_detail.warranty,
-            "max_years":billing_detail.max_years
-        })
+            "warranty": billing_detail.warranty,
+            "max_years": billing_detail.max_years,
+            "additional":billing_detail.additional
+        })    
     return {
         "billing_details": billing_details,
         "total_amount": doc.total_amount,

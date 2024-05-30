@@ -417,11 +417,14 @@
                                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                                                     v-for="(item, index) in jobCardData.billing_details" :key="index">
                                                     <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                                        scope="row">{{ item.item_code }}
+                                                        scope="row">{{ item.item_code + additional(item.additional) }}
                                                     </td>
                                                     <td class="px-6 py-3">{{ item.warehouse }}</td>
-                                                    <td class="px-6 py-3">{{ formatValue(item.warranty, 'warranty') }}</td>
-                                                    <td class="px-6 py-3">{{ formatValue(item.max_years, 'years') }}</td>                                                                                                        <td class="px-6 py-3">{{ item.quantity }}</td>
+                                                    <td class="px-6 py-3">{{ formatValue(item.warranty, 'warranty') }}
+                                                    </td>
+                                                    <td class="px-6 py-3">{{ formatValue(item.max_years, 'years') }}
+                                                    </td>
+                                                    <td class="px-6 py-3">{{ item.quantity }}</td>
                                                     <td class="px-6 py-3">{{ item.rate }}</td>
                                                     <td class="px-6 py-3">{{ item.amount }}</td>
                                                 </tr>
@@ -988,6 +991,23 @@
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Mobile No.">
                                     </p>
+                                    <!-- <p class="m-2">Vehicle Brand <span class="text-red-500 font-bold">*</span><br>
+                                        <select
+                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            v-model="customerData.vehicle_brand"
+                                            @change="get_Vmodel(vehicleData.vehicle_brand)" style="overflow-y: auto;">
+                                            <option value="" disabled selected>Select brand...</option>
+                                            <option v-for="brand in vBrand" :key="brand">{{ brand.name }}</option>
+                                        </select>
+                                    </p>
+                                    <p class="m-2">Vehicle Model <span class="text-red-500 font-bold">*</span><br>
+                                        <select
+                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            v-model="customerData.vehicle_model" style="overflow-y: auto;">
+                                            <option value="" disabled selected>Select model...</option>
+                                            <option v-for="model in vModel" :key="model">{{ model.model }}</option>
+                                        </select>
+                                    </p> -->
                                     <input type="checkbox" v-model="customerData.whatsappChecked"
                                         :checked="leadDetails.custom_whatsapp == '1'" :disabled="boolDetails.state == 1"
                                         class="bg-gray-300 rounded-sm">&nbsp;&nbsp; <label>WhatsApp</label>
@@ -1101,7 +1121,7 @@
                                                     @change="getType(selectedBrand, selectedVariant, pattern, index)">
                                                     <option v-for="(pattern, index) in patterns[index]" :key="index">{{
                                                         pattern
-                                                    }}</option>
+                                                        }}</option>
                                                 </select>
                                             </div>
                                             <div class="flex flex-col ml-1">
@@ -1758,8 +1778,7 @@
                                 <div class="flex flex-row justify-around">
                                     <div class="flex flex-col space-y-1">
                                         <label class="text-[1rem]" for="FL">Inches
-                                            <span
-                                                v-if="requireService.mandatory && !requireService.balancings.inches"
+                                            <span v-if="requireService.mandatory && !requireService.balancings.inches"
                                                 class="text-red-500 font-bold">*</span>
                                         </label>
                                         <!-- <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
@@ -2014,7 +2033,7 @@
                         <p class="mb-4">Are you sure want to cancel the details?</p>
                         <div class="flex justify-center">
                             <button
-                                @click="currentstep = 0; cancelpop = false; tableData = []; selectedname = ''; selectednumber = ''; totalRate = 0, totalQuantity = 0, totalCost = 0, finalAmount = 0, respop = ''"
+                                @click="currentstep = 0; cancelpop = false; tableData = []; selectedname = ''; selectednumber = ''; totalRate = 0, totalQuantity = 0, totalCost = 0, finalAmount = 0, respop = '', directCancel()"
                                 class="bg-green-500 text-white font-semibold px-4 py-2 rounded mr-2">Yes</button>
                             <button @click="cancelpop = false"
                                 class="bg-red-500 text-white font-semibold px-4 py-2 rounded">No</button>
@@ -2472,9 +2491,13 @@ function confirmBill() {
                     totalCost.value = 0.00;
                     finalAmount.value = 0.00;
                     step = 0;
+                    window.location.reload()
                 }, 2000);
             }
         })
+}
+const directCancel = () => {
+    window.location.reload();
 }
 
 function focusNext(event, nextInput) {
@@ -3998,7 +4021,7 @@ function handleGrams() {
 }
 
 function checkup(data) {
-    console.log("final data checking in last page",data);
+    console.log("final data checking in last page", data);
     try {
         const response = axios.post(`${BaseURL}/api/method/tyre.api.job_card`, { data: JSON.stringify(data), brand: responseData.value.message[0].vehicle_brand, model: responseData.value.message[0].vehicle_model }, { headers: headers })
         console.log('job card after response', response);
@@ -4240,6 +4263,9 @@ function formatValue(value, type) {
     }
     return type === 'warranty' ? `${value} years` : `${value}`;
 }
+const additional = (additional) => {
+    return additional ? ' (additonal sale)' : ''
+}
 const tyres = ref([{
     type: '',
     loadIndex: '',
@@ -4367,7 +4393,7 @@ function addValue(data, replace) {
                             itemCode: item.item,
                             sourceWarehouse: '',
                             rate: item.rate,
-                            warranty:item.warranty,
+                            warranty: item.warranty,
                             requiredQuantity: 1, // Set initial quantity to 1
                             cost: ''
                         };
@@ -4431,7 +4457,7 @@ function addValue(data, replace) {
                         const newData = {
                             itemCode: key,
                             sourceWarehouse: '',
-                            warranty:'',
+                            warranty: 0,
                             requiredQuantity: 1,
                             cost: ''
                         };
@@ -4519,6 +4545,7 @@ const addNewRow = (billIndex) => {
         rate: '',
         requiredQuantity: 0,
         cost: '',
+        additional: 'additional'
     });
     console.log(tableData.value[step])
     step++;
