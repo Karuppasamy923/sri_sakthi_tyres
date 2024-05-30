@@ -10,7 +10,9 @@
   "warehouse",
   "quantity",
   "rate",
-  "amount"
+  "amount",
+  "warranty",
+  "max_years"
  ],
  "fields": [
   {
@@ -42,12 +44,22 @@
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Amount"
+  },
+  {
+   "fieldname": "warranty",
+   "fieldtype": "Int",
+   "label": "Warranty"
+  },
+  {
+   "fieldname": "max_years",
+   "fieldtype": "Date",
+   "label": "Max Years"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-04-12 18:27:13.525253",
+ "modified": "2024-05-30 12:44:46.507346",
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "Tyre Billing Detail",
