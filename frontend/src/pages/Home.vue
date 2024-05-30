@@ -414,28 +414,14 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <template v-if="jobCardData.warranty">
-                                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                                                        v-for="(item, index) in jobCardData.warranty" :key="index">
-                                                        <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                                            scope="row">{{ item.item_code }}</td>
-                                                        <td class="px-6 py-3">{{ item.warehouse }}</td>
-                                                        <td class="px-6 py-3">{{ item.warranty }} years</td>
-                                                        <td class="px-6 py-3">{{ item.max_years }}</td>
-                                                        <td class="px-6 py-3">{{ item.quantity }}</td>
-                                                        <td class="px-6 py-3">{{ item.rate }}</td>
-                                                        <td class="px-6 py-3">{{ item.amount }}</td>
-                                                    </tr>
-                                                </template>
                                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                                                     v-for="(item, index) in jobCardData.billing_details" :key="index">
                                                     <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                                                         scope="row">{{ item.item_code }}
                                                     </td>
                                                     <td class="px-6 py-3">{{ item.warehouse }}</td>
-                                                    <td class="px-6 py-3">Nil</td>
-                                                    <td class="px-6 py-3">Nil</td>
-                                                    <td class="px-6 py-3">{{ item.quantity }}</td>
+                                                    <td class="px-6 py-3">{{ formatValue(item.warranty, 'warranty') }}</td>
+                                                    <td class="px-6 py-3">{{ formatValue(item.max_years, 'years') }}</td>                                                                                                        <td class="px-6 py-3">{{ item.quantity }}</td>
                                                     <td class="px-6 py-3">{{ item.rate }}</td>
                                                     <td class="px-6 py-3">{{ item.amount }}</td>
                                                 </tr>
@@ -1115,7 +1101,7 @@
                                                     @change="getType(selectedBrand, selectedVariant, pattern, index)">
                                                     <option v-for="(pattern, index) in patterns[index]" :key="index">{{
                                                         pattern
-                                                        }}</option>
+                                                    }}</option>
                                                 </select>
                                             </div>
                                             <div class="flex flex-col ml-1">
@@ -1773,12 +1759,12 @@
                                     <div class="flex flex-col space-y-1">
                                         <label class="text-[1rem]" for="FL">Inches
                                             <span
-                                                v-if="requireService.mandatory && !requireService.balancings.inches.trim()"
+                                                v-if="requireService.mandatory && !requireService.balancings.inches"
                                                 class="text-red-500 font-bold">*</span>
                                         </label>
                                         <!-- <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
                                             type="text" id="FL" v-model="requireService.balancings.inches"> -->
-                                            <select class="w-[16rem] h-[3rem] rounded-sm border-solid border border-black"
+                                        <select class="w-[16rem] h-[3rem] rounded-sm border-solid border border-black"
                                             id="inche" v-model="requireService.balancings.inches">
                                             <option value="" disabled selected>Select an Inche</option>
                                             <option v-for="inch in B_inch" :key="inch" :value="inch">{{ inch }}</option>
@@ -1807,45 +1793,30 @@
                                 <div class="flex flex-row justify-around mt-5" v-if="showGrams">
                                     <div class="flex flex-col space-y-1">
                                         <label class="text-[1rem]" for="FL">Front-Left (gm)
-                                            <span
-                                                v-if="requireService.mandatory && requireService.balancings.gramsCheck && !requireService.balancings.fl.trim()"
-                                                class="text-red-500 font-bold">*</span>
                                         </label>
                                         <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
                                             type="text" id="FL" v-model="requireService.balancings.fl">
                                     </div>
                                     <div class="flex flex-col space-y-1">
                                         <label class="text-[1rem]" for="FR">Front-Right (gm)
-                                            <span
-                                                v-if="requireService.mandatory && requireService.balancings.gramsCheck && !requireService.balancings.fr.trim()"
-                                                class="text-red-500 font-bold">*</span>
                                         </label>
                                         <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
                                             type="text" id="FR" v-model="requireService.balancings.fr">
                                     </div>
                                     <div class="flex flex-col space-y-1">
                                         <label class="text-[1rem]" for="BL">Back-Left (gm)
-                                            <span
-                                                v-if="requireService.mandatory && requireService.balancings.gramsCheck && !requireService.balancings.bl.trim()"
-                                                class="text-red-500 font-bold">*</span>
                                         </label>
                                         <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
                                             type="text" id="BL" v-model="requireService.balancings.bl">
                                     </div>
                                     <div class="flex flex-col space-y-1">
                                         <label class="text-[1rem]" for="BR">Back-Right (gm)
-                                            <span
-                                                v-if="requireService.mandatory && requireService.balancings.gramsCheck && !requireService.balancings.br.trim()"
-                                                class="text-red-500 font-bold">*</span>
                                         </label>
                                         <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
                                             type="text" id="BR" v-model="requireService.balancings.br">
                                     </div>
                                     <div class="flex flex-col space-y-1">
                                         <label class="text-[1rem]" for="ST">Spare Tyre (gm)
-                                            <span
-                                                v-if="requireService.mandatory && requireService.balancings.gramsCheck && !requireService.balancings.st.trim()"
-                                                class="text-red-500 font-bold">*</span>
                                         </label>
                                         <input class="w-[12rem] h-[3rem] rounded-sm border-solid border border-black"
                                             type="text" id="ST" v-model='requireService.balancings.st' @change="shooo">
@@ -1983,7 +1954,7 @@
                                     </option>
                                 </select>
                                 <div class="mt-[20px]">
-                                    <label :for="'pattern' + index">Warranty(in Years)<span
+                                    <label :for="'pattern' + index">Warranty(in_Years)<span
                                             v-if="tyre.mandatory && !tyre.warranty.trim()"
                                             class="text-red-500 font-bold">*</span></label>
                                     <!-- <span>(upto_{{maxYears}})</span> -->
@@ -2129,6 +2100,7 @@
                                             class="text-red-500">*</span></th>
                                     <th class="border border-gray-800 px-4 py-4 w-[16rem]">Warehouse<span v-if="warepop"
                                             class="text-red-500">*</span></th>
+                                    <th class="border border-gray-800 px-4 py-4 w-[10rem]">Warranty(in_years)</th>
                                     <th class="border border-gray-800 px-4 py-4 w-[16rem]">Quantity<span v-if="qutpop"
                                             class="text-red-500">*</span></th>
                                     <th class="border border-gray-800 px-4 py-4 w-[10rem]">Rate</th>
@@ -2170,6 +2142,11 @@
                                     </td>
 
                                     <td class="border border-gray-800 px-4 py-2">
+                                        <input type="number" v-model="data[0].warranty"
+                                            @input="calculateTotals(); qutpop = ''; billpop = ''"
+                                            class="w-[10rem] rounded-sm border-solid border border-black">
+                                    </td>
+                                    <td class="border border-gray-800 px-4 py-2">
                                         <input type="number" v-model="data[0].requiredQuantity"
                                             @input="calculateTotals(); qutpop = ''; billpop = ''"
                                             class="w-[10rem] rounded-sm border-solid border border-black">
@@ -2193,6 +2170,9 @@
                                 <tr>
                                     <td colspan="3" class="border border-gray-800 px-4 py-2 text-center">
                                         Total
+                                    </td>
+                                    <td class="border border-gray-800 px-4 py-2 text-center cursor-not-allowed">
+                                        {{ warranty }}
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2 text-center cursor-not-allowed">
                                         {{ totalQuantity }}
@@ -2379,8 +2359,8 @@ onMounted(() => {
             console.log(billitems.value)
         })
 });
-const B_inch=[12,13,14,15,16,17,18,19,20,21,22];
-const R_inch=ref([])
+const B_inch = [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
+const R_inch = ref([])
 onMounted(() => {
     axios.get(`${BaseURL}/api/method/tyre.api.get_inch_list`, { headers: headers })
         .then(response => {
@@ -2916,16 +2896,13 @@ function nextPageAndHighlight() {
                     return;
                 }
 
-                if (requireService.value.Balancing) {
-                    if (requireService.value.balancings.gramsCheck &&
-                        (!requireService.value.balancings.fl || !requireService.value.balancings.fr || !requireService.value.balancings.bl ||
-                            !requireService.value.balancings.br || !requireService.value.balancings.st || !requireService.value.balancings.inches ||
-                            !requireService.value.balancings.type || !requireService.value.balancings.gramsCheck)) {
-                        requireService.value.mandatory = true;
-                        currentstep.value = 2;
-                        return;
-                    }
+                if (requireService.value.Balancing &&
+                    (!requireService.value.balancings.inches || !requireService.value.balancings.type)) {
+                    requireService.value.mandatory = true;
+                    currentstep.value = 2;
+                    return;
                 }
+
 
                 if (requireService.value.Inflation &&
                     (!requireService.value.inflations.type || !requireService.value.inflations.ft || !requireService.value.inflations.rt)) {
@@ -4021,6 +3998,7 @@ function handleGrams() {
 }
 
 function checkup(data) {
+    console.log("final data checking in last page",data);
     try {
         const response = axios.post(`${BaseURL}/api/method/tyre.api.job_card`, { data: JSON.stringify(data), brand: responseData.value.message[0].vehicle_brand, model: responseData.value.message[0].vehicle_model }, { headers: headers })
         console.log('job card after response', response);
@@ -4073,7 +4051,7 @@ function handleShow(item) {
             show.value.rotation = !show.value.rotation;
             requireService.value.Rotation = show.value.rotation;
             if (show.value.rotation == false) {
-                requireService.value.rotations.Inche = '';
+                requireService.value.rotations.inche = '';
                 requireService.value.rotations.wheel_count = 1;
             }
             break;
@@ -4089,11 +4067,15 @@ function handleShow(item) {
             show.value.balancing = !show.value.balancing;
             requireService.value.Balancing = show.value.balancing;
             if (show.value.balancing == false) {
+                requireService.value.balancings.inches = '';
+                requireService.value.balancings.type = '';
+                requireService.value.balancings.gramsCheck = false;
                 requireService.value.balancings.fl = '';
                 requireService.value.balancings.fr = '';
                 requireService.value.balancings.bl = '';
                 requireService.value.balancings.br = '';
                 requireService.value.balancings.st = '';
+                showGrams.value = false;
             }
             break;
         case 'inflation':
@@ -4103,6 +4085,8 @@ function handleShow(item) {
                 requireService.value.inflations.type = '';
                 requireService.value.inflations.ft = '';
                 requireService.value.inflations.rt = '';
+                show.value.inflation_air = false;
+                show.value.inflation_nitrogen = false;
             }
             break;
     }
@@ -4196,6 +4180,8 @@ async function get_itemrate(data, index) {
 async function getrate(data) {
     let inch = ''
     let type = ''
+    let brand =''
+    let model =''
     if (data === "Rotation") {
         console.log("+++++++++++++++++++yes++++++++++++++++++")
         inch = requireService.value.rotations.inche;
@@ -4207,9 +4193,13 @@ async function getrate(data) {
     else {
         inch = ''
     }
+    if(responseData.value.message){
+        brand=responseData.value.message[0].vehicle_brand;
+        model=responseData.value.message[0].vehicle_model;
+    }
     try {
         const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_item_rate`, {
-            params: { item_code: data, brand: responseData.value.message[0].vehicle_brand, model: responseData.value.message[0].vehicle_model, inch: inch, type: type },
+            params: { item_code: data, brand: brand, model: model, inch: inch, type: type },
             headers: headers // Assuming headers is defined elsewhere
         });
         const rate = response.data.message;
@@ -4243,6 +4233,12 @@ const warrantyYears = (warranty) => {
         maxYears.value = 0;
     }
     return sendYears;
+}
+function formatValue(value, type) {
+    if (value === 0 || value === undefined || value === null) {
+        return 'Nill';
+    }
+    return type === 'warranty' ? `${value} years` : `${value}`;
 }
 const tyres = ref([{
     type: '',
@@ -4371,6 +4367,7 @@ function addValue(data, replace) {
                             itemCode: item.item,
                             sourceWarehouse: '',
                             rate: item.rate,
+                            warranty:item.warranty,
                             requiredQuantity: 1, // Set initial quantity to 1
                             cost: ''
                         };
@@ -4425,7 +4422,7 @@ function addValue(data, replace) {
                                 console.log("step 3:itemcode in billing page for tyre 22", item.itemCode)
                                 itemExists = true;
                                 getrate(key).then(rate => {
-                                    item.rate=rate;
+                                    item.rate = rate;
                                 })
                             }
                         });
@@ -4434,6 +4431,7 @@ function addValue(data, replace) {
                         const newData = {
                             itemCode: key,
                             sourceWarehouse: '',
+                            warranty:'',
                             requiredQuantity: 1,
                             cost: ''
                         };
@@ -4603,7 +4601,7 @@ const confirmDataSave = async () => {
         // show.oil_change.value = false;
         // show.inflation.value = false;
         // show.balancing.value = false;
-        // window.location.reload()
+        window.location.reload()
     }, 1000);
 }
 const cancelSaved = () => {
