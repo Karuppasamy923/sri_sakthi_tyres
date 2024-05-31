@@ -2171,7 +2171,7 @@
                                             class="w-[10rem] rounded-sm border-solid border border-black">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="float" v-model="data[0].rate" @input="calculateTotals" readonly
+                                        <input type="float" v-model="data[0].rate" @input="calculateTotals" :readonly="isReadOnly"
                                             class="w-[10rem] h-[2.6rem] pl-[0.7rem] rounded-sm border-solid border border-black text-justify">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
@@ -2275,7 +2275,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, computed, onMounted, watchEffect } from 'vue';
+import { ref, reactive, watch, computed, onMounted,onUnmounted, watchEffect } from 'vue';
 import { FeatherIcon } from 'frappe-ui'
 import axios from 'axios';
 
@@ -2298,6 +2298,8 @@ const headers = {
     'Authorization': 'token b89ae1f0409875e :af8a0b78d948ebf'
 
 }
+
+const isReadOnly = computed(() => permission.value === 0);
 
 const pin1 = ref('');
 const pin2 = ref('');
@@ -2559,6 +2561,32 @@ onMounted(() => {
             vBrand.value = response.data.message
         })
 })
+
+const permission=ref('')
+
+const fetchPermission = () => {
+      axios.get(`${BaseURL}/api/method/tyre.api.get_permission`, { headers: headers })
+        .then(response => {
+          console.log(response.data.message);
+          permission.value = response.data.message;
+          console.log(permission.value, "+++++++++++++++++++++++++++++++++");
+        })
+        .catch(error => {
+          console.error("There was an error fetching the permission:", error);
+        });
+    };
+
+    let intervalId;
+
+    onMounted(() => {
+      fetchPermission();
+      intervalId = setInterval(fetchPermission, 10000); // Fetch permission every 5 seconds
+    });
+
+    onUnmounted(() => {
+      clearInterval(intervalId); // Clear interval when the component is unmounted
+    });
+
 
 
 const get_Vmodel = (data) => {
@@ -3744,6 +3772,8 @@ const clearVehicleData = () => {
         vehicleData.value[key] = '';
     });
 };
+
+
 
 const returnSearch = async (search) => {
     const data = {

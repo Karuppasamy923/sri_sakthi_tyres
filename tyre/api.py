@@ -1186,6 +1186,13 @@ def get_inch_list():
     inch_list.sort()
     
     return inch_list
+
+
+@frappe.whitelist()
+def get_permission():
+    print("yessssss+++++++++++++++++++++++++++++++++++++++++")
+    permission = frappe.get_single("Price changing permission")
+    return permission.allow_permission
     
 # @frappe.whitelist()
 # def pay_invoice(name):
