@@ -528,6 +528,8 @@ def lead(**args):
         "custom_ac_service": services.ac_service,
         "custom_puncture": services.puncture,
         "custom_tyre_patch": services.tyre_patch,
+        "custom_balancing_inch":services.balancingInch,
+        "custom_rotation_inch":services.rotationInch
     }
     # l=['Alignment','Oil_change','Inflation','tyre_edge','mushroom_patch','Battery','CarWash','Rotation','Balancing','Wiper','AcService','puncture','tyre_patch']
  

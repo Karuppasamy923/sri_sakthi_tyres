@@ -487,9 +487,9 @@
                                             <h5 class="mb-2 text-2xl font-bold tracking-tight text-black">
                                                 Details</h5>
                                             <p class="mb-2 ml-4 tracking-tight text-black">
-                                                Vehicle brand: {{enquiryData.vehicle_brand}} </p>
+                                                Vehicle brand: {{ enquiryData.vehicle_brand }} </p>
                                             <p class="mb-2 ml-4 tracking-tight text-black">
-                                                Vehicle Model: {{enquiryData.vehicle_model}} </p>
+                                                Vehicle Model: {{ enquiryData.vehicle_model }} </p>
                                         </div>
                                         <div class="flex justify-end">
                                             <button @click="enquiryPopup = 'false'">
@@ -1006,8 +1006,7 @@
                                         </select>
                                         <input type="input" v-model="leadDetails.custom_vehicle_brand"
                                             v-if="boolDetails.state == 1" :readonly="boolDetails.state == 1"
-                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 pl-3 rounded-sm border-solid border border-black"
-                                            >
+                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 pl-3 rounded-sm border-solid border border-black">
                                     </p>
                                     <p class="m-2" v-if="enquiryPage">Vehicle Model <span
                                             class="text-red-500 font-bold">*</span><br>
@@ -1019,8 +1018,7 @@
                                         </select>
                                         <input type="input" v-model="leadDetails.custom_vehicle_model"
                                             v-if="boolDetails.state == 1" :readonly="boolDetails.state == 1"
-                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 pl-3 rounded-sm border-solid border border-black"
-                                            >
+                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 pl-3 rounded-sm border-solid border border-black">
                                     </p>
                                     <input type="checkbox" v-model="customerData.whatsappChecked"
                                         :checked="leadDetails.custom_whatsapp == '1'" :disabled="boolDetails.state == 1"
@@ -1205,10 +1203,33 @@
                                             </div>
                                             <div>
                                                 <input type="checkbox" v-model="serviceDetails.rotation"
+                                                    @change="() => { serviceDetails.rotation ? showRotationInch = true : showRotationInch = false; serviceDetails.rotationInch = '' }"
                                                     :checked="leadDetails.custom_rotation == '1'"
                                                     :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm"
                                                     id="rotation">
                                                 <label class="p-2" for="rotation">Rotation</label>
+                                                <select type="number" v-if="showRotationInch"
+                                                    v-model="serviceDetails.rotationInch"
+                                                    class="w-[8rem] h-[2.3rem] ml-6 rounded-sm border-solid border border-black bg-gray-300">
+                                                    <option value="" selected disabled>Select Inch</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" v-model="serviceDetails.balancing"
+                                                    @change="() => { serviceDetails.balancing ? showBalancingInch = true : showBalancingInch = false; serviceDetails.balancingInch = '' }"
+                                                    :checked="leadDetails.custom_balancing == '1'"
+                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm"
+                                                    id="balancing">
+                                                <label class="p-2" for="balancing">Balancing</label>
+                                                <select type="number" v-if="showBalancingInch"
+                                                    v-model="serviceDetails.balancingInch"
+                                                    class="w-[8rem] h-[2.3rem] ml-6 rounded-sm border-solid border border-black bg-gray-300">
+                                                    <option value="" selected disabled>Select Inch</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                </select>
                                             </div>
                                             <div>
                                                 <input type="checkbox" v-model="serviceDetails.oil_change"
@@ -1216,13 +1237,6 @@
                                                     :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm"
                                                     id="oil_change">
                                                 <label class="p-2" for="oil_change">Oil Change</label>
-                                            </div>
-                                            <div>
-                                                <input type="checkbox" v-model="serviceDetails.balancing"
-                                                    :checked="leadDetails.custom_balancing == '1'"
-                                                    :disabled="boolDetails.state == 1" class="bg-gray-300 rounded-sm"
-                                                    id="balancing">
-                                                <label class="p-2" for="balancing">Balancing</label>
                                             </div>
                                             <div>
                                                 <input type="checkbox" v-model="serviceDetails.inflation"
@@ -2185,7 +2199,8 @@
                                             class="w-[10rem] rounded-sm border-solid border border-black">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
-                                        <input type="float" v-model="data[0].rate" @input="calculateTotals" :readonly="isReadOnly"
+                                        <input type="float" v-model="data[0].rate" @input="calculateTotals"
+                                            :readonly="isReadOnly"
                                             class="w-[10rem] h-[2.6rem] pl-[0.7rem] rounded-sm border-solid border border-black text-justify">
                                     </td>
                                     <td class="border border-gray-800 px-4 py-2">
@@ -2289,7 +2304,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, computed, onMounted,onUnmounted, watchEffect } from 'vue';
+import { ref, reactive, watch, computed, onMounted, onUnmounted, watchEffect } from 'vue';
 import { FeatherIcon } from 'frappe-ui'
 import axios from 'axios';
 
@@ -2576,30 +2591,30 @@ onMounted(() => {
         })
 })
 
-const permission=ref('')
+const permission = ref('')
 
 const fetchPermission = () => {
-      axios.get(`${BaseURL}/api/method/tyre.api.get_permission`, { headers: headers })
+    axios.get(`${BaseURL}/api/method/tyre.api.get_permission`, { headers: headers })
         .then(response => {
-          console.log(response.data.message);
-          permission.value = response.data.message;
-          console.log(permission.value, "+++++++++++++++++++++++++++++++++");
+            console.log(response.data.message);
+            permission.value = response.data.message;
+            console.log(permission.value, "+++++++++++++++++++++++++++++++++");
         })
         .catch(error => {
-          console.error("There was an error fetching the permission:", error);
+            console.error("There was an error fetching the permission:", error);
         });
-    };
+};
 
-    let intervalId;
+let intervalId;
 
-    onMounted(() => {
-      fetchPermission();
-      intervalId = setInterval(fetchPermission, 10000); // Fetch permission every 5 seconds
-    });
+onMounted(() => {
+    fetchPermission();
+    intervalId = setInterval(fetchPermission, 10000); // Fetch permission every 5 seconds
+});
 
-    onUnmounted(() => {
-      clearInterval(intervalId); // Clear interval when the component is unmounted
-    });
+onUnmounted(() => {
+    clearInterval(intervalId); // Clear interval when the component is unmounted
+});
 
 
 
@@ -2662,6 +2677,8 @@ const noData = ref(false);
 const successData = ref(false);
 const searchValue = ref(false);
 const noMessage = ref(false);
+const showRotationInch = ref(false);
+const showBalancingInch = ref(false);
 const showMessage = () => {
     noMessage.value = true;
     setTimeout(() => {
@@ -3596,7 +3613,9 @@ const serviceDetails = ref({
     puncture: false,
     tyre_patch: false,
     ac_service: false,
-    wiper: false
+    wiper: false,
+    rotationInch: 0,
+    balancingInch: 0
 })
 const leadCustomer = ref(false);
 const handleCustomer = async () => {
