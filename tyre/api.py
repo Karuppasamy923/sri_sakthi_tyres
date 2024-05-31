@@ -466,14 +466,18 @@ def job_card(data,brand,model):
         "message": "Jobcard Created Successfully",
         "datas":tyre_replacement
     }
-from datetime import datetime, timedelta
-
+    
+from datetime import datetime
 def maxyears(warranty):
     try:
         warranty_years = float(warranty)
+        if warranty_years == 0:
+            print("Warranty period is 0, no max years calculation needed.")
+            return None
     except ValueError:
         print("Invalid warranty period")
-        return
+        return None
+    
     today = datetime.today()
     expiry_date = datetime(today.year + int(warranty_years), today.month, today.day)
     month = expiry_date.strftime('%m')
@@ -493,6 +497,8 @@ def lead(**args):
     lead_user_details = {
         "first_name": data.current_owner,
         "mobile_no": data.owner_mobile_no,
+        "custom_vehicle_brand":data.vehicle_brand,
+        "custom_vehicle_model":data.vehicle_model,
         "custom_whatsapp": data.whatsapp,
         "custom_sms": data.sms,
         "custom_call": data.call,
@@ -697,6 +703,15 @@ def get_jobcard_details(searchJobCard):
                                           fields=["time_in", "name", "vehicle_no", "customer", "mobile_no"])
         if jobcard_details:
             print('jobcard details',jobcard_details)
+            # print('jobcard details',job_card_details[0]['customer'])
+            for job_card in job_card_details:
+                customer_details = frappe.get_all("Customer", fields=["customer_name", "name"], filters={'name': job_card['customer']})
+                print("customer details:", customer_details)        
+                if customer_details:
+                    customer_detail = customer_details[0]
+                    if customer_detail['name'] == job_card['customer']:
+                        print(customer_detail['name'])
+                        job_card["customer_name"] = customer_detail['customer_name']
             return jobcard_details 
         else:
             return {
@@ -707,6 +722,15 @@ def get_jobcard_details(searchJobCard):
         job_card_details = frappe.get_all("Tyre Job Card",
                                            fields=["time_in", "name", "vehicle_no", "customer", "mobile_no"])
         print('jobcard details',job_card_details)
+        # print('jobcard details',job_card_details[0]['customer'])
+        for job_card in job_card_details:
+            customer_details = frappe.get_all("Customer", fields=["customer_name", "name"], filters={'name': job_card['customer']})
+            print("customer details:", customer_details)        
+            if customer_details:
+                customer_detail = customer_details[0]
+                if customer_detail['name'] == job_card['customer']:
+                    print(customer_detail['name'])
+                    job_card["customer_name"] = customer_detail['customer_name']
         return job_card_details 
 
 
@@ -801,7 +825,7 @@ def get_enquiry(name):
     for i in doc.custom_lead_items:
         lead_items.append(i.as_dict())
     print("get enquiry detailsssss", lead_items)
-    return {"enquiry_details":lead_items, "total_amount": doc.custom_total_amount}
+    return {"enquiry_details":lead_items, "total_amount": doc.custom_total_amount, "vehicle_brand":doc.custom_vehicle_brand, "vehicle_model":doc.custom_vehicle_model}
 
 @frappe.whitelist(allow_guest=True)
 def get_item_rate(item_code,brand,model,inch,type):
