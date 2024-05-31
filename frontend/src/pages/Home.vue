@@ -355,7 +355,7 @@
                                                     {{ jobcard.vehicle_no }}
                                                 </td>
                                                 <td class="px-6 py-4">
-                                                    {{ jobcard.customer }}
+                                                    {{ jobcard.customer_name }}
                                                 </td>
                                                 <td class="px-6 py-4">
                                                     {{ jobcard.mobile_no }}
@@ -483,9 +483,13 @@
                                 <a href="#"
                                     class="block max-w-[70rem] p-10 pt-5 bg-white border border-gray-200 rounded-lg shadow">
                                     <div class="grid grid-cols-2">
-                                        <div>
+                                        <div class="flex flex-row">
                                             <h5 class="mb-2 text-2xl font-bold tracking-tight text-black">
                                                 Details</h5>
+                                            <p class="mb-2 ml-4 tracking-tight text-black">
+                                                Vehicle brand: {{enquiryData.vehicle_brand}} </p>
+                                            <p class="mb-2 ml-4 tracking-tight text-black">
+                                                Vehicle Model: {{enquiryData.vehicle_model}} </p>
                                         </div>
                                         <div class="flex justify-end">
                                             <button @click="enquiryPopup = 'false'">
@@ -991,23 +995,33 @@
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Mobile No.">
                                     </p>
-                                    <!-- <p class="m-2">Vehicle Brand <span class="text-red-500 font-bold">*</span><br>
-                                        <select
+                                    <p class="m-2" v-if="enquiryPage">Vehicle Brand <span
+                                            class="text-red-500 font-bold">*</span><br>
+                                        <select v-if="boolDetails.state == 0"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="customerData.vehicle_brand"
-                                            @change="get_Vmodel(vehicleData.vehicle_brand)" style="overflow-y: auto;">
+                                            @change="get_Vmodel(customerData.vehicle_brand)" style="overflow-y: auto;">
                                             <option value="" disabled selected>Select brand...</option>
                                             <option v-for="brand in vBrand" :key="brand">{{ brand.name }}</option>
                                         </select>
+                                        <input type="input" v-model="leadDetails.custom_vehicle_brand"
+                                            v-if="boolDetails.state == 1" :readonly="boolDetails.state == 1"
+                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 pl-3 rounded-sm border-solid border border-black"
+                                            >
                                     </p>
-                                    <p class="m-2">Vehicle Model <span class="text-red-500 font-bold">*</span><br>
-                                        <select
+                                    <p class="m-2" v-if="enquiryPage">Vehicle Model <span
+                                            class="text-red-500 font-bold">*</span><br>
+                                        <select v-if="boolDetails.state == 0"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="customerData.vehicle_model" style="overflow-y: auto;">
                                             <option value="" disabled selected>Select model...</option>
                                             <option v-for="model in vModel" :key="model">{{ model.model }}</option>
                                         </select>
-                                    </p> -->
+                                        <input type="input" v-model="leadDetails.custom_vehicle_model"
+                                            v-if="boolDetails.state == 1" :readonly="boolDetails.state == 1"
+                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 pl-3 rounded-sm border-solid border border-black"
+                                            >
+                                    </p>
                                     <input type="checkbox" v-model="customerData.whatsappChecked"
                                         :checked="leadDetails.custom_whatsapp == '1'" :disabled="boolDetails.state == 1"
                                         class="bg-gray-300 rounded-sm">&nbsp;&nbsp; <label>WhatsApp</label>
@@ -1121,7 +1135,7 @@
                                                     @change="getType(selectedBrand, selectedVariant, pattern, index)">
                                                     <option v-for="(pattern, index) in patterns[index]" :key="index">{{
                                                         pattern
-                                                        }}</option>
+                                                    }}</option>
                                                 </select>
                                             </div>
                                             <div class="flex flex-col ml-1">
@@ -2493,7 +2507,7 @@ function confirmBill() {
                     totalCost.value = 0.00;
                     finalAmount.value = 0.00;
                     step = 0;
-                    window.location.reload()
+                    // window.location.reload()
                 }, 2000);
             }
         })
@@ -3587,10 +3601,12 @@ const serviceDetails = ref({
 const leadCustomer = ref(false);
 const handleCustomer = async () => {
     showNewCustomer.value = false;
-    if (customerData.value.current_owner && customerData.value.owner_mobile_no) {
+    if (customerData.value.current_owner && customerData.value.owner_mobile_no && customerData.value.vehicle_brand && customerData.value.vehicle_model) {
         const customerDetails = {
             current_owner: customerData.value.current_owner,
             owner_mobile_no: customerData.value.owner_mobile_no,
+            vehicle_brand: customerData.value.vehicle_brand,
+            vehicle_model: customerData.value.vehicle_model,
             whatsapp: customerData.value.whatsappChecked,
             call: customerData.value.callChecked,
             sms: customerData.value.smsChecked,
@@ -3665,6 +3681,8 @@ const enquiryClear = async () => {
     }
     billPopup.value = 'false';
     customerData.value.current_owner = '';
+    customerData.value.owner_mobile_no = '';
+    customerData.value.vehicle_model = '';
     customerData.value.owner_mobile_no = '';
     customerData.value.whatsappChecked = false;
     customerData.value.callChecked = false;
@@ -4233,8 +4251,8 @@ async function get_itemrate(data, index) {
 async function getrate(data) {
     let inch = ''
     let type = ''
-    let brand =''
-    let model =''
+    let brand = ''
+    let model = ''
     if (data === "Rotation") {
         console.log("+++++++++++++++++++yes++++++++++++++++++")
         inch = requireService.value.rotations.inche;
@@ -4246,9 +4264,9 @@ async function getrate(data) {
     else {
         inch = ''
     }
-    if(responseData.value.message){
-        brand=responseData.value.message[0].vehicle_brand;
-        model=responseData.value.message[0].vehicle_model;
+    if (responseData.value.message) {
+        brand = responseData.value.message[0].vehicle_brand;
+        model = responseData.value.message[0].vehicle_model;
     }
     try {
         const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_item_rate`, {
@@ -4623,41 +4641,6 @@ const confirmDataSave = async () => {
         afterResponse.value = false;
         handle.value = false
         searchMobileAfterResponse.value = true
-        //     if (tyreDatas.value[key] == Boolean) {
-        //         tyreDatas.value[key] = false;
-        //     }
-        //     else {
-        //         tyreDatas.value[key] = '';
-        //     }
-        // })
-        // tyres.value.forEach(tyre => {
-        //     for (let key in tyre) {
-        //         tyre[key] = '';
-        //     }
-        //     tyre.maxYears = warrantyYears(0);
-        //     tyre.mandatory = false;
-        //     tyre.status = false;
-        // });
-        // // Loop through each property of the object
-        // for (let key in requireService.value) {
-        //     // If the property value is an object, loop through its properties
-        //     if (typeof requireService.value[key] === 'object') {
-        //         for (let innerKey in requireService.value[key]) {
-        //             // Set sub-properties to empty strings
-        //             requireService.value[key][innerKey] = '';
-        //         }
-        //     } else {
-        //         // Set properties to false
-        //         requireService.value[key] = false;
-        //     }
-        // }
-
-        // // Set sub-properties of the show object to false
-        // show.alignment.value = false;
-        // show.rotation.value = false;
-        // show.oil_change.value = false;
-        // show.inflation.value = false;
-        // show.balancing.value = false;
         window.location.reload()
     }, 1000);
 }
