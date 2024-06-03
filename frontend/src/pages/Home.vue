@@ -90,6 +90,7 @@
                 </div>
             </div>
             <!-- main page -->
+            
             <div v-if="currentstep == 0 && Auth">
                 <div class="pt-24">
                     <div v-if="currentstep == 0">
@@ -98,6 +99,7 @@
                                 <span class="font-medium text-red-500">No data found!</span>
                             </div>
                         </div>
+                        
                         <div v-if="showConfirmation"
                             class="fixed inset-0 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
                             <div class="bg-white rounded-lg p-8 shadow-xl">
@@ -355,7 +357,7 @@
                                                     {{ jobcard.vehicle_no }}
                                                 </td>
                                                 <td class="px-6 py-4">
-                                                    {{ jobcard.customer_name }}
+                                                    {{ jobcard.customer }}
                                                 </td>
                                                 <td class="px-6 py-4">
                                                     {{ jobcard.mobile_no }}
@@ -483,13 +485,9 @@
                                 <a href="#"
                                     class="block max-w-[70rem] p-10 pt-5 bg-white border border-gray-200 rounded-lg shadow">
                                     <div class="grid grid-cols-2">
-                                        <div class="flex flex-row">
+                                        <div>
                                             <h5 class="mb-2 text-2xl font-bold tracking-tight text-black">
                                                 Details</h5>
-                                            <p class="mb-2 ml-4 tracking-tight text-black">
-                                                Vehicle brand: {{enquiryData.vehicle_brand}} </p>
-                                            <p class="mb-2 ml-4 tracking-tight text-black">
-                                                Vehicle Model: {{enquiryData.vehicle_model}} </p>
                                         </div>
                                         <div class="flex justify-end">
                                             <button @click="enquiryPopup = 'false'">
@@ -948,15 +946,104 @@
                                     </svg>
                                 </button>
                                 <div class="p-8 mt-[110px]">
-                                    <div class="pb-4 grid grid-cols-2 ml-24" v-if="searchMobileAfterResponse">
+                                    <div class="pb-4 grid grid-cols-2 ml-16" v-if="searchMobileAfterResponse">
                                         <input type="tel" v-model="searchMobile"
                                             class="w-[19rem] h-[3rem] mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Customer Mobile No." @keyup.enter="handleSearch">
-                                        <div class="w-[3rem] h-[3rem] mt-1 ml-[7.6rem] bg-blue-600 rounded-sm">
+                                        <div class="w-[3rem] h-[3rem] mt-1 ml-[7rem] bg-blue-600 rounded-sm">
                                             <FeatherIcon name="search" class="m-2 w-8 h-8 cursor-pointer text-gray-100"
                                                 @click="handleSearch" />
                                         </div>
                                     </div>
+
+                                    <div class="custom-dropdown" v-if="!searchMobileAfterResponse">
+                                        <div class="flex flex-row">
+                                            <div>
+                                                <div>
+                                                    <input type="text" placeholder="Search..." v-model="billCustomer" @input="checkcustomer"
+                                                        class="w-[22rem] h-[3rem] ml-2 bg-gray-300 mt-1 rounded-sm border-solid border border-black">
+                                                </div>
+                                                <!-- <pre>{{customers}}</pre> -->
+                                                <ul v-show="dataLoaded" class="custom-dropdown-list">
+                                                    <li v-for="option in customers" :key="option.value" @click="customerData.current_owner=option.customer_name,customerData.owner_mobile_no=option.mobile_no,customerData.whatsappChecked=option.custom_whatsapp,customerData.callChecked=custom_call,customerData.smsChecked=custom_sms,dataLoaded=false,billCustomer=''"
+                                                        class="custom-dropdown-item">
+                                                        <div v-if="option.customer_name">
+                                                            <label>{{ option.customer_name }}</label><br>
+                                                            <label>{{ option.mobile_no }}</label>
+                                                        </div>
+                                                        <div v-if="!option.customer_name">
+                                                            <label>No data found</label>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <button class="bg-blue-500 text-white font-bold text-base p-2 rounded-sm mt-1 ml-3"
+                                                    @click="addNew()">Create
+                                                    Customer</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div v-if="conpop"
+                                        class="fixed inset-1 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                                        <div class="bg-white rounded-lg p-8 shadow-xl">
+                                            <h2 class="text-xl font-semibold mb-4 text-green-600">Customer Successfully Created</h2>
+                                        </div>
+                                    </div>
+
+                                    <div v-if="newpop"
+                                        class="fixed inset-1 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                                        <div class="bg-white rounded-lg p-12 shadow-x">
+                                            <div class="text-red-500 mb-4">
+                                                <h6 class="flex justify-center">{{ customerResponse }}</h6>
+                                            </div>
+                                            <h2 class="text-3xl font-semibold mb-3 mr-4">New Customer</h2>
+                                            <div class="mb-2 ml-20rem">
+                                                <p>Customer Name <span v-if="mentatory && !newName" class="text-red-500">*</span></p>
+                                                <input type="text" class="w-[100%] h-[3rem] rounded-sm border-solid border border-black"
+                                                    v-model="newName" />
+                                            </div>
+                                            <div class="mb-3">
+                                                <p>Customer Mobile No <span v-if="mentatory && !newNumber" class="text-red-500">*</span>
+                                                </p>
+                                                <input type="tel" class="w-[100%] h-[3rem] rounded-sm border-solid border border-black"
+                                                    v-model="newNumber" @input="customerResponse = ''" />
+                                            </div>
+                                            <div class="mb-3">
+                                                <p>GSTIN </p>
+                                                <input type="tel" class="w-[100%] h-[3rem] rounded-sm border-solid border border-black"
+                                                    v-model="newGSTIN" @input="customerResponse = ''" />
+                                            </div>
+                                            <div class="mb-3">
+                                                <p>Address<span v-if="mentatory && !newAddress" class="text-red-500">*</span></p>
+                                                <textarea
+                                                  class="w-full h-[6rem] rounded-sm border-solid border border-black"
+                                                  v-model="newAddress"
+                                                  @input="customerResponse = ''"
+                                                ></textarea>
+                                              </div>
+                                              <div class="mb-3">
+                                                <input type="checkbox" v-model="Cwhat"
+                                                        class="bg-gray-300 rounded-sm">&nbsp;&nbsp; <label>WhatsApp<span v-if="mentatory && !Cwhat" class="text-red-500">*</span></label>
+                                                <span class="ml-5">
+                                                    <input type="checkbox" v-model="Ccall"
+                                                        class="bg-gray-300 rounded-sm">&nbsp;&nbsp;<label>call<span v-if="mentatory && !Ccall" class="text-red-500">*</span></label>
+                                                </span>
+                                                <span class="ml-5 mb-3">
+                                                    <input type="checkbox" v-model="Csms"
+                                                        class="bg-gray-300 rounded-sm">&nbsp;&nbsp;<label>SMS<span v-if="mentatory && !Csms" class="text-red-500">*</span></label>
+                                                </span>
+                                            </div>
+                                            <div class="flex justify-center">
+                                                <button @click="newCustomer"
+                                                    class="bg-green-500 w-[9rem] text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
+                                                <button @click="newpop = false; mentatory = false"
+                                                    class="bg-red-500 w-[9rem] text-white font-semibold px-4 py-2 rounded">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="grid grid-cols-2 mt-[1.5rem]">
                                         <div>
                                             <h2 class="text-2xl font-semibold mb-4">Customer Details</h2>
@@ -995,33 +1082,25 @@
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Mobile No.">
                                     </p>
-                                    <p class="m-2" v-if="enquiryPage">Vehicle Brand <span
-                                            class="text-red-500 font-bold">*</span><br>
-                                        <select v-if="boolDetails.state == 0"
-                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                            v-model="customerData.vehicle_brand"
-                                            @change="get_Vmodel(customerData.vehicle_brand)" style="overflow-y: auto;">
-                                            <option value="" disabled selected>Select brand...</option>
-                                            <option v-for="brand in vBrand" :key="brand">{{ brand.name }}</option>
-                                        </select>
-                                        <input type="input" v-model="leadDetails.custom_vehicle_brand"
-                                            v-if="boolDetails.state == 1" :readonly="boolDetails.state == 1"
-                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 pl-3 rounded-sm border-solid border border-black"
-                                            >
-                                    </p>
-                                    <p class="m-2" v-if="enquiryPage">Vehicle Model <span
-                                            class="text-red-500 font-bold">*</span><br>
-                                        <select v-if="boolDetails.state == 0"
-                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
-                                            v-model="customerData.vehicle_model" style="overflow-y: auto;">
-                                            <option value="" disabled selected>Select model...</option>
-                                            <option v-for="model in vModel" :key="model">{{ model.model }}</option>
-                                        </select>
-                                        <input type="input" v-model="leadDetails.custom_vehicle_model"
-                                            v-if="boolDetails.state == 1" :readonly="boolDetails.state == 1"
-                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 pl-3 rounded-sm border-solid border border-black"
-                                            >
-                                    </p>
+                                    <div v-if="searchMobileAfterResponse">
+                                        <p class="m-2">Vehicle Brand <span class="text-red-500 font-bold">*</span><br>
+                                            <select
+                                                class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                                v-model="customerData.vehicle_brand"
+                                                @change="get_Vmodel(vehicleData.vehicle_brand)" style="overflow-y: auto;">
+                                                <option value="" disabled selected>Select brand...</option>
+                                                <option v-for="brand in vBrand" :key="brand">{{ brand.name }}</option>
+                                            </select>
+                                        </p>
+                                        <p class="m-2">Vehicle Model <span class="text-red-500 font-bold">*</span><br>
+                                            <select
+                                                class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                                v-model="customerData.vehicle_model" style="overflow-y: auto;">
+                                                <option value="" disabled selected>Select model...</option>
+                                                <option v-for="model in vModel" :key="model">{{ model.model }}</option>
+                                            </select>
+                                        </p>
+                                    </div>
                                     <input type="checkbox" v-model="customerData.whatsappChecked"
                                         :checked="leadDetails.custom_whatsapp == '1'" :disabled="boolDetails.state == 1"
                                         class="bg-gray-300 rounded-sm">&nbsp;&nbsp; <label>WhatsApp</label>
@@ -1135,7 +1214,7 @@
                                                     @change="getType(selectedBrand, selectedVariant, pattern, index)">
                                                     <option v-for="(pattern, index) in patterns[index]" :key="index">{{
                                                         pattern
-                                                    }}</option>
+                                                        }}</option>
                                                 </select>
                                             </div>
                                             <div class="flex flex-col ml-1">
@@ -2040,6 +2119,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div v-if="cancelpop"
                     class="fixed inset-1 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
                     <div class="bg-white rounded-lg p-8 shadow-xl">
@@ -2060,33 +2140,68 @@
                         <h2 class="text-xl font-semibold mb-4 text-green-600">Data added Successfully!</h2>
                     </div>
                 </div>
+
+
+                <div v-if="conpop"
+                    class="fixed inset-1 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                    <div class="bg-white rounded-lg p-8 shadow-xl">
+                        <h2 class="text-xl font-semibold mb-4 text-green-600">Customer Successfully Created</h2>
+                    </div>
+                </div>
+
+
                 <div class="pt-24 p-12">
                     <div v-if="newpop"
-                        class="fixed inset-1 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
-                        <div class="bg-white rounded-lg p-12 shadow-x">
-                            <div class="text-red-500 mb-4">
-                                <h6 class="flex justify-center">{{ customerResponse }}</h6>
-                            </div>
-                            <h2 class="text-3xl font-semibold mb-3 mr-4">New Customer</h2>
-                            <div class="mb-2 ml-20rem">
-                                <p>Customer Name <span v-if="mentatory && !newName" class="text-red-500">*</span></p>
-                                <input type="text" class="w-[100%] h-[3rem] rounded-sm border-solid border border-black"
-                                    v-model="newName" />
-                            </div>
-                            <div class="mb-3">
-                                <p>Customer Mobile No <span v-if="mentatory && !newNumber" class="text-red-500">*</span>
-                                </p>
-                                <input type="tel" class="w-[100%] h-[3rem] rounded-sm border-solid border border-black"
-                                    v-model="newNumber" @input="customerResponse = ''" />
-                            </div>
-                            <div class="flex justify-center">
-                                <button @click="newCustomer"
-                                    class="bg-green-500 w-[9rem] text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
-                                <button @click="newpop = false; mentatory = false"
-                                    class="bg-red-500 w-[9rem] text-white font-semibold px-4 py-2 rounded">Cancel</button>
-                            </div>
-                        </div>
-                    </div>
+                                        class="fixed inset-1 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                                        <div class="bg-white rounded-lg p-12 shadow-x">
+                                            <div class="text-red-500 mb-4">
+                                                <h6 class="flex justify-center">{{ customerResponse }}</h6>
+                                            </div>
+                                            <h2 class="text-3xl font-semibold mb-3 mr-4">New Customer</h2>
+                                            <div class="mb-2 ml-20rem">
+                                                <p>Customer Name <span v-if="mentatory && !newName" class="text-red-500">*</span></p>
+                                                <input type="text" class="w-[100%] h-[3rem] rounded-sm border-solid border border-black"
+                                                    v-model="newName" />
+                                            </div>
+                                            <div class="mb-3">
+                                                <p>Customer Mobile No <span v-if="mentatory && !newNumber" class="text-red-500">*</span>
+                                                </p>
+                                                <input type="tel" class="w-[100%] h-[3rem] rounded-sm border-solid border border-black"
+                                                    v-model="newNumber" @input="customerResponse = ''" />
+                                            </div>
+                                            <div class="mb-3">
+                                                <p>GSTIN </p>
+                                                <input type="tel" class="w-[100%] h-[3rem] rounded-sm border-solid border border-black"
+                                                    v-model="newGSTIN" @input="customerResponse = ''" />
+                                            </div>
+                                            <div class="mb-3">
+                                                <p>Address<span v-if="mentatory && !newAddress" class="text-red-500">*</span></p>
+                                                <textarea
+                                                  class="w-full h-[6rem] rounded-sm border-solid border border-black"
+                                                  v-model="newAddress"
+                                                  @input="customerResponse = ''"
+                                                ></textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <input type="checkbox" v-model="Cwhat"
+                                                        class="bg-gray-300 rounded-sm">&nbsp;&nbsp; <label>WhatsApp<span v-if="mentatory && !Cwhat" class="text-red-500">*</span></label>
+                                                <span class="ml-5">
+                                                    <input type="checkbox" v-model="Ccall"
+                                                        class="bg-gray-300 rounded-sm">&nbsp;&nbsp;<label>call<span v-if="mentatory && !Ccall" class="text-red-500">*</span></label>
+                                                </span>
+                                                <span class="ml-5 mb-3">
+                                                    <input type="checkbox" v-model="Csms"
+                                                        class="bg-gray-300 rounded-sm">&nbsp;&nbsp;<label>SMS<span v-if="mentatory && !Csms" class="text-red-500">*</span></label>
+                                                </span>
+                                            </div>
+                                            <div class="flex justify-center">
+                                                <button @click="newCustomer"
+                                                    class="bg-green-500 w-[9rem] text-white font-semibold px-4 py-2 rounded mr-2">Save</button>
+                                                <button @click="newpop = false; mentatory = false"
+                                                    class="bg-red-500 w-[9rem] text-white font-semibold px-4 py-2 rounded">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
                     <div v-if="billing === true">
                         <h1 class="text-[20px] font-bold mb-1">Customer Deatils</h1>
                         <hr class="mt-2" :style="{ borderWidth: '2px', borderColor: 'gray' }">
@@ -2140,7 +2255,7 @@
                                     <th class="border border-gray-800 px-4 py-4 w-[10rem]">Amount</th>
                                 </tr>
                             </thead>
-                            <pre>{{ tableData.value }}</pre>
+                            <!-- <pre>{{ tableData.value }}</pre> -->
                             <tbody class="border border-gray-800 text-center">
                                 <tr v-for="(data, index) in tableData" :key="index">
                                     <td class="border border-gray-800 px-4 py-2 w-[10rem]">{{ index + 1 }}</td>
@@ -2406,6 +2521,8 @@ onMounted(() => {
 const newpop = ref(false)
 const newName = ref('')
 const newNumber = ref('')
+const newGSTIN=ref('')
+const newAddress=ref('')
 
 function addNew() {
     console.log("create new")
@@ -2416,17 +2533,42 @@ function addNew() {
 
 const mentatory = ref(false)
 const customerResponse = ref('')
+const conpop=ref(false)
+const Cwhat=ref(false)
+const Ccall=ref(false)
+const Csms=ref(false)
 
 function newCustomer() {
     if (newName.value && newNumber.value) {
         console.log("created")
-        axios.post(`${BaseURL}/api/method/tyre.api.create_customer`, { name: newName.value, no: newNumber.value }, { headers: headers })
+        axios.post(`${BaseURL}/api/method/tyre.api.create_customer`, { name: newName.value, no: newNumber.value,gs:newGSTIN.value,add:newAddress.value,what:Cwhat.value,call:Ccall,sms:Csms }, { headers: headers })
             .then(response => {
                 if (response.data.message === "Customer created successfully") {
                     newpop.value = false
-                    selectedname.value = newName.value
-                    selectednumber.value = newNumber.value
+                    conpop.value=true
+                    if(currentstep.value===4){
+                        selectedname.value = newName.value
+                        selectednumber.value = newNumber.value
+                    }
+                    if(currentstep.value===0){
+                        console.log(newName.value,newNumber.value)
+                        customerData.value.current_owner=newName.value
+                        customerData.value.owner_mobile_no=newNumber.value
+                        customerData.value.whatsappChecked=Cwhat.value
+                        customerData.value.callChecked=Ccall.value
+                        customerData.value.smsChecked=Csms.value
+                    }
+                    setTimeout(() => {
+                        conpop.value=false
+                    }, 2000);
+                    
                 } else {
+                    if(response.data.message==="Error: Fill the Address Field"){
+                        mentatory.value = true
+                    }
+                    if(response.data.message==="Fill the require field"){
+                        mentatory.value=true
+                    }
                     customerResponse.value = response.data.message;
                 }
             })
@@ -2507,7 +2649,7 @@ function confirmBill() {
                     totalCost.value = 0.00;
                     finalAmount.value = 0.00;
                     step = 0;
-                    // window.location.reload()
+                    window.location.reload()
                 }, 2000);
             }
         })
@@ -3353,25 +3495,25 @@ const existMobileNumber = async (mobile) => {
     }
     const response = await axios.post(`${BaseURL}/api/method/tyre.api.exist_mobile_number`, { data: JSON.stringify(data) }, { headers: headers })
     if (response.data.message == "mobileExist") {
-        showNewCustomer.value = false;
-        showAlerts.value = true;
-        mobileNumber.value = true;
-        setTimeout(() => {
-            showAlerts.value = false;
-            mobileNumber.value = false;
-            showNewCustomer.value = true;
-        }, 1000);
+        // showNewCustomer.value = false;
+        // showAlerts.value = true;
+        // mobileNumber.value = true;
+        // setTimeout(() => {
+        //     showAlerts.value = false;
+        //     mobileNumber.value = false;
+        //     showNewCustomer.value = true;
+        // }, 1000);
         return true;
     }
     return false;
 }
-
+const exists=ref(false)
 const addCustomerData = async () => {
     const name = responseData.value.message[0].name.trim();
     const existingData = await returnSearch(name);
     const mobileNumberExist = await existMobileNumber(customerData.value.owner_mobile_no)
     if (mobileNumberExist) {
-        return
+        exists.value=true
     }
     console.log("existing vehicle check", existingData)
     if (existingData.message[0].name && !existingData.message[1].current_owner) {
@@ -3421,7 +3563,8 @@ const addCustomerData = async () => {
             whatsappChecked: customerData.value.whatsappChecked,
             callChecked: customerData.value.callChecked,
             smsChecked: customerData.value.smsChecked,
-            employees: []
+            employees: [],
+            exists:exists.value
         };
 
         employees.value.forEach(employee => {
@@ -3601,12 +3744,10 @@ const serviceDetails = ref({
 const leadCustomer = ref(false);
 const handleCustomer = async () => {
     showNewCustomer.value = false;
-    if (customerData.value.current_owner && customerData.value.owner_mobile_no && customerData.value.vehicle_brand && customerData.value.vehicle_model) {
+    if (customerData.value.current_owner && customerData.value.owner_mobile_no) {
         const customerDetails = {
             current_owner: customerData.value.current_owner,
             owner_mobile_no: customerData.value.owner_mobile_no,
-            vehicle_brand: customerData.value.vehicle_brand,
-            vehicle_model: customerData.value.vehicle_model,
             whatsapp: customerData.value.whatsappChecked,
             call: customerData.value.callChecked,
             sms: customerData.value.smsChecked,
@@ -3681,8 +3822,6 @@ const enquiryClear = async () => {
     }
     billPopup.value = 'false';
     customerData.value.current_owner = '';
-    customerData.value.owner_mobile_no = '';
-    customerData.value.vehicle_model = '';
     customerData.value.owner_mobile_no = '';
     customerData.value.whatsappChecked = false;
     customerData.value.callChecked = false;
@@ -4251,8 +4390,8 @@ async function get_itemrate(data, index) {
 async function getrate(data) {
     let inch = ''
     let type = ''
-    let brand = ''
-    let model = ''
+    let brand =''
+    let model =''
     if (data === "Rotation") {
         console.log("+++++++++++++++++++yes++++++++++++++++++")
         inch = requireService.value.rotations.inche;
@@ -4264,9 +4403,9 @@ async function getrate(data) {
     else {
         inch = ''
     }
-    if (responseData.value.message) {
-        brand = responseData.value.message[0].vehicle_brand;
-        model = responseData.value.message[0].vehicle_model;
+    if(responseData.value.message){
+        brand=responseData.value.message[0].vehicle_brand;
+        model=responseData.value.message[0].vehicle_model;
     }
     try {
         const response = await axios.get(`${BaseURL}/api/method/tyre.api.get_item_rate`, {
@@ -4641,6 +4780,41 @@ const confirmDataSave = async () => {
         afterResponse.value = false;
         handle.value = false
         searchMobileAfterResponse.value = true
+        //     if (tyreDatas.value[key] == Boolean) {
+        //         tyreDatas.value[key] = false;
+        //     }
+        //     else {
+        //         tyreDatas.value[key] = '';
+        //     }
+        // })
+        // tyres.value.forEach(tyre => {
+        //     for (let key in tyre) {
+        //         tyre[key] = '';
+        //     }
+        //     tyre.maxYears = warrantyYears(0);
+        //     tyre.mandatory = false;
+        //     tyre.status = false;
+        // });
+        // // Loop through each property of the object
+        // for (let key in requireService.value) {
+        //     // If the property value is an object, loop through its properties
+        //     if (typeof requireService.value[key] === 'object') {
+        //         for (let innerKey in requireService.value[key]) {
+        //             // Set sub-properties to empty strings
+        //             requireService.value[key][innerKey] = '';
+        //         }
+        //     } else {
+        //         // Set properties to false
+        //         requireService.value[key] = false;
+        //     }
+        // }
+
+        // // Set sub-properties of the show object to false
+        // show.alignment.value = false;
+        // show.rotation.value = false;
+        // show.oil_change.value = false;
+        // show.inflation.value = false;
+        // show.balancing.value = false;
         window.location.reload()
     }, 1000);
 }
