@@ -259,13 +259,26 @@ def store_customer_details(data):
             new_owner = None
 
             # Check if owner data already exists
-            if not owner:
+            print(owner)
+            print(data)
+            print(data.get("exists"))
+            if not owner and data.get("exists") == False:
                 new_owner = frappe.new_doc("Customer")
                 new_owner.customer_name = data.get('current_owner')
                 new_owner.mobile_no = data.get('owner_mobile_no')
                 new_owner.custom_whatsapp = data.get('whatsappChecked')
                 new_owner.custom_sms = data.get('smsChecked')
                 new_owner.custom_call = data.get('callChecked')
+            elif owner and data.get("exists") == True:
+                print("NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
+                own = frappe.get_doc("Customer", owner)
+                # own = frappe.get_doc("",owner)
+                print(own)
+                own.customer_name = data.get('current_owner')
+                own.mobile_no = data.get('owner_mobile_no')
+                own.custom_whatsapp = data.get('whatsappChecked')
+                own.custom_sms = data.get('smsChecked')
+                own.custom_call = data.get('callChecked')
             else:
                 frappe.throw("Owner already exists with the given number: " + data.get('owner_mobile_no'))
 
@@ -304,10 +317,16 @@ def store_customer_details(data):
                         return "contact person already exist"
 
             # Save the new owner, driver, and contact person data if they are new entries
-            if new_owner and (new_driver or new_drivers):
-                new_owner.save(ignore_permissions=True)
-                doc.owner_data = new_owner
-
+            if new_owner or owner and (new_driver or new_drivers):
+                if new_owner:
+                    print("YESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
+                    new_owner.save(ignore_permissions=True)
+                    doc.owner_data = new_owner
+                if owner:
+                    print("yesss++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+                    own.save(ignore_permissions=True)    
+                    doc.owner_data=own
+                    print(doc.owner_data)
                 if new_driver:
                     new_driver.save(ignore_permissions=True)
                     doc.append("current_driver", {"current_driver": new_driver.name, "mobile_no": driver_data.get('mobile_no')})
@@ -321,6 +340,10 @@ def store_customer_details(data):
             elif new_owner:
                 new_owner.save(ignore_permissions=True)
                 doc.owner_data = new_owner
+            else:
+                own.save(ignore_permissions=True)
+                doc.owner_data = own
+                
 
             # Save the customer details document
             doc.save(ignore_permissions=True)
@@ -1130,17 +1153,33 @@ def send_quotation(data):
 def get_customer(data):
     if data.isdigit():
         # Search for the customer by partial match of mobile number
-        customers = frappe.get_all("Customer", fields=["name", "customer_name", "mobile_no"], filters={"mobile_no": ("like", f"%{data}%")})
+        customers = frappe.get_all(
+            "Customer", 
+            fields=["name", "customer_name", "mobile_no", "custom_whatsapp", "custom_sms", "custom_call"], 
+            filters={"mobile_no": ("like", f"%{data}%")}
+        )
     else:
         # Search for the customer by name
-        customers = frappe.get_all("Customer", fields=["name", "customer_name", "mobile_no"], filters={"customer_name": ("like", f"%{data}%")})
+        customers = frappe.get_all(
+            "Customer", 
+            fields=["name", "customer_name", "mobile_no", "custom_whatsapp", "custom_sms", "custom_call"], 
+            filters={"customer_name": ("like", f"%{data}%")}
+        )
     
-    customer_details = [{"name": customer.name, "customer_name": customer.customer_name, "mobile_no": customer.mobile_no} for customer in customers]
+    customer_details = [{
+        "name": customer.name,
+        "customer_name": customer.customer_name,
+        "mobile_no": customer.mobile_no,
+        "custom_whatsapp": customer.custom_whatsapp,
+        "custom_sms": customer.custom_sms,
+        "custom_call": customer.custom_call
+    } for customer in customers]
     
     if not customer_details:
         return [{"message": "No data found"}]
     
     return customer_details
+
 
 
 @frappe.whitelist()
@@ -1149,20 +1188,41 @@ def get_items(item_group=None):
     return items
 
 @frappe.whitelist()
-def create_customer(name, no):
+def create_customer(name, no,gs,add,what,call,sms):
+    
+    if what == False or call==False or sms==False:
+        return "Fill the require field"
     # Validate mobile number
+    if not add:
+        return "Error: Fill the Address Field"
     if not no.isdigit() or len(no) != 10:
         return "Error: Mobile number must be a 10-digit number"
+    
+    regex = "^[0-9]{2}[A-Z]{5}[0-9]{4}"+"[A-Z]{1}[1-9A-Z]{1}"+"Z[0-9A-Z]{1}$"
+     
+    # Compile the ReGex
+    p = re.compile(regex)
+    
+    # Check if the GSTIN matches the regex pattern
+    if not re.search(p, gs):
+        return "Error: Enter a correct GSTIN number!"
+
     
     number = frappe.get_all("Customer", filters={"mobile_no": no})
     if number:
         return "Mobile number is already exists!"
     else :
         # Convert name to first letter capitalized
+        
         name = name.strip().capitalize()
         doc=frappe.new_doc("Customer")
         doc.customer_name=name
         doc.mobile_no=no
+        doc.primary_address=add
+        doc.custom_gstin=gs
+        doc.custom_whatsapp=what
+        doc.custom_call=call
+        doc.custom_sms=sms
         doc.save(ignore_permissions=True)
         return "Customer created successfully"
 
@@ -1195,12 +1255,12 @@ def sales_order(data, name):
 
     # Save the document
     doc.save(ignore_permissions=True)
-    print("hello")
-    doc.submit()
-    si_doc=make_sales_invoice(source_name=doc.name)
-    si_doc.save(ignore_permissions=True)
-    si_doc.submit()
-    # pay_invoice(si_doc.name)
+    # print("hello")
+    # doc.submit()
+    # si_doc=make_sales_invoice(source_name=doc.name)
+    # si_doc.save(ignore_permissions=True)
+    # si_doc.submit()
+    # # pay_invoice(si_doc.name)
     return "done"
 
 @frappe.whitelist()
