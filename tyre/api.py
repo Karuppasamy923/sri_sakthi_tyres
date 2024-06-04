@@ -504,9 +504,9 @@ def lead(**args):
         "custom_call": data.call,
     }
     print("lead details",data)
-    doc = frappe.db.exists("Lead",{ "mobile_no" : data.owner_mobile_no})
+    docs = frappe.db.exists("Lead",{ "mobile_no" : data.owner_mobile_no})
 
-    if doc:
+    if docs:
         return {
             "status": 400,
             "message": "Lead Already Exists"
@@ -539,15 +539,36 @@ def lead(**args):
     doc = frappe.new_doc("Lead")
     doc.update(lead_user_details)
     doc.update(service_details)
+    doc_dict = doc.as_dict()
+    print("\n\n\n\n..................",json.dumps(doc_dict, indent=4))
     for service, value in service_details.items():
+        print('service',service)
         if value:
+            print("value",value)
             for Services, values in service_dict.items():
+                print("service++++++++",service)
+                print("Services.....",Services)
+                print("Values......",values)
                 if service == Services :
-                    doc.append("custom_lead_items",{"item_code":values,"quantity" : 1})
+                    # doc.append("custom_lead_items",{"item_code":values,"quantity" : 1})
+                    rotation_amount = frappe.get_doc("Tyre Edge Rotation Price",{"name":services.rotationInch})
+                    # doc.append("custom_lead_items",{"item_code":values, "quantity":12,"amount":rotation_amount.price,"rate":1000})
+                    print("rotation amount checking",rotation_amount.price)
+                    balancing_amount = frappe.get_doc("Wheel Balancing",{"inche":services.balancingInch})
+                    print("balancing amount checking",balancing_amount.price)
+                    if values == "Rotation":
+                        doc.append("custom_lead_items",{"item_code":values, "quantity":12, "amount" :rotation_amount.price, "rate" :1000})
+                        doc.custom_rotation_amount = rotation_amount.price
+                    if values == "Balancing":
+                        doc.custom_balancing_amount = balancing_amount.price
+                        doc.append("custom_lead_items",{"item_code":values,"quantity" : 13, "amount" :balancing_amount.price, "rate" :1000})
+                    if "Rotation" not in values and "Balancing" not in values:
+                        doc.append("custom_lead_items",{"item_code":values,"quantity" : 14, "amount" :10, "rate" :10})
 
     for items_deatils in data.get("items"):
         items_deatils = frappe._dict(items_deatils)
         doc.append("custom_lead_items", {"brand": items_deatils.brand, "size": items_deatils.variants, "quantity" : items_deatils.quantity,"pattern": items_deatils.pattern,"tyre_type": items_deatils.type})
+    print("\n\n\n\n..................",json.dumps(doc_dict.custom_lead_items, indent=4))
     doc.save(ignore_permissions=True)  # Save customer document
     return {
         "status": 200,

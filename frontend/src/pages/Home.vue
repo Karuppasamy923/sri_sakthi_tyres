@@ -233,6 +233,8 @@
                                 <p class="mb-4 text-red-500 font-bold" v-if="customerExist">! Customer already added to
                                     this
                                     vehicle..</p>
+                                <p class="mb-4 text-red-500 font-bold" v-if="driverExist">Driver already exist!</p>
+                                <p class="mb-4 text-red-500 font-bold" v-if="cpersonExist">Contact person already exist!</p>
                                 <p class="mb-4 text-red-500 font-bold" v-if="leadMobile">Lead Customer not found!</p>
                                 <p class="mb-4 text-red-500 font-bold" v-if="leadCustomer">Lead Customer already exists!
                                 </p>
@@ -1212,8 +1214,7 @@
                                                     v-model="serviceDetails.rotationInch"
                                                     class="w-[8rem] h-[2.3rem] ml-6 rounded-sm border-solid border border-black bg-gray-300">
                                                     <option value="" selected disabled>Select Inch</option>
-                                                    <option value="1">1</option>
-                                                    <option value="2">2</option>
+                                                    <option v-for="inch in R_inch" :key="inch" :value="inch">{{ inch }}</option>
                                                 </select>
                                             </div>
                                             <div>
@@ -1227,8 +1228,7 @@
                                                     v-model="serviceDetails.balancingInch"
                                                     class="w-[8rem] h-[2.3rem] ml-6 rounded-sm border-solid border border-black bg-gray-300">
                                                     <option value="" selected disabled>Select Inch</option>
-                                                    <option value="1">1</option>
-                                                    <option value="2">2</option>
+                                                    <option v-for="inch in B_inch" :key="inch" :value="inch">{{ inch }}</option>
                                                 </select>
                                             </div>
                                             <div>
@@ -1523,8 +1523,6 @@
                                 </div>
                                 <div class="flex flex-col space-y-1">
                                     <label class="mt-2" :for="'COM' + index">Comment
-                                        <span v-if="tyreData.mandatory && !tyreData.comment.trim()"
-                                            class="text-red-500 font-bold">*</span>
                                     </label>
                                     <input v-model="tyreData.comment"
                                         class="w-[100%] h-[3.5rem] rounded-sm border-solid border border-black"
@@ -2522,7 +2520,7 @@ function confirmBill() {
                     totalCost.value = 0.00;
                     finalAmount.value = 0.00;
                     step = 0;
-                    // window.location.reload()
+                    window.location.reload()
                 }, 2000);
             }
         })
@@ -2939,7 +2937,7 @@ function nextPageAndHighlight() {
                 for (let i = 0; i < tyreDatas.value.length; i++) {
                     const tyre = tyreDatas.value[i];
                     if (tyre.tyre) {
-                        if (tyre.comment == '' || tyre.depth == '' || tyre.pressure == '') {
+                        if ( tyre.depth == '' || tyre.pressure == '' ) {
                             tyre.mandatory = true;
                             currentstep.value = 1;
                             return;
@@ -3382,7 +3380,8 @@ const existMobileNumber = async (mobile) => {
     }
     return false;
 }
-
+const driverExist = ref(false)
+const cpersonExist = ref(false)
 const addCustomerData = async () => {
     const name = responseData.value.message[0].name.trim();
     const existingData = await returnSearch(name);
@@ -3457,10 +3456,24 @@ const addCustomerData = async () => {
             check.value = true;
             console.log("customer details", response);
             if (response.data.message == "driver already exist") {
-                alert("driver already exist")
+                showModifyCustomer.value = false;
+                showAlerts.value = true;
+                driverExist.value = true;
+                setTimeout(() => {
+                    showAlerts.value = false;
+                    driverExist.value = false;
+                    showModifyCustomer.value = true;
+                }, 1000);
             }
             else if (response.data.message == "contact person already exist") {
-                alert("contact person already exist")
+                showModifyCustomer.value = false;
+                showAlerts.value = true;
+                cpersonExist.value = true;
+                setTimeout(() => {
+                    showAlerts.value = false;
+                    cpersonExist.value = false;
+                    showModifyCustomer.value = true;
+                }, 1000);
             }
             else if (response) {
                 showNewCustomer.value = false;
@@ -3561,10 +3574,24 @@ const addCustomerModifiedData = async () => {
         const response = await axios.post(`${BaseURL}/api/method/tyre.api.store_customer_details`, { data: JSON.stringify(modifiedData) }, { headers: headers });
         console.log("customer details", response);
         if (response.data.message == "driver already exist") {
-            alert("driver already exist")
+            showModifyCustomer.value = false;
+            showAlerts.value = true;
+                driverExist.value = true;
+                setTimeout(() => {
+                    showAlerts.value = false;
+                    driverExist.value = false;
+                    showModifyCustomer.value = true;
+                }, 1000);
         }
         else if (response.data.message == "contact person already exist") {
-            alert("contact person already exist")
+            showModifyCustomer.value = false;
+            showAlerts.value = true;
+            cpersonExist.value = true;
+            setTimeout(() => {
+                    showAlerts.value = false;
+                    cpersonExist.value = false;
+                    showModifyCustomer.value = true;
+                }, 1000);
         }
         else if (response) {
             check.value = true;
@@ -4331,7 +4358,7 @@ function formatValue(value, type) {
     return type === 'warranty' ? `${value} years` : `${value}`;
 }
 const additional = (additional) => {
-    return additional ? ' (additonal sale)' : ''
+    return additional ? ' (additional sale)' : ''
 }
 const tyres = ref([{
     type: '',
