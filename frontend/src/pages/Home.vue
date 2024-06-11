@@ -561,7 +561,7 @@
                                         Add Vehicle
                                     </button>
                                     <button class="bg-blue-500 w-[150px] text-white font-bold  p-4 rounded-lg ml-3"
-                                        @click="addCustomer" id="customerId">
+                                        @click="addCustomer(),searchMobileAfterResponse=false" id="customerId">
                                         Add Customer
                                     </button>
 
@@ -965,7 +965,7 @@
                                                 </div>
                                                 <!-- <pre>{{customers}}</pre> -->
                                                 <ul v-show="dataLoaded" class="custom-dropdown-list">
-                                                    <li v-for="option in customers" :key="option.value" @click="customerData.current_owner=option.customer_name,customerData.owner_mobile_no=option.mobile_no,customerData.whatsappChecked=option.custom_whatsapp,customerData.callChecked=custom_call,customerData.smsChecked=custom_sms,dataLoaded=false,billCustomer=''"
+                                                    <li v-for="option in customers" :key="option.value" @click="assign(option),dataLoaded=false,billCustomer=''"
                                                         class="custom-dropdown-item">
                                                         <div v-if="option.customer_name">
                                                             <label>{{ option.customer_name }}</label><br>
@@ -984,7 +984,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div v-if="conpop"
                                         class="fixed inset-1 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
                                         <div class="bg-white rounded-lg p-8 shadow-xl">
@@ -1068,6 +1067,7 @@
 
                                         <input type="text" v-model="customerData.current_owner"
                                             v-if="boolDetails.state == 0"
+                                            :disabled="true"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Name">
                                     </p>
@@ -1079,6 +1079,7 @@
 
                                         <input type="tel" v-model="customerData.owner_mobile_no"
                                             v-if="boolDetails.state == 0"
+                                            :disabled="true"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Mobile No.">
                                     </p>
@@ -1102,16 +1103,16 @@
                                         </p>
                                     </div>
                                     <input type="checkbox" v-model="customerData.whatsappChecked"
-                                        :checked="leadDetails.custom_whatsapp == '1'" :disabled="boolDetails.state == 1"
+                                        :checked="leadDetails.custom_whatsapp == '1' || customerData.whatsappChecked == '1'" :disabled="boolDetails.state == 1"
                                         class="bg-gray-300 rounded-sm">&nbsp;&nbsp; <label>WhatsApp</label>
                                     <span class="ml-5">
                                         <input type="checkbox" v-model="customerData.callChecked"
-                                            :checked="leadDetails.custom_call == '1'" :disabled="boolDetails.state == 1"
+                                            :checked="leadDetails.custom_call == '1'|| customerData.callChecked=='1'" :disabled="boolDetails.state == 1"
                                             class="bg-gray-300 rounded-sm">&nbsp;&nbsp;<label>call</label>
                                     </span>
                                     <span class="ml-5">
                                         <input type="checkbox" v-model="customerData.smsChecked"
-                                            :checked="leadDetails.custom_sms == '1'" :disabled="boolDetails.state == 1"
+                                            :checked="leadDetails.custom_sms == '1'|| customerData.smsChecked=='1'" :disabled="boolDetails.state == 1"
                                             class="bg-gray-300 rounded-sm">&nbsp;&nbsp;<label>SMS</label>
                                     </span>
 
@@ -1409,6 +1410,19 @@
                                         <input type="tel" v-if="check" v-model="responseData.message[1].owner_mobile_no"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             placeholder="Enter Owner Mobile No.">
+                                    </p>
+
+                                    <p class="m-2">GSTIN <br>
+                                        <input type="text" v-if="check" v-model="responseData.message[3].custom_gstin"
+                                            class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                            placeholder="Enter a Valid GSTIN.">
+                                    </p>
+                                    <p class="m-2">
+                                        Address <br>
+                                        <textarea v-if="check" v-model="responseData.message[3].primary_address"
+                                                  class="w-[22rem] h-[7rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
+                                                  placeholder="Enter Address">
+                                        </textarea>
                                     </p>
                                     <input type="checkbox" v-if="check"
                                         :checked="responseData.message[1]?.whatsapp === 1"
@@ -2455,6 +2469,18 @@ function handleImgSelection(event) {
     data.selectedAlt = event.target.alt;
 }
 
+function assign(optiondata){
+    console.log("**********")
+    console.log(optiondata.customer_name)
+    console.log("**********")
+    customerData.value.current_owner=optiondata.customer_name
+    customerData.value.owner_mobile_no=optiondata.mobile_no
+    customerData.value.whatsappChecked=optiondata.custom_whatsapp
+    customerData.value.callChecked=optiondata.custom_call
+    customerData.value.smsChecked=optiondata.custom_sms
+
+}
+
 const customers = ref([])
 const dataLoaded = ref(false)
 const selectedname = ref('')
@@ -2558,6 +2584,7 @@ function newCustomer() {
                         customerData.value.callChecked=Ccall.value
                         customerData.value.smsChecked=Csms.value
                     }
+                    billCustomer.value=''
                     setTimeout(() => {
                         conpop.value=false
                     }, 2000);
@@ -2865,6 +2892,10 @@ const dataAssignment = (response) => {
                     custom_whatsapp: '',
                     custom_sms: ''
                 }]
+            },
+            response.data.message[3] ? response.data.message[3] : {
+                gst:'',
+                address:'',
             }
         ]
     };
@@ -2928,7 +2959,7 @@ const search = async () => {
                 nextButtonEnable.value = true;
                 enquiryPage.value = false;
                 searchMobileAfterResponse.value = false;
-                console.log("response", response.data.message)
+                console.log("response*******************", response.data.message)
                 return dataAssignment(response)
             }
         } else {
@@ -3624,6 +3655,11 @@ const addCustomerData = async () => {
 
 const addCustomerModifiedData = async () => {
     const name = responseData.value.message[1].name
+    console.log("*********************")
+
+    console.log(responseData.value.message[1].owner_mobile_no)
+
+    console.log("*********************")
     const modifiedData = {
         name: responseData.value.message[1].name,
         current_owner: responseData.value.message[1].current_owner,
@@ -3632,8 +3668,11 @@ const addCustomerModifiedData = async () => {
         whatsapp: responseData.value.message[1].whatsapp,
         call: responseData.value.message[1].call,
         sms: responseData.value.message[1].sms,
+        gst:responseData.value.message[3].custom_gstin,
+        address:responseData.value.message[3].primary_address,
         employees: []
     };
+
 
     const driver = responseData.value.message[1].current_driver;
     const contactPerson = responseData.value.message[1].contact_person;

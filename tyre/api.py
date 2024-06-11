@@ -27,6 +27,7 @@ def get_details(license_plate):
                 vehicle_details = ''
                 customer_details = ''
                 primary_details=[]
+                customer =''
 
                 # Check if Vehicle Details exist
                 if frappe.db.exists("Vehicle Details", {"name": license_plate}):
@@ -35,6 +36,8 @@ def get_details(license_plate):
                 # Check if Customer Details exist
                 if frappe.db.exists("Customer Details", {"name": license_plate}):
                     customer_details = frappe.get_doc("Customer Details", {"name": license_plate})
+                    if customer_details.owner_data:
+                        customer = frappe.get_doc("Customer",{"name":customer_details.owner_data})
                     for current_driver in customer_details.current_driver:
                         data= frappe.get_doc("Driver",{"name":current_driver.current_driver})
                         print(data.full_name)
@@ -62,7 +65,7 @@ def get_details(license_plate):
                 # print(customer_details.employee_name)
 
                 if vehicle_details or customer_details :
-                    return [vehicle_details, customer_details,primary_details]
+                    return [vehicle_details, customer_details,primary_details,customer]
                 else:
                     print("*******")
                     return ""
@@ -131,7 +134,10 @@ def exist_mobile_number(data):
 # function to store new customer details
 @frappe.whitelist(allow_guest=True)
 def store_customer_details(data):
+    print("*********************")
     print(data)
+    print("*********************")
+    
     data = json.loads(data)
     print(data)
     license_plate = data.get('name').upper().replace(' ', '')
@@ -147,12 +153,13 @@ def store_customer_details(data):
             if frappe.db.exists("Customer",{'name':data.get('owner_data')}):
                 owner = frappe.get_doc("Customer",data.get('owner_data'))
                 owner.customer_name = data.get( 'current_owner')
-                owner.mobile_no = data.get('owner_mobile_no')
                 owner.custom_whatsapp = data.get('whatsapp')
                 owner.custom_sms = data.get('sms')
                 owner.custom_call = data.get('call')
+                owner.custom_gstin=data.get('gst')
+                owner.primary_address=data.get('address')
                 owner.save(ignore_permissions=True)
-            # doc.owner_email_id = data.get('owner_email_id')
+                frappe.db.set_value('Customer', data.get('owner_data'),'mobile_no',data.get('owner_mobile_no'))
             print("********old*******")
         
             #update a driver and conteact person
