@@ -11,8 +11,9 @@ def get_details(license_plate):
     print("****")
     print(license_plate)
     license_plate = re.sub(r'[^a-zA-Z0-9]', '', license_plate)
-    regex = "^[A-Z]{2}[0-9]{2}[A-Z]{1,2}[0-9]{4}$"
-    p = re.compile(regex)
+    print(len(license_plate))
+    # regex = "^[A-Z]{2}[0-9]{2}[A-Z]{1,2}[0-9]{4}$"
+    # p = re.compile(regex)
     # regex = "^[A-Z]{2}[\\s-]{0,1}[0-9]{2}[\\s-]{0,1}[A-Z]{1,2}[\\s-]{0,1}[0-9]{4}$"
     # p = re.compile(regex)
     license_plate=license_plate.upper()
@@ -20,7 +21,7 @@ def get_details(license_plate):
         return "NO Data Found!!!!"
     else:   
         print(license_plate.upper())
-        if(re.search(p, license_plate)):
+        if(len(license_plate)>=8 and len(license_plate)<=10):
             print("*****currect*******")
             print(license_plate)
             if license_plate:
@@ -1257,7 +1258,8 @@ def sales_order(data, name):
         doc.append("items", {
                         'item_code': sublist['itemCode'],
                         'qty': sublist['requiredQuantity'],
-                        'delivery_date':  current_date
+                        'delivery_date':  current_date,
+                        'rate':sublist['rate']
                     })
 
     # Save the document
