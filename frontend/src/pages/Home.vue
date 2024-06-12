@@ -837,12 +837,12 @@
                                             v-model="vehicleData.last_odometer_reading"
                                             placeholder="Enter Odometer reading">
                                     </p>
-                                    <p class="m-2">Tyre Change (kms) <span class="text-red-500 font-bold">*</span><br>
+                                    <p class="m-2">Tyre Change (kms)<br>
                                         <input type="number"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="vehicleData.tyre_change" placeholder="Enter Tyre Change">
                                     </p>
-                                    <p class="m-2">Alignment (kms) <span class="text-red-500 font-bold">*</span><br>
+                                    <p class="m-2">Alignment (kms) <br>
                                         <input type="number"
                                             class="w-[22rem] h-[3rem] bg-gray-300 mt-1 rounded-sm border-solid border border-black"
                                             v-model="vehicleData.alignment" placeholder="Enter Alignment">
@@ -3264,9 +3264,18 @@ const addVehicleData = async () => {
 
     fieldNames.forEach(fieldName => {
         const value = vehicleData.value[fieldName];
-        if (value == '') {
+
+        if (value == '' && (fieldName != 'tyre_change' && fieldName != 'alignment') ) {
             allRequiredFileds = false;
-            return;
+            // return;
+            // showNewVehicle.value = false;
+            showAlerts.value = true;
+            // vehicleNumber.value = true;
+        setTimeout(() => {
+            showAlerts.value = false;
+            // vehicleNumber.value = false;
+            showNewVehicle.value = true;
+        }, 1000);
         }
         data[fieldName] = value;
     });
@@ -3356,6 +3365,7 @@ const confirmSave = async () => {
 };
 
 const cancelSave = () => {
+    showNewVehicle.value = true;
     showConfirmation.value = false;
     enable.value = false;
     clearVehicleData();
