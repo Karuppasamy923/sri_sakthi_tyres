@@ -1145,7 +1145,7 @@
   {
    "fieldname": "fl_load_index",
    "fieldtype": "Data",
-   "label": "Load Index"
+   "label": "DOT"
   },
   {
    "fieldname": "column_break_kjli",
@@ -1203,7 +1203,7 @@
   {
    "fieldname": "fr_load_index",
    "fieldtype": "Data",
-   "label": "Load Index"
+   "label": "DOT"
   },
   {
    "fieldname": "column_break_ehwo",
@@ -1255,7 +1255,7 @@
   {
    "fieldname": "rl_load_index",
    "fieldtype": "Data",
-   "label": "Load Index"
+   "label": "DOT"
   },
   {
    "fieldname": "column_break_yxql",
@@ -1307,7 +1307,7 @@
   {
    "fieldname": "rr_load_index",
    "fieldtype": "Data",
-   "label": "Load Index"
+   "label": "DOT"
   },
   {
    "fieldname": "column_break_idth",
@@ -1359,7 +1359,7 @@
   {
    "fieldname": "sp_load_index",
    "fieldtype": "Data",
-   "label": "Load Index"
+   "label": "DOT"
   },
   {
    "fieldname": "column_break_gagi",
@@ -1486,7 +1486,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-05-13 11:51:08.202207",
+ "modified": "2024-06-13 11:11:05.066369",
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "Tyre Job Card",
