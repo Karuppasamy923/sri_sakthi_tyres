@@ -1011,7 +1011,7 @@
                                             </div>
                                             <div class="mb-3">
                                                 <p>GSTIN </p>
-                                                <input type="tel" class="w-[100%] h-[3rem] rounded-sm border-solid border border-black"
+                                                <input type="text" class="w-[100%] h-[3rem] rounded-sm border-solid border border-black"
                                                     v-model="newGSTIN" @input="customerResponse = ''" />
                                             </div>
                                             <div class="mb-3">
@@ -2019,11 +2019,11 @@
                                     <option value="Spare Tyre">Spare Tyre</option>
                                 </select>
                                 <div class="mt-[20px]">
-                                    <label :for="'loadIndex' + index">Load Index<span
-                                            v-if="tyre.mandatory && !tyre.loadIndex.trim()"
+                                    <label :for="'dot' + index">DOT<span
+                                            v-if="tyre.mandatory && !tyre.dot.trim()"
                                             class="text-red-500 font-bold">*</span></label><br>
                                     <input class="w-[15rem] h-[52px] rounded-sm border-solid border border-black"
-                                        :id="'loadIndex' + index" type="text" v-model="tyre.loadIndex"
+                                        :id="'dot' + index" type="text" v-model="tyre.dot"
                                         @change="saveData(index)">
                                 </div>
                             </div>
@@ -2185,7 +2185,7 @@
                                             </div>
                                             <div class="mb-3">
                                                 <p>GSTIN </p>
-                                                <input type="tel" class="w-[100%] h-[3rem] rounded-sm border-solid border border-black"
+                                                <input type="text" class="w-[100%] h-[3rem] rounded-sm border-solid border border-black"
                                                     v-model="newGSTIN" @input="customerResponse = ''" />
                                             </div>
                                             <div class="mb-3">
@@ -2795,7 +2795,7 @@ const getOther = (brand, data, index) => {
     for (const co in sizes.value[index]) {
         const sizeData = sizes.value[index][i]
         if (sizeData.size == data) {
-            tyres.value[index].loadIndex = sizeData.load_index;
+            //tyres.value[index].loadIndex = sizeData.load_index;
             tyres.value[index].speedRating = sizeData.speed_rating;
             // getType(brand, data, index)
             getPattern(brand, data, index)
@@ -3156,7 +3156,7 @@ function nextPageAndHighlight() {
                 for (let i = 0; i < tyres.value.length; i++) {
                     const tyre = tyres.value[i];
                     if (tyre.type) {
-                        if (tyre.loadIndex == '' || tyre.brand == '' || tyre.speedRating == '' || tyre.size == '' || tyre.pattern == '' || tyre.ttTl == '' || tyre.warranty == '') {
+                        if (tyre.dot == '' || tyre.brand == '' || tyre.speedRating == '' || tyre.size == '' || tyre.pattern == '' || tyre.ttTl == '' || tyre.warranty == '') {
                             tyre.mandatory = true;
                             currentstep.value = 3;
                             return;
@@ -4504,7 +4504,7 @@ const additional = (additional) => {
 }
 const tyres = ref([{
     type: '',
-    loadIndex: '',
+    dot: '',
     brand: '',
     speedRating: '',
     pattern: '',
@@ -4525,7 +4525,7 @@ watchEffect(() => {
 
 const size = ref([])
 const saveData = (index) => {
-    console.log(resData.value);
+    // console.log(resData.value);
     console.log(tyres.value);
     console.log(tyres.value[index].brand);
 };
@@ -4537,7 +4537,7 @@ const setValue = reactive({
 const addTyreReplacement = () => {
     if (setValue.index < 5) {
         tyres.value.push({
-            loadIndex: '',
+            dot: '',
             brand: '',
             speedRating: '',
             pattern: '',
@@ -4561,7 +4561,7 @@ const deleteTyreReplacement = (index) => {
 const clearTyreData = (index) => {
     const tyre = tyres.value[index]
     tyre.type = '';
-    tyre.loadIndex = '';
+    tyre.dot = '';
     tyre.brand = '';
     tyre.speedRating = '';
     tyre.pattern = '';

@@ -394,10 +394,13 @@ def job_card(data,brand,model):
     for replacement in data.replace:
         replacement = frappe._dict(replacement)
         if replacement.type :
+            print("***********")
+            print(replacement)
+            print("************")
             abbr = tyre_types[replacement.type]
             tyre_replacement.update({
                     abbr + "_brand": replacement.brand,
-                    abbr + "_load_index": replacement.loadIndex,	
+                    abbr + "_load_index": replacement.dot,	
                     abbr + "_pattern": replacement.pattern,
                     abbr + "_speed_rating": replacement.speedRating,
                     abbr + "_tt_tl": replacement.ttTl,
