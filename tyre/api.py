@@ -1215,8 +1215,13 @@ def create_customer(name, no,gs,add,what,call,sms):
     p = re.compile(regex)
     
     # Check if the GSTIN matches the regex pattern
-    if not re.search(p, gs):
-        return "Error: Enter a correct GSTIN number!"
+    print("*******************")
+    print(gs)
+    print("*******************")
+    
+    if gs :
+        if not re.search(p, gs):
+            return "Error: Enter a correct GSTIN number!"
 
     
     number = frappe.get_all("Customer", filters={"mobile_no": no})
