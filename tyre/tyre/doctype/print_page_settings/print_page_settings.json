@@ -1,0 +1,57 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-07-18 12:53:48.242578",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "page_size_setting_section",
+  "sales_invoice_page_size",
+  "column_break_gbuz",
+  "purchase_invoice_page_size"
+ ],
+ "fields": [
+  {
+   "fieldname": "page_size_setting_section",
+   "fieldtype": "Section Break",
+   "label": "Page Size Setting"
+  },
+  {
+   "fieldname": "sales_invoice_page_size",
+   "fieldtype": "Data",
+   "label": "Sales Invoice Page size"
+  },
+  {
+   "fieldname": "column_break_gbuz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "purchase_invoice_page_size",
+   "fieldtype": "Data",
+   "label": "Purchase Invoice Page size"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2024-07-18 12:54:58.773841",
+ "modified_by": "Administrator",
+ "module": "Tyre",
+ "name": "Print Page Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
