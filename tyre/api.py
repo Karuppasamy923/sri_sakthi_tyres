@@ -1267,7 +1267,7 @@ def sales_order(data, name):
             sublist=sublist[0]
         doc.append("items", {
                         'item_code': sublist['itemCode'],
-                        'warehouse':frappe.db.get_value('Warehouse',{'warehouse_name':sublist['sourceWarehouse']},"name"),
+                        'warehouse':frappe.db.get_value('Warehouse',{'warehouse_name':sublist['sourceWarehouse'],'company':doc.company},"name"),
                         'qty': sublist['requiredQuantity'],
                         'delivery_date':  current_date,
                         'rate':sublist['rate']
