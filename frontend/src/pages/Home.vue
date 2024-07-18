@@ -2252,6 +2252,17 @@
                     </div>
                     <h1 class="text-[20px] font-bold mb-1">Items</h1>
                     <hr class="mt-2" :style="{ borderWidth: '2px', borderColor: 'gray' }">
+                    <div class="mt-2">
+                        <select v-model="selectedCompany" 
+                            class="w-[28.6rem] rounded-sm border-solid border border-black" @change="retriveWarehouse(selectedCompany)">
+                            <option value="">Select Company</option>
+                            <!-- Loop through warehouseList and create an option for each warehouse -->
+                            <option v-for="company in Company" :key="company"
+                                :value="company">
+                                {{ company }}
+                            </option>
+                        </select>
+                    </div>
                     <div class="pt-5">
                         <table
                             class="table-auto border border-collapse border-gray-800 w-auto shadow-md transition-shadow">
@@ -2659,7 +2670,7 @@ function confirmBill() {
     console.log(selectedname.value)
     console.log(selectednumber.value)
     console.log(selecteddoc.value)
-    axios.post(`${BaseURL}/api/method/tyre.api.sales_order`, { data: tableData.value, name: selecteddoc.value }, { headers: headers })
+    axios.post(`${BaseURL}/api/method/tyre.api.sales_order`, { data: tableData.value, name: selecteddoc.value.at, company:selectedCompany.value }, { headers: headers })
         .then(response => {
             if (response.data.message === "done") {
                 showpop.value = false
@@ -2720,6 +2731,8 @@ const sizes = ref([])
 const patterns = ref([])
 const types = ref([])
 const Warehouse = ref([])
+const selectedCompany=ref('')
+const Company = ref([])
 const vBrand = ref([])
 const vModel = ref([])
 const BaseURL = window.location.origin
@@ -2731,10 +2744,17 @@ onMounted(() => {
         })
 });
 
-onMounted(() => {
-    axios.get(`${BaseURL}/api/method/tyre.api.get_warehouse`, { headers: headers })
+function retriveWarehouse(selectedCompany){
+    axios.get(`${BaseURL}/api/method/tyre.api.get_warehouse`,{data:selectedCompany.value}, { headers: headers })
         .then(response => {
             Warehouse.value = response.data.message
+        })
+}
+
+onMounted(() => {
+    axios.get(`${BaseURL}/api/method/tyre.api.get_Company`, { headers: headers })
+        .then(response => {
+            Company.value = response.data.message
         })
 })
 
@@ -4259,7 +4279,7 @@ function handleGrams() {
 function checkup(data) {
     console.log("final data checking in last page", data);
     try {
-        const response = axios.post(`${BaseURL}/api/method/tyre.api.job_card`, { data: JSON.stringify(data), brand: responseData.value.message[0].vehicle_brand, model: responseData.value.message[0].vehicle_model }, { headers: headers })
+        const response = axios.post(`${BaseURL}/api/method/tyre.api.job_card`, { data: JSON.stringify(data), brand: responseData.value.message[0].vehicle_brand, model: responseData.value.message[0].vehicle_model,company:selectedCompany.value }, { headers: headers })
         console.log('job card after response', response);
     } catch (error) {
         console.log("error");

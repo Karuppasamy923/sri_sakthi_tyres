@@ -8,10 +8,7 @@ from erpnext.accounts.doctype.payment_entry.payment_entry import get_payment_ent
 # function to get the vehicle & customer details (parameter = license plate)
 @frappe.whitelist(allow_guest=True)
 def get_details(license_plate):
-    print("****")
-    print(license_plate)
     license_plate = re.sub(r'[^a-zA-Z0-9]', '', license_plate)
-    print(len(license_plate))
     # regex = "^[A-Z]{2}[0-9]{2}[A-Z]{1,2}[0-9]{4}$"
     # p = re.compile(regex)
     # regex = "^[A-Z]{2}[\\s-]{0,1}[0-9]{2}[\\s-]{0,1}[A-Z]{1,2}[\\s-]{0,1}[0-9]{4}$"
@@ -20,10 +17,7 @@ def get_details(license_plate):
     if license_plate is None:
         return "NO Data Found!!!!"
     else:   
-        print(license_plate.upper())
         if(len(license_plate)>=8 and len(license_plate)<=10):
-            print("*****currect*******")
-            print(license_plate)
             if license_plate:
                 vehicle_details = ''
                 customer_details = ''
@@ -41,7 +35,6 @@ def get_details(license_plate):
                         customer = frappe.get_doc("Customer",{"name":customer_details.owner_data})
                     for current_driver in customer_details.current_driver:
                         data= frappe.get_doc("Driver",{"name":current_driver.current_driver})
-                        print(data.full_name)
                         current_driver.name=current_driver.current_driver
                         current_driver.current_driver=data.full_name
                         if data.custom_primary:
@@ -50,25 +43,15 @@ def get_details(license_plate):
                 
                     for contact_person in customer_details.contact_person:
                         data= frappe.get_doc("ContactPerson",{"name":contact_person.contact_person_name})
-                        # print(data.contact_person_name)
                         contact_person.name=contact_person.contact_person_name
                         contact_person.contact_person_name=data.contact_person_name
-                        # print(contact_person.contact_person_name)
+                       
                         if data.custom_primary:
                             primary_details.append(data)
                             
-                    # print(customer_details.current_owner)
-                
-
-                # print(customer_details.call)
-                print("Vehicle Details:", vehicle_details)
-                print("Customer Details:", customer_details)
-                # print(customer_details.employee_name)
-
                 if vehicle_details or customer_details :
                     return [vehicle_details, customer_details,primary_details,customer]
                 else:
-                    print("*******")
                     return ""
         else:
             return "Enter a Valid vehicle number"        
@@ -83,8 +66,7 @@ def store_vehicle_details(data):
     regex = "^[A-Z]{2}[0-9]{2}[A-Z]{1,2}[0-9]{4}$"
     p = re.compile(regex)
     license_plate=license_plate.upper()
-    print(license_plate)
-    
+   
     # checking if vehicle number already exists
     if(re.search(p, license_plate)):
         if frappe.db.exists('Vehicle Details', {'name': license_plate}):
@@ -120,32 +102,21 @@ def store_vehicle_details(data):
 
 @frappe.whitelist(allow_guest = True)
 def exist_mobile_number(data):
-    print(data)
     data = json.loads(data)
     mobile = data.get('mobile')
-    print('mobile number',mobile)
     owner = frappe.db.get_value("Customer",{"mobile_no":data.get('mobile')})
     if owner:
-        print("mobile number exist")
         return "mobileExist"
-    else:
-        print("mobile else block")
     
 
 # function to store new customer details
 @frappe.whitelist(allow_guest=True)
 def store_customer_details(data):
-    print("*********************")
-    print(data)
-    print("*********************")
-    
     data = json.loads(data)
-    print(data)
     license_plate = data.get('name').upper().replace(' ', '')
     license_plate = re.sub(r'[^a-zA-Z0-9]', '', license_plate)
     regex = "^[A-Z]{2}[0-9]{2}[A-Z]{1,2}[0-9]{4}$"
     p = re.compile(regex)
-    print(license_plate)
 
     if(re.search(p, license_plate)):
         if frappe.db.exists('Customer Details', {'name': license_plate}):
@@ -161,7 +132,6 @@ def store_customer_details(data):
                 owner.primary_address=data.get('address')
                 owner.save(ignore_permissions=True)
                 frappe.db.set_value('Customer', data.get('owner_data'),'mobile_no',data.get('owner_mobile_no'))
-            print("********old*******")
         
             #update a driver and conteact person
             new_driver = new_drivers = None
@@ -169,7 +139,6 @@ def store_customer_details(data):
                 doc_type = driver_data.get('type')
                 if doc_type == "current_driver":
                     driver = frappe.db.get_value("Driver",{"name":driver_data.get('name')})
-                    print(driver_data.get('name'))
                     # Append the name of the current_driver to the parent document
                     if not driver:
                         mobile_no = frappe.db.get_value("Driver",{"cell_number":driver_data.get('mobile_no')})
@@ -187,13 +156,9 @@ def store_customer_details(data):
                         else:
                             return "driver already exist"
                     else:
-                        print("11111111111")
                         new_driver1=frappe.get_doc("Driver",{"name":driver_data.get('name')})
-                        print(driver_data.get('current_driver'))
                         new_driver1.full_name=driver_data.get('current_driver')
-                        print("2222")
                         new_driver1.cell_number=driver_data.get('mobile_no')
-                        print("333")
                         new_driver1.custom_whatsapp_check=driver_data.get('whatsapp')
                         new_driver1.custom_sms_check=driver_data.get('sms')
                         new_driver1.custom_call_check=driver_data.get('call')
@@ -205,17 +170,12 @@ def store_customer_details(data):
                         # driver = new_driver.name  
                 else:
                     cPerson = frappe.db.get_value("ContactPerson",{"name":driver_data.get('name')})
-                    print(cPerson)
                     if not cPerson:
-                        print("#######")
                         cPerson = frappe.db.get_value("ContactPerson",{"contact_person_mobile":driver_data.get('contact_person_mobile')})
-                        print("contact person mobile",cPerson)
                         if not cPerson:
                             new_drivers = frappe.new_doc("ContactPerson")
                             new_drivers.contact_person_name=driver_data.get('contact_person_name')
-                            print(new_drivers.contact_person_name)
                             new_drivers.contact_person_mobile=driver_data.get('contact_person_mobile')
-                            print(new_drivers.contact_person_mobile)
                             new_drivers.whatsapp=driver_data.get("custom_whatsapp")
                             new_drivers.sms=driver_data.get("custom_sms")
                             new_drivers.call=driver_data.get("custom_call")
@@ -224,12 +184,9 @@ def store_customer_details(data):
                         else:
                             return "contact person already exist"
                     else:
-                        print("@@@@@@")
                         new_driver2=frappe.get_doc("ContactPerson",{"name":driver_data.get('name')})
                         new_driver2.contact_person_name=driver_data.get('contact_person_name')
-                        print(new_driver2.contact_person_name)
                         new_driver2.contact_person_mobile=driver_data.get('contact_person_mobile')
-                        print(new_driver2.contact_person_mobile)
                         new_driver2.whatsapp=driver_data.get("custom_whatsapp")
                         new_driver2.sms=driver_data.get("custom_sms")
                         new_driver2.call=driver_data.get("custom_call")
@@ -257,7 +214,6 @@ def store_customer_details(data):
             return ['',[doc]]
         ##customer details doc not created then run this else 
         else:
-            print("******new******")
             # New document in customer details
             doc = frappe.new_doc('Customer Details')
             doc.license_plate = license_plate
@@ -267,9 +223,6 @@ def store_customer_details(data):
             new_owner = None
 
             # Check if owner data already exists
-            print(owner)
-            print(data)
-            print(data.get("exists"))
             if not owner and data.get("exists") == False:
                 new_owner = frappe.new_doc("Customer")
                 new_owner.customer_name = data.get('current_owner')
@@ -278,10 +231,8 @@ def store_customer_details(data):
                 new_owner.custom_sms = data.get('smsChecked')
                 new_owner.custom_call = data.get('callChecked')
             elif owner and data.get("exists") == True:
-                print("NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
                 own = frappe.get_doc("Customer", owner)
                 # own = frappe.get_doc("",owner)
-                print(own)
                 own.customer_name = data.get('current_owner')
                 own.mobile_no = data.get('owner_mobile_no')
                 own.custom_whatsapp = data.get('whatsappChecked')
@@ -327,14 +278,12 @@ def store_customer_details(data):
             # Save the new owner, driver, and contact person data if they are new entries
             if new_owner or owner and (new_driver or new_drivers):
                 if new_owner:
-                    print("YESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
                     new_owner.save(ignore_permissions=True)
                     doc.owner_data = new_owner
                 if owner:
-                    print("yesss++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+
                     own.save(ignore_permissions=True)    
                     doc.owner_data=own
-                    print(doc.owner_data)
                 if new_driver:
                     new_driver.save(ignore_permissions=True)
                     doc.append("current_driver", {"current_driver": new_driver.name, "mobile_no": driver_data.get('mobile_no')})
@@ -368,10 +317,8 @@ def store_customer_details(data):
 
 # function to create job card
 @frappe.whitelist(allow_guest=True)
-def job_card(data,brand,model):
-    print(model)
+def job_card(data,brand,model,company):
     data = frappe._dict(json.loads(data))
-    print("**************************************************************",data)
     five_point_checkup = {}
     tyre_abbr = {"Rear Left": "rl_", "Front Right": "fr_", "Front Left": "fl_", "Rear Right": "rr_","Spare Tyre": "sp1_"}
     for checkup in data.checkup:
@@ -394,9 +341,6 @@ def job_card(data,brand,model):
     for replacement in data.replace:
         replacement = frappe._dict(replacement)
         if replacement.type :
-            print("***********")
-            print(replacement)
-            print("************")
             abbr = tyre_types[replacement.type]
             tyre_replacement.update({
                     abbr + "_brand": replacement.brand,
@@ -410,9 +354,6 @@ def job_card(data,brand,model):
                     abbr + "_max_years": replacement.maxYears,
             })
     vehicle_number = data.user
-    print('vehicle number',vehicle_number)
-    print("\n\n\n\ntyre replacement details:",tyre_replacement)
-    # print(vehicle_number)
     user_details = frappe.db.sql(""" 
                                     SELECT vd.license_plate as vehicle_no,
                                         vd.vehicle_brand as vehicle_brand,
@@ -444,14 +385,9 @@ def job_card(data,brand,model):
 
     if user_details:
         user_details = user_details[0]
-        print("=================user_deatils====================================")
-        print(user_details)
     else:
         user_details = {}
     val = frappe._dict(data.service)    
-    print('vehicle number',vehicle_number)
-    print('user details in job card',user_details)
-    # print(val.alignment['lastAlignment'])
     
     air,nitrogen = False,False
 
@@ -478,24 +414,17 @@ def job_card(data,brand,model):
     doc.update(user_details)
     doc.update(service)
     bills = [bill[0] for bill in data.bill]
-    print(bills, "===========================================================================bills===============================================================")
     billing_items = []
     total_amount = 0
     for items in bills:
-        print('items....',items)
         items = frappe._dict(items)
-        print(items)
         total_amount += float(items.cost)
-        print(items.sourceWarehouse,"-----------------")
         billing_items.append({"item_code": items.itemCode, "warehouse": items.sourceWarehouse, "quantity" : items.requiredQuantity, "amount" : items.cost, "rate": items.rate, "warranty":items.warranty, "max_years":maxyears(items.warranty), "additional":items.additional})
-    # print(doc.as_dict(), "as_dict")
-    print("billing details for checking warranty and max years",billing_items)
     doc.extend("billing_details", billing_items)
 
     doc.total_amount = total_amount
     doc.save(ignore_permissions=True)  # Save customer document
-    sales_order(bills,user_details.customer)
-    print(doc.as_dict(), "as_dict===============================================")
+    sales_order(bills,user_details.customer,company)
     return {
         "status": 200,
         "message": "Jobcard Created Successfully",
@@ -507,10 +436,8 @@ def maxyears(warranty):
     try:
         warranty_years = float(warranty)
         if warranty_years == 0:
-            print("Warranty period is 0, no max years calculation needed.")
             return None
     except ValueError:
-        print("Invalid warranty period")
         return None
     
     today = datetime.today()
@@ -521,13 +448,10 @@ def maxyears(warranty):
     max_years = f"{month}_{day}_{year}"
     send_years = f"{year}-{month}-{day}"
 
-    print(f"maxYears: {max_years}")
-    print(f"sendYears: {send_years}")
     return send_years
 
 @frappe.whitelist(allow_guest=True)
 def lead(**args):
-    # print(args, type(args))
     data = frappe._dict(args)
     lead_user_details = {
         "first_name": data.current_owner,
@@ -538,7 +462,6 @@ def lead(**args):
         "custom_sms": data.sms,
         "custom_call": data.call,
     }
-    print("lead details",data)
     doc = frappe.db.exists("Lead",{ "mobile_no" : data.owner_mobile_no})
 
     if doc:
@@ -546,7 +469,6 @@ def lead(**args):
             "status": 400,
             "message": "Lead Already Exists"
         }
-    print( 'lkaklkflkak',data.keys())
     services = frappe._dict(data["services"])
 
     service_details = {
@@ -592,7 +514,6 @@ def lead(**args):
 
 @frappe.whitelist(allow_guest=True)
 def delete_lead(data):
-    print('delete lead',data)
     frappe.delete_doc("Lead",data)
     return{
         "status": 200,
@@ -694,7 +615,6 @@ def create_service_items():
 
 @frappe.whitelist(allow_guest=True)
 def get_ItemCode(brand, size, tyer_type,pattern):
-    print(brand, size, tyer_type, pattern)
     item_code = frappe.get_all("Brand Details", filters={"parent": brand, "size": size, "tyer_type": tyer_type, "pattern":pattern}, pluck="item_code")[0]
     brand=None
     model=None
@@ -720,7 +640,6 @@ def stock_details():
         
         items_grouped_by_brand.append(item_data)
 
-    print(items_grouped_by_brand)
     if items_grouped_by_brand:
         return items_grouped_by_brand
     else:
@@ -731,21 +650,16 @@ def stock_details():
     
 @frappe.whitelist(allow_guest=True)
 def get_jobcard_details(searchJobCard):
-    print(searchJobCard)
     if searchJobCard:
         jobcard_details = frappe.get_all("Tyre Job Card",
                                           filters={'vehicle_no': searchJobCard},
                                           fields=["time_in", "name", "vehicle_no", "customer", "mobile_no"])
         if jobcard_details:
-            print('jobcard details',jobcard_details)
-            # print('jobcard details',job_card_details[0]['customer'])
             for job_card in job_card_details:
-                customer_details = frappe.get_all("Customer", fields=["customer_name", "name"], filters={'name': job_card['customer']})
-                print("customer details:", customer_details)        
+                customer_details = frappe.get_all("Customer", fields=["customer_name", "name"], filters={'name': job_card['customer']})        
                 if customer_details:
                     customer_detail = customer_details[0]
                     if customer_detail['name'] == job_card['customer']:
-                        print(customer_detail['name'])
                         job_card["customer_name"] = customer_detail['customer_name']
             return jobcard_details 
         else:
@@ -756,38 +670,29 @@ def get_jobcard_details(searchJobCard):
     else:
         job_card_details = frappe.get_all("Tyre Job Card",
                                            fields=["time_in", "name", "vehicle_no", "customer", "mobile_no"])
-        print('jobcard details',job_card_details)
-        # print('jobcard details',job_card_details[0]['customer'])
         for job_card in job_card_details:
-            customer_details = frappe.get_all("Customer", fields=["customer_name", "name"], filters={'name': job_card['customer']})
-            print("customer details:", customer_details)        
+            customer_details = frappe.get_all("Customer", fields=["customer_name", "name"], filters={'name': job_card['customer']})        
             if customer_details:
                 customer_detail = customer_details[0]
                 if customer_detail['name'] == job_card['customer']:
-                    print(customer_detail['name'])
                     job_card["customer_name"] = customer_detail['customer_name']
         return job_card_details 
 
 
 @frappe.whitelist(allow_guest = True)
 def delete_vehicle(data):
-    print("delete vehicle number", data)
     data = json.loads(data)
     license_plate = data.get('name').upper().replace(' ', '')
-    print("license plate", license_plate)
     if frappe.db.exists("Vehicle Details", {"name": license_plate}):
         vehicle_details = frappe.get_doc("Vehicle Details", license_plate)
-        print("vehicle details", vehicle_details)
         frappe.delete_doc("Vehicle Details", license_plate, force=True)
         if frappe.db.exists("Customer Details", {"name": license_plate}):
             customer_details = frappe.get_doc("Customer Details", license_plate).as_dict()
-            print("customer details", customer_details)
 
             # Check if there are any linked Tyre Job Cards
             tyre_job_cards = frappe.get_all("Tyre Job Card", filters={"vehicle_no": customer_details["name"]})
             if tyre_job_cards:
                 for tyre_job_card in tyre_job_cards:
-                    print("Deleting linked Tyre Job Card:", tyre_job_card.name)
                     frappe.delete_doc("Tyre Job Card", tyre_job_card.name, force=True)
 
             # Delete linked Driver documents
@@ -795,7 +700,6 @@ def delete_vehicle(data):
                 if frappe.db.exists("Driver", {"cell_number": driver.mobile_no}):
                     driver_details = frappe.get_doc("Driver", {"cell_number": driver.mobile_no})
                     frappe.delete_doc("Driver", driver_details.name, force=True)
-                    print("Deleted driver:", driver.mobile_no)
                 else:
                     print("Driver with mobile number {} not found. Skipping deletion.".format(driver.mobile_no))
 
@@ -834,7 +738,6 @@ def get_enquiry_details(data):
 @frappe.whitelist(allow_guest=True)
 def get_billing_details(name):
     doc = frappe.get_doc("Tyre Job Card", name)
-    print("\n\n\n\n\ntyre job card details", doc.as_dict())
     billing_details = []
     
     for billing_detail in doc.billing_details:
@@ -859,34 +762,24 @@ def get_enquiry(name):
     lead_items = []
     for i in doc.custom_lead_items:
         lead_items.append(i.as_dict())
-    print("get enquiry detailsssss", lead_items)
     return {"enquiry_details":lead_items, "total_amount": doc.custom_total_amount, "vehicle_brand":doc.custom_vehicle_brand, "vehicle_model":doc.custom_vehicle_model}
 
 @frappe.whitelist(allow_guest=True)
 def get_item_rate(item_code,brand,model,inch,type):
-    print(type,"+++++++++++++++++++++++++++++++++")
-    print(inch,"=====================================")
-    print("brand=================",brand)
-    print("model=================",model)
-    # print("============================================", item_code)
     if inch:
         if item_code == "Rotation":
             doc = frappe.get_all("Tyre Edge Rotation Price", filters={"name": inch}, fields=["price"])
             return doc[0].price
         if item_code == "Balancing" and type:
-            print("Balancing")
             doc = frappe.get_all("Wheel Balancing", filters={"inche": inch,"type":type}, fields=["price"])
-            print(doc[0].price)
             return doc[0].price
     
     doc = frappe.get_all("Vehicle Model Item Price", filters={'parent':model, "item":item_code}, fields={'price'})
     if doc:
-        print(doc)
         return doc[0].price
-    print(item_code,"-rate")
+    
     from erpnext.stock.report.item_price_stock.item_price_stock import get_item_price_qty_data
     price_list = get_item_price_qty_data({"item_code": item_code})
-    print(price_list)
     if price_list:
         return price_list[0]["selling_rate"]
     
@@ -899,8 +792,17 @@ def get_item(args):
     return frappe.db.get_value("Brand Details",{"parent": args.brand, "size": args.size, "tyer_type": args.tyre_type, "pattern": args.pattern}, "item_code")
 
 @frappe.whitelist()
-def get_warehouse():
+def get_warehouse(data):
     return frappe.get_all("Warehouse",{"is_group":0}, pluck="name")
+
+@frappe.whitelist()
+def get_warehouse(data):
+    warehouses = frappe.get_all("Warehouse",filters={"is_group": 0,"company": data},pluck="name")
+    return warehouses
+
+@frappe.whitelist()
+def get_Company():
+     return frappe.get_all("Company",pluck="name")
 
 def calculate_total_amount(self, method):
     model = None
@@ -911,7 +813,6 @@ def calculate_total_amount(self, method):
         total_amount = 0
         for row in self.custom_lead_items:
             if row.item_code:
-                # print(price_list)
                 price_list = get_item_rate(row.item_code,brand,model,inch,type)
                 self.custom_lead_items[row.idx - 1].rate = float(price_list)
                 self.custom_lead_items[row.idx - 1].amount =int(row.quantity)* float(price_list)
@@ -928,7 +829,6 @@ def calculate_total_amount(self, method):
                 self.custom_lead_items[row.idx - 1].amount = 0
                 if item_code:
                     price_list = get_item_rate(item_code,brand,model,inch,type)
-                    # print(price_list)
                     self.custom_lead_items[row.idx - 1].item_code = item_code
                     self.custom_lead_items[row.idx - 1].rate = float(price_list)
                     self.custom_lead_items[row.idx - 1].amount = int(row.quantity) * float(price_list)
@@ -944,7 +844,6 @@ def calculate_total_amount(self, method):
             self.billing_details[row.idx - 1].amount = 0
             if row.item_code:
                 price_list = get_item_rate(row.item_code,brand,model)
-                print(price_list)
                 self.billing_details[row.idx - 1].rate = price_list
                 self.billing_details[row.idx - 1].amount = row.quantity * price_list
                 total_amount += row.quantity * price_list
@@ -992,7 +891,6 @@ def get_item(args):
 # 	from erpnext.stock.report.item_price_stock.item_price_stock import get_item_price_qty_data
 # 	price_list = get_item_price_qty_data({"item_code": item_code})
 # 	if price_list:
-# 		print(price_list)
 # 		return price_list[0]["selling_rate"]
     
 # 	return 0
@@ -1021,20 +919,13 @@ def send_quotation(data):
         data = json.loads(data)
         mobile = data.get('mobile_no')
         license_plate = data.get('license_plate')
-        print('whatsapp integration mobile number', mobile)
-        print('whatsapp integration license_plate', license_plate)
         doc = ""
         enquiry = ""
         if mobile and license_plate:
-            print("if block")
             doc = frappe.get_doc("Tyre Job Card", {"vehicle_no": license_plate})
-            print(doc)
         elif mobile and not license_plate:
-            print("else block")
             enquiry = frappe.get_doc("Lead",{"mobile_no":mobile})
-            print('enquiry',enquiry.__dict__)
         # job_card_detail = doc.as_dict()
-        # print('..........',job_card_detail)
         # def convert_to_dict(obj):
         # 	if isinstance(obj, datetime):
         # 		return obj.strftime("%Y-%m-%d %H:%M:%S")
@@ -1048,9 +939,7 @@ def send_quotation(data):
         # doc_serializable = convert_to_dict(doc.as_dict())
         # doc_json = json.dumps(doc_serializable)
         if doc:
-            print("Tyre Job Card found:", doc.name)
             docs = frappe.get_doc("Customer Details",{"name":license_plate}).as_dict()
-            print("Tyre Job Card found:", docs)
             headers = {
                 'Authorization':'Bearer EAAPvJMkEALEBO6dcBS0YuNy5Iq6gftR6hjykaMgrYBMlsVQIRc9ZCub7cQnXE52GfWTkOkAcOFOCPF2zod2NFvkjGOjKDgC7rL7PvPk36aC49tii1TDq2HjoBlz44MZCcKnm3WHxRBlX4NuJpM6S1oisCA5FVk7pnDGGIojE6QZCk8fnnxBRiOLDBvtZAaiN',
                 'Content-Type': 'application/json'
@@ -1097,14 +986,9 @@ def send_quotation(data):
                 }
             })
             response = requests.request("POST",url, headers=headers, data=payload)
-            print('response',response.text)
-            print("payload",payload)
             return "success"
-        else:
-            print("Tyre Job Card not found")
 
         if enquiry:
-            print("Tyre Job Card found:", enquiry.name)
             headers = {
                 'Authorization':'Bearer EAAPvJMkEALEBO6dcBS0YuNy5Iq6gftR6hjykaMgrYBMlsVQIRc9ZCub7cQnXE52GfWTkOkAcOFOCPF2zod2NFvkjGOjKDgC7rL7PvPk36aC49tii1TDq2HjoBlz44MZCcKnm3WHxRBlX4NuJpM6S1oisCA5FVk7pnDGGIojE6QZCk8fnnxBRiOLDBvtZAaiN',
                 'Content-Type': 'application/json'
@@ -1151,13 +1035,9 @@ def send_quotation(data):
                 }
             })
             response = requests.request("POST",url, headers=headers, data=payload)
-            print("lead response",response.text)
-            print("lead payload",payload)
         else:
-            print("lead details not found")
             return "lead details not found"
     except Exception as e:
-        print("Error:", frappe.get_traceback())
         return "Error occurred: " + str(e)
 
 
@@ -1215,10 +1095,6 @@ def create_customer(name, no,gs,add,what,call,sms):
     # Compile the ReGex
     p = re.compile(regex)
     
-    # Check if the GSTIN matches the regex pattern
-    print("*******************")
-    print(gs)
-    print("*******************")
     
     if gs :
         if not re.search(p, gs):
@@ -1244,25 +1120,19 @@ def create_customer(name, no,gs,add,what,call,sms):
         return "Customer created successfully"
 
 @frappe.whitelist()
-def sales_order(data, name):
+def sales_order(data, name,company):
     # Deserialize the data if it's a JSON string
-    print("data============================================================",data)
-    print(name)
     if isinstance(data, str):
         data = json.loads(data)
-    
-    print(type(data))
-    print(name)
 
     # Create a new Sales Order document
     doc = frappe.new_doc("Sales Order")
     doc.customer = name
-    print(doc.customer)
+    doc.company = company
 
     current_date = datetime.now().date()
     # Iterate over the data to add items to the Sales Order
     for sublist in data:
-        print("----------------",sublist,"---------------")
         if str(type(sublist))=="<class 'list'>":
             sublist=sublist[0]
         doc.append("items", {
@@ -1275,7 +1145,6 @@ def sales_order(data, name):
 
     # Save the document
     doc.save(ignore_permissions=True)
-    # print("hello")
     # doc.submit()
     # si_doc=make_sales_invoice(source_name=doc.name)
     # si_doc.save(ignore_permissions=True)
@@ -1294,17 +1163,14 @@ def get_inch_list():
 
 @frappe.whitelist()
 def get_permission():
-    print("yessssss+++++++++++++++++++++++++++++++++++++++++")
     permission = frappe.get_single("Price changing permission")
     return permission.allow_permission
     
 # @frappe.whitelist()
 # def pay_invoice(name):
-#     print(name)
 #     pay_doc=get_payment_entry(dt="Sales Invoice",dn=name)
     
 #     pay_doc.mode_of_payment="Cash"
-#     print(pay_doc.__dict__)
 #     pay_doc.save(ignore_permissions=True)
 #     pay_doc.submit()
     
