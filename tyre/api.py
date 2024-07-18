@@ -486,6 +486,7 @@ def job_card(data,brand,model):
         items = frappe._dict(items)
         print(items)
         total_amount += float(items.cost)
+        print(items.sourceWarehouse,"-----------------")
         billing_items.append({"item_code": items.itemCode, "warehouse": items.sourceWarehouse, "quantity" : items.requiredQuantity, "amount" : items.cost, "rate": items.rate, "warranty":items.warranty, "max_years":maxyears(items.warranty), "additional":items.additional})
     # print(doc.as_dict(), "as_dict")
     print("billing details for checking warranty and max years",billing_items)
@@ -1261,10 +1262,12 @@ def sales_order(data, name):
     current_date = datetime.now().date()
     # Iterate over the data to add items to the Sales Order
     for sublist in data:
+        print("----------------",sublist,"---------------")
         if str(type(sublist))=="<class 'list'>":
             sublist=sublist[0]
         doc.append("items", {
                         'item_code': sublist['itemCode'],
+                        'warehouse':frappe.db.get_value('Warehouse',{'warehouse_name':sublist['sourceWarehouse']},"name"),
                         'qty': sublist['requiredQuantity'],
                         'delivery_date':  current_date,
                         'rate':sublist['rate']
