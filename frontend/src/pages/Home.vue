@@ -4864,7 +4864,7 @@ const confirmDataSave = async () => {
         // show.oil_change.value = false;
         // show.inflation.value = false;
         // show.balancing.value = false;
-        window.location.reload()
+        //window.location.reload()
     }, 1000);
 }
 const cancelSaved = () => {
