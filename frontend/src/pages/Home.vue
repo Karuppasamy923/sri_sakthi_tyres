@@ -2120,6 +2120,16 @@
                         </div>
                     </div>
                 </div>
+                <div v-if="showError"
+                class="fixed inset-1 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
+                <div class="bg-white rounded-lg p-8 shadow-xl" v-if="showError">
+                    <h2 class="text-xl font-semibold mb-4">Error</h2>
+                    <p class="mb-4">Please fill all mandatory fields.</p>
+                    <div class="flex justify-center">
+                        <button @click="showError=false" class="bg-blue-500 text-white font-semibold px-4 py-2 rounded">OK</button>
+                    </div>
+                </div>
+                </div>
                 <div v-if="showpop"
                     class="fixed inset-1 overflow-hidden bg-black bg-opacity-50 flex justify-center items-center">
                     <div class="bg-white rounded-lg p-8 shadow-xl">
@@ -2252,10 +2262,11 @@
                     </div>
                     <h1 class="text-[20px] font-bold mb-1">Items</h1>
                     <hr class="mt-2" :style="{ borderWidth: '2px', borderColor: 'gray' }">
-                    <div class="mt-2">
+                    <div class="mt-4">
                         <select v-model="selectedCompany" 
-                            class="w-[28.6rem] rounded-sm border-solid border border-black" @change="retriveWarehouse(selectedCompany)">
-                            <option value="">Select Company</option>
+                            class="w-[28.6rem] rounded-sm border-solid border border-black" @change="retrieveWarehouse()">
+                            <option value="">Select Company<span v-if="indication"
+                                class="text-red-500">*</span></option>
                             <!-- Loop through warehouseList and create an option for each warehouse -->
                             <option v-for="company in Company" :key="company"
                                 :value="company">
@@ -2271,7 +2282,7 @@
                                     <th class="border border-gray-800 px-4 py-4 w-[10rem]">SI.No</th>
                                     <th class="border border-gray-800 px-4 py-4 w-[10rem]">Item<span v-if="itempop"
                                             class="text-red-500">*</span></th>
-                                    <th class="border border-gray-800 px-4 py-4 w-[16rem]">Warehouse<span v-if="warepop"
+                                    <th class="border border-gray-800 px-4 py-4 w-[16rem]">Warehouse<span v-if="warepop || indication"
                                             class="text-red-500">*</span></th>
                                     <th class="border border-gray-800 px-4 py-4 w-[10rem]">Warranty(in_years)</th>
                                     <th class="border border-gray-800 px-4 py-4 w-[16rem]">Quantity<span v-if="qutpop"
@@ -2666,10 +2677,6 @@ function finalSubmit() {
 }
 
 function confirmBill() {
-    console.log(tableData.value)
-    console.log(selectedname.value)
-    console.log(selectednumber.value)
-    console.log(selecteddoc.value)
     axios.post(`${BaseURL}/api/method/tyre.api.sales_order`, { data: tableData.value, name: selecteddoc.value.at, company:selectedCompany.value }, { headers: headers })
         .then(response => {
             if (response.data.message === "done") {
@@ -2744,11 +2751,17 @@ onMounted(() => {
         })
 });
 
-function retriveWarehouse(selectedCompany){
-    axios.get(`${BaseURL}/api/method/tyre.api.get_warehouse`,{data:selectedCompany.value}, { headers: headers })
-        .then(response => {
-            Warehouse.value = response.data.message
-        })
+function retrieveWarehouse() {
+    axios.get(`${BaseURL}/api/method/tyre.api.get_warehouse`, {
+        params: { company: selectedCompany.value },
+        headers: headers
+    })
+    .then(response => {
+        Warehouse.value = response.data.message;
+    })
+    .catch(error => {
+        console.error("There was an error retrieving the warehouses:", error);
+    });
 }
 
 onMounted(() => {
@@ -2772,7 +2785,6 @@ const fetchPermission = () => {
         .then(response => {
           console.log(response.data.message);
           permission.value = response.data.message;
-          console.log(permission.value, "+++++++++++++++++++++++++++++++++");
         })
         .catch(error => {
           console.error("There was an error fetching the permission:", error);
@@ -4815,9 +4827,25 @@ const removeRow = (index) => {
     calculateTotals();
 };
 const showConfirm = ref(false)
+const showError = ref(false)
+const indication = ref(false)
 const dataFinalSubmission = () => {
-    showConfirm.value = true;
-}
+    let allFieldsFilled = true;
+    for (let i = 0; i < tableData.value[0].length; i++) {
+        console.log(tableData.value[0][i].sourceWarehouse);
+        if (!tableData.value[0][i].sourceWarehouse) {
+            allFieldsFilled = false;
+            break;
+        }
+    }
+
+    if (allFieldsFilled) {
+        showConfirm.value = true;
+    } else {
+        showError.value = true;
+        indication.value = true;
+    }
+};
 const finalSuccess = ref(false);
 const confirmDataSave = async () => {
     showConfirm.value = false;
@@ -4884,7 +4912,7 @@ const confirmDataSave = async () => {
         // show.oil_change.value = false;
         // show.inflation.value = false;
         // show.balancing.value = false;
-        //window.location.reload()
+        window.location.reload()
     }, 1000);
 }
 const cancelSaved = () => {

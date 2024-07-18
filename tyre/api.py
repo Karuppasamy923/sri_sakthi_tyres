@@ -791,14 +791,10 @@ def get_item(args):
         args = frappe._dict(json.loads(args))
     return frappe.db.get_value("Brand Details",{"parent": args.brand, "size": args.size, "tyer_type": args.tyre_type, "pattern": args.pattern}, "item_code")
 
-@frappe.whitelist()
-def get_warehouse(data):
-    return frappe.get_all("Warehouse",{"is_group":0}, pluck="name")
+# @frappe.whitelist()
+# def get_warehouse(company):
+#     return frappe.get_all("Warehouse",filters={"is_group": 0,"company": company}, pluck="name")
 
-@frappe.whitelist()
-def get_warehouse(data):
-    warehouses = frappe.get_all("Warehouse",filters={"is_group": 0,"company": data},pluck="name")
-    return warehouses
 
 @frappe.whitelist()
 def get_Company():
@@ -897,8 +893,10 @@ def get_item(args):
 
 
 @frappe.whitelist()
-def get_warehouse():
-    return frappe.get_all("Warehouse",{"is_group":0}, pluck="warehouse_name")
+def get_warehouse(company):
+    print(company, "**************")
+    return frappe.get_all("Warehouse", filters={"company": company, "is_group": 0}, pluck="warehouse_name")
+
 
 @frappe.whitelist()
 def get_vehicleBrand():
