@@ -127,6 +127,9 @@ doc_events = {
 	"Lead": {
 		"validate": "tyre.api.calculate_total_amount",
 	},
+    "Sales Invoice": {
+        "validate": "tyre.api.send_invoice"
+    }
 	# "Tyre Job Card": {
 	# 	"validate": "tyre.api.calculate_total_amount",
 	# }

@@ -1308,3 +1308,76 @@ def get_permission():
 #     pay_doc.save(ignore_permissions=True)
 #     pay_doc.submit()
     
+@frappe.whitelist()
+def send_invoice_via_whatsapp(doctype, name, print_format, letterhead):
+    from frappe.utils.file_manager import save_file
+    import requests
+    import json
+    try:
+        doc = frappe.get_doc(doctype, name)
+        print_doc = frappe.get_doc("Print Page Settings", "Print Page Settings")
+        mobile_number = frappe.db.get_value(doctype, name, "mobile_no")
+        if mobile_number:
+            return
+        pdf = frappe.get_print(doctype=doctype, name=name, print_format=print_format,as_pdf=True, no_letterhead=0, letterhead=letterhead)
+        file = save_file("{0}.pdf".format(name), pdf ,None ,None ,is_private=0 ,folder="Home")
+        file_url = file.file_url
+        url = "https://graph.facebook.com/v17.0/{0}/messages".format(print_doc.whatsapp_id)
+
+        payload = json.dumps({
+        "messaging_product": "whatsapp",
+        "to": mobile_number,
+        "type": "template",
+        "template": {
+            "name": print_doc.sales_invoice_template,
+            "language": {
+            "code": "en_us"
+            },
+            "components": [
+            {
+                "type": "body",
+                "parameters": [
+                {
+                    "type": "text",
+                    "text": doc.customer
+                },
+                {
+                    "type": "text",
+                    "text": doc.name
+                },
+                {
+                    "type": "text",
+                    "text": doc.grand_total
+                }
+                ]
+            },
+            {
+                "type": "button",
+                "sub_type": "url",
+                "index": 0,
+                "parameters": [
+                {
+                    "type": "text",
+                    "text": file_url
+                }
+                ]
+            }
+            ]
+        }
+        })
+        headers = {
+        'Authorization': 'Bearer {0}'.format(print_doc.bearer_token),
+        'Content-Type': 'application/json'
+        }
+        
+        response = requests.request("POST", url, headers=headers, data=payload)
+        frappe.log_error(response.text)
+    except Exception as e:
+        frappe.log_error(title="Whatsapp API Error", message="Invoice No: {0}\n".format(name)+str(e))
+
+def send_invoice(self, method):
+    send_invoice_via_whatsapp(self.doctype, self.name, "New Sales Invoice", "Sri Sakthi Tyres")
+    
+
+
+    

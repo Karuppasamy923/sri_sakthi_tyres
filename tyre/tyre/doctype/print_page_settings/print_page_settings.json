@@ -8,7 +8,12 @@
   "page_size_setting_section",
   "sales_invoice_page_size",
   "column_break_gbuz",
-  "purchase_invoice_page_size"
+  "purchase_invoice_page_size",
+  "whatsapp_integration_section",
+  "bearer_token",
+  "column_break_aeqm",
+  "whatsapp_id",
+  "sales_invoice_template"
  ],
  "fields": [
   {
@@ -29,12 +34,36 @@
    "fieldname": "purchase_invoice_page_size",
    "fieldtype": "Data",
    "label": "Purchase Invoice Page size"
+  },
+  {
+   "fieldname": "whatsapp_integration_section",
+   "fieldtype": "Section Break",
+   "label": "Whatsapp Integration"
+  },
+  {
+   "fieldname": "bearer_token",
+   "fieldtype": "Long Text",
+   "label": "Bearer Token"
+  },
+  {
+   "fieldname": "column_break_aeqm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "whatsapp_id",
+   "fieldtype": "Data",
+   "label": "Whatsapp ID"
+  },
+  {
+   "fieldname": "sales_invoice_template",
+   "fieldtype": "Data",
+   "label": "Sales Invoice Template"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-07-18 12:54:58.773841",
+ "modified": "2024-07-30 13:11:24.253811",
  "modified_by": "Administrator",
  "module": "Tyre",
  "name": "Print Page Settings",
